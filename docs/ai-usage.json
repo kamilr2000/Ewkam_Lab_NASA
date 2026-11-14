@@ -12,17 +12,23 @@
     "planning document checker",
     "remote collaboration workflow, task reservation commits and updated agent prompts",
     "detailed executable goals, bidirectional review tasks and human-only final submission boundary",
-    "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader"
+    "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader",
+    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion"
   ],
   "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
   "scientific_observations_downloaded": true,
   "scientific_sample_manifest": "data/manifests/k002-samples.json",
+  "scientific_validation_manifest": "data/manifests/k017-earth-validation.json",
+  "scientific_validation_report": "data/reports/k017-validation.json",
   "scientific_sample_sources": [
     "NOAA ETOPO 2022 v1",
     "NASA PDS LOLA LDEM_4",
-    "NASA PDS MOLA MEGT/MEGC"
+    "NASA PDS MOLA MEGT/MEGC",
+    "NASA/JPL NASADEM HGT/NUM/SWB v001",
+    "GSHHG 2.3.7",
+    "PROJ NGA EGM96/EGM2008 grids"
   ],
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
-  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; sample data are real and were not AI-generated. NASADEM remains unauthenticated; scientific method, processing and application behavior require implementation-time validation and team review."
+  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. K-017 validates three AOIs and four mask cases, but does not establish global DEM accuracy or produce a global mask raster/ranking; independent team review is pending."
 }

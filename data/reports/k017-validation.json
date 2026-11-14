@@ -1,0 +1,836 @@
+{
+  "report_version": 1,
+  "task_id": "K-017",
+  "manifest": "data/manifests/k017-earth-validation.json",
+  "accessed_at": "2026-11-14",
+  "processing": {
+    "comparison_grid_resolution_m": 2000,
+    "feature_window_radius_m": 10000,
+    "horizontal_resampling": "bilinear for HGT; nearest-neighbor for NUM and SWB",
+    "validity": "same GSHHG land, NASADEM SWB land, and finite DEM cells for both products",
+    "vertical_conversion": "PROJ EGM96-to-EGM2008 operation with local NGA grids; ETOPO already uses EGM2008",
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "rasterio": "1.5.2",
+    "pyproj": "3.8.0"
+  },
+  "vertical_operation": {
+    "name": "Inverse of WGS 84 to EGM96 height (1) + WGS 84 to EGM2008 height (1) (with axis order normalized for visualization)",
+    "accuracy_m": 1.113,
+    "definition": "proj=pipeline step proj=unitconvert xy_in=deg xy_out=rad step proj=vgridshift grids=us_nga_egm96_15.tif multiplier=1 step inv proj=vgridshift grids=us_nga_egm08_25.tif multiplier=1 step proj=unitconvert xy_in=rad xy_out=deg"
+  },
+  "comparison_aois": [
+    {
+      "aoi_id": "atacama-andes",
+      "label": "Atacama / Andes",
+      "nasadem_granule": "NASADEM_HGT_s25w069",
+      "target_crs": "EPSG:32719",
+      "cell_size_m": 2000,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "minimum_valid_fraction": 0.7
+      },
+      "counts": {
+        "target_grid_cells": 3300,
+        "aoi_cells": 1796,
+        "gshhg_land_cells_in_aoi": 1796,
+        "nasadem_swb_land_cells_in_aoi": 1793,
+        "nasadem_swb_water_cells_in_aoi": 3,
+        "gshhg_swb_evaluable_cells": 1796,
+        "gshhg_swb_agreement_cells": 1793,
+        "gshhg_swb_disagreement_cells": 3,
+        "common_land_dem_cells": 1793
+      },
+      "gshhg_swb_agreement_fraction": 0.9983296213808464,
+      "nasadem_sources": {
+        "hgt_sha256": "f1ec048c7ed55fe1801043b94486f4711026de1b068f178b79deb5bd870f8f58",
+        "num_sha256": "b359bc1116e74fb5bf65ab2ab7d22cbef5618141a552f8d572675af085999ff0",
+        "swb_sha256": "8eaa2196f307f909a164b5b87df7e29dc0813780a2abd945068b4ff5a2a06c81",
+        "num_class_histogram": {
+          "1": 6,
+          "2": 718,
+          "3": 1013,
+          "4": 56
+        }
+      },
+      "vertical_conversion": {
+        "source": "EGM96 geoid height",
+        "target": "EGM2008 geoid height",
+        "operation": "Inverse of WGS 84 to EGM96 height (1) + WGS 84 to EGM2008 height (1) (with axis order normalized for visualization)",
+        "accuracy_m": 1.113,
+        "offset_m": {
+          "count": 1793,
+          "mean": -0.2152356654405594,
+          "p05": -0.6706281900405884,
+          "median": -0.21044547855854034,
+          "p95": 0.22168102860450745
+        },
+        "absolute_height_difference_m": {
+          "count": 1793,
+          "mean_bias": 0.9279122041445901,
+          "mae": 3.6358677299742053,
+          "rmse": 5.741219742908719,
+          "median_abs_error": 2.02685546875
+        }
+      },
+      "features": {
+        "slope_deg": {
+          "unit": "degree",
+          "nasadem": {
+            "count": 1769,
+            "mean": 4.206811904907227,
+            "p05": 0.7650457620620728,
+            "median": 3.351421594619751,
+            "p95": 10.805951118469238
+          },
+          "etopo": {
+            "count": 1769,
+            "mean": 4.1587815284729,
+            "p05": 0.7608683109283447,
+            "median": 3.322849750518799,
+            "p95": 10.568819046020508
+          },
+          "nasadem_minus_etopo": {
+            "count": 1769,
+            "mean_bias": 0.048030546095870846,
+            "mae": 0.0769916802195652,
+            "rmse": 0.12232616169969539,
+            "median_abs_error": 0.0413203239440918
+          }
+        },
+        "roughness_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1793,
+            "mean": 167.26864624023438,
+            "p05": 40.143760681152344,
+            "median": 157.1822052001953,
+            "p95": 342.9321594238281
+          },
+          "etopo": {
+            "count": 1793,
+            "mean": 164.84896850585938,
+            "p05": 39.59598159790039,
+            "median": 155.24679565429688,
+            "p95": 338.17620849609375
+          },
+          "nasadem_minus_etopo": {
+            "count": 1793,
+            "mean_bias": 2.419680276797327,
+            "mae": 2.4445508626075143,
+            "rmse": 2.9897443674545947,
+            "median_abs_error": 1.9527435302734375
+          }
+        },
+        "relief_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1793,
+            "mean": 890.1629028320312,
+            "p05": 382.61669921875,
+            "median": 843.72607421875,
+            "p95": 1510.84716796875
+          },
+          "etopo": {
+            "count": 1793,
+            "mean": 884.9680786132812,
+            "p05": 379.69232177734375,
+            "median": 836.924072265625,
+            "p95": 1508.50634765625
+          },
+          "nasadem_minus_etopo": {
+            "count": 1793,
+            "mean_bias": 5.194912792914285,
+            "mae": 6.717494166768335,
+            "rmse": 9.600946012184592,
+            "median_abs_error": 4.391357421875
+          }
+        }
+      }
+    },
+    {
+      "aoi_id": "hawaii-big-island",
+      "label": "Hawaii, Big Island",
+      "nasadem_granule": "NASADEM_HGT_n19w156",
+      "target_crs": "EPSG:32605",
+      "cell_size_m": 2000,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "minimum_valid_fraction": 0.7
+      },
+      "counts": {
+        "target_grid_cells": 3480,
+        "aoi_cells": 1854,
+        "gshhg_land_cells_in_aoi": 1703,
+        "nasadem_swb_land_cells_in_aoi": 1704,
+        "nasadem_swb_water_cells_in_aoi": 150,
+        "gshhg_swb_evaluable_cells": 1854,
+        "gshhg_swb_agreement_cells": 1853,
+        "gshhg_swb_disagreement_cells": 1,
+        "common_land_dem_cells": 1703
+      },
+      "gshhg_swb_agreement_fraction": 0.9994606256742179,
+      "nasadem_sources": {
+        "hgt_sha256": "81152cfe0644ec55e4ed8f6575c1d69a444ef9bb7716baac4e03cde3066211be",
+        "num_sha256": "107b427b930871e01a8f6485aad370292f3c3bb19498f2bde30ec20417baab9d",
+        "swb_sha256": "7bdf1ba4116256b66f9e8b05ca3e28912fcf19ab36f6cacb22420a287790d389",
+        "num_class_histogram": {
+          "1": 1,
+          "2": 910,
+          "3": 743,
+          "4": 49
+        }
+      },
+      "vertical_conversion": {
+        "source": "EGM96 geoid height",
+        "target": "EGM2008 geoid height",
+        "operation": "Inverse of WGS 84 to EGM96 height (1) + WGS 84 to EGM2008 height (1) (with axis order normalized for visualization)",
+        "accuracy_m": 1.113,
+        "offset_m": {
+          "count": 1703,
+          "mean": -0.6604259014129639,
+          "p05": -1.0037312507629395,
+          "median": -0.6691873073577881,
+          "p95": -0.32009926438331604
+        },
+        "absolute_height_difference_m": {
+          "count": 1703,
+          "mean_bias": 2.5365869937332253,
+          "mae": 5.235784811057977,
+          "rmse": 8.25295340548939,
+          "median_abs_error": 3.92559814453125
+        }
+      },
+      "features": {
+        "slope_deg": {
+          "unit": "degree",
+          "nasadem": {
+            "count": 1638,
+            "mean": 5.204693794250488,
+            "p05": 1.7140192985534668,
+            "median": 4.7174882888793945,
+            "p95": 10.024938583374023
+          },
+          "etopo": {
+            "count": 1638,
+            "mean": 5.200253963470459,
+            "p05": 1.7290499210357666,
+            "median": 4.711770534515381,
+            "p95": 9.965431213378906
+          },
+          "nasadem_minus_etopo": {
+            "count": 1638,
+            "mean_bias": 0.004439882333680387,
+            "mae": 0.061958456805410254,
+            "rmse": 0.09003444017240445,
+            "median_abs_error": 0.04609322547912598
+          }
+        },
+        "roughness_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1622,
+            "mean": 135.3051300048828,
+            "p05": 39.178070068359375,
+            "median": 113.9337387084961,
+            "p95": 306.0547180175781
+          },
+          "etopo": {
+            "count": 1622,
+            "mean": 134.8555450439453,
+            "p05": 38.11690139770508,
+            "median": 114.04656219482422,
+            "p95": 304.890869140625
+          },
+          "nasadem_minus_etopo": {
+            "count": 1622,
+            "mean_bias": 0.4495828066448395,
+            "mae": 1.2624220889240834,
+            "rmse": 1.7084319248621018,
+            "median_abs_error": 1.0054473876953125
+          }
+        },
+        "relief_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1622,
+            "mean": 1342.7205810546875,
+            "p05": 676.9874267578125,
+            "median": 1290.94873046875,
+            "p95": 2131.182373046875
+          },
+          "etopo": {
+            "count": 1622,
+            "mean": 1343.4954833984375,
+            "p05": 673.4259033203125,
+            "median": 1289.0167236328125,
+            "p95": 2139.49365234375
+          },
+          "nasadem_minus_etopo": {
+            "count": 1622,
+            "mean_bias": -0.7749135197311382,
+            "mae": 6.6770052645268185,
+            "rmse": 9.773585137596406,
+            "median_abs_error": 4.885009765625
+          }
+        }
+      }
+    },
+    {
+      "aoi_id": "himalaya",
+      "label": "Himalaya",
+      "nasadem_granule": "NASADEM_HGT_n28e086",
+      "target_crs": "EPSG:32645",
+      "cell_size_m": 2000,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "minimum_valid_fraction": 0.7
+      },
+      "counts": {
+        "target_grid_cells": 3245,
+        "aoi_cells": 1737,
+        "gshhg_land_cells_in_aoi": 1737,
+        "nasadem_swb_land_cells_in_aoi": 1731,
+        "nasadem_swb_water_cells_in_aoi": 6,
+        "gshhg_swb_evaluable_cells": 1737,
+        "gshhg_swb_agreement_cells": 1731,
+        "gshhg_swb_disagreement_cells": 6,
+        "common_land_dem_cells": 1731
+      },
+      "gshhg_swb_agreement_fraction": 0.9965457685664939,
+      "nasadem_sources": {
+        "hgt_sha256": "fdec4a92dec8f44d2cfba023c8dddc4cba22be5542549c01e5fa81670cb5c517",
+        "num_sha256": "1ed7517bef3ffbd7e25ac76d2cb82fb5520101aefa1521c14dbdc387c8b6da25",
+        "swb_sha256": "3aae6ae3584c47f1907d1259e684903eac0caf767273ca9283d87ff4f5a53a70",
+        "num_class_histogram": {
+          "1": 124,
+          "2": 1225,
+          "3": 350,
+          "4": 18,
+          "41": 1,
+          "123": 1,
+          "125": 1,
+          "127": 1,
+          "129": 2,
+          "130": 1,
+          "132": 2,
+          "133": 2,
+          "138": 2,
+          "143": 1
+        }
+      },
+      "vertical_conversion": {
+        "source": "EGM96 geoid height",
+        "target": "EGM2008 geoid height",
+        "operation": "Inverse of WGS 84 to EGM96 height (1) + WGS 84 to EGM2008 height (1) (with axis order normalized for visualization)",
+        "accuracy_m": 1.113,
+        "offset_m": {
+          "count": 1731,
+          "mean": -0.1398916393518448,
+          "p05": -0.24306640028953552,
+          "median": -0.14080071449279785,
+          "p95": -0.05782675743103027
+        },
+        "absolute_height_difference_m": {
+          "count": 1731,
+          "mean_bias": 0.9268878515850665,
+          "mae": 7.428060177913778,
+          "rmse": 10.500548250476255,
+          "median_abs_error": 5.4677734375
+        }
+      },
+      "features": {
+        "slope_deg": {
+          "unit": "degree",
+          "nasadem": {
+            "count": 1688,
+            "mean": 4.794996738433838,
+            "p05": 0.8152239918708801,
+            "median": 4.3915300369262695,
+            "p95": 10.168575286865234
+          },
+          "etopo": {
+            "count": 1688,
+            "mean": 4.674552917480469,
+            "p05": 0.7993358969688416,
+            "median": 4.306239604949951,
+            "p95": 9.838852882385254
+          },
+          "nasadem_minus_etopo": {
+            "count": 1688,
+            "mean_bias": 0.12044312263357837,
+            "mae": 0.1635915496611694,
+            "rmse": 0.23042530005408307,
+            "median_abs_error": 0.12030935287475586
+          }
+        },
+        "roughness_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1731,
+            "mean": 195.15347290039062,
+            "p05": 107.25816345214844,
+            "median": 188.71253967285156,
+            "p95": 302.30291748046875
+          },
+          "etopo": {
+            "count": 1731,
+            "mean": 190.23458862304688,
+            "p05": 104.22138977050781,
+            "median": 183.44497680664062,
+            "p95": 293.55926513671875
+          },
+          "nasadem_minus_etopo": {
+            "count": 1731,
+            "mean_bias": 4.918886265129385,
+            "mae": 4.9198518176770225,
+            "rmse": 5.6856895274472405,
+            "median_abs_error": 3.9965667724609375
+          }
+        },
+        "relief_m": {
+          "unit": "m",
+          "nasadem": {
+            "count": 1731,
+            "mean": 923.957275390625,
+            "p05": 472.47314453125,
+            "median": 887.38134765625,
+            "p95": 1406.28369140625
+          },
+          "etopo": {
+            "count": 1731,
+            "mean": 911.1600341796875,
+            "p05": 459.718994140625,
+            "median": 876.4013671875,
+            "p95": 1388.056396484375
+          },
+          "nasadem_minus_etopo": {
+            "count": 1731,
+            "mean_bias": 12.79721626444816,
+            "mae": 14.121182023549204,
+            "rmse": 18.599833199148698,
+            "median_abs_error": 11.4140625
+          }
+        }
+      }
+    }
+  ],
+  "nasadem_tile_validation": [
+    {
+      "granule_id": "NASADEM_HGT_s25w069",
+      "archive_size_bytes": 13837115,
+      "archive_sha256": "0bf7b325fd309c98c3e89a43137f940d95878e20e8a7f5026f10a4632898ee69",
+      "files": {
+        "hgt": {
+          "filename": "s25w069.hgt",
+          "size_bytes": 25934402,
+          "sha256": "f1ec048c7ed55fe1801043b94486f4711026de1b068f178b79deb5bd870f8f58"
+        },
+        "num": {
+          "filename": "s25w069.num",
+          "size_bytes": 12967201,
+          "sha256": "b359bc1116e74fb5bf65ab2ab7d22cbef5618141a552f8d572675af085999ff0"
+        },
+        "swb": {
+          "filename": "s25w069.swb",
+          "size_bytes": 12967201,
+          "sha256": "8eaa2196f307f909a164b5b87df7e29dc0813780a2abd945068b4ff5a2a06c81"
+        }
+      },
+      "observed_value_summary": {
+        "sample_count_per_layer": 12967201,
+        "hgt_m_egm96": {
+          "minimum": 2423,
+          "maximum": 6732,
+          "outside_documented_range_count": 0
+        },
+        "num_class_histogram": {
+          "0": 11709,
+          "1": 46371,
+          "2": 6087140,
+          "3": 6511097,
+          "4": 309991,
+          "124": 1,
+          "125": 1,
+          "128": 1,
+          "130": 1,
+          "131": 1,
+          "132": 4,
+          "133": 4,
+          "134": 4,
+          "135": 7,
+          "136": 10,
+          "137": 20,
+          "138": 13,
+          "139": 13,
+          "140": 19,
+          "141": 10,
+          "142": 13,
+          "143": 21,
+          "144": 18,
+          "145": 17,
+          "146": 20,
+          "147": 26,
+          "148": 32,
+          "149": 16,
+          "150": 24,
+          "151": 42,
+          "152": 32,
+          "153": 28,
+          "154": 31,
+          "155": 46,
+          "156": 34,
+          "157": 35,
+          "158": 39,
+          "159": 42,
+          "160": 256,
+          "180": 1,
+          "185": 1,
+          "189": 2,
+          "190": 1,
+          "194": 3,
+          "195": 2,
+          "197": 1,
+          "250": 1
+        },
+        "swb_class_histogram": {
+          "0": 12955492,
+          "255": 11709
+        }
+      }
+    },
+    {
+      "granule_id": "NASADEM_HGT_n19w156",
+      "archive_size_bytes": 10982430,
+      "archive_sha256": "6c3ce653562a0e76d9204be0800124853deb77088167e63d7c1236a124cfdc31",
+      "files": {
+        "hgt": {
+          "filename": "n19w156.hgt",
+          "size_bytes": 25934402,
+          "sha256": "81152cfe0644ec55e4ed8f6575c1d69a444ef9bb7716baac4e03cde3066211be"
+        },
+        "num": {
+          "filename": "n19w156.num",
+          "size_bytes": 12967201,
+          "sha256": "107b427b930871e01a8f6485aad370292f3c3bb19498f2bde30ec20417baab9d"
+        },
+        "swb": {
+          "filename": "n19w156.swb",
+          "size_bytes": 12967201,
+          "sha256": "7bdf1ba4116256b66f9e8b05ca3e28912fcf19ab36f6cacb22420a287790d389"
+        }
+      },
+      "observed_value_summary": {
+        "sample_count_per_layer": 12967201,
+        "hgt_m_egm96": {
+          "minimum": -20,
+          "maximum": 4210,
+          "outside_documented_range_count": 0
+        },
+        "num_class_histogram": {
+          "0": 3051127,
+          "1": 7197,
+          "2": 5733106,
+          "3": 3922498,
+          "4": 252549,
+          "112": 23,
+          "113": 113,
+          "114": 232,
+          "115": 153,
+          "116": 39,
+          "117": 18,
+          "118": 9,
+          "119": 7,
+          "120": 8,
+          "121": 7,
+          "122": 1,
+          "123": 5,
+          "231": 102,
+          "250": 7
+        },
+        "swb_class_histogram": {
+          "0": 9916074,
+          "255": 3051127
+        }
+      }
+    },
+    {
+      "granule_id": "NASADEM_HGT_n28e086",
+      "archive_size_bytes": 16647273,
+      "archive_sha256": "567e6afbbe94c5694e93c8467c9c8a8cb7ae3f09c2ce225b036755b1d80cb2eb",
+      "files": {
+        "hgt": {
+          "filename": "n28e086.hgt",
+          "size_bytes": 25934402,
+          "sha256": "fdec4a92dec8f44d2cfba023c8dddc4cba22be5542549c01e5fa81670cb5c517"
+        },
+        "num": {
+          "filename": "n28e086.num",
+          "size_bytes": 12967201,
+          "sha256": "1ed7517bef3ffbd7e25ac76d2cb82fb5520101aefa1521c14dbdc387c8b6da25"
+        },
+        "swb": {
+          "filename": "n28e086.swb",
+          "size_bytes": 12967201,
+          "sha256": "3aae6ae3584c47f1907d1259e684903eac0caf767273ca9283d87ff4f5a53a70"
+        }
+      },
+      "observed_value_summary": {
+        "sample_count_per_layer": 12967201,
+        "hgt_m_egm96": {
+          "minimum": 2567,
+          "maximum": 8269,
+          "outside_documented_range_count": 0
+        },
+        "num_class_histogram": {
+          "0": 19739,
+          "1": 1027649,
+          "2": 8107393,
+          "3": 3217953,
+          "4": 312073,
+          "5": 20019,
+          "41": 61,
+          "42": 208,
+          "43": 1376,
+          "44": 1459,
+          "45": 1082,
+          "46": 482,
+          "47": 173,
+          "48": 38,
+          "49": 16,
+          "50": 18,
+          "51": 2,
+          "111": 135,
+          "112": 1075,
+          "113": 1892,
+          "114": 3072,
+          "115": 4503,
+          "116": 5461,
+          "117": 6475,
+          "118": 7495,
+          "119": 8202,
+          "120": 8493,
+          "121": 9225,
+          "122": 9927,
+          "123": 10269,
+          "124": 10700,
+          "125": 11488,
+          "126": 11599,
+          "127": 10960,
+          "128": 10777,
+          "129": 10530,
+          "130": 10087,
+          "131": 10017,
+          "132": 9647,
+          "133": 8836,
+          "134": 8215,
+          "135": 7743,
+          "136": 7252,
+          "137": 6448,
+          "138": 5869,
+          "139": 5236,
+          "140": 4527,
+          "141": 4080,
+          "142": 3228,
+          "143": 2642,
+          "144": 2185,
+          "145": 1779,
+          "146": 1425,
+          "147": 1027,
+          "148": 681,
+          "149": 447,
+          "150": 246,
+          "151": 189,
+          "152": 105,
+          "153": 66,
+          "154": 28,
+          "155": 10,
+          "156": 2,
+          "157": 2,
+          "171": 33,
+          "172": 167,
+          "173": 211,
+          "174": 385,
+          "175": 498,
+          "176": 397,
+          "177": 319,
+          "178": 213,
+          "179": 217,
+          "180": 154,
+          "181": 154,
+          "182": 144,
+          "183": 109,
+          "184": 102,
+          "185": 91,
+          "186": 78,
+          "187": 57,
+          "188": 79,
+          "189": 46,
+          "190": 47,
+          "191": 45,
+          "192": 40,
+          "193": 30,
+          "194": 30,
+          "195": 27,
+          "196": 17,
+          "197": 18,
+          "198": 11,
+          "199": 2,
+          "200": 5,
+          "207": 1,
+          "208": 1,
+          "232": 12,
+          "250": 9346,
+          "251": 77
+        },
+        "swb_class_histogram": {
+          "0": 12947462,
+          "255": 19739
+        }
+      }
+    },
+    {
+      "granule_id": "NASADEM_HGT_n29e027",
+      "archive_size_bytes": 8883266,
+      "archive_sha256": "fe3a1606ae107897b65a4ffef51f2d44eb25106b09aee93489c3cedda148b89f",
+      "files": {
+        "hgt": {
+          "filename": "n29e027.hgt",
+          "size_bytes": 25934402,
+          "sha256": "e03d431daf8419217f2132c50d62621065e5ee0c9d00adc9a2efb4ef9230e475"
+        },
+        "num": {
+          "filename": "n29e027.num",
+          "size_bytes": 12967201,
+          "sha256": "031b994d313a4a33a5b99b28235356177671f2898ff455f56d6b520ac1e92a35"
+        },
+        "swb": {
+          "filename": "n29e027.swb",
+          "size_bytes": 12967201,
+          "sha256": "e47549cc72469c03a4352052cabef673610c657781aa4f63c83d5c52748f4ef3"
+        }
+      },
+      "observed_value_summary": {
+        "sample_count_per_layer": 12967201,
+        "hgt_m_egm96": {
+          "minimum": -187,
+          "maximum": 135,
+          "outside_documented_range_count": 0
+        },
+        "num_class_histogram": {
+          "1": 880860,
+          "2": 5201175,
+          "3": 4733194,
+          "4": 1370836,
+          "5": 600202,
+          "6": 36093,
+          "42": 1,
+          "43": 1,
+          "113": 1,
+          "114": 2,
+          "115": 11,
+          "116": 29,
+          "117": 151,
+          "118": 656,
+          "119": 2105,
+          "120": 6104,
+          "121": 12382,
+          "122": 26906,
+          "123": 33990,
+          "124": 38428,
+          "125": 16509,
+          "126": 5342,
+          "127": 1980,
+          "128": 215,
+          "250": 28
+        },
+        "swb_class_histogram": {
+          "0": 12967201
+        }
+      }
+    }
+  ],
+  "mask_checks": [
+    {
+      "id": "big-island-land",
+      "longitude": -155.5,
+      "latitude": 19.5,
+      "land": true,
+      "deepest_level": 1,
+      "matched_features": [
+        {
+          "level": 1,
+          "id": "81"
+        }
+      ],
+      "expected": "land",
+      "nasadem_hgt_m_egm96": 3210.0,
+      "nasadem_swb_class": "land",
+      "nasadem_swb_expected": "land",
+      "nasadem_swb_passed": true,
+      "passed": true
+    },
+    {
+      "id": "big-island-ocean",
+      "longitude": -155.99,
+      "latitude": 19.5,
+      "land": false,
+      "deepest_level": null,
+      "matched_features": [],
+      "expected": "water",
+      "nasadem_hgt_m_egm96": 0.0,
+      "nasadem_swb_class": "water",
+      "nasadem_swb_expected": "water",
+      "nasadem_swb_passed": true,
+      "passed": true
+    },
+    {
+      "id": "qattara-depression",
+      "longitude": 27.1,
+      "latitude": 29.1,
+      "land": true,
+      "deepest_level": 1,
+      "matched_features": [
+        {
+          "level": 1,
+          "id": "1"
+        }
+      ],
+      "expected": "land",
+      "nasadem_hgt_m_egm96": -80.0,
+      "nasadem_swb_class": "land",
+      "nasadem_hgt_below_m": 0,
+      "nasadem_below_sea_level_passed": true,
+      "passed": true
+    },
+    {
+      "id": "antarctica-grounded",
+      "longitude": 0.0,
+      "latitude": -85.0,
+      "land": true,
+      "deepest_level": 6,
+      "matched_features": [
+        {
+          "level": 6,
+          "id": "5-E"
+        }
+      ],
+      "expected": "land",
+      "passed": true
+    }
+  ],
+  "mask_checks_passed": true,
+  "limitations": [
+    "NASADEM covers the SRTM latitude band only; GSHHG L6 supplies grounded Antarctica outside that band.",
+    "This validation compares three selected AOIs and does not establish global DEM agreement or a global ranking.",
+    "A full global GSHHG mask raster was not materialized; this run validates point classification and rasterization over the three AOIs.",
+    "GSHHG full-resolution polygons do not guarantee that islands smaller than a 2 km cell remain individually resolvable.",
+    "Global antimeridian and polar raster tiling behavior remains to be checked in the global pipeline task."
+  ]
+}
