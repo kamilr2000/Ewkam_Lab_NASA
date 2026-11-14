@@ -133,7 +133,7 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
   .map-frame { flex-basis: 420px; }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 780px) {
   .topbar { height: 58px; flex-basis: 58px; grid-template-columns: 1fr auto; padding: 0 17px; }
   .topbar-center { display: none; }
   .brand-name { font-size: 16px; }
