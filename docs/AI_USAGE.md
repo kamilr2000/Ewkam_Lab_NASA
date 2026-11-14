@@ -22,6 +22,6 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 
 | Data | Narzędzie / wersja, jeśli znana | Zadanie / pliki | Jak wspomogło pracę | Kontrola człowieka i testy | Oznaczenia w wyniku |
 |---|---|---|---|---|---|
-| Uzupełnij przy implementacji | | | | | |
+| 2026-11-14 | OpenAI Codex (wersja nieustalona) | K-001: `pyproject.toml`, API FastAPI, test gotowości i instrukcje środowiska | Utworzył szkielet backendu i konfigurację zależności. | Zainstalowano `uv.lock` w nowym `.venv` na Pythonie 3.12.14; `pytest` zakończył się `1 passed`; lokalny endpoint zwrócił stan gotowości i jawny brak danych. Przegląd człowieka pozostaje wymagany. | Nie wygenerowano danych ani pomiarów naukowych. |
 
 Wraz z kodem lub danymi wspomaganymi przez AI dodaj opis i metadane wymagane dla tych materiałów. Jeżeli powstaną media, zastosuj oznaczenia właściwe dla ich typu według S03. Nie utożsamiaj użycia asystenta z wykorzystaniem danych NASA. Przed zgłoszeniem członkowie zespołu potwierdzają opis użycia narzędzi.
