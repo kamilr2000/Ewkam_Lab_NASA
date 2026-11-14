@@ -97,7 +97,7 @@ function App() {
             <div className="toolbar-status"><span className="status-dot" aria-hidden="true" />Awaiting analysis</div>
           </div>
 
-          <div className="map-frame" aria-label="Map canvas awaiting analysis data">
+          <div className="map-frame" role="region" aria-label="Analysis map awaiting data" aria-describedby="map-scale-note">
             <div className="map-grid" aria-hidden="true" />
             <div className="map-coordinate coordinate-nw">GLOBAL TERRAIN VIEW <span>·</span> WGS 84</div>
             <div className="map-coordinate coordinate-ne">NO ACTIVE DATASET</div>
@@ -108,8 +108,9 @@ function App() {
               <p>Connect an analysis to see measured cells, source coverage and the strongest matching locations.</p>
             </div>
             <div className="map-coordinate coordinate-sw">MAP LAYERS <span>·</span> NOT YET LOADED</div>
-            <div className="map-coordinate coordinate-se">CELL OUTLINES WILL REFLECT THE ANALYSIS GRID</div>
+            <div className="map-coordinate coordinate-se">ANALYSIS GRID CELLS · NOT SCREEN PIXELS</div>
             <div className="map-scale" aria-label="Map scale unavailable"><span /><span>—</span><span>Scale unavailable</span></div>
+            <p className="map-scale-note" id="map-scale-note">Zoom changes the view, not the data resolution.</p>
           </div>
 
           <div className="results-bottom">
@@ -120,9 +121,18 @@ function App() {
               </div>
               <div className="empty-list-state">
                 <span className="empty-glyph" aria-hidden="true">↗</span>
-                <p>Run an analysis to rank individual grid cells.</p>
+                <p>Run an analysis to rank individual physical grid cells.</p>
               </div>
-              <p className="card-footnote">Nearby cells can each appear in the ranking.</p>
+              <p className="card-footnote">Nearby cells can each appear in the ranking. A map bucket is only a display summary.</p>
+            </section>
+
+            <section className="result-card pixel-card" aria-labelledby="pixel-heading">
+              <div className="card-heading">
+                <div><p className="eyebrow">SELECTED CELL</p><h2 id="pixel-heading">Pixel details</h2></div>
+                <span className="empty-tag">NO SELECTION</span>
+              </div>
+              <p className="explanation-copy">Select a ranked pixel to inspect its true cell outline, area, grid and source resolution, and feature window.</p>
+              <p className="card-footnote">These are separate scales. Zooming the map does not add measurement detail.</p>
             </section>
 
             <section className="result-card explanation-card" aria-labelledby="explanation-heading">
@@ -130,7 +140,7 @@ function App() {
                 <div><p className="eyebrow">READ THE RESULT</p><h2 id="explanation-heading">A transparent comparison</h2></div>
                 <span className="info-mark" aria-hidden="true">i</span>
               </div>
-              <p className="explanation-copy">Each score will show the measured value, its unit, reference range and weighted contribution—alongside source scale and quality flags.</p>
+              <p className="explanation-copy">Each similarity index will show measured values, units, reference ranges, weighted contributions, source scale, coverage and quality flags.</p>
               <div className="legend-row"><span className="legend-swatch" aria-hidden="true" /><span>Similarity index</span><span className="legend-range">0–100%</span></div>
               <p className="card-footnote">The current MVP covers three related topographic measures only; it is not a full environmental comparison. A similarity index does not establish that two environments are alike in every way.</p>
             </section>
