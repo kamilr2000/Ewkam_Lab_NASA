@@ -72,10 +72,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-016 — Review audytu źródeł i próbek K-002](E-016.md), Ewelina, P0: sprawdzenie metadanych, sum i odtwarzalnego pobrania z PR #8.
 - [K-017 — Pozyskaj NASADEM i wybierz niezależną maskę lądu](K-017.md), Kamil, P0: pobranie NASADEM po lokalnym logowaniu i weryfikacja maski przed walidacją Earth DEM.
 - [K-018 — Re-review overflowu mobilnego przy klasycznym pasku](K-018.md), Kamil, P0: ponowne sprawdzenie E-014 wobec `clientWidth` na dokładnym nowym headzie PR #5.
+- [I-010 — Uzupełnij rejestr AI dla E-002, E-014 i E-016](I-010.md), Ewelina, P0: uzupełnienie wymaganej deklaracji Codex dla UI, poprawki mobilnej i review próbek.
+- [E-017 — Niezależny review NASADEM i maski lądu](E-017.md), Ewelina, P0: sprawdzenie opublikowanego K-017, jego źródeł, porównania i ograniczeń w PR #12.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-019, E-017, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-019, E-018, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
