@@ -1,0 +1,233 @@
+{
+  "manifest_version": 1,
+  "task_id": "K-002",
+  "accessed_at": "2026-11-14",
+  "datasets": [
+    {
+      "dataset_id": "ETOPO_2022_v1_15s_surface",
+      "title": "ETOPO 2022 15 Arc-Second Global Relief Model, surface elevation tile",
+      "provider": "NOAA National Centers for Environmental Information",
+      "product_version": "ETOPO_2022_v1",
+      "role": "Real Earth DEM sample used to verify public download, raster metadata, and elevation units. This single tile is not a global coverage claim.",
+      "citation": "NOAA National Centers for Environmental Information. 2022. ETOPO 2022 15 Arc-Second Global Relief Model. https://doi.org/10.25921/fd45-gt74",
+      "license": {
+        "id": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "evidence_url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022"
+      },
+      "format": "GeoTIFF",
+      "sample_grid": {
+        "width": 3600,
+        "height": 3600,
+        "bands": 1,
+        "dtype": "float32",
+        "resolution_degrees": 0.0041666667,
+        "bounds_degrees": {
+          "west": -75,
+          "south": -30,
+          "east": -60,
+          "north": -15
+        },
+        "horizontal_crs": "WGS84",
+        "vertical_reference": "EGM2008",
+        "compound_crs_reported_by_rasterio": "EPSG:9518",
+        "units": "m",
+        "nodata": -99999,
+        "sample_min_m": -8997,
+        "sample_max_m": 6806.77880859375,
+        "sample_mean_m": 262.3150242968591,
+        "sample_standard_deviation_m": 2989.101483183304
+      },
+      "limitations": [
+        "The sample is one 15 by 15 degree tile named S15W075; it includes land and bathymetry.",
+        "The project-wide analysis grid and effective physical scale remain subject to the K-002 G1 benchmark.",
+        "Use an independent land mask; do not infer land by thresholding elevation at zero.",
+        "NOAA states the product is not for navigation."
+      ],
+      "files": [
+        {
+          "filename": "ETOPO_2022_v1_15s_S15W075_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S15W075_surface.tif",
+          "size_bytes": 30004071,
+          "sha256": "1872b57145c8d18ebd44cf6d08de601bd34c067dc5a780038b0754398444eaf9"
+        }
+      ]
+    },
+    {
+      "dataset_id": "LRO-L-LOLA-4-GDR-V1.0",
+      "title": "Lunar Reconnaissance Orbiter LOLA Gridded Digital Elevation Model, LDEM_4",
+      "provider": "NASA Planetary Data System Geosciences Node / LOLA Data Node",
+      "product_version": "V3.0",
+      "pds4_bundle_lid": "urn:nasa:pds:lro_lola_rdr",
+      "doi": "https://doi.org/10.17189/1520642",
+      "role": "Real lunar altimetry-derived gridded shape sample for checking the planetary data ingestion and label interpretation.",
+      "license": {
+        "id": "Public domain (PDS data)",
+        "evidence_url": "https://pds-geosciences.wustl.edu/faq.html",
+        "citation_guidance": "Cite the PDS data set DOI and product; PDS archive documents may have separate copyright statements."
+      },
+      "format": "PDS image array with detached PDS3 LBL and PDS4 XML labels",
+      "sample_grid": {
+        "product_id": "LDEM_4",
+        "width": 1440,
+        "height": 720,
+        "pixels_per_degree": 4,
+        "reported_map_scale_m_per_pixel": 7580.84,
+        "coverage": "global; 0-360 degrees east longitude and 90 degrees north to 90 degrees south",
+        "projection": "simple cylindrical",
+        "coordinate_system": "body-fixed rotating; mean Earth/polar axis of DE421",
+        "sample_type": "signed 16-bit little-endian integer",
+        "raw_units": "digital number",
+        "scaling_factor_m_per_dn": 0.5,
+        "reference_radius_offset_m": 1737400,
+        "raw_sample_min_dn": -17757,
+        "raw_sample_max_dn": 21008,
+        "nodata": "No missing-data constant is declared in the sampled product label.",
+        "interpretation": "Planetary radius = DN * 0.5 m + 1,737,400 m. True topography relative to the lunar geoid requires planetary radius minus geoid radius; this sample is a radius/shape map relative to a reference sphere, not a directly comparable absolute elevation datum."
+      },
+      "limitations": [
+        "The 4 pixels per degree sample has a coarser scale than the final detail needed for all lunar analog features.",
+        "Lunar reference radii and geoid are not Earth or Mars vertical datums.",
+        "A missing-data constant is not declared; do not invent one."
+      ],
+      "files": [
+        {
+          "filename": "ldem_4.img",
+          "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_4.img",
+          "size_bytes": 2073600,
+          "sha256": "c04632eba6449af49e3108ed7c25b3b1c450600abd3690df4fc815853a1af476"
+        },
+        {
+          "filename": "ldem_4.lbl",
+          "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_4.lbl",
+          "size_bytes": 5107,
+          "sha256": "b5a197b4d417e3b5e0e84f8fe15f9a1d2203b8eb5d7213236c0ffbc86e940cc6"
+        },
+        {
+          "filename": "ldem_4.xml",
+          "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_4.xml",
+          "size_bytes": 11930,
+          "sha256": "534384777b2eea7c98e5a19516f31e218d0b7b18a00134a51f04002a8aa2f57e"
+        }
+      ]
+    },
+    {
+      "dataset_id": "MGS-M-MOLA-5-MEGDR-L3-V1.0",
+      "title": "Mars Global Surveyor MOLA MEGDR, global 4 pixels per degree topography and counts",
+      "provider": "NASA Planetary Data System Geosciences Node",
+      "product_version": "2.0",
+      "pds4_bundle_lid": "urn:nasa:pds:mgs_mola_topography_derived",
+      "doi": "https://doi.org/10.17189/1z1b-kv84",
+      "role": "Real Mars altimetry-derived topography sample; the paired count map records direct observations and must be retained for quality handling.",
+      "license": {
+        "id": "Public domain (PDS data)",
+        "evidence_url": "https://pds-geosciences.wustl.edu/faq.html",
+        "citation_guidance": "Cite the PDS4 bundle DOI and product; PDS archive documents may have separate copyright statements."
+      },
+      "format": "PDS3 image arrays with detached PDS3 LBL and maintained PDS4 XML labels",
+      "sample_grid": {
+        "topography_product_id": "MEGT90N000CB.IMG",
+        "counts_product_id": "MEGC90N000CB.IMG",
+        "width": 1440,
+        "height": 720,
+        "pixels_per_degree": 4,
+        "angular_bin_degrees": 0.25,
+        "equatorial_scale_km_per_pixel": 14.818,
+        "coverage": "global; 0-360 degrees east longitude and 90 degrees north to 90 degrees south",
+        "projection": "simple cylindrical",
+        "coordinate_system": "body-fixed rotating, planetocentric, IAU2000_MARS",
+        "topography_units": "m",
+        "vertical_reference": "planetary radius minus the MOLA areoid (GMM-3)",
+        "sample_type": "signed 16-bit big-endian integer",
+        "sample_topography_min_m": -8068,
+        "sample_topography_max_m": 21134,
+        "sample_count_min": 0,
+        "sample_count_max": 2611,
+        "nodata_policy": "The topography product fills unobserved bins by interpolation. Retain the counts map; a count of zero means no direct observations in that bin and must be exposed as an observation-quality limitation."
+      },
+      "limitations": [
+        "The 4 pixels per degree grid is about 14.8 km per pixel at the equator; angular cell size does not represent a constant physical distance over latitude.",
+        "The PDS4 label dated 2026-09-15 is the maintained label and corrects the map pixel scale/geotransform metadata; preserve it with the data.",
+        "Interpolated bins are not direct measurements. Exclude or separately flag zero-count cells when the comparison requires observed values."
+      ],
+      "files": [
+        {
+          "filename": "megt90n000cb.img",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megt90n000cb.img",
+          "size_bytes": 2073600,
+          "sha256": "25f16fb7aaf857898dcf98bc4f841341a24f8b9f7e98453ca083bc45d897ca2c"
+        },
+        {
+          "filename": "megt90n000cb.lbl",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megt90n000cb.lbl",
+          "size_bytes": 4796,
+          "sha256": "5a3fe60256afa1c35fea5d551fe0ab0a9198fb2bcd2c2e161d078aa69627ebac"
+        },
+        {
+          "filename": "megt90n000cb.xml",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megt90n000cb.xml",
+          "size_bytes": 15509,
+          "sha256": "e3982cb17458a9d59896b0c21e0485322ccc42f8e6089d9d856a62032775b60b"
+        },
+        {
+          "filename": "megc90n000cb.img",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megc90n000cb.img",
+          "size_bytes": 2073600,
+          "sha256": "7e920ec43497b4beddf974650471600c7afd4916e2a8dd3500d6b14714365661"
+        },
+        {
+          "filename": "megc90n000cb.lbl",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megc90n000cb.lbl",
+          "size_bytes": 3066,
+          "sha256": "487004de9598296dc910b814ee8a256e7755abed7ade9f1180743208eccb8476"
+        },
+        {
+          "filename": "megc90n000cb.xml",
+          "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/megc90n000cb.xml",
+          "size_bytes": 13835,
+          "sha256": "32b1df151884c2a212ed108e9e1c75eff8fb4b084ba17bf37338a8b72bba5a57"
+        }
+      ]
+    }
+  ],
+  "blocked_or_planned_sources": [
+    {
+      "dataset_id": "NASADEM_HGT",
+      "collection_version": "001",
+      "granule_id": "NASADEM_HGT_s24w069",
+      "role": "NASA Earth DEM sample for an independent Earth-elevation comparison; NASADEM also provides a land/water byte mask in its related SWB file.",
+      "doi": "https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001",
+      "citation": "NASA JPL. NASADEM Merged DEM Global 1 arc second V001. 2020. NASA EOSDIS Land Processes Distributed Active Archive Center. https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001",
+      "license": {
+        "id": "CC0-1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "evidence_url": "https://forum.earthdata.nasa.gov/viewtopic.php?p=18837&t=5421"
+      },
+      "metadata_url": "https://cmr.earthdata.nasa.gov/search/granules.umm_json?short_name=NASADEM_HGT&version=001&page_size=1&producer_granule_id=NASADEM_HGT_s24w069",
+      "data_url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/NASADEM_HGT.001/NASADEM_HGT_s24w069/NASADEM_HGT_s24w069.zip",
+      "product_guide_url": "https://lpdaac.usgs.gov/documents/2237/NASADEM_User_Guide_V13.pdf",
+      "access_method": "NASA Earthdata Login credentials via earthaccess or authenticated HTTPS; never put credentials or tokens in the repository.",
+      "observed_access": "CMR metadata lookup succeeded without authentication; the granule is catalogued. An unauthenticated data request returned the Earthdata login page, so no NASADEM measurements were downloaded or verified in this run.",
+      "guide_metadata": {
+        "hgt_units": "m relative to EGM96 geoid",
+        "hgt_layout": "3601 by 3601 signed 16-bit HGT samples",
+          "hgt_no_data": "The user guide lists no fill or no-data value.",
+        "swb_classes": {
+          "0": "land",
+          "255": "water"
+        },
+        "coverage": "NASADEM/SRTM latitude coverage does not include polar regions."
+      },
+      "status": "authentication_required"
+    },
+    {
+      "dataset_id": "GSHHG",
+      "product_version": "2.3.7",
+      "role": "Candidate independent land and lake polygon mask; do not derive land from a zero-elevation threshold.",
+      "source_url": "https://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html",
+      "license": "GNU Lesser General Public License (LGPL), according to NOAA NCEI.",
+      "coverage_and_format": "Global hierarchical closed polygons; WGS84 geographic coordinates; multiple resolutions and shoreline/lake hierarchy levels.",
+      "status": "candidate_not_downloaded"
+    }
+  ]
+}

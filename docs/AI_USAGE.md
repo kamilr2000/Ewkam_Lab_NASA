@@ -8,9 +8,9 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 - **Narzędzie:** asystent Codex. Dokładnego identyfikatora wersji modelu nie zapisano.
 - **Zakres wspomagania:** analiza wskazanych źródeł, propozycja źródeł i metody, plan projektu, podział pracy, dokumentacja, karty zadań, kontrakt startowy i syntetyczne przypadki regresyjne.
 - **Wygenerowane artefakty:** pliki przygotowania w początkowym commicie, w tym narzędzie kontroli dokumentacji. Fixture'y mają `is_synthetic: true` i `ai_assisted: true`; nie stanowią obserwacji Ziemi ani planet. Metadane: [ai-usage.json](ai-usage.json).
-- **Stan kontroli:** zweryfikowano treści oficjalnych stron przez narzędzie odczytu; metoda, progi i architektura są propozycją wymagającą walidacji przy implementacji.
+- **Stan kontroli:** oficjalne metadane źródeł sprawdzono, a rzeczywiste pliki próbek Ziemi/LOLA/MOLA pobrano bezpośrednio z NOAA i NASA PDS, po czym zweryfikowano etykiety, odczyt i sumy SHA-256. Asystent pomógł przygotować manifest, instrukcję pobrania i streszczenie ograniczeń; AI nie wygenerowało ani nie zmieniło pomiarów. NASADEM nie został pobrany z powodu wymaganego uwierzytelnienia Earthdata. Metoda, progi i architektura nadal wymagają walidacji przy implementacji.
 - **Media generatywne:** na tym etapie nie wygenerowano zdjęć, filmów ani audio. Nie wygenerowano materiałów zawierających branding NASA.
-- **Dane naukowe:** nie pobrano i nie wygenerowano żadnych rzeczywistych pomiarów; dane testowe nie mogą zostać przedstawione jako pomiary.
+- **Dane naukowe:** pobrano rzeczywiste próbki ETOPO 2022, LOLA LDEM_4 i MOLA MEGT/MEGC; surowe pliki są ignorowane przez Git, a ich pochodzenie i SHA-256 są w data/manifests/k002-samples.json. Nie wygenerowano pomiarów ani danych syntetycznych do tych próbek.
 
 ## Kolejne wpisy
 
@@ -19,6 +19,8 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 2026-11-14 — I-007: Codex rozbudował oba prompty do samodzielnych Celów wykonawczych z kryteriami ukończenia, obowiązkowym pullem, rezerwacją przed implementacją, wykrywaniem braków oraz zlecaniem zadań i review drugiemu agentowi. Na wyraźną prośbę Kamila formalny submission oznaczono jako human_only; agenci kończą na gotowym pakiecie do ręcznego zgłoszenia. Zaktualizowano szablon przeglądu i instrukcje tak, by nie tworzyć zależności wymagającej done ocenianego zadania przed jego review.
 
 2026-11-14 — I-008: Codex doprecyzował pierwszeństwo gotowych review przy wyborze następnego zadania, także przed zwykłymi P0, bez przerywania już wykonywanej pracy. Zaktualizowano oba Cele, instrukcje i szablon przeglądu; sprawdzenia dotyczą dokumentacji, nie działania aplikacji.
+
+2026-11-14 — K-002: Codex sprawdził oficjalne metadane NOAA ETOPO oraz NASA PDS LOLA/MOLA, pobrał próbki z oficjalnych serwerów i przygotował manifest oraz mały downloader sprawdzający rozmiar i SHA-256. Pomiary i etykiety pochodzą z archiwów; asystent nie wygenerował ani nie edytował danych. NASADEM pozostał niedostępny bez logowania Earthdata; dokładny stan i ograniczenia zapisano w manifeście.
 
 | Data | Narzędzie / wersja, jeśli znana | Zadanie / pliki | Jak wspomogło pracę | Kontrola człowieka i testy | Oznaczenia w wyniku |
 |---|---|---|---|---|---|
