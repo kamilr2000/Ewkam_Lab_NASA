@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terra-analog:profile-response:1.0.0",
+  "title": "ProfileResponse v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "is_synthetic", "profile"],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "is_synthetic": {"type": "boolean"},
+    "profile": {"$ref": "#/$defs/profile"}
+  },
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "name", "body", "profile_version", "region", "features", "source_ids", "limitations"],
+      "properties": {
+        "profile_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "body": {"enum": ["mars", "moon"]},
+        "profile_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "region": {"$ref": "#/$defs/region"},
+        "features": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/profileFeature"}},
+        "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region_id", "name", "coordinate_system", "geometry", "geometry_missing_reason"],
+      "properties": {
+        "region_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "coordinate_system": {"$ref": "#/$defs/coordinateSystem"},
+        "geometry": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "coordinate_system_id", "coordinates"],
+              "properties": {
+                "type": {"enum": ["Polygon", "MultiPolygon"]},
+                "coordinate_system_id": {"type": "string", "minLength": 1, "maxLength": 128},
+                "coordinates": {"type": "array", "minItems": 1}
+              }
+            }
+          ]
+        },
+        "geometry_missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 128}
+      }
+    },
+    "coordinateSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate_system_id", "body", "name", "longitude_direction", "longitude_domain", "latitude_type", "vertical_reference", "vertical_reference_missing_reason"],
+      "properties": {
+        "coordinate_system_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "body": {"enum": ["mars", "moon"]},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "longitude_direction": {"enum": ["east", "west", "not_applicable"]},
+        "longitude_domain": {"enum": ["-180_180", "0_360", "not_applicable"]},
+        "latitude_type": {"enum": ["planetocentric", "planetographic", "selenocentric", "selenographic", "other"]},
+        "vertical_reference": {"type": ["string", "null"], "minLength": 1, "maxLength": 200},
+        "vertical_reference_missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 500}
+      }
+    },
+    "profileFeature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature_id", "name", "description", "unit", "measurement_scale", "reference_interval", "tolerance", "spatial_support", "is_proxy", "proxy_description", "source_ids", "limitations"],
+      "properties": {
+        "feature_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "description": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "measurement_scale": {"enum": ["ratio", "interval", "ordinal", "nominal"]},
+        "reference_interval": {
+          "type": "array",
+          "prefixItems": [{"type": "number"}, {"type": "number"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "tolerance": {"$ref": "#/$defs/tolerance"},
+        "spatial_support": {"$ref": "#/$defs/spatialSupport"},
+        "is_proxy": {"type": "boolean"},
+        "proxy_description": {"type": ["string", "null"], "minLength": 1, "maxLength": 1000},
+        "source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "tolerance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "basis", "rationale", "source_ids"],
+      "properties": {
+        "value": {"type": "number", "exclusiveMinimum": 0},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "basis": {"enum": ["physical", "measurement", "assumption"]},
+        "rationale": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}}
+      }
+    },
+    "spatialSupport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_resolution_m", "analysis_cell_resolution_m", "window_radius_m", "description", "missing_reason"],
+      "properties": {
+        "source_resolution_m": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "analysis_cell_resolution_m": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "window_radius_m": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "description": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 500}
+      }
+    }
+  }
+}

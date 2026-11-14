@@ -1,0 +1,37 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-hotspot",
+  "is_synthetic": true,
+  "query": {"bbox": [3, 3, 3.04, 3.02], "level": 0, "limit": 1000},
+  "map_cells": [
+    {
+      "cell_id": "synthetic-weak-map-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.03, 3], [3.03, 3.01], [3, 3.01], [3, 3]]]},
+      "max_score_pct": 100,
+      "mean_score_pct": 46.666666666666664,
+      "max_pixel_id": "synthetic-hotspot-p001",
+      "valid_pixel_count": 3,
+      "total_pixel_count": 3,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    },
+    {
+      "cell_id": "synthetic-steady-map-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[3.03, 3], [3.04, 3], [3.04, 3.01], [3.03, 3.01], [3.03, 3]]]},
+      "max_score_pct": 60,
+      "mean_score_pct": 60,
+      "max_pixel_id": "synthetic-steady-p001",
+      "valid_pixel_count": 1,
+      "total_pixel_count": 1,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    }
+  ],
+  "next_cursor": null
+}

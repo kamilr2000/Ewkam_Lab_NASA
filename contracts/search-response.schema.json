@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terra-analog:search-response:1.0.0",
+  "$comment": "Counts, ordered intervals, area fractions, mode-specific distance rules, and feature-id compatibility also have semantic constraints documented in docs/CONTRACTS.md.",
+  "title": "SearchResponse v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "dataset_version", "grid_version", "model_version", "profile_version", "analysis_id", "is_synthetic", "query", "elapsed_ms", "scope", "coverage", "map_cells", "warnings"],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "dataset_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "grid_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "model_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "profile_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "analysis_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "is_synthetic": {"type": "boolean"},
+    "query": {"$ref": "#/$defs/query"},
+    "elapsed_ms": {"type": "number", "minimum": 0},
+    "scope": {"$ref": "#/$defs/scope"},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "ranking": {"type": "array", "items": {"$ref": "#/$defs/rankedPixel"}},
+    "area_ranking": {"type": "array", "items": {"$ref": "#/$defs/areaRank"}},
+    "map_cells": {"type": "array", "items": {"$ref": "#/$defs/mapCell"}},
+    "warnings": {"type": "array", "items": {"$ref": "#/$defs/warning"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"query": {"properties": {"result_mode": {"const": "pixels"}}}}},
+      "then": {"required": ["ranking"], "not": {"required": ["area_ranking"]}},
+      "else": {"required": ["area_ranking"], "not": {"required": ["ranking"]}}
+    }
+  ],
+  "$defs": {
+    "position": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "minimum": -180, "maximum": 180},
+        {"type": "number", "minimum": -90, "maximum": 90}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "linearRing": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/position"}},
+    "polygonCoordinates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/linearRing"}},
+    "multiPolygonCoordinates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/polygonCoordinates"}},
+    "geometry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "coordinates"],
+          "properties": {"type": {"const": "Polygon"}, "coordinates": {"$ref": "#/$defs/polygonCoordinates"}}
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "coordinates"],
+          "properties": {"type": {"const": "MultiPolygon"}, "coordinates": {"$ref": "#/$defs/multiPolygonCoordinates"}}
+        }
+      ]
+    },
+    "requestScope": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["type"], "properties": {"type": {"const": "global"}}},
+        {"type": "object", "additionalProperties": false, "required": ["type", "region_id"], "properties": {"type": {"const": "regional"}, "region_id": {"type": "string", "minLength": 1, "maxLength": 128}}}
+      ]
+    },
+    "queryCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature_id", "weight", "normalized_weight"],
+      "properties": {
+        "feature_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "weight": {"type": "number", "exclusiveMinimum": 0, "maximum": 1000000},
+        "normalized_weight": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["body", "profile_id", "criteria", "scope", "result_mode", "top_k", "min_distance_km", "area_selection_rule"],
+      "properties": {
+        "body": {"enum": ["mars", "moon"]},
+        "profile_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "criteria": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/queryCriterion"}},
+        "scope": {"$ref": "#/$defs/requestScope"},
+        "result_mode": {"enum": ["pixels", "distinct_areas"]},
+        "top_k": {"type": "integer", "minimum": 1, "maximum": 10},
+        "min_distance_km": {"type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 10000},
+        "area_selection_rule": {"enum": ["none", "greedy_geodesic_representatives"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"result_mode": {"const": "pixels"}}},
+          "then": {"properties": {"min_distance_km": {"type": "null"}, "area_selection_rule": {"const": "none"}}}
+        },
+        {
+          "if": {"properties": {"result_mode": {"const": "distinct_areas"}}},
+          "then": {"properties": {"min_distance_km": {"type": "number", "exclusiveMinimum": 0}, "area_selection_rule": {"const": "greedy_geodesic_representatives"}}}
+        }
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "region_id", "region_name", "geometry", "mask_id", "grid_version", "description"],
+      "properties": {
+        "type": {"enum": ["global", "regional"]},
+        "region_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "region_name": {"type": ["string", "null"], "minLength": 1, "maxLength": 200},
+        "geometry": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/geometry"}]},
+        "mask_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "grid_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "description": {"type": "string", "minLength": 1, "maxLength": 1000}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"type": {"const": "global"}}},
+          "then": {"properties": {"region_id": {"type": "null"}, "region_name": {"type": "null"}, "geometry": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"type": {"const": "regional"}}},
+          "then": {"properties": {"region_id": {"type": "string"}, "region_name": {"type": "string"}, "geometry": {"$ref": "#/$defs/geometry"}}}
+        }
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_pixels", "eligible_pixels", "excluded_by_reason", "total_area_km2", "eligible_area_km2", "eligible_area_fraction", "no_data_reason"],
+      "properties": {
+        "total_pixels": {"type": "integer", "minimum": 0},
+        "eligible_pixels": {"type": "integer", "minimum": 0},
+        "excluded_by_reason": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "missing_feature_value": {"type": "integer", "minimum": 0},
+            "outside_mask": {"type": "integer", "minimum": 0},
+            "outside_scope": {"type": "integer", "minimum": 0},
+            "failed_quality": {"type": "integer", "minimum": 0},
+            "invalid_geometry": {"type": "integer", "minimum": 0},
+            "source_nodata": {"type": "integer", "minimum": 0},
+            "unsupported_resolution": {"type": "integer", "minimum": 0}
+          }
+        },
+        "total_area_km2": {"type": "number", "minimum": 0},
+        "eligible_area_km2": {"type": "number", "minimum": 0},
+        "eligible_area_fraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "no_data_reason": {"type": ["string", "null"], "enum": ["empty_scope", "missing_feature_values", "all_cells_excluded", null]}
+      }
+    },
+    "featureResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature_id", "value", "unit", "measurement_scale", "similarity_pct", "normalized_weight", "contribution_pct", "reference_interval", "tolerance", "source_ids", "quality_flags"],
+      "properties": {
+        "feature_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "value": {"type": "number"},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "measurement_scale": {"enum": ["ratio", "interval", "ordinal", "nominal"]},
+        "similarity_pct": {"type": "number", "minimum": 0, "maximum": 100},
+        "normalized_weight": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "contribution_pct": {"type": "number", "minimum": 0, "maximum": 100},
+        "reference_interval": {"type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}], "items": false, "minItems": 2, "maxItems": 2},
+        "tolerance": {"type": "number", "exclusiveMinimum": 0},
+        "source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "quality_flags": {"type": "array", "uniqueItems": true, "items": {"enum": ["LOW_COVERAGE", "INTERPOLATED", "SOURCE_EDGE", "SYNTHETIC_FIXTURE"]}}
+      }
+    },
+    "rankedPixel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "pixel_id", "score_pct", "center", "geometry", "pixel_area_km2", "coverage_fraction", "quality_flags", "features"],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1},
+        "pixel_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "score_pct": {"type": "number", "minimum": 0, "maximum": 100},
+        "center": {"$ref": "#/$defs/position"},
+        "geometry": {"$ref": "#/$defs/geometry"},
+        "pixel_area_km2": {"type": "number", "exclusiveMinimum": 0},
+        "coverage_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "quality_flags": {"type": "array", "uniqueItems": true, "items": {"enum": ["LOW_COVERAGE", "INTERPOLATED", "SOURCE_EDGE", "SYNTHETIC_FIXTURE"]}},
+        "features": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/featureResult"}}
+      }
+    },
+    "areaRepresentative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pixel_id", "score_pct", "center", "geometry", "pixel_area_km2", "coverage_fraction", "quality_flags", "features"],
+      "properties": {
+        "pixel_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "score_pct": {"type": "number", "minimum": 0, "maximum": 100},
+        "center": {"$ref": "#/$defs/position"},
+        "geometry": {"$ref": "#/$defs/geometry"},
+        "pixel_area_km2": {"type": "number", "exclusiveMinimum": 0},
+        "coverage_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "quality_flags": {"type": "array", "uniqueItems": true, "items": {"enum": ["LOW_COVERAGE", "INTERPOLATED", "SOURCE_EDGE", "SYNTHETIC_FIXTURE"]}},
+        "features": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/featureResult"}}
+      }
+    },
+    "areaRank": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "candidate_id", "representative_pixel", "nearest_selected_distance_km"],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1},
+        "candidate_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "representative_pixel": {"$ref": "#/$defs/areaRepresentative"},
+        "nearest_selected_distance_km": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "mapCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cell_id", "level", "geometry", "max_score_pct", "mean_score_pct", "max_pixel_id", "valid_pixel_count", "total_pixel_count", "coverage_fraction", "missing_reason"],
+      "properties": {
+        "cell_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "level": {"type": "integer", "minimum": 0},
+        "geometry": {"$ref": "#/$defs/geometry"},
+        "max_score_pct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "mean_score_pct": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "max_pixel_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 200},
+        "valid_pixel_count": {"type": "integer", "minimum": 0},
+        "total_pixel_count": {"type": "integer", "minimum": 0},
+        "coverage_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "missing_reason": {"type": ["string", "null"], "enum": ["missing_feature_value", "outside_scope", "no_eligible_pixels", null]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"valid_pixel_count": {"const": 0}}},
+          "then": {"properties": {"max_score_pct": {"type": "null"}, "mean_score_pct": {"type": "null"}, "max_pixel_id": {"type": "null"}, "missing_reason": {"type": "string"}}}
+        },
+        {
+          "if": {"properties": {"valid_pixel_count": {"minimum": 1}}},
+          "then": {"properties": {"max_score_pct": {"type": "number"}, "mean_score_pct": {"type": "number"}, "max_pixel_id": {"type": "string"}, "missing_reason": {"type": "null"}}}
+        }
+      ]
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {"enum": ["SYNTHETIC_DATA", "TOPOGRAPHY_ONLY", "REGIONAL_COVERAGE", "COARSE_RESOLUTION", "PROXY_FEATURE", "NO_ELIGIBLE_PIXELS"]},
+        "message": {"type": "string", "minLength": 1, "maxLength": 1000}
+      }
+    }
+  }
+}

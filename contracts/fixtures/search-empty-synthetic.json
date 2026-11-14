@@ -1,0 +1,44 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-empty",
+  "is_synthetic": true,
+  "query": {
+    "body": "mars",
+    "profile_id": "synthetic-mars-reference",
+    "criteria": [{"feature_id": "slope_deg", "weight": 1, "normalized_weight": 1}],
+    "scope": {"type": "regional", "region_id": "synthetic-empty-region"},
+    "result_mode": "pixels",
+    "top_k": 10,
+    "min_distance_km": null,
+    "area_selection_rule": "none"
+  },
+  "elapsed_ms": 0,
+  "scope": {
+    "type": "regional",
+    "region_id": "synthetic-empty-region",
+    "region_name": "Synthetic empty result scope",
+    "geometry": {"type": "Polygon", "coordinates": [[[1, 1], [1.01, 1], [1.01, 1.01], [1, 1.01], [1, 1]]]},
+    "mask_id": "synthetic-mask",
+    "grid_version": "synthetic-grid-v1",
+    "description": "Synthetic scope with no intersecting cells in this example."
+  },
+  "coverage": {
+    "total_pixels": 0,
+    "eligible_pixels": 0,
+    "excluded_by_reason": {},
+    "total_area_km2": 0,
+    "eligible_area_km2": 0,
+    "eligible_area_fraction": null,
+    "no_data_reason": "empty_scope"
+  },
+  "ranking": [],
+  "map_cells": [],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "This is a synthetic empty-result example."},
+    {"code": "NO_ELIGIBLE_PIXELS", "message": "No cells intersect this synthetic scope; this is not a zero-score result."}
+  ]
+}

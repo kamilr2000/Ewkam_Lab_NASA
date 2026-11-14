@@ -1,0 +1,85 @@
+{
+  "contract_version": "1.0.0",
+  "is_synthetic": true,
+  "dataset_id": "synthetic-fixture-data",
+  "dataset_version": "synthetic-earth-v1",
+  "provider": "Synthetic test fixture",
+  "role": "fixture_only",
+  "body": "earth",
+  "product_version": "synthetic-fixture-v1",
+  "generated_at": "2026-11-14T00:00:00Z",
+  "sources": [
+    {
+      "source_id": "synthetic-fixture",
+      "provider": "Terra Analog contract tests",
+      "title": "Synthetic values authored for contract validation",
+      "product_version": null,
+      "url": null,
+      "doi": null,
+      "citation": "Synthetic test values authored for the Terra Analog v1 contract. No scientific observations were used.",
+      "accessed_at": null,
+      "license": null,
+      "role": "fixture values only; not an external dataset"
+    }
+  ],
+  "files": [],
+  "temporal_coverage": {
+    "start_date": null,
+    "end_date": null,
+    "missing_reason": "not_applicable_synthetic_fixture"
+  },
+  "spatial_coverage": {
+    "coordinate_system_id": "synthetic-earth-test-grid",
+    "bounds": [0, 0, 1, 1],
+    "bounds_order": ["min_x", "min_y", "max_x", "max_y"],
+    "bounds_unit": "degree",
+    "missing_reason": null,
+    "total_pixels": 4,
+    "eligible_pixels": 4,
+    "excluded_by_reason": {},
+    "total_area_km2": 4,
+    "eligible_area_km2": 4
+  },
+  "grid": {
+    "grid_version": "synthetic-grid-v1",
+    "model_version": "synthetic-model-v1",
+    "cell_id_scheme": "synthetic-test-cell-id",
+    "nominal_resolution_m": 1,
+    "effective_resolution_m": 1,
+    "resolution_missing_reason": null,
+    "mask_id": "synthetic-mask",
+    "vertical_reference": null
+  },
+  "measurements": [
+    {"feature_id": "slope_deg", "unit": "degree", "measurement_scale": "ratio", "source_ids": ["synthetic-fixture"]},
+    {"feature_id": "roughness_m", "unit": "meter", "measurement_scale": "ratio", "source_ids": ["synthetic-fixture"]}
+  ],
+  "processing": {
+    "code_version": null,
+    "processed_at": null,
+    "steps": ["No scientific processing occurred; values are authored only for contract validation."],
+    "parameters": {}
+  },
+  "quality": {
+    "qa_rules": ["Synthetic fixture; not scientifically quality-screened."],
+    "nodata_convention": "null represents a missing measurement and is never scored as zero.",
+    "interpolation_fraction": 0
+  },
+  "limitations": [
+    "This manifest has no scientific source files, license claim, or measured coverage.",
+    "The coordinates and counts exercise the response shape only."
+  ],
+  "missing_reasons": {
+    "sources[0].product_version": "No external product was used in this synthetic fixture.",
+    "sources[0].url": "No external data product was accessed.",
+    "sources[0].doi": "No external DOI applies to synthetic test values.",
+    "sources[0].accessed_at": "No external source was accessed.",
+    "sources[0].license": "No external data are included, so no source license applies.",
+    "temporal_coverage.start_date": "Not applicable to synthetic fixture values.",
+    "temporal_coverage.end_date": "Not applicable to synthetic fixture values.",
+    "grid.vertical_reference": "No elevation measurement or vertical datum is represented.",
+    "processing.code_version": "No scientific preprocessing was performed.",
+    "processing.processed_at": "No scientific preprocessing was performed."
+  },
+  "synthetic_reason": "Synthetic metadata and values exist only to validate the contract."
+}

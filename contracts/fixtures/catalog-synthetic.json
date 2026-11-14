@@ -1,0 +1,90 @@
+{
+  "contract_version": "1.0.0",
+  "catalog_version": "synthetic-catalog-v1",
+  "generated_at": "2026-11-14T00:00:00Z",
+  "is_synthetic": true,
+  "datasets": [
+    {
+      "dataset_version": "synthetic-earth-v1",
+      "role": "fixture_only",
+      "body": "earth",
+      "grid_version": "synthetic-grid-v1",
+      "model_version": "synthetic-model-v1",
+      "availability": "synthetic_only",
+      "coverage_description": "Synthetic cells for contract and UI examples; no scientific observations.",
+      "manifest_path": "/api/v1/catalog/datasets/synthetic-earth-v1/manifest"
+    }
+  ],
+  "features": [
+    {
+      "feature_id": "slope_deg",
+      "name": "Surface slope",
+      "description": "Synthetic example of a slope measurement.",
+      "unit": "degree",
+      "measurement_scale": "ratio",
+      "domain_id": "topography",
+      "domain_label": "Topography",
+      "availability": "synthetic_only",
+      "is_proxy": false,
+      "proxy_description": null,
+      "source_ids": ["synthetic-fixture"]
+    },
+    {
+      "feature_id": "roughness_m",
+      "name": "Local roughness",
+      "description": "Synthetic example of roughness after local-plane removal.",
+      "unit": "meter",
+      "measurement_scale": "ratio",
+      "domain_id": "topography",
+      "domain_label": "Topography",
+      "availability": "synthetic_only",
+      "is_proxy": false,
+      "proxy_description": null,
+      "source_ids": ["synthetic-fixture"]
+    },
+    {
+      "feature_id": "relief_m",
+      "name": "Local relief",
+      "description": "Synthetic example of a local percentile elevation range.",
+      "unit": "meter",
+      "measurement_scale": "ratio",
+      "domain_id": "topography",
+      "domain_label": "Topography",
+      "availability": "synthetic_only",
+      "is_proxy": false,
+      "proxy_description": null,
+      "source_ids": ["synthetic-fixture"]
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "synthetic-mars-reference",
+      "name": "Synthetic Mars reference profile",
+      "body": "mars",
+      "region_name": "Synthetic reference region",
+      "profile_version": "synthetic-profile-v1",
+      "availability": "synthetic_only",
+      "feature_ids": ["slope_deg", "roughness_m"],
+      "source_ids": ["synthetic-fixture"]
+    }
+  ],
+  "search_regions": [
+    {
+      "region_id": "synthetic-region-1",
+      "name": "Synthetic demonstration region",
+      "dataset_version": "synthetic-earth-v1",
+      "availability": "synthetic_only",
+      "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [0.02, 0], [0.02, 0.01], [0, 0.01], [0, 0]]]},
+      "mask_id": "synthetic-mask",
+      "description": "Synthetic region for request and UI examples only."
+    }
+  ],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "This catalog contains synthetic contract examples only."},
+    {"code": "TOPOGRAPHY_ONLY", "message": "The P0 feature examples belong to one topography domain."}
+  ],
+  "limitations": [
+    "No Earth, Moon, Mars, or NASA measurements are represented by this fixture.",
+    "Availability is synthetic_only and must not be interpreted as a production dataset."
+  ]
+}

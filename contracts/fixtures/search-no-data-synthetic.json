@@ -1,0 +1,60 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-no-data",
+  "is_synthetic": true,
+  "query": {
+    "body": "mars",
+    "profile_id": "synthetic-mars-reference",
+    "criteria": [
+      {"feature_id": "slope_deg", "weight": 1, "normalized_weight": 0.5},
+      {"feature_id": "roughness_m", "weight": 1, "normalized_weight": 0.5}
+    ],
+    "scope": {"type": "regional", "region_id": "synthetic-no-data-region"},
+    "result_mode": "pixels",
+    "top_k": 10,
+    "min_distance_km": null,
+    "area_selection_rule": "none"
+  },
+  "elapsed_ms": 1,
+  "scope": {
+    "type": "regional",
+    "region_id": "synthetic-no-data-region",
+    "region_name": "Synthetic no-data scope",
+    "geometry": {"type": "Polygon", "coordinates": [[[2, 2], [2.02, 2], [2.02, 2.01], [2, 2.01], [2, 2]]]},
+    "mask_id": "synthetic-mask",
+    "grid_version": "synthetic-grid-v1",
+    "description": "Synthetic cells exist, but every active feature value is missing."
+  },
+  "coverage": {
+    "total_pixels": 2,
+    "eligible_pixels": 0,
+    "excluded_by_reason": {"missing_feature_value": 2},
+    "total_area_km2": 2,
+    "eligible_area_km2": 0,
+    "eligible_area_fraction": 0,
+    "no_data_reason": "missing_feature_values"
+  },
+  "ranking": [],
+  "map_cells": [
+    {
+      "cell_id": "synthetic-no-data-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[2, 2], [2.02, 2], [2.02, 2.01], [2, 2.01], [2, 2]]]},
+      "max_score_pct": null,
+      "mean_score_pct": null,
+      "max_pixel_id": null,
+      "valid_pixel_count": 0,
+      "total_pixel_count": 2,
+      "coverage_fraction": 0,
+      "missing_reason": "missing_feature_value"
+    }
+  ],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "This is a synthetic missing-data example."},
+    {"code": "NO_ELIGIBLE_PIXELS", "message": "Missing active measurements produce null scores and explicit exclusions, not zero scores."}
+  ]
+}

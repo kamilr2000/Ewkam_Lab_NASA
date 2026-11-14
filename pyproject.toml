@@ -20,4 +20,4 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
-testpaths = ["apps/api/tests", "pipeline/tests"]
+testpaths = ["apps/api/tests", "contracts/tests", "pipeline/tests"]

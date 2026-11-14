@@ -1,76 +1,91 @@
-# Kontrakt współpracy v0.1
+# Kontrakt API v1
 
-Status: **draft startowy**. Kamil zamraża v1 w K-003, zanim oba tory połączą implementację. Ewelina może rozpocząć UI na dostarczonych fixture'ach. Schematy requestu i regresja hotspotu są już w `contracts/`; odpowiedzi poniżej wymagają schema/OpenAPI w K-003.
+Status: **zamrożony kontrakt `1.0.0` dla K-003**. Źródłem operacji HTTP jest [OpenAPI](../contracts/openapi.yaml), a źródłem kształtu payloadów są wskazane w nim schematy JSON Schema Draft 2020-12.
+
+K-001 wdraża obecnie wyłącznie `GET /api/v1/health`. Pozostałe operacje opisują uzgodniony interfejs do wdrożenia w kolejnych kartach; sama obecność w OpenAPI nie oznacza działającego API, danych ani wyników naukowych.
 
 ## Wspólne reguły
 
-- JSON: klucze angielskie `snake_case`; daty ISO 8601, znaczniki czasu z offsetem lub `Z`.
-- Geometria Earth GeoJSON: `[longitude, latitude]`, WGS84. Profile planetarne mają własny układ w metadanych i nie trafiają bez transformacji do ziemskiego GeoJSON.
-- Wszystkie procenty mają skalę 0–100; frakcje kompletności 0–1. Wartości brakujące to `null` wraz z powodem.
-- Identyfikatory pikseli są stringami powiązanymi z konkretną siatką, np. wersją i wierszem/kolumną rastra. Brak `NaN`, `Infinity` i niejawnej zamiany braku na 0.
+- JSON używa angielskich kluczy `snake_case`. Daty są ISO 8601, a timestampy mają offset lub `Z`.
+- Procenty mają zakres 0–100; frakcje kompletności 0–1. Nie kodujemy braków jako zera, `NaN` ani `Infinity`.
 - Każda odpowiedź analityczna zawiera `contract_version`, `dataset_version`, `grid_version`, `model_version`, `profile_version`, `analysis_id` i `is_synthetic`.
-- Konfiguracja obejmuje profile, wagi, reguły QA i wersje; w odpowiedzi zwracamy jej efektywną postać.
+- `is_synthetic: true` oznacza wartości demonstracyjne/testowe, które nie są pomiarami planety. Każdy fixture w `contracts/fixtures/` z wynikiem analitycznym jest syntetyczny.
+- Pomiary mają `unit`, `measurement_scale`, `source_ids` i kontekst przestrzenny. Proxy ma `is_proxy: true` oraz opis, który mówi, czego jest przybliżeniem.
+- Earth GeoJSON używa WGS84 i kolejności `[longitude, latitude]`. Geometria profilu Księżyca lub Marsa pozostaje w osobnym układzie z nazwanym ciałem i referencją; nie traktujemy jej jako Earth GeoJSON.
+- Identyfikator piksela jest stringiem powiązanym z wersją siatki. Szczegóły i wynik zawsze należą do tego samego `analysis_id`.
 
-## Powierzchnia API
+## Operacje v1
 
-| Endpoint planowany | Wynik |
-|---|---|
-| `GET /api/v1/catalog` | Profile, cechy, jednostki, dostępność, reguły QA, siatka, źródła i aktualne wersje |
-| `POST /api/v1/search` | Globalny ranking, agregaty mapowe i raport kwalifikowalności |
-| `GET /api/v1/analyses/{analysis_id}/pixels/{pixel_id}` | Dokładna geometria, pomiary, wyniki cech i źródła w kontekście tej analizy |
-| `GET /api/v1/analyses/{analysis_id}/map?bbox=...&level=...&limit=...` | Ograniczone przestrzennie wyniki tej samej konfiguracji; paginacja / limit |
-| `GET /api/v1/analyses/{analysis_id}/export` | Konfiguracja, wersje i wynik do odtworzenia; CSV/JSON z jednostkami i cytowaniami |
-| `GET /api/v1/health` | Gotowość i wersja zbioru, bez danych uwierzytelniających |
+| Operacja | Kontrakt odpowiedzi | Stan implementacji po K-001 |
+|---|---|---|
+| `GET /api/v1/health` | [HealthResponse](../contracts/health-response.schema.json) | Zaimplementowana |
+| `GET /api/v1/catalog` | [CatalogResponse](../contracts/catalog-response.schema.json) | Planowana |
+| `GET /api/v1/catalog/profiles/{profile_id}` | [ProfileResponse](../contracts/profile-response.schema.json) | Planowana |
+| `GET /api/v1/catalog/datasets/{dataset_version}/manifest` | [DatasetManifest](../contracts/dataset-manifest.schema.json) | Planowana |
+| `POST /api/v1/search` | [SearchRequest](../contracts/search-request.schema.json) → [SearchResponse](../contracts/search-response.schema.json) | Planowana |
+| `GET /api/v1/analyses/{analysis_id}/pixels/{pixel_id}` | [PixelDetailsResponse](../contracts/pixel-details-response.schema.json) | Planowana |
+| `GET /api/v1/analyses/{analysis_id}/map` | [MapResponse](../contracts/map-response.schema.json) | Planowana |
 
-Nieudokumentowane endpointy nie są wymaganiem P0. Eksport jest rozwinięciem po pierwszej integracji. Długie obliczenia mogą później wymagać job API; zmianę zatwierdzamy w K-003 / osobnej karcie, nie jednostronnie.
+`CatalogResponse.search_regions` wylicza regionalne scope ID dopuszczone dla wskazanych datasetów. Scope globalny jest jawny i nie wymaga geometrii w request.
+
+Eksport wyników i asynchroniczne job API nie należą do tego zamrożenia; wymagają osobnej decyzji i wersjonowanej zmiany kontraktu.
 
 ## SearchRequest
 
-Przykład ma wartości konfiguracyjne, a nie wynik naukowy:
+Przykład poprawnego requestu jest syntetyczny i pokazuje wyłącznie kształt konfiguracji:
 
 ```json
 {
+  "contract_version": "1.0.0",
   "body": "mars",
-  "profile_id": "mars-jezero",
-  "dataset_version": "VERSION_FROM_CATALOG",
+  "profile_id": "synthetic-mars-reference",
+  "dataset_version": "synthetic-earth-v1",
+  "scope": {"type": "regional", "region_id": "synthetic-region-1"},
   "criteria": [
     {"feature_id": "slope_deg", "weight": 1},
     {"feature_id": "roughness_m", "weight": 2}
   ],
   "result_mode": "pixels",
-  "top_k": 10,
-  "min_distance_km": 25
+  "top_k": 10
 }
 ```
 
-`min_distance_km` działa wyłącznie w `distinct_areas`; w trybie pikseli pozostaje w konfiguracji, ale nie filtruje sąsiadów. Schema: [search-request.schema.json](../contracts/search-request.schema.json). Dodatkowa walidacja semantyczna: unikalne `feature_id`, zgodność profilu z ciałem i datasetem, warstwa dostępna dla profilu oraz wersja zbioru istniejąca na serwerze. Lista zawiera wyłącznie aktywne cechy o dodatnich wagach.
+- `scope` jest jawne: `{"type":"global"}` albo `{"type":"regional","region_id":"…"}`. Nie przekazujemy dowolnej geometrii wyszukiwania. Serwer rozwiązuje `region_id` w `CatalogResponse.search_regions` dla wybranej wersji danych i odrzuca nieobsługiwany zakres; nie może po cichu obciąć globalnego żądania do próbki regionalnej.
+- `criteria` ma od 1 do 16 aktywnych cech o dodatnich wagach. `feature_id` musi być unikalne. JSON Schema nie wyraża tej reguły między polami; serwer najpierw waliduje schemat, a potem wywołuje [walidację semantyczną](../contracts/validation.py), która zwraca `DUPLICATE_FEATURE_ID`.
+- Serwer sprawdza, czy dataset i profil istnieją, ciało jest zgodne z profilem, a wszystkie cechy są dostępne dla wybranej wersji. Komórki porównuje na tym samym aktywnym zestawie cech i wag.
+- `top_k` wynosi 1–10. Porządek jest po niezaokrąglonym `score_pct` malejąco, a remisy rozstrzyga `pixel_id` rosnąco.
 
-## SearchResponse — wymagane pola
+Tryb `pixels` nie przyjmuje `min_distance_km` i zwraca wyłącznie `ranking`. Tryb `distinct_areas` wymaga dodatniego `min_distance_km` i zwraca wyłącznie `area_ranking`. To osobne nazwy, by nie pomylić rankingu komórek z wyborem różnych lokalizacji.
 
-| Obiekt | Pola |
+## SearchResponse
+
+Odpowiedź zawiera skuteczną konfigurację w `query`, zadeklarowany `scope`, raport `coverage`, wyniki oraz ostrzeżenia. Pole `scope.type` pozostaje `global` dla globalnego żądania także wtedy, gdy dane mają braki; zasięg i braki opisują `coverage`, a nie ukryta zmiana zakresu.
+
+`coverage` zawiera `total_pixels`, `eligible_pixels`, wzajemnie rozłączne liczniki `excluded_by_reason`, powierzchnię całkowitą i kwalifikującą się oraz `eligible_area_fraction`. Liczniki spełniają `total_pixels = eligible_pixels + sum(excluded_by_reason)`. Jeśli całkowita powierzchnia wynosi zero, frakcja jest `null` z `no_data_reason: "empty_scope"`; brak kwalifikujących się pomiarów ma frakcję 0 i konkretny powód. Powierzchnie i udziały dotyczą tego samego zakresu oraz maski.
+
+| Pole | Znaczenie |
 |---|---|
-| Nagłówek | Wersje, `analysis_id`, `is_synthetic`, `query`, `elapsed_ms`, `scope` |
-| `scope` | `type` global/regional, geometria/identyfikator zasięgu, opis maski i siatki |
-| `coverage` | `total_pixels`, `eligible_pixels`, `excluded_by_reason`, frakcja powierzchni z kompletem danych |
-| `ranking[]` | `rank`, `pixel_id`, `score_pct`, `center`, `pixel_area_km2`, `coverage_fraction`, `quality_flags`, `features[]` |
-| `features[]` | `feature_id`, `value`, `unit`, `similarity_pct`, `normalized_weight`, `contribution_pct`, `reference_interval`, `tolerance`, `source_ids`, `missing_reason` |
-| `map_cells[]` | `cell_id`, `level`, `max_score_pct`, `mean_score_pct`, `max_pixel_id`, `valid_pixel_count`, `total_pixel_count` |
-| `warnings[]` | Kody i czytelne komunikaty, np. `TOPOGRAPHY_ONLY`, `COARSE_RESOLUTION`, `REGIONAL_COVERAGE` |
+| `ranking[]` | Tryb `pixels`: pojedyncze kwalifikujące się piksele. Każdy ma `rank`, `pixel_id`, `score_pct`, geometrię, faktyczną powierzchnię, jakość i wyniki cech. |
+| `features[]` | Wartość, jednostka, skala pomiaru, podobieństwo, znormalizowana waga, wkład, przedział referencyjny, tolerancja, źródła i flagi QA. W kwalifikującym się rankingu wszystkie aktywne cechy mają wartość. |
+| `area_ranking[]` | Tryb `distinct_areas`: wybrane reprezentatywne piksele z `candidate_id` oraz odległością od poprzednio wybranego reprezentanta. To heurystyka różnorodności, nie granice klastrów ani średnie obszarów. |
+| `map_cells[]` | Agregaty liczone dopiero po wspólnym wyniku pikseli: maksimum, średnia ważona powierzchnią, ID piksela maksimum, liczność kwalifikująca się/całkowita i geometria komórki mapy. |
 
-Brak ważnych komórek: HTTP 200, puste `ranking`, jawny raport braków i komunikat. Nie zerujemy mapy. W mapie brak ważnych pikseli daje `max_score_pct = null`, `mean_score_pct = null`, `max_pixel_id = null`.
+W `distinct_areas` selekcja zachłanna porównuje kandydatów od najlepszych do spełnienia `top_k` lub wyczerpania zbioru. Używa geodezyjnej odległości na Ziemi i jawnego `min_distance_km`; nie ogranicza się do pierwszych 10 pikseli. `map_cells` nadal agreguje wszystkie policzone piksele, a nie tylko reprezentantów.
 
-`distinct_areas` dodaje dystans i regułę wyboru reprezentantów. `score_pct` nadal jest wynikiem konkretnego reprezentanta. Nie zwracamy tego samego pola raz jako maksimum, raz jako średniej bez zmiany nazwy.
+Ranking pojedynczych pikseli zachowuje sąsiednie i izolowane hotspoty. Nie odrzucamy komórki przez średnią regionu przed oceną jej piksela. Mapy nie łączą osobnych maksimów różnych cech. Dla komórki bez kwalifikujących się pikseli `max_score_pct`, `mean_score_pct` i `max_pixel_id` są `null`, z `missing_reason`; nie zastępujemy ich zerem.
 
-## PixelDetails
+## PixelDetails, Profile i Manifest
 
-Obejmuje geometrię komórki, faktyczną powierzchnię, rozdzielczość źródeł i siatki, okna cech, wszystkie pomiary i wkłady, źródła i flagi. Gdy użytkownik kliknie brak danych, szczegóły mają `score_pct = null` i przyczynę. Pole `center` służy do nawigacji, nie sugeruje precyzji pojedynczego punktu w terenie.
-
-Nie wolno wyświetlać szczegółów policzonych dla poprzednich wag obok nowej mapy. UI identyfikuje stan przez `analysis_id` i ignoruje opóźnione odpowiedzi wcześniejszego zapytania.
+- `PixelDetailsResponse` podaje wersje analizy, faktyczną geometrię i rozmiar pikseli oraz wartości, jednostki, wkłady i źródła. Brak wartości to `null` z `missing_reason`; gdy piksel nie może być oceniony, również `score_pct` jest `null`.
+- `ProfileResponse` opisuje ciało, region, układ współrzędnych, przedziały referencyjne, tolerancje, jednostki, skalę pomiaru i przestrzenne wsparcie każdej cechy. Wartości wsparcia `null` mają `missing_reason`; geometria planetarna zachowuje jawny, właściwy układ ciała.
+- `DatasetManifest` rejestruje identyfikator i wersje produktu/zbioru, dostawcę, cytowanie/URL/DOI, datę dostępu, licencję i warunki, SHA-256 plików, czas i zasięg, układ ciała, jednostki, siatkę, maski/QA, parametry przetwarzania, ograniczenia i status syntetyczny. Nieznane wartości pozostają `null` z powodem w `missing_reasons` (klucze to ścieżki pól, np. `sources[0].license`); walidacja semantyczna odrzuca nieopisane `null`. Nie tworzymy fikcyjnych licencji, checksum ani pomiarów. Manifest rzeczywistego zbioru musi mieć źródła z URL i warunkami licencji oraz przynajmniej jeden plik z SHA-256.
 
 ## Błędy
 
-Jedna struktura: `error.code`, `error.message`, opcjonalne `error.details`, `request_id`. Co najmniej: `INVALID_QUERY`, `UNKNOWN_PROFILE`, `INCOMPATIBLE_FEATURE`, `DATASET_UNAVAILABLE`, `ANALYSIS_EXPIRED`, `LIMIT_EXCEEDED`. Utrata analizy nie może po cichu podmienić jej na aktualną wersję danych.
+Operacje używają wspólnej struktury [ErrorResponse](../contracts/error-response.schema.json): `contract_version`, `request_id`, `is_synthetic` oraz `error.code`, `error.message` i opcjonalne `error.details`. Kody obejmują m.in. `INVALID_QUERY`, `DUPLICATE_FEATURE_ID`, `UNKNOWN_PROFILE`, `INCOMPATIBLE_FEATURE`, `DATASET_UNAVAILABLE`, `DATASET_VERSION_UNAVAILABLE`, `SCOPE_UNAVAILABLE`, `ANALYSIS_EXPIRED` i `LIMIT_EXCEEDED`. Błąd nie może zastąpić brakującego wyniku zerem ani podmienić wygasłej analizy aktualnym zbiorem.
 
-## Zasada zmiany kontraktu
+## Walidacja i zmiany wersji
 
-Kamil proponuje zmianę w karcie i wersji; dołącza fixture oraz opis migracji. Ewelina potwierdza wpływ na UI. Zmiana usuwająca pole / zmieniająca semantykę wymaga nowej wersji i uzgodnionej integracji. Jednostki i znaczenie agregacji również należą do kontraktu.
+Schematy i przykłady walidują `contracts/tests/`; fixture'y zawierają wyłącznie syntetyczne dane i nigdy nie dowodzą wyniku naukowego. `uniqueItems` całych obiektów nie zastępuje semantycznej unikalności `feature_id`. Szczegóły uruchomienia znajdują się w [contracts/README.md](../contracts/README.md).
+
+Zmiana znaczenia, usunięcie pola lub niekompatybilna zmiana struktury wymaga nowego `contract_version`, aktualizacji OpenAPI, schematów, fixture'ów, testów oraz uzgodnienia z konsumentem. Jednostki, sposób agregacji, tryb rankingu i reguły braków są częścią kontraktu.
