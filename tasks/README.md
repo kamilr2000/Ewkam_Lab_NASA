@@ -59,10 +59,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 
 - [I-007 — Szczegółowe cele agentów i ręczny submission](I-007.md), Kamil, P0: doprecyzowanie na prośbę Kamila; bez implementacji aplikacji.
 - [I-008 — Pierwszeństwo gotowych review](I-008.md), Kamil, P0: przeglądy przed zwykłym backlogiem przy wyborze następnego zadania, bez przerywania rozpoczętej pracy.
+- [K-012 — Review web scaffold E-001](K-012.md), Kamil, P0: sprawdzenie opublikowanego szkieletu React/Vite i dowodów builda przed połączeniem PR #3.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tej karty: K-012, E-012, I-009; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tej karty: K-013, E-012, I-009; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
