@@ -21,7 +21,7 @@ uv run --locked pytest
 
 `/api/v1/health` potwierdza wyłącznie gotowość API. Zwraca `dataset_ready: false` i `dataset_version: null`, dopóki nie zostanie przygotowany rzeczywisty pakiet danych. Endpoint nie uruchamia analizy i nie zwraca wyników syntetycznych.
 
-Testowana konfiguracja: Python 3.12.10, FastAPI 0.162.7, NumPy 2.5.4, Rasterio 1.5.2, pyproj 3.8.0 i Uvicorn 0.54.0. Pełne wersje zależności bezpośrednich i pośrednich są przypięte w `uv.lock`.
+Testowana konfiguracja: Python 3.12.14, FastAPI 0.162.7, NumPy 2.5.4, Rasterio 1.5.2, pyproj 3.8.0 i Uvicorn 0.54.0. Pełne wersje zależności bezpośrednich i pośrednich są przypięte w `uv.lock`.
 
 ## Zakres
 
