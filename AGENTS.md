@@ -22,7 +22,15 @@ Każdy agent może utworzyć kartę dla drugiego: Kamil tworzy E-* z `owner: ewe
 
 Opisuj konkretny rezultat, powód, pliki/kontrakt, kryteria, priorytet oraz opublikowany SHA/PR. Dla przeglądu użyj `tasks/REVIEW_TEMPLATE.md`: `task_type: review`, `review_of`, `review_ref` i warunek startu. Nie dodawaj ocenianego zadania do `depends_on` przeglądu, jeśli czeka ono na review przed done — powodowałoby to blokadę. Producent zapisuje w swojej karcie `review_tasks`; przegląd rusza na opublikowanej wersji, gdy zadanie jest w review, nie dopiero po done.
 
-Regularnie pulluj i czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania dodane przez drugiego agenta. Gotowy przegląd P0 odblokowujący drugą osobę ma pierwszeństwo przed nową pracą P1. Recenzent publikuje wynik i dowody w remote. Poprawki przypisuje właścicielowi kodu; nie uznaje zmiany za poprawną bez sprawdzenia. Istotne poprawki po przeglądzie wymagają przeglądu zmienionego zakresu. Nie twórz automatycznej nieskończonej kolejki review przeglądów.
+Regularnie pulluj i czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania dodane przez drugiego agenta. Recenzent publikuje wynik i dowody w remote. Poprawki przypisuje właścicielowi kodu; nie uznaje zmiany za poprawną bez sprawdzenia. Istotne poprawki po przeglądzie wymagają przeglądu zmienionego zakresu. Nie twórz automatycznej nieskończonej kolejki review przeglądów.
+
+### Review ma pierwszeństwo przy wyborze następnego zadania
+
+**Nie przerywaj bieżącego zadania z powodu nowego review.** Najpierw dokończ wykonywaną pracę i opublikuj jej wynik. Następnie zrób pull i wybierz: (1) gotowe zadanie `task_type: review` przypisane Tobie, (2) inne gotowe P0, (3) P1/P2. Gotowe review wyprzedza zwykłe zadania także wtedy, gdy w kolejce jest dwadzieścia P0; nie odkładaj go do końca backlogu.
+
+Gotowe review wymaga spełnionych warunków startu, dostępnego `review_ref` i braku rezerwacji innego agenta. Jeśli kilka przeglądów jest gotowych, najpierw wybierz odblokowujące drugiego agenta, a w tej samej grupie najstarszą opublikowaną prośbę. Przy niedostępnym kodzie zgłoś brak i wybierz inną gotową kartę; nie czekaj bezczynnie. Sam `status: review` na karcie producenta nie jest zadaniem przeglądu dla recenzenta.
+
+Pierwszeństwo wynika z `task_type: review`, także dla starszych kart bez `queue_priority`. Szablon zapisuje `queue_priority: review_first`; to kolejność obsługi, niezależna od merytorycznego P0/P1/P2. Recenzent nadal publikuje własny commit IN PROGRESS przed rozpoczęciem. Gotowa implementacja przekazana już do odbioru nie wymaga bezczynnego oczekiwania na cudze zatwierdzenie — przy wyborze kolejnej pracy stosuj tę kolejność. Nie przełączaj się natomiast w środku trwającej implementacji lub przeglądu.
 
 ## Formalny submission — wyłącznie człowiek
 
@@ -57,7 +65,7 @@ Nie jesteś sam w repozytorium. Nie cofaj cudzych zmian. Nie edytuj pliku drugie
 ## Pętla wykonania
 
 1. Sprawdź własny klon, `origin`, gałąź i zmiany; pobierz aktualne remote. Nie nadpisuj niezacommitowanej pracy.
-2. Wybierz gotowe P0 z aktualnych kart w `origin/main`. Zależności muszą być tam ukończone; lokalna gałąź drugiej osoby nie wystarcza.
+2. Po zakończeniu bieżącej pracy i pullu wybierz najpierw gotowe review przypisane Tobie, potem pozostałe P0, następnie P1/P2. Nie przerywaj rozpoczętego zadania. Sprawdź aktualne zależności i warunki startu w `origin/main`; lokalna gałąź drugiej osoby nie wystarcza.
 3. Opublikuj osobny commit **IN PROGRESS** w `origin/main` i potwierdź rezerwację przed implementacją. Jeśli kartę zajął ktoś inny, nie nadpisuj jego rezerwacji.
 4. Utwórz gałąź zadania z aktualnego `main`. Po każdej spójnej poprawce: sprawdzenie → commit → fetch → merge potrzebnych zmian i rozwiązanie konfliktów → sprawdzenie → push.
 5. Nowe karty, zmiany statusów i uzgodnienia publikuj w remote. Nie zostawiaj ustaleń tylko w rozmowie lub na lokalnym dysku.
