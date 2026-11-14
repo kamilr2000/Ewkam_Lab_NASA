@@ -11,11 +11,18 @@
     "initial request schema and synthetic regression vectors",
     "planning document checker",
     "remote collaboration workflow, task reservation commits and updated agent prompts",
-    "detailed executable goals, bidirectional review tasks and human-only final submission boundary"
+    "detailed executable goals, bidirectional review tasks and human-only final submission boundary",
+    "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader"
   ],
   "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
-  "scientific_observations_downloaded": false,
+  "scientific_observations_downloaded": true,
+  "scientific_sample_manifest": "data/manifests/k002-samples.json",
+  "scientific_sample_sources": [
+    "NOAA ETOPO 2022 v1",
+    "NASA PDS LOLA LDEM_4",
+    "NASA PDS MOLA MEGT/MEGC"
+  ],
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
-  "review_status": "Source texts checked; scientific method and software architecture require implementation-time validation and team review."
+  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; sample data are real and were not AI-generated. NASADEM remains unauthenticated; scientific method, processing and application behavior require implementation-time validation and team review."
 }

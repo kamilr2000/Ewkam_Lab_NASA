@@ -54,6 +54,6 @@ To podział organizacyjny, nie założenie o Waszym doświadczeniu. Można zamie
 
 ## Co można uruchomić teraz
 
-Obecnie można czytać dokumentację, przeglądać zadania i uruchomić kontrolę przygotowania: `python tools/check_planning.py` z katalogu repo. Komendy instalacji, testów i uruchomienia aplikacji dodają agenci w K-001 i E-001 po faktycznym utworzeniu projektów. Nie ma jeszcze działającego demo ani pobranych danych naukowych.
+Można czytać dokumentację, przeglądać zadania, uruchomić kontrolę przygotowania poleceniem `python tools/check_planning.py` i odtworzyć pobranie małych rzeczywistych próbek ETOPO, LOLA i MOLA poleceniem `python pipeline/download_samples.py`. Manifest i sumy są w `data/manifests/k002-samples.json`; próbki pozostają w ignorowanym `data/raw/k002`. Aplikacja nie ma jeszcze działającego demo, preprocessingu ani rzeczywistego rankingu. NASADEM wymaga lokalnego uwierzytelnienia Earthdata.
 
 Dokumentacja operacyjna jest po polsku. Interfejs i publiczny pakiet zgłoszeniowy powstają po angielsku. Kod własny i dokumentacja: [MIT](LICENSE); dane oraz cudze materiały zachowują własne warunki.
