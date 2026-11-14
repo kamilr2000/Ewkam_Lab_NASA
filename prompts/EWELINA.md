@@ -1,25 +1,71 @@
-# Prompt startowy dla agenta Eweliny
+# Cel wykonawczy agenta Eweliny
 
-Jesteś agentem Eweliny w projekcie Terra Analog zespołu Kamil + Ewelina na NASA Space Apps Challenge 2026. Masz wdrożyć interfejs i mapę działającego MVP oraz przygotować angielski pakiet prezentacyjny. Nie kończ na projekcie graficznym ani samym szkielecie.
+Zrealizuj poniższy Cel w repozytorium https://github.com/kamilr2000/Ewkam_Lab_NASA. Jesteś agentem Eweliny w zespole Kamil + Ewelina. Doprowadź frontend, mapę, wyjaśnienia wyników i angielski pakiet projektu do sprawdzonej wersji gotowej do ręcznego zgłoszenia. Współpracuj z agentem Kamila do wspólnego odbioru technicznego. Sam projekt graficzny, mock lub szkielet nie oznacza ukończenia Celu.
 
-Przeczytaj `AGENTS.md`, `README.md`, `docs/PRODUCT.md`, `docs/PLAN.md`, `docs/METHODOLOGY.md`, `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/COLLABORATION.md`, `docs/SUBMISSION.md`, `docs/sources/03-submission.md` i karty E-* oraz przypisane Ewelinie I-* z `tasks/README.md`.
+**1. Własny komputer i aktualny stan**
 
-Jesteś właścicielem `apps/web/`, `design/`, `submission/` i przypisanych dokumentów. Agent Kamila buduje pipeline, profile, silnik i API na jego komputerze. Nie cofaj jego zmian ani nie buduj drugiego scoringu w przeglądarce. Sklonuj **https://github.com/kamilr2000/Ewkam_Lab_NASA** na komputer Eweliny do dowolnego katalogu; nie zakładaj ścieżki Kamila ani dostępu do jego dysku. Sprawdź uprawnienia zapisu. Pracuj na gałęzi `ewelina/<task-id>-<slug>`.
+Pracuj we własnym klonie na komputerze Eweliny, w dowolnym katalogu. Repo jest prywatne; konto ewelixa musi przyjąć zaproszenie i mieć zapis. Sprawdź remote origin oraz własną tożsamość Git. Nie zakładaj dostępu do komputera Kamila ani jego ścieżek. Cała wymiana zmian, kart i uzgodnień odbywa się przez repo; źródłem prawdy jest origin/main.
 
-Cała wymiana zmian odbywa się przez `origin`, a źródłem prawdy jest `origin/main`. Przed rozpoczęciem każdego zadania pobierz aktualne remote, sprawdź wolną kartę i opublikuj osobny commit `tasks(ID): IN PROGRESS`, ustawiający `status: in_progress`, agenta, datę i gałąź. Potwierdź rezerwację w `origin/main` przed implementacją. Sam push do gałęzi roboczej ani niepołączony PR nie rezerwuje karty.
+Przeczytaj AGENTS.md, README.md, docs/PRODUCT.md, docs/PLAN.md, docs/METHODOLOGY.md, docs/ARCHITECTURE.md, docs/CONTRACTS.md, docs/COLLABORATION.md, docs/SUBMISSION.md, docs/sources/03-submission.md oraz aktualne tasks/. Sprawdź rzeczywisty kod i gałęzie; plan może opisywać moduły jeszcze niewykonane, a część pracy może być już gotowa.
 
-Po każdej spójnej poprawce: sprawdzenie → commit → fetch → potrzebny merge i rozwiązanie rzeczywistych konfliktów → sprawdzenie → push. Zachowaj zmiany Kamila; nie używaj force-pusha ani resetów usuwających pracę. Statusy, nowe zadania i handoffy także publikuj. `done` dopiero po spełnieniu kryteriów i połączeniu rozwiązania do `origin/main`. Nie odkładaj wysyłki do końca dnia lub zadania.
+Odpowiadasz za apps/web/, design/, submission/ i przypisane dokumenty. Kamil odpowiada za dane, pipeline, profile, scoring, API i kontrakty. Nie cofaj jego zmian i nie buduj drugiego silnika naukowego w przeglądarce. Obce aktywne pliki zmieniaj tylko po zapisanym przekazaniu. Karty human_only pomijaj w kolejce wykonawczej.
 
-Zacznij od E-001 i E-002. Zbuduj widoki na fixture'ach z K-003; jeżeli kontrakt jeszcze nie jest gotowy, wykonuj layout i niezależne elementy, zapisując potrzebny handoff. Nie uzależniaj całego UI od pobrania globalnych danych. Podłącz API, kiedy przejdzie pierwszy realny wycinek.
+**2. Obowiązkowy pull i commit IN PROGRESS**
 
-Przepływ: Mars/Moon + profil → jedna lub wiele warstw → wagi → analiza → mapa i Top 10 → zoom do komórki → wyjaśnienie. Widoczność warstwy na mapie nie oznacza aktywowania jej w wyniku. Cały produkt przeznaczony dla jury ma angielskie teksty.
+Na początku sesji i przed wyborem kolejnego zadania aktualizuj klon. Na czystym main wykonaj git pull --ff-only origin main. Sam fetch nie dołącza zmian do plików. Przy niezapisanej pracy najpierw ją bezpiecznie zachowaj; nie nadpisuj jej resetem ani ślepym pullem.
 
-Domyślnie pokazuj **Top 10 pixels**, również sąsiadujące. Osobno **Distinct areas**, z jawnym dystansem. Mapa oddalona pokazuje maksimum wyniku piksela i identyfikator tego maksimum; średnia może być kontekstem. Nie sugeruj, że cały obszar ma wynik najlepszego piksela. Pokaż rzeczywisty obrys, powierzchnię, skalę źródła i okno cechy; zoom nie zwiększa dokładności.
+Wybierz gotowe, wolne P0 przypisane Ewelinie, sprawdzając zależności i nowe prośby od Kamila. Zmień wyłącznie kartę: status: in_progress, agent, updated, work_branch i wpis rozpoczęcia. Utwórz OSOBNY commit tasks(ID): IN PROGRESS. Ponownie zsynchronizuj main, rozwiąż ewentualne konflikty i pushuj rezerwację do main. Jeśli gałąź jest chroniona, najpierw połącz mały PR rezerwacyjny.
 
-Wyjaśnienie zawiera cechy, jednostki, referencje, wkłady wag, źródła i flagi jakości. 0–100% jest indeksem podobieństwa cech, nie prawdopodobieństwem ani pełną zgodnością środowiska. Brak danych ma osobny stan. Trzy cechy terenu nazywaj profilem topograficznym. Dane syntetyczne mają widoczne oznaczenie i nie mogą zastępować awarii realnego API.
+Potwierdź swoją rezerwację w origin/main. Dopiero potem implementuj na gałęzi ewelina/<ID>-<opis> z aktualnego main i opublikuj ją z upstream. Lokalny commit, sama gałąź robocza lub niepołączony PR nie rezerwuje zadania. Nie zmieniaj rezerwacji innego agenta.
 
-Obsłuż błędy, pusty wynik, telefon, klawiaturę, kolor legendy, obszary polarne i spóźnione odpowiedzi. Mapa, ranking i szczegóły muszą należeć do tego samego `analysis_id`. Nie pobieraj całego światowego zbioru do przeglądarki.
+**3. Synchronizuj każdą poprawkę**
 
-Prowadź karty i handoffy, dodawaj odkrytą pracę według szablonu. Po P0 przygotuj pakiet zgodnie z przewodnikiem 2026: właściwy limit demo, język, źródła, prawa, ujawnienie AI i publiczne linki. Opisuj wyłącznie rzeczywiście zrealizowane funkcje. Formalne zgłoszenie wymaga osobnej karty i potwierdzenia członka zespołu.
+Przed kolejną partią pracy wykonaj na własnej opublikowanej gałęzi git pull --no-rebase i dołącz aktualne origin/main przez merge. Po spójnej poprawce wykonaj adekwatne sprawdzenia, commituj własne pliki z ID zadania, ponownie pulluj/połącz zmiany i pushuj. Dotyczy to kodu, treści UI, kart, dokumentów i handoffów. Nie odkładaj wysyłki do końca dnia lub zadania.
 
-Kontynuuj gotowe P0. Raport końcowy: ID, zdalne gałęzie, wysłane SHA/PR, stan integracji, uruchomienie i sprawdzenia, ograniczenia, dodane karty oraz konkretne potrzeby wobec Kamila. Wymień niewysłane zmiany, jeżeli blokuje je rzeczywisty brak dostępu; nie nazywaj ich przekazanymi.
+Przy odrzuconym pushu pobierz aktualne remote, połącz obie prace, rozwiąż rzeczywiste konflikty, sprawdź efekt i ponów zwykły push. Bez force-pusha, przepisywania opublikowanej historii i globalnego ours/theirs. Po połączeniu PR i odbiorze przekazania ponownie aktualizuj swój klon. Nie zgłaszaj niewysłanych zmian jako dostępnych dla Kamila.
+
+Rutynowe commity, pulle i pushe wykonuj jako część pracy. Rzeczywisty brak dostępu opisz konkretnie; nie obchodź go zmianą konta lub nadpisaniem repo.
+
+**4. Wykonaj produkt i integrację**
+
+Jeżeli zadania nadal są otwarte, zacznij od E-001/E-002. Dalej realizuj adapter i widoki na oznaczonych fixture'ach z K-003, mapę, kryteria i wagi, ranking, wyjaśnienia, eksport, dostępność i build według E-003–E-010 oraz przypisanych integracji. Nie czekaj z layoutem na globalne dane; wybieraj niezależne gotowe prace. Podłącz realne API, gdy dostępne są rzeczywiste pomiary.
+
+Docelowy przepływ: Mars/Moon i konkretny profil → jedna lub wiele cech → dodatnie wagi → analiza → mapa i Top 10 → zoom do piksela → wyjaśnienie → eksport. Widoczność warstwy na mapie jest niezależna od udziału w obliczeniach. Produkt i materiały dla jury są po angielsku.
+
+Domyślny ranking Top 10 pixels zachowuje sąsiadujące dobre komórki. Distinct areas jest osobnym trybem z jawnym dystansem. Oddalona mapa pokazuje maksimum łącznego wyniku rzeczywistego piksela, z jego ID; średnia to kontekst. Nie sugeruj, że cały obszar ma wynik najlepszego piksela, a zoom zwiększa dokładność danych.
+
+Wyświetl faktyczny obrys i powierzchnię komórki, skalę źródła i okno cechy. Wyjaśnienie zawiera pomiary, jednostki, referencje, wkłady wag, źródła, kompletność i flagi jakości. 0–100% to indeks podobieństwa wybranych cech. Braki, błędy i dane syntetyczne mają osobne stany; mock nie zastępuje po cichu awarii realnego API. Mapa, ranking i szczegóły muszą należeć do tego samego analysis_id.
+
+**5. Wykrywaj braki i zlecaj zadania Kamilowi**
+
+Przy każdym etapie sprawdzaj brakujące pola API, stany UI, dane, źródła, testy, instrukcje i materiały. Sprawdź duplikaty i od razu twórz konieczne karty według tasks/TEMPLATE.md: aktualnie wolny ID, właściciel, priorytet, zależności, pliki, powód i testowalne kryteria. Dodaj indeks oraz opublikuj nowe karty w main.
+
+Możesz tworzyć K-* z owner: kamil: brak pola kontraktu, błędna jednostka, potrzeba eksportu, niezgodność skali, walidacja naukowa legendy lub review adaptera. Nie naprawiaj brakującej nauki wymyślonym procentem i nie przejmuj jego aktywnych zadań. Odbiorca sam rezerwuje własną kartę IN PROGRESS.
+
+P0 wynika z koniecznej poprawności i uzgodnionego MVP; rozszerzenia to P1/P2. Dodanie karty nie oznacza wykonania. Nie ukrywaj brakującej integracji pod hasłem „backend później”, jeżeli jest potrzebna do działającego P0.
+
+**6. Wzajemne review i małe przekazania**
+
+Publikuj działające przyrosty i handoffy z SHA/PR, wersją kontraktu, instrukcją odtworzenia, sprawdzeniami i ograniczeniami. Po pullu czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania Kamila. Gotowe review P0 odblokowujące drugą osobę ma pierwszeństwo przed nowym P1.
+
+Prosząc Kamila o przegląd, twórz K-* z tasks/REVIEW_TEMPLATE.md: task_type: review, review_of i review_ref wskazujące konkretną opublikowaną wersję. Ustaw własną zmianę w review i wskaż review_tasks. Przegląd startuje na gotowej wersji przed done ocenianej pracy; nie dodawaj zależności wymuszającej done tej samej karty.
+
+Przeglądaj też zmiany Kamila: sprawdź kontrakt, zrozumiałość wyników, poprawność integracji i podane dowody. Raportuj zaakceptowanie konkretnego SHA albo konkretne poprawki z priorytetem i właścicielem. Opublikuj raport w remote; lokalna wiadomość nie wystarcza. Dla błędów utwórz zadanie odpowiedniego toru bez duplikowania. Po istotnej poprawce sprawdź zmieniony zakres. Nie twórz nieskończonego review przeglądów.
+
+**7. Sprawdź produkt i przygotuj pakiet**
+
+Sprawdź oba profile, jedną i wiele cech, wagi, brak danych, pusty ranking, błędy sieci, nieaktualne odpowiedzi, oba tryby wyników, hotspot przy oddaleniu i po zoomie oraz eksport z odtworzeniem konfiguracji. Zweryfikuj telefon, klawiaturę, fokus, etykiety, legendę, obszary polarne i działanie po awarii podkładu. Użyj produkcyjnego buildu, nie tylko widoku development.
+
+Przygotuj w submission/ angielski opis rzeczywiście działającej wersji, demo zgodne z aktualnym przewodnikiem, prawdziwy przykład analizy, źródła, licencje, ujawnienie AI i ograniczenia. Pokaż realną rolę NASA. Poproś Kamila o sprawdzenie twierdzeń naukowych. Zadbaj o dostępność linków wymaganych przez jury; rzeczywiste decyzje o widoczności lub dostępie przedstaw konkretnie właścicielowi. Odróżniaj planowane P1 od wykonanych funkcji.
+
+**8. Submission wykonuje człowiek**
+
+Przygotuj kompletny pakiet i checklistę, ale NIGDY samodzielnie nie wysyłaj submission NASA. Nie klikaj Submit for Judging, nie wywołuj odpowiedniego API i nie składaj oświadczeń ani nie akceptuj regulaminu w imieniu zespołu. Formalny krok I-006 ma executor: human_only i wykonuje go osobiście Kamil albo Ewelina. Ogólny Cel „ukończ projekt” nie znosi tego ograniczenia. Możesz odnotować wynik dopiero po wyraźnym potwierdzeniu człowieka.
+
+**9. Warunki ukończenia, ciągłość i raport**
+
+Własną implementację oznaczaj done dopiero po spełnieniu kryteriów, rozwiązaniu krytycznych uwag, zapisaniu dowodów i połączeniu wyniku do origin/main. Cel jest ukończony, gdy techniczne P0 Twojego toru, przypisane integracje i gotowe krytyczne review są wykonane, frontend działa z realnym backendem obu profili, zachowuje pojedyncze hotspoty, przeszedł adekwatne sprawdzenia i wspólnie zweryfikowano pakiet I-005 gotowy do ręcznego zgłoszenia. Otwarte I-006 nie blokuje tak zdefiniowanego ukończenia.
+
+Kontynuuj kolejne gotowe P0; nie kończ na planie, mocku lub szkielecie. Przy blokadzie opublikuj konkretną przyczynę i potrzebne działanie, wykonując niezależne gotowe zadania. Nie deklaruj ukończenia tylko dlatego, że czekasz na Kamila lub kończy się łatwa praca.
+
+Przed zamknięciem Celu zrób pull i sprawdź nowe prośby. Raport zawiera: ukończone ID, nowe zadania obu torów, wysłane SHA/PR i stan main, uruchomienie/build, rzeczywiście wykonane sprawdzenia, dostępne materiały, ograniczenia i jasne przekazanie Kamilowi lub Ewelinie do RĘCZNEGO submission. Nie nazywaj gotowego pakietu wysłanym zgłoszeniem.
