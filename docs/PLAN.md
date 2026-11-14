@@ -65,14 +65,14 @@ To P1, z osobną decyzją o zakresie. Karty: K-010, K-011, E-011. Zbyt mało cza
 
 Karty: E-008, E-009, I-003, I-004. Nie zmieniajcie rozdzielczości tylko w rankingu lub tylko w mapie.
 
-## 8. Przygotujcie zgłoszenie i wyślijcie — końcowa rezerwa
+## 8. Agenci przygotowują pakiet; człowiek wysyła — końcowa rezerwa
 
 1. Ewelina przygotowuje angielski pakiet w `submission/` i demo według wybranego formatu z `docs/sources/03-submission.md`.
 2. Kamil weryfikuje źródła i zgodność twierdzeń z działającą wersją.
 3. Oboje sprawdzacie kompletność materiałów, licencje i ujawnienie AI.
-4. Osoba obsługująca stronę zespołu wykonuje formalne zgłoszenie, zachowuje potwierdzenie i odnotowuje moment wysłania. Zapisanie wersji roboczej nie kończy tej karty.
+4. Wyłącznie Kamil albo Ewelina osobiście wykonuje formalne zgłoszenie, zachowuje potwierdzenie i odnotowuje moment wysłania. Agenci nie wysyłają submission ani nie składają oświadczeń. Ich Cele kończą się gotowym projektem i pakietem do ręcznego zgłoszenia.
 
-Karty: E-010, I-005, I-006. Zarezerwujcie co najmniej 2 godziny przed właściwym terminem; lokalny pitch może być wcześniej.
+Karty agentów: E-010 i I-005. Karta człowieka: I-006 (human_only), wyłączona z wykonawczych Celów agentów. Zarezerwujcie co najmniej 2 godziny przed właściwym terminem; lokalny pitch może być wcześniej.
 
 ## Zależności i praca równoległa
 
@@ -89,7 +89,8 @@ flowchart TD
   M --> E3[Mapa maksimum, ranking pikseli, wyjaśnienia]
   K3 --> T[Testy i wydanie]
   E3 --> T
-  T --> S[Demo i formalne zgłoszenie]
+  T --> S[Agenci: gotowe demo i pakiet]
+  S --> H[Kamil lub Ewelina: ręczny submission]
 ```
 
 ## Fallback bez ukrywania ograniczeń

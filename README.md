@@ -15,6 +15,10 @@ Webapp wyszukujący na Ziemi komórki najbardziej podobne do wybranego regionu M
 5. Przed implementacją każdego zadania opublikuj osobny commit **IN PROGRESS** w `origin/main`. Każdą poprawkę zapisuj commitem i od razu wysyłaj na zdalną gałąź zadania. Konflikty rozwiązuj przy synchronizacji z zachowaniem obu prac.
 6. Obie strony stosują [kontrakty](docs/CONTRACTS.md); zakończone zadania i ich rozwiązania muszą być dostępne w `origin/main`.
 
+Prompty są pełnymi **Celami wykonawczymi**: zawierają warunki ukończenia, pętlę pull/commit/push i zasady dopisywania zadań także dla drugiego agenta. Do przeglądów służy [szablon review](tasks/REVIEW_TEMPLATE.md).
+
+**Agenci przygotowują projekt i pakiet zgłoszeniowy. Submission wykonuje osobiście Kamil albo Ewelina; karta I-006 ma executor: human_only i nie jest zadaniem do samodzielnego wykonania przez agenta.**
+
 ## Najważniejsze decyzje
 
 - **Top 10 dotyczy pojedynczych komórek**, a nie średnich regionów. Sąsiadujące dobre piksele mogą zajmować wiele miejsc w domyślnym rankingu.

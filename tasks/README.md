@@ -49,13 +49,15 @@ Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLA
 | [I-003](I-003.md) | P0 | Kamil | K-008, K-009, E-007, E-008 | Odbierz globalność, hotspoty i granulację |
 | [I-004](I-004.md) | P0 | Kamil | I-002, K-008, E-009 | Przygotuj i sprawdź wspólne wydanie |
 | [I-005](I-005.md) | P0 | Ewelina | I-003, I-004, E-010 | Sprawdź zgodność zgłoszenia z finalnym produktem |
-| [I-006](I-006.md) | P0 | Kamil | I-005 | Wyślij projekt i zachowaj potwierdzenie |
+| [I-006](I-006.md) | P0 | Kamil lub Ewelina osobiście | I-005 | Ręczny submission — human_only, poza Celami agentów |
 
 ## Odkryte zadania
 
 Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tutaj ID, link, właściciela i powód. Nowe P0 musi wynikać z uzgodnionego MVP, poprawności lub obowiązkowego zgłoszenia. Nie usuwaj istniejących kart; zastąpione oznacz jako `cancelled` z uzasadnieniem i aktualizacją zależności.
 
 - [I-007 — Szczegółowe cele agentów i ręczny submission](I-007.md), Kamil, P0: doprecyzowanie na prośbę Kamila; bez implementacji aplikacji.
+
+Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
 Następne wolne numery po dodaniu tej karty: K-012, E-012, I-008; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 

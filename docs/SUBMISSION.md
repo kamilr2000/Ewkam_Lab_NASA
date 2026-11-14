@@ -1,6 +1,8 @@
 # Pakiet zgłoszeniowy
 
-Właściciel: Ewelina. Weryfikacja naukowa: Kamil. Formalne zgłoszenie: upoważniony członek zespołu. Dokładne wymagania i terminy: [sprawdzony przewodnik 2026](sources/03-submission.md).
+Przygotowanie pakietu: agent Eweliny. Weryfikacja naukowa: agent Kamila. **Formalne zgłoszenie wykonuje wyłącznie Kamil albo Ewelina osobiście, nigdy agent.** Dokładne wymagania i terminy: [sprawdzony przewodnik 2026](sources/03-submission.md).
+
+Agenci przygotowują kompletną treść, demo, źródła, linki, sprawdzenia i checklistę. Nie klikają Submit for Judging, nie wysyłają odpowiedniego żądania API, nie składają oświadczeń ani nie akceptują regulaminu w imieniu zespołu. Ogólny Cel ukończenia projektu nie upoważnia do tych czynności. Granicą ich Celu jest gotowy pakiet do ręcznego zgłoszenia.
 
 ## Przygotowanie
 
@@ -25,8 +27,8 @@ Wyzwanie → po co szukać analogów → wybór celu i kryteriów → mapa odkry
 - [ ] Formularz opisuje ograniczenia: topografia vs pełne środowisko, skala, brakujące dane i lokalne doprecyzowanie.
 - [ ] Zespół sprawdził oświadczenia wymagane przy wysłaniu oraz wszystkie obowiązkowe pola formularza.
 
-## Wykonanie I-006
+## Wykonanie I-006 — tylko Kamil lub Ewelina
 
-Jedna osoba edytuje stronę zespołu, druga przegląda gotową treść. Skorzystaj z blokady edycji i często zapisuj postęp. Następnie wykonaj formalne zgłoszenie według S03 i sprawdź komunikat powodzenia. Odnotuj URL projektu, datę/czas ze strefą i dowód potwierdzenia; nie zapisuj prywatnych danych konta w repo.
+Poniższe czynności wykonuje człowiek: jedna osoba edytuje stronę zespołu, druga przegląda gotową treść. Korzysta z blokady edycji, zapisuje postęp i samodzielnie wykonuje formalne zgłoszenie według S03 oraz sprawdza komunikat powodzenia. Zachowuje URL projektu, datę/czas ze strefą i dowód potwierdzenia. Nie zapisuje prywatnych danych konta w repo.
 
-`I-006` pozostaje otwarte do faktycznego potwierdzenia wysłania. Sam publiczny deploy, gotowy tekst lub zapis wersji roboczej nie oznacza zgłoszenia.
+`I-006` ma `executor: human_only` i pozostaje otwarte do faktycznego potwierdzenia wysłania przez Kamila lub Ewelinę. Po przekazaniu takiego potwierdzenia agent może odnotować status i niesensytywny dowód. Sam publiczny deploy, gotowy tekst lub zapis wersji roboczej nie oznacza zgłoszenia. Otwarte I-006 nie blokuje ukończenia technicznych Celów agentów, gdy projekt i pakiet są rzeczywiście gotowe do ręcznego przekazania.
