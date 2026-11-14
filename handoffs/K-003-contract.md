@@ -5,9 +5,9 @@
 - Data i strefa: 2026-11-14, Europe/Warsaw
 - Zadanie / PR / commity implementacji: K-003 / [PR #7](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/7) / bazowy `b439941e1a6d33573b5de46654004fe2ab8a51b0`, poprawka geometrii `0f7eb71a6a64b08211ef3df43ac28664f1a2bf95`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-003-contract-v1`
-- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-003 (`619dc9a`) jest w `origin/main`; rezultat jest opublikowany na gałęzi i w PR #7, jeszcze nie w `main`.
+- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-003 (`619dc9a`) oraz rezultat PR #7 są w `origin/main`; PR scalono commitem `41139726d0370145b7c4c1bb97666aafa8ece086`.
 - Lokalne niewysłane zmiany: brak.
-- Stan: poprawka po E-013 opublikowana; czeka na E-015.
+- Stan: kontrakt v1.0.0 po poprawce E-013, niezależnie zaakceptowany przez E-015 i scalony do `main`.
 
 ## Co jest dostępne
 
@@ -32,15 +32,14 @@ Walidator JSON Schema to przypięte `jsonschema==4.26.0`. Semantyczne kontrole w
 ## Sprawdzenia
 
 - `uv run --locked pytest contracts/tests/test_contracts.py`: 34 testy zaliczone dla pierwotnego kontraktu. Po poprawce `pytest -q contracts/tests/test_contracts.py` w istniejącym środowisku `.venv-k003-contract`: 40 testów zaliczonych.
-- `python tools/check_planning.py`: OK — 107 plików Markdown, 62 JSON, 39 kart i acykliczne zależności.
+- Po scaleniu PR #7: `uv --cache-dir <lokalny-zapisywalny-cache> run --locked pytest contracts/tests/test_contracts.py` — 40 testów zaliczonych w 0.60 s.
+- `python tools/check_planning.py`: OK — 94 pliki Markdown, 30 JSON, 45 kart i acykliczne zależności.
 - Parser YAML odczytał `contracts/openapi.yaml`: 7 ścieżek; wszystkie 9 lokalnych odwołań do schematów istnieje.
 - 23 pliki JSON kontraktów i fixture'ów parsują się.
 - `git diff --check`: bez błędów.
 
-Próba odtworzenia `uv run --locked pytest` w bieżącym środowisku nie mogła zapisać cache interpretera do katalogu aplikacji; te same testy uruchomiono w istniejącym środowisku K-003. Nie uruchamiano serwera, bo K-003 nie implementuje endpointów. Nie sprawdzano pobierania, pokrycia ani przetwarzania rzeczywistych danych; syntetyczne przykłady nie dowodzą jakości naukowej ani globalnej kompletności.
+Domyślny cache uv w środowisku aplikacji nie był zapisywalny; ponowne uruchomienie z lokalnym zapisywalnym cache przeszło po scaleniu. Nie uruchamiano serwera, bo K-003 nie implementuje endpointów. Nie sprawdzano pobierania, pokrycia ani przetwarzania rzeczywistych danych; syntetyczne przykłady nie dowodzą jakości naukowej ani globalnej kompletności.
 
 ## Ograniczenia i potrzebne działania
 
-E-013 wskazało, że nieprawidłowe `MultiPolygon.coordinates` mogło przejść przez katalog, mapę i szczegóły piksela. Poprawkę sprawdzająca zagnieżdżenie oraz regresje opublikowano w PR #7 jako `0f7eb71a6a64b08211ef3df43ac28664f1a2bf95`; E-015 w [origin/main](../tasks/E-015.md) prosi Ewelinę o niezależny review dokładnie tego SHA. Proszę też potwierdzić, że pozostałe kształty `SearchRequest`/`SearchResponse`, `PixelDetails`, `ProfileResponse`, `DatasetManifest`, jednostki, zakresy, braki i rozdzielenie rankingu od agregacji pozwalają odtworzyć UI w E-003/E-004.
-
-Po akceptacji PR należy połączyć K-003 do `main`. To nie zmienia ograniczenia, że tylko health jest dziś wdrożony; backend i wyniki na danych rzeczywistych pozostają kolejnymi zadaniami.
+E-013 wskazało, że nieprawidłowe `MultiPolygon.coordinates` mogło przejść przez katalog, mapę i szczegóły piksela. Poprawka z testami regresyjnymi została niezależnie zaakceptowana przez E-015 dla SHA `0f7eb71a6a64b08211ef3df43ac28664f1a2bf95`; wynik jest w [E-015](../tasks/E-015.md) i [review PR #7](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/7#pullrequestreview-5907018066). PR #7 jest scalony do `main`. Dalsze wdrożenie API, profile planetarne, dane Ziemi i wyniki na rzeczywistych danych pozostają kolejnymi zadaniami. To nie zmienia ograniczenia, że tylko health jest dziś wdrożony.
