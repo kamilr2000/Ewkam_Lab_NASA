@@ -61,10 +61,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [I-008 — Pierwszeństwo gotowych review](I-008.md), Kamil, P0: przeglądy przed zwykłym backlogiem przy wyborze następnego zadania, bez przerywania rozpoczętej pracy.
 - [K-012 — Review web scaffold E-001](K-012.md), Kamil, P0: sprawdzenie opublikowanego szkieletu React/Vite i dowodów builda przed połączeniem PR #3.
 - [E-012 — Review bootstrapu API K-001](E-012.md), Ewelina, P0: sprawdzenie środowiska Python, API gotowości i odtwarzalności K-001 przed połączeniem PR #4.
+- [K-013 — Review poprawki zakresu topografii E-001](K-013.md), Kamil, P1: potwierdzenie poprawki P1 K-012 w dokładnie wskazanym headzie PR #3.
+- [I-009 — Zapisz użycie AI przy E-001](I-009.md), Ewelina, P0: brakujący wpis wspólnego rejestru AI, zależny od odbioru E-001.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-013, E-013, I-009; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-014, E-013, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
