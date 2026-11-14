@@ -64,10 +64,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-013 — Review poprawki zakresu topografii E-001](K-013.md), Kamil, P1: potwierdzenie poprawki P1 K-012 w dokładnie wskazanym headzie PR #3.
 - [I-009 — Zapisz użycie AI przy E-001](I-009.md), Ewelina, P0: brakujący wpis wspólnego rejestru AI, zależny od odbioru E-001.
 - [K-014 — Review przepływu informacji E-002](K-014.md), Kamil, P0: przegląd przepływu UX, skali informacji i layoutu E-002 na PR #5.
+- [K-015 — Review rejestru AI E-001](K-015.md), Kamil, P0: sprawdzenie faktograficzne ujawnienia użycia Codex przy web scaffoldzie w PR #6.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-015, E-013, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-016, E-013, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
