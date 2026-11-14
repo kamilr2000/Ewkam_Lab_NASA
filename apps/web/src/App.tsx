@@ -503,7 +503,7 @@ function App() {
 
           <footer className="workspace-footer">
             <span>EARTH ANALOGS <span className="footer-separator">/</span> TERRAIN SCREENING</span>
-            <span>{analysis?.is_synthetic ? 'Synthetic contract fixture · not a planetary observation.' : 'NASA data sources will be cited with each released analysis.'}</span>
+            <span>{analysis?.is_synthetic ? 'Synthetic contract fixture · not a planetary observation.' : 'Source IDs appear when provided; full citations are not linked in this prototype.'}</span>
           </footer>
         </section>
       </section>
