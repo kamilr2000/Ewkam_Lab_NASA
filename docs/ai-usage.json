@@ -10,7 +10,8 @@
     "project plan, documentation and task cards",
     "initial request schema and synthetic regression vectors",
     "planning document checker",
-    "remote collaboration workflow, task reservation commits and updated agent prompts"
+    "remote collaboration workflow, task reservation commits and updated agent prompts",
+    "detailed executable goals, bidirectional review tasks and human-only final submission boundary"
   ],
   "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
   "scientific_observations_downloaded": false,

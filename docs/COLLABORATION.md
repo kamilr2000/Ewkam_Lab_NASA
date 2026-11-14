@@ -51,6 +51,8 @@ Przy błędzie zatrzymaj ten ciąg i rozwiąż przyczynę. Odmowa fast-forward w
 
 Po opublikowaniu rezerwacji utwórz gałąź zadania z aktualnego `main` i opublikuj ją przez `git push -u origin HEAD`.
 
+Na początku sesji i przed kolejnym zadaniem wykonuj rzeczywisty **pull**, nie tylko odczyt zdalnych kart. Na czystym `main`: `git pull --ff-only origin main`. Na gałęzi z ustawionym upstream: `git pull --no-rebase`, potem merge aktualnego `origin/main`. Po cudzym przekazaniu i po połączeniu PR ponownie zsynchronizuj pliki. Przy niezapisanych zmianach najpierw zachowaj własną pracę; nie nadpisuj jej automatycznie. Jeśli ustawienie upstream nie istnieje, sprawdź docelową gałąź i skonfiguruj ją świadomie.
+
 1. Przed kolejną partią pobierz remote i połącz potrzebne zmiany z `origin/main` oraz zdalnej wersji własnej gałęzi.
 2. Wykonaj małą poprawkę, sprawdź ją i zrób commit zawierający ID zadania. Dotyczy to także dokumentacji, fixture'ów, kart i kontraktów.
 3. Przed wysłaniem ponownie pobierz remote. Jeśli doszły zmiany, połącz je, rozwiąż rzeczywiste konflikty i sprawdź rezultat.
@@ -97,3 +99,19 @@ Wczesne przekazania:
 - E-010 → I-005: publiczny pakiet z jasno rozdzielonym stanem wykonanym i planowanym.
 
 Krótki wspólny przegląd po G1, G2 i przed zgłoszeniem. Komunikaty mają identyfikator karty i konkretny zdalny rezultat. Repo utworzono 2026-11-14 jako prywatne i opublikowano początkowe przygotowanie oraz poprawki przez main (30b19ff). Zaproszenie write dla ewelixa oczekuje na przyjęcie; potem Ewelina potwierdza zapis ze swojego komputera. Bieżące potwierdzenia są w I-001.
+
+## Zadania dla drugiego agenta i przeglądy
+
+Kamil może utworzyć zadanie E-* dla Eweliny, a Ewelina K-* dla Kamila. Zlecający sprawdza duplikaty i wolny ID po pullu, tworzy kartę z właścicielem odbiorcy i publikuje ją z indeksem w `origin/main`. Odbiorca sam rezerwuje ją commitem IN PROGRESS. Samo przydzielenie nie oznacza rozpoczęcia ani wykonania.
+
+Przykłady: Kamil prosi o sprawdzenie zrozumiałości API/wyjaśnień i UI dla wyniku MCDA; Ewelina zleca sprawdzenie naukowej poprawności legendy, jednostek albo zgodności adaptera z kontraktem. Zlecenie musi wskazywać rezultat i opublikowane dowody; nie wystarcza „sprawdź backend”.
+
+Przegląd używa [REVIEW_TEMPLATE](../tasks/REVIEW_TEMPLATE.md). Producent publikuje implementację i sprawdzenia, ustawia swoje zadanie na review oraz wskazuje `review_tasks`. Karta przeglądu ma `task_type: review`, `review_of: K-006` i `review_ref` wskazujący konkretny commit/PR.
+
+**Przegląd nie zależy od done ocenianego zadania.** Jego `depends_on` zawiera tylko już wymagane inne zadania; `review_of` jest osobnym odnośnikiem. Warunek startu to dostępność wskazanego kodu i status review. Dzięki temu E-012 może sprawdzić K-006 przed jego ukończeniem. Nie twórz cyklu K-006 → E-012 → K-006 przez zwykłe zależności.
+
+Recenzent rezerwuje kartę, pobiera wskazaną wersję, sprawdza kryteria, uruchamia adekwatne kontrole i publikuje raport w `handoffs/` lub komentarzu PR. Wynik to zaakceptowanie wskazanego SHA albo konkretne wymagane poprawki z dowodami i właścicielem. Raport musi być dostępny w remote; sama wiadomość w lokalnym czacie nie zamyka review.
+
+Jeśli znaleziono błąd, recenzent dodaje kartę poprawki właścicielowi kodu lub odnotowuje ją w istniejącej karcie bez dublowania. Producent poprawia, pushuje i zleca kontrolę zmienionego zakresu. Nie oznacza parenta done, dopóki krytyczne uwagi nie są rozwiązane. Sam przegląd nie generuje automatycznie kolejnego przeglądu; jego kartę można zamknąć po opublikowaniu kompletnego raportu, nawet z wynikiem „wymagane poprawki”. To nie oznacza akceptacji implementacji.
+
+Przed rozpoczęciem nowej funkcji i przed zakończeniem Celu sprawdź nowe karty przypisane Tobie. Przeglądy P0 odblokowujące drugą osobę obsługuj przed rozszerzeniami P1. Publikuj wczesne wersje kontraktów i małe przekazania, aby obie strony mogły robić postępy. I-006 pozostaje zadaniem człowieka i nie jest zleceniem dla żadnego agenta.

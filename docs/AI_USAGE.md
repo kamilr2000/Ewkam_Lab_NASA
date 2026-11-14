@@ -16,6 +16,8 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 
 2026-11-14 — Codex pomógł doprecyzować pracę Kamila i Eweliny na osobnych komputerach: zdalne rezerwacje IN PROGRESS, commit/push każdej poprawki, obsługę konfliktów, aktualizację promptów i kontrolę metadanych kart. Na bezpośrednie polecenie Kamila utworzono repo, nadano nazwę Ewkam_Lab_NASA i wysłano zaproszenie write do ewelixa. Kontrole lokalnych dokumentów i syntetycznych przykładów przechodzą; nie jest to walidacja aplikacji.
 
+2026-11-14 — I-007: Codex rozbudował oba prompty do samodzielnych Celów wykonawczych z kryteriami ukończenia, obowiązkowym pullem, rezerwacją przed implementacją, wykrywaniem braków oraz zlecaniem zadań i review drugiemu agentowi. Na wyraźną prośbę Kamila formalny submission oznaczono jako human_only; agenci kończą na gotowym pakiecie do ręcznego zgłoszenia. Zaktualizowano szablon przeglądu i instrukcje tak, by nie tworzyć zależności wymagającej done ocenianego zadania przed jego review.
+
 | Data | Narzędzie / wersja, jeśli znana | Zadanie / pliki | Jak wspomogło pracę | Kontrola człowieka i testy | Oznaczenia w wyniku |
 |---|---|---|---|---|---|
 | Uzupełnij przy implementacji | | | | | |

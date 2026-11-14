@@ -14,6 +14,22 @@ Repozytorium zespołu: **https://github.com/kamilr2000/Ewkam_Lab_NASA**, remote 
 
 Następnie implementuj na gałęzi zadania; po każdej spójnej poprawce wykonaj commit, synchronizację i skuteczny push. Zwykłe commity/pushe do ustalonego repo są częścią zleconej pracy. Respektuj rzeczywiste wymagania dostępu i zgody środowiska; błąd wysyłki raportuj uczciwie. Wyjątek startowy: utworzenie pustego repo i pierwsze zasilenie w I-001 wymaga lokalnego commita, bo `origin/main` jeszcze nie istnieje. Wyjątek nie dotyczy kolejnych zadań.
 
+**Pull jest obowiązkowy:** na początku sesji, przed wyborem nowego zadania i po połączeniu zmian do `main` aktualizuj własny klon. Na czystym `main` używaj `git pull --ff-only origin main`; na opublikowanej gałęzi roboczej `git pull --no-rebase`, a następnie dołącz aktualne `origin/main` przez merge. Ponawiaj synchronizację przed pushem. Sam `fetch` nie aktualizuje plików w drzewie roboczym. Jeśli masz niezapisane zmiany, najpierw bezpiecznie zachowaj własną pracę; nie nadpisuj jej ślepym pullem/resetem.
+
+## Współpraca i zlecanie drugiemu agentowi
+
+Każdy agent może utworzyć kartę dla drugiego: Kamil tworzy E-* z `owner: ewelina`, Ewelina tworzy K-* z `owner: kamil`; w I-* zawsze wskaż jednego właściciela. Dotyczy to implementacji, pytań o kontrakt, integracji i review. Nową kartę oraz indeks opublikuj w `origin/main`. Nie ustawiaj in_progress za drugiego agenta i nie przejmuj jego aktywnej karty.
+
+Opisuj konkretny rezultat, powód, pliki/kontrakt, kryteria, priorytet oraz opublikowany SHA/PR. Dla przeglądu użyj `tasks/REVIEW_TEMPLATE.md`: `task_type: review`, `review_of`, `review_ref` i warunek startu. Nie dodawaj ocenianego zadania do `depends_on` przeglądu, jeśli czeka ono na review przed done — powodowałoby to blokadę. Producent zapisuje w swojej karcie `review_tasks`; przegląd rusza na opublikowanej wersji, gdy zadanie jest w review, nie dopiero po done.
+
+Regularnie pulluj i czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania dodane przez drugiego agenta. Gotowy przegląd P0 odblokowujący drugą osobę ma pierwszeństwo przed nową pracą P1. Recenzent publikuje wynik i dowody w remote. Poprawki przypisuje właścicielowi kodu; nie uznaje zmiany za poprawną bez sprawdzenia. Istotne poprawki po przeglądzie wymagają przeglądu zmienionego zakresu. Nie twórz automatycznej nieskończonej kolejki review przeglądów.
+
+## Formalny submission — wyłącznie człowiek
+
+**Agenci nigdy samodzielnie nie wysyłają zgłoszenia NASA. I-006 ma executor: human_only.** Przygotujcie kompletny projekt, materiały, treści, demo, źródła i checklistę dla Kamila lub Eweliny. Nie klikajcie Submit for Judging, nie wysyłajcie równoważnego żądania API, nie składajcie oświadczeń i nie akceptujcie regulaminu w ich imieniu. Ogólny cel „ukończ projekt” nie znosi tego ograniczenia.
+
+Submission wykonuje osobiście Kamil albo Ewelina. Po wyraźnym potwierdzeniu przez tę osobę agent może odnotować dowód i status w karcie, ale nie może sam wykonać wysyłki. Cel agenta kończy się na gotowym, sprawdzonym pakiecie do ręcznego zgłoszenia; otwarte I-006 nie blokuje ukończenia tak zdefiniowanego celu.
+
 ## Najważniejsze wymagania
 
 1. Oceniaj każdą kwalifikującą się komórkę w zadeklarowanej siatce; globalny Top 10 powstaje przed agregacją do wyświetlania.
