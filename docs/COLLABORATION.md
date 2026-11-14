@@ -96,4 +96,4 @@ Wczesne przekazania:
 - E-006 → K-009: ekran pokazujący wkłady oraz reprodukowalna konfiguracja.
 - E-010 → I-005: publiczny pakiet z jasno rozdzielonym stanem wykonanym i planowanym.
 
-Krótki wspólny przegląd po G1, G2 i przed zgłoszeniem. Komunikaty mają identyfikator karty i konkretny zdalny rezultat. Repo utworzono 2026-11-14 jako prywatne. Pierwszy push i dostęp zapisu Eweliny trzeba potwierdzić w I-001; sam adres nie dowodzi, że oba komputery już mogą współpracować.
+Krótki wspólny przegląd po G1, G2 i przed zgłoszeniem. Komunikaty mają identyfikator karty i konkretny zdalny rezultat. Repo utworzono 2026-11-14 jako prywatne i opublikowano początkowe przygotowanie oraz poprawki przez main (30b19ff). Zaproszenie write dla ewelixa oczekuje na przyjęcie; potem Ewelina potwierdza zapis ze swojego komputera. Bieżące potwierdzenia są w I-001.
