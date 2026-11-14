@@ -1,0 +1,47 @@
+name: Zadanie projektu
+description: Nowa praca odkryta przez zespół lub agenta
+title: "[TASK-ID] "
+body:
+  - type: input
+    id: task
+    attributes:
+      label: Karta w repo
+      description: Najpierw utwórz tasks/ID.md; karta pozostaje źródłem prawdy.
+      placeholder: tasks/K-012.md
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Właściciel
+      options:
+        - Kamil
+        - Ewelina
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorytet
+      options:
+        - P0 — konieczne do MVP lub zgłoszenia
+        - P1 — rozszerzenie po MVP
+        - P2 — dalszy rozwój
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Cel, kroki, zakres plików i zależności
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Kryteria odbioru i sprawdzenia
+    validations:
+      required: true
+  - type: textarea
+    id: discovery
+    attributes:
+      label: Skąd wynika zadanie i co blokuje

@@ -1,0 +1,46 @@
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Web
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Large scientific inputs and generated products: publish through a versioned manifest
+data/raw/
+data/intermediate/
+data/processed/
+data/cache/
+*.tif
+*.tiff
+*.img
+*.nc
+*.h5
+*.hdf
+*.parquet
+*.npy
+*.npz
+*.zip
+*.mp4
+*.mov
+
+# Keep small curated fixtures and reports under version control
+!contracts/fixtures/**

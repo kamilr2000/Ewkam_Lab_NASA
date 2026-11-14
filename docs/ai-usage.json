@@ -1,0 +1,19 @@
+{
+  "record_date": "2026-11-14",
+  "tool": "Codex assistant",
+  "model_version": null,
+  "original_product_idea_by": ["Kamil", "Ewelina"],
+  "pixel_granularity_requirement_by": "Kamil",
+  "ai_assisted": true,
+  "scope": [
+    "source review and proposed implementation methodology",
+    "project plan, documentation and task cards",
+    "initial request schema and synthetic regression vectors",
+    "planning document checker"
+  ],
+  "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
+  "scientific_observations_downloaded": false,
+  "generated_media": [],
+  "details": "docs/AI_USAGE.md",
+  "review_status": "Source texts checked; scientific method and software architecture require implementation-time validation and team review."
+}

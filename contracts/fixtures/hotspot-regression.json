@@ -1,0 +1,96 @@
+{
+  "fixture_version": "0.1.0",
+  "is_synthetic": true,
+  "ai_assisted": true,
+  "description": "Dimensionless synthetic regression cases with equal pixel areas. IDs and values are test objects, not Earth, Moon or Mars observations. Similarity is the linear interval function from METHODOLOGY.md.",
+  "cases": [
+    {
+      "id": "isolated_hotspot_in_weak_region",
+      "features": {"test_a": {"interval": [0, 0], "tolerance": 1}},
+      "weights": {"test_a": 1},
+      "pixels": [
+        {"pixel_id": "test-p001", "map_cell_id": "weak", "values": {"test_a": 0}},
+        {"pixel_id": "test-p002", "map_cell_id": "weak", "values": {"test_a": 0.8}},
+        {"pixel_id": "test-p003", "map_cell_id": "weak", "values": {"test_a": 0.8}},
+        {"pixel_id": "test-p004", "map_cell_id": "steady", "values": {"test_a": 0.4}},
+        {"pixel_id": "test-p005", "map_cell_id": "steady", "values": {"test_a": 0.4}},
+        {"pixel_id": "test-p006", "map_cell_id": "steady", "values": {"test_a": 0.4}}
+      ],
+      "expected": {
+        "ranked_pixel_ids": ["test-p001", "test-p004", "test-p005", "test-p006", "test-p002", "test-p003"],
+        "top_score_pct": 100,
+        "map_cells": {
+          "weak": {"max_score_pct": 100, "mean_score_pct": 46.666666666666664, "max_pixel_id": "test-p001"},
+          "steady": {"max_score_pct": 60, "mean_score_pct": 60, "max_pixel_id": "test-p004"}
+        }
+      }
+    },
+    {
+      "id": "feature_maxima_belong_to_different_pixels",
+      "features": {
+        "test_a": {"interval": [0, 0], "tolerance": 1},
+        "test_b": {"interval": [0, 0], "tolerance": 1}
+      },
+      "weights": {"test_a": 1, "test_b": 1},
+      "pixels": [
+        {"pixel_id": "test-p001", "map_cell_id": "both", "values": {"test_a": 0, "test_b": 1}},
+        {"pixel_id": "test-p002", "map_cell_id": "both", "values": {"test_a": 1, "test_b": 0}}
+      ],
+      "expected": {
+        "ranked_pixel_ids": ["test-p001", "test-p002"],
+        "top_score_pct": 50,
+        "map_cells": {"both": {"max_score_pct": 50, "mean_score_pct": 50, "max_pixel_id": "test-p001"}}
+      }
+    },
+    {
+      "id": "missing_feature_is_not_renormalized",
+      "features": {
+        "test_a": {"interval": [0, 0], "tolerance": 1},
+        "test_b": {"interval": [0, 0], "tolerance": 1}
+      },
+      "weights": {"test_a": 1, "test_b": 1},
+      "pixels": [
+        {"pixel_id": "test-p001", "map_cell_id": "both", "values": {"test_a": 0, "test_b": null}},
+        {"pixel_id": "test-p002", "map_cell_id": "both", "values": {"test_a": 0.3, "test_b": 0.3}}
+      ],
+      "expected": {
+        "ranked_pixel_ids": ["test-p002"],
+        "excluded_pixel_ids": ["test-p001"],
+        "top_score_pct": 70,
+        "map_cells": {"both": {"max_score_pct": 70, "mean_score_pct": 70, "max_pixel_id": "test-p002"}}
+      }
+    },
+    {
+      "id": "weighted_score_and_tie_order",
+      "features": {
+        "test_a": {"interval": [0, 0], "tolerance": 1},
+        "test_b": {"interval": [0, 0], "tolerance": 1}
+      },
+      "weights": {"test_a": 1, "test_b": 3},
+      "pixels": [
+        {"pixel_id": "test-p002", "map_cell_id": "both", "values": {"test_a": 1, "test_b": 0}},
+        {"pixel_id": "test-p001", "map_cell_id": "both", "values": {"test_a": 1, "test_b": 0}},
+        {"pixel_id": "test-p003", "map_cell_id": "both", "values": {"test_a": 0, "test_b": 1}}
+      ],
+      "expected": {
+        "ranked_pixel_ids": ["test-p001", "test-p002", "test-p003"],
+        "top_score_pct": 75,
+        "map_cells": {"both": {"max_score_pct": 75, "mean_score_pct": 58.333333333333336, "max_pixel_id": "test-p001"}}
+      }
+    },
+    {
+      "id": "all_pixels_missing",
+      "features": {"test_a": {"interval": [0, 0], "tolerance": 1}},
+      "weights": {"test_a": 1},
+      "pixels": [
+        {"pixel_id": "test-p001", "map_cell_id": "empty", "values": {"test_a": null}}
+      ],
+      "expected": {
+        "ranked_pixel_ids": [],
+        "excluded_pixel_ids": ["test-p001"],
+        "top_score_pct": null,
+        "map_cells": {"empty": {"max_score_pct": null, "mean_score_pct": null, "max_pixel_id": null}}
+      }
+    }
+  ]
+}

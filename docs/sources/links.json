@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-11-14",
+  "edition": 2026,
+  "verification_method": "Full rendered-page extraction via TinyFish after direct web fetch failures",
+  "sources": [
+    {"id": "S01", "url": "https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=details", "status": "read_full", "summary": "01-challenge.md"},
+    {"id": "S02", "url": "https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources", "status": "read_full", "summary": "02-resources.md"},
+    {"id": "S03", "url": "https://www.spaceappschallenge.org/resources/project-submission-guide/", "status": "read_full", "page_date": "2026-11-13", "summary": "03-submission.md"},
+    {"id": "S04", "url": "https://www.spaceappschallenge.org/legal/", "status": "read_full", "page_date": "2026-08-07", "summary": "04-legal.md"},
+    {"id": "S05", "url": "https://www.spaceappschallenge.org/resources/judging-awards-guide/", "status": "read_full", "page_date": "2026-11-13", "summary": "README.md"}
+  ]
+}
