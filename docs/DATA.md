@@ -1,6 +1,6 @@
 # Dane, warstwy i profile
 
-Stan 2026-11-14: zweryfikowano opisy źródeł i zasobów organizatora; **nie pobrano jeszcze produktów naukowych ani nie zmierzono ich kompletności**. Dostępność konkretnego pliku, jego wersję i warunki zatwierdza K-002. Poniższa lista jest propozycją implementacyjną, a nie listą produktów już wykorzystanych.
+Stan 2026-11-14: K-002 pobrał i poprawnie odczytał małe rzeczywiste próbki ETOPO, LOLA i MOLA. Ich pochodzenie, etykiety, rozmiary i SHA-256 zapisano w manifeście próbek w data/manifests/k002-samples.json; odtwarzalne pobranie uruchamia pipeline/download_samples.py. To próbki techniczne, nie gotowe warstwy aplikacji ani dowód globalnego pokrycia. NASADEM jest widoczny w katalogu, ale wymaga lokalnego logowania Earthdata; bez uwierzytelnienia nie pobrano pomiarów.
 
 ## 1. Kolejność pozyskiwania
 
@@ -15,12 +15,22 @@ Stan 2026-11-14: zweryfikowano opisy źródeł i zasobów organizatora; **nie po
 | ID | Źródło i rola | Ograniczenie / działanie |
 |---|---|---|
 | D01 | [NOAA ETOPO 2022](https://www.ncei.noaa.gov/products/etopo-global-relief-model): globalna rzeźba powierzchni Ziemi | Rozważyć wariant Ice Surface 60 arc-second dla screeningu; angularny piksel nie ma stałego rozmiaru w metrach. Nie używać Bedrock jako terenu po powierzchni lodu. |
-| D02 | [NASA/METI ASTER GDEM v3](https://asterweb.jpl.nasa.gov/gdem.asp): rzeczywiste porównanie cech na wybranych ziemskich wycinkach | Zasięg 83°S–83°N, artefakty, dostęp przez Earthdata. Pobrać co najmniej trzy AOI, sprowadzić do tej samej skali i policzyć rozbieżności z D01. Nie ogłaszać danych ASTER jako pełnego globalnego podkładu. |
-| D03 | [LRO LOLA w NASA PDS](https://pds-geosciences.wustl.edu/missions/lro/lola.htm): profil topograficzny Księżyca | Wybierać produkty gridded/polar zgodne z regionem. Zachować etykiety produktu, jednostki i model ciała. |
-| D04 | [MGS MOLA MEGDR / Topography Derived](https://pds-geosciences.wustl.edu/missions/mgs/megdr.html): profil topograficzny Marsa | Odczytać topografię, nie surowy promień. PDS wskazuje migrację do PDS4 w 2026 r.; dobrać aktualny produkt i jego etykiety. |
-| D05 | [GSHHG przez NOAA](https://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html): kandydat na maskę lądu i jezior | LGPL według strony; zachować wersję i wymagane noty albo wybrać sprawdzone zgodne źródło. Nie wyznaczać lądu progiem wysokości 0 m. |
+| D02 | [NASA/METI ASTER GDEM v3](https://asterweb.jpl.nasa.gov/gdem.asp) lub NASADEM: niezależna walidacja ziemskich cech | Do kolejnego sprawdzenia wybrano NASADEM HGT v001 (DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001, CC0-1.0). CMR potwierdza granule, ale plik LP DAAC wymaga Earthdata Login; próbki nie pobrano. Porównać w co najmniej trzech AOI po wspólnym przeskalowaniu i jawnie rozdzielić EGM96 od EGM2008. NASADEM SWB może dostarczyć maskę lądu/wody tylko w zasięgu SRTM, bez obszarów polarnych. |
+| D03 | [LRO LOLA w NASA PDS](https://pds-geosciences.wustl.edu/missions/lro/lola.htm): profil Księżyca; pobrano LDEM_4 i etykiety PDS3/PDS4 | Globalny produkt 4 piksele/stopień przechowuje promień względem sfery odniesienia (DN × 0,5 m + 1 737 400 m); topografia względem geoidy wymaga odjęcia promienia geoidy. Nie porównywać surowych wysokości między ciałami. |
+| D04 | [MGS MOLA MEGDR / Topography Derived](https://pds-geosciences.wustl.edu/missions/mgs/megdr.html): profil Marsa; pobrano globalny MEGT 4 px/deg oraz MEGC | Używaj utrzymywanego bundle PDS4 z 2026 r. MEGT jest topografią względem areoidy MOLA GMM-3; MEGC zawiera liczbę obserwacji. Produkt interpoluje nieobserwowane komórki — zachowuj MEGC i oznaczaj zerową liczbę obserwacji jako brak bezpośredniego pomiaru. |
+| D05 | [GSHHG przez NOAA](https://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html): kandydat na globalną maskę lądu i jezior | NOAA wskazuje wersję 2.3.7, WGS84 i LGPL. Kandydat nie został pobrany ani wdrożony. Nie wyznaczać lądu progiem wysokości 0 m. |
 
-D01 jest produktem NOAA, nie NASA ani agencji partnerskiej Space Apps. Rola danych NASA w rozwiązaniu to D03/D04 w samym wyniku oraz D02 w ilościowej walidacji ziemskich cech. Raport musi pokazywać wykonane obliczenia D02, nie sam link. Jeśli D02 jest niedostępne, K-002 wybiera inne realne NASA Earth dane i aktualizuje plan; nie zaznacza tego wymagania jako spełnione.
+D01 jest produktem NOAA, nie NASA ani agencji partnerskiej Space Apps. Próbki D03/D04 są rzeczywistymi produktami NASA PDS, ale nie zastępują niezależnej walidacji cech Ziemi przez dane NASA Earth. Rola NASA Earth w obliczeniach pozostaje otwarta do czasu pobrania i porównania NASADEM lub uzgodnionego zamiennika.
+
+### Dowody próbek z K-002
+
+| Produkt | Odczyt próbki | Układ / rozdzielczość | Kontrola jakości |
+|---|---|---|---|
+| ETOPO 2022 v1, kafel S15W075 | Rasterio: min −8 997 m, max 6 806.7788 m, średnia 262.3150 m, odch. std. 2 989.1015 m | 3 600 × 3 600, 15″; WGS84 + EGM2008, EPSG:9518, metry, nodata −99999 | 30 004 071 B; SHA-256 w manifeście; NOAA podaje, że wartość nodata nie występuje w siatce ETOPO. |
+| LOLA LDEM_4 | 1 036 800 wartości int16; surowe DN −17 757…21 008; pierwsze próbki −239, −245, −236 | 1 440 × 720, 4 px/deg; prosta cylindryczna, DE421 mean-Earth/polar-axis; 0,5 m/DN | 2 073 600 B; etykieta określa próbkę jako mapę promienia. Nie ustawiono niezadeklarowanego nodata. |
+| MOLA MEGT90N000CB + MEGC90N000CB | topografia −8 068…21 134 m; liczność obserwacji 0…2 611; pierwsze wartości −1 971 m i liczność 1 | 1 440 × 720, 4 px/deg (0,25°); IAU2000 Mars, planetocentryczny; MEGT względem areoidy GMM-3 | Każdy plik 2 073 600 B. MEGC identyfikuje komórki bez bezpośrednich obserwacji; PDS4 XML zawiera poprawiony geotransform. |
+
+Pliki wejściowe i etykiety PDS3/PDS4 mają rozmiary, URL-e i SHA-256 w manifeście. Downloader weryfikuje rozmiar i SHA-256; surowe dane pozostają poza Gitem.
 
 [Metadane ETOPO](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022) podają CC0-1.0. Warunki konkretnej wersji oraz dokumentację pochodzenia zapisujemy wraz z cytowaniem DOI w manifeście. [SLDEM2015](https://pgda.gsfc.nasa.gov/products/54) może pomóc przy niższych szerokościach Księżyca, ale obejmuje ±60°, więc nie zastępuje polarnego LOLA.
 
