@@ -16,23 +16,23 @@
 
 ## Verification
 
-- `npm run build --prefix apps/web` passed: TypeScript check and Vite production build.
-- Served the production build locally and checked it in headless Chrome 157.0.8103.78 at 320, 375, 390, 780, 781, 1150, and 1151 CSS px.
-- At every width, `document.documentElement.scrollWidth <= innerWidth`; no visible element had a right edge beyond the viewport.
-- Keyboard Tab showed a 2 px visible focus outline on the first link at every width.
+- `npm run build --prefix apps/web` passed after the overflow fix: TypeScript check and Vite production build.
+- Served the production build locally in Chrome on Windows. Each width was measured in an iframe with a classic 15 CSS px vertical scrollbar, matching the review case; the acceptance check is `document.documentElement.scrollWidth <= document.documentElement.clientWidth`.
+- At all seven widths, document and body `scrollWidth` equal `clientWidth`; no inspected body element extends beyond the usable viewport.
+- Programmatic keyboard-visible focus on the first link produced a solid outline at every width. Computed outline width was 1.6 CSS px in this browser context (the stylesheet declares 2px).
 - Both selects and the analysis button remained disabled, matching the unconnected API scaffold.
 
-| Viewport | `scrollWidth` | `innerWidth` | Right-edge overflow |
-| ---: | ---: | ---: | :--- |
-| 320 | 320 | 320 | none |
-| 375 | 375 | 375 | none |
-| 390 | 390 | 390 | none |
-| 780 | 765 | 780 | none |
-| 781 | 766 | 781 | none |
-| 1150 | 1135 | 1150 | none |
-| 1151 | 1136 | 1151 | none |
+| Viewport | `innerWidth` | `clientWidth` | `scrollWidth` | Right-edge overflow |
+| ---: | ---: | ---: | ---: | :--- |
+| 320 | 320 | 305 | 305 | none |
+| 375 | 375 | 360 | 360 | none |
+| 390 | 390 | 375 | 375 | none |
+| 780 | 780 | 765 | 765 | none |
+| 781 | 781 | 766 | 766 | none |
+| 1150 | 1150 | 1135 | 1135 | none |
+| 1151 | 1151 | 1136 | 1136 | none |
 
-The 15 px difference at 780 px and wider is the headless browser's vertical scrollbar; the document remains within the viewport.
+The 15 px reduction from `innerWidth` to `clientWidth` is the visible classic vertical scrollbar. The previous check compared with `innerWidth` and missed this usable-width failure at 320 px; this check now compares against `clientWidth`.
 
 ## Screenshots
 
@@ -47,4 +47,4 @@ The 15 px difference at 780 px and wider is the headless browser's vertical scro
 
 ## Limits
 
-This is a desktop headless-browser check of the production build. It does not claim physical-device, screen-reader, or full accessibility-audit coverage; E-008 remains responsible for the broader UX/accessibility audit. The frontend still has no connected analysis API or real measurements.
+This is a desktop-browser check of the production build using narrow iframes with classic scrollbars. It does not claim physical-device, screen-reader, or full accessibility-audit coverage; E-008 remains responsible for the broader UX/accessibility audit. The frontend still has no connected analysis API or real measurements. Screenshots linked above document the rendered layouts from the original visual pass; the updated scrollbar/client-width measurements are in `e014-viewport-metrics.json`.
