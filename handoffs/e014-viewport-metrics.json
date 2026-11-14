@@ -1,0 +1,93 @@
+[
+  {
+    "width": 320,
+    "innerWidth": 320,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 375,
+    "innerWidth": 375,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 390,
+    "innerWidth": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 780,
+    "innerWidth": 780,
+    "scrollWidth": 765,
+    "clientWidth": 765,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 781,
+    "innerWidth": 781,
+    "scrollWidth": 766,
+    "clientWidth": 766,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 1150,
+    "innerWidth": 1150,
+    "scrollWidth": 1135,
+    "clientWidth": 1135,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  },
+  {
+    "width": 1151,
+    "innerWidth": 1151,
+    "scrollWidth": 1136,
+    "clientWidth": 1136,
+    "activeTag": "A",
+    "activeClass": "brand",
+    "focusOutline": "solid",
+    "focusWidth": "2px",
+    "disabledSelects": true,
+    "runDisabled": true,
+    "rightOverflow": []
+  }
+]
