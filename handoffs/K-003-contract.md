@@ -3,11 +3,11 @@
 - Od: Kamil, `codex-kamil-k003-contract`
 - Do: Ewelina
 - Data i strefa: 2026-11-14, Europe/Warsaw
-- Zadanie / PR / commit implementacji: K-003 / [PR #7](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/7) / `b439941e1a6d33573b5de46654004fe2ab8a51b0`
+- Zadanie / PR / commity implementacji: K-003 / [PR #7](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/7) / bazowy `b439941e1a6d33573b5de46654004fe2ab8a51b0`, poprawka geometrii `0f7eb71a6a64b08211ef3df43ac28664f1a2bf95`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-003-contract-v1`
 - Czy rezerwacja / rezultat są w origin/main: rezerwacja K-003 (`619dc9a`) jest w `origin/main`; rezultat jest opublikowany na gałęzi i w PR #7, jeszcze nie w `main`.
 - Lokalne niewysłane zmiany: brak.
-- Stan: gotowe do przeglądu.
+- Stan: poprawka po E-013 opublikowana; czeka na E-015.
 
 ## Co jest dostępne
 
@@ -27,20 +27,20 @@ uv run --locked pytest contracts/tests/test_contracts.py
 python tools/check_planning.py
 ```
 
-Walidator JSON Schema to przypięte `jsonschema==4.26.0`. Semantyczne kontrole w `contracts/validation.py` uzupełniają JSON Schema o unikalność `feature_id` i powody wartości `null` w manifeście.
+Walidator JSON Schema to przypięte `jsonschema==4.26.0`. Semantyczne kontrole w `contracts/validation.py` uzupełniają JSON Schema o unikalność `feature_id` i powody wartości `null` w manifeście. Schematy katalogu, mapy i szczegółu pikseli walidują zagnieżdżenie MultiPolygon do pozycji; nie sprawdzają domknięcia pierścieni ani topologii. Negatywna regresja obejmuje błędny typ elementu i długość geograficzną 181 dla każdego z tych trzech payloadów.
 
 ## Sprawdzenia
 
-- `uv run --locked pytest contracts/tests/test_contracts.py`: 34 testy zaliczone.
-- `python tools/check_planning.py`: OK — 98 plików Markdown, 59 JSON, 35 kart i acykliczne zależności.
+- `uv run --locked pytest contracts/tests/test_contracts.py`: 34 testy zaliczone dla pierwotnego kontraktu. Po poprawce `pytest -q contracts/tests/test_contracts.py` w istniejącym środowisku `.venv-k003-contract`: 40 testów zaliczonych.
+- `python tools/check_planning.py`: OK — 107 plików Markdown, 62 JSON, 39 kart i acykliczne zależności.
 - Parser YAML odczytał `contracts/openapi.yaml`: 7 ścieżek; wszystkie 9 lokalnych odwołań do schematów istnieje.
 - 23 pliki JSON kontraktów i fixture'ów parsują się.
 - `git diff --check`: bez błędów.
 
-Nie uruchamiano serwera, bo K-003 nie implementuje endpointów. Nie sprawdzano pobierania, pokrycia ani przetwarzania rzeczywistych danych; syntetyczne przykłady nie dowodzą jakości naukowej ani globalnej kompletności.
+Próba odtworzenia `uv run --locked pytest` w bieżącym środowisku nie mogła zapisać cache interpretera do katalogu aplikacji; te same testy uruchomiono w istniejącym środowisku K-003. Nie uruchamiano serwera, bo K-003 nie implementuje endpointów. Nie sprawdzano pobierania, pokrycia ani przetwarzania rzeczywistych danych; syntetyczne przykłady nie dowodzą jakości naukowej ani globalnej kompletności.
 
 ## Ograniczenia i potrzebne działania
 
-Proszę sprawdzić PR #7 i potwierdzić, że kształt `SearchRequest`/`SearchResponse`, `PixelDetails`, `ProfileResponse`, `DatasetManifest`, jednostki, zakresy, braki i rozdzielenie rankingu od agregacji pozwalają odtworzyć UI w E-003/E-004. Uwagi kontraktowe zapisujemy w PR; niekompatybilna zmiana wymaga nowej wersji.
+E-013 wskazało, że nieprawidłowe `MultiPolygon.coordinates` mogło przejść przez katalog, mapę i szczegóły piksela. Poprawkę sprawdzająca zagnieżdżenie oraz regresje opublikowano w PR #7 jako `0f7eb71a6a64b08211ef3df43ac28664f1a2bf95`; E-015 w [origin/main](../tasks/E-015.md) prosi Ewelinę o niezależny review dokładnie tego SHA. Proszę też potwierdzić, że pozostałe kształty `SearchRequest`/`SearchResponse`, `PixelDetails`, `ProfileResponse`, `DatasetManifest`, jednostki, zakresy, braki i rozdzielenie rankingu od agregacji pozwalają odtworzyć UI w E-003/E-004.
 
 Po akceptacji PR należy połączyć K-003 do `main`. To nie zmienia ograniczenia, że tylko health jest dziś wdrożony; backend i wyniki na danych rzeczywistych pozostają kolejnymi zadaniami.

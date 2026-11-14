@@ -41,4 +41,4 @@ uv sync --locked --dev
 uv run --locked pytest contracts/tests/test_contracts.py
 ```
 
-Walidator sprawdza same schematy, fixture'y zgodne z każdym typem payloadu, poprawne i niepoprawne kombinacje trybu oraz semantyczną unikalność `feature_id`. Te kontrole dotyczą kontraktów i przykładów; nie dowodzą, że planowane endpointy lub naukowe dane są już wdrożone.
+Walidator sprawdza same schematy, fixture'y zgodne z każdym typem payloadu, zagnieżdżenie współrzędnych Polygon/MultiPolygon w katalogu, mapie i szczegółach, poprawne i niepoprawne kombinacje trybu oraz semantyczną unikalność `feature_id`. Regresja odrzuca błędny poziom geometrii i długość geograficzną poza zakresem; schemat nie sprawdza domknięcia pierścieni ani topologii. Te kontrole dotyczą kontraktów i przykładów; nie dowodzą, że planowane endpointy lub naukowe dane są już wdrożone.
