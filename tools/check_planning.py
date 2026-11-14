@@ -112,7 +112,7 @@ def main():
             metadata[key] = value.strip()
         required = {
             "id", "owner", "reviewer", "priority", "status", "depends_on",
-            "agent", "updated", "discovered_from",
+            "agent", "work_branch", "updated", "discovered_from",
         }
         if required - metadata.keys():
             errors.append(f"Missing fields in {path.name}: {required - metadata.keys()}")
@@ -124,6 +124,9 @@ def main():
             errors.append(f"Invalid reviewer: {path.name}")
         if metadata.get("priority") not in {"P0", "P1", "P2"} or metadata.get("status") not in STATES:
             errors.append(f"Invalid priority/status: {path.name}")
+        if metadata.get("status") in {"in_progress", "review", "done"}:
+            if metadata.get("agent") in {None, "", "unassigned"} or metadata.get("work_branch") in {None, "", "unassigned"}:
+                errors.append(f"Started task needs an agent and work branch: {path.name}")
         raw_dependencies = metadata.get("depends_on", "")
         if not (raw_dependencies.startswith("[") and raw_dependencies.endswith("]")):
             errors.append(f"Dependencies must use a one-line list: {path.name}")

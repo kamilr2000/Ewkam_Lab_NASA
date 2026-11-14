@@ -4,14 +4,16 @@ Zespół: **Kamil i Ewelina** · NASA Space Apps Challenge 2026 · nazwa robocza
 
 Webapp wyszukujący na Ziemi komórki najbardziej podobne do wybranego regionu Marsa lub Księżyca. Użytkownik wybiera warstwy, nadaje im wagi i otrzymuje mapę oraz ranking Top 10 z wyjaśnieniem wyniku.
 
-**Stan repo: dokumentacja, plan i kontrakty startowe. Aplikacja i rzeczywiste wyniki nie są jeszcze zaimplementowane.** Repozytorium Git utworzono lokalnie; publikacja i połączenie z repozytorium zespołu są zadaniem I-001.
+**Stan repo: dokumentacja, plan i kontrakty startowe. Aplikacja i rzeczywiste wyniki nie są jeszcze zaimplementowane.** Wspólne prywatne repo: **[kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA)**. Remote to `origin`; I-001 potwierdza pierwszą wysyłkę i dostęp obu osób.
 
 ## Zacznij tutaj
 
-1. Przeczytaj [instrukcje agentów](AGENTS.md) i [opis produktu](docs/PRODUCT.md).
-2. Otwórz [plan krok po kroku](docs/PLAN.md) oraz [tablicę zadań](tasks/README.md).
-3. Kamil uruchamia agenta z [tego promptu](prompts/KAMIL.md), Ewelina z [tego promptu](prompts/EWELINA.md).
-4. Przed połączeniem implementacji obie strony stosują [kontrakty](docs/CONTRACTS.md).
+1. Kamil i Ewelina klonują wspólne repo na swoich komputerach do dowolnych katalogów i sprawdzają dostęp do zapisu.
+2. Pobierz aktualne `origin/main`, przeczytaj [instrukcje agentów](AGENTS.md), [zasady synchronizacji](docs/COLLABORATION.md) i [opis produktu](docs/PRODUCT.md).
+3. Otwórz [plan krok po kroku](docs/PLAN.md) oraz [tablicę zadań](tasks/README.md).
+4. Kamil uruchamia agenta z [tego promptu](prompts/KAMIL.md), Ewelina z [tego promptu](prompts/EWELINA.md).
+5. Przed implementacją każdego zadania opublikuj osobny commit **IN PROGRESS** w `origin/main`. Każdą poprawkę zapisuj commitem i od razu wysyłaj na zdalną gałąź zadania. Konflikty rozwiązuj przy synchronizacji z zachowaniem obu prac.
+6. Obie strony stosują [kontrakty](docs/CONTRACTS.md); zakończone zadania i ich rozwiązania muszą być dostępne w `origin/main`.
 
 ## Najważniejsze decyzje
 

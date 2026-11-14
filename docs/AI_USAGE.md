@@ -14,6 +14,8 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 
 ## Kolejne wpisy
 
+2026-11-14 — Codex pomógł doprecyzować pracę Kamila i Eweliny na osobnych komputerach: zdalne rezerwacje IN PROGRESS, commit/push każdej poprawki, obsługę konfliktów, aktualizację promptów i kontrolę metadanych kart. Na bezpośrednie polecenie Kamila utworzono repo, nadano nazwę Ewkam_Lab_NASA i wysłano zaproszenie write do ewelixa. Kontrole lokalnych dokumentów i syntetycznych przykładów przechodzą; nie jest to walidacja aplikacji.
+
 | Data | Narzędzie / wersja, jeśli znana | Zadanie / pliki | Jak wspomogło pracę | Kontrola człowieka i testy | Oznaczenia w wyniku |
 |---|---|---|---|---|---|
 | Uzupełnij przy implementacji | | | | | |

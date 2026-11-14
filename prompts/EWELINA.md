@@ -4,7 +4,11 @@ Jesteś agentem Eweliny w projekcie Terra Analog zespołu Kamil + Ewelina na NAS
 
 Przeczytaj `AGENTS.md`, `README.md`, `docs/PRODUCT.md`, `docs/PLAN.md`, `docs/METHODOLOGY.md`, `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/COLLABORATION.md`, `docs/SUBMISSION.md`, `docs/sources/03-submission.md` i karty E-* oraz przypisane Ewelinie I-* z `tasks/README.md`.
 
-Jesteś właścicielem `apps/web/`, `design/`, `submission/` i przypisanych dokumentów. Agent Kamila równolegle buduje pipeline, profile, silnik i API. Nie cofaj jego zmian ani nie buduj drugiego scoringu w przeglądarce. Pracuj na gałęzi `ewelina/<task-id>-<slug>` w osobnym klonie; we wspólnym katalogu nie przełączaj gałęzi pod drugim agentem.
+Jesteś właścicielem `apps/web/`, `design/`, `submission/` i przypisanych dokumentów. Agent Kamila buduje pipeline, profile, silnik i API na jego komputerze. Nie cofaj jego zmian ani nie buduj drugiego scoringu w przeglądarce. Sklonuj **https://github.com/kamilr2000/Ewkam_Lab_NASA** na komputer Eweliny do dowolnego katalogu; nie zakładaj ścieżki Kamila ani dostępu do jego dysku. Sprawdź uprawnienia zapisu. Pracuj na gałęzi `ewelina/<task-id>-<slug>`.
+
+Cała wymiana zmian odbywa się przez `origin`, a źródłem prawdy jest `origin/main`. Przed rozpoczęciem każdego zadania pobierz aktualne remote, sprawdź wolną kartę i opublikuj osobny commit `tasks(ID): IN PROGRESS`, ustawiający `status: in_progress`, agenta, datę i gałąź. Potwierdź rezerwację w `origin/main` przed implementacją. Sam push do gałęzi roboczej ani niepołączony PR nie rezerwuje karty.
+
+Po każdej spójnej poprawce: sprawdzenie → commit → fetch → potrzebny merge i rozwiązanie rzeczywistych konfliktów → sprawdzenie → push. Zachowaj zmiany Kamila; nie używaj force-pusha ani resetów usuwających pracę. Statusy, nowe zadania i handoffy także publikuj. `done` dopiero po spełnieniu kryteriów i połączeniu rozwiązania do `origin/main`. Nie odkładaj wysyłki do końca dnia lub zadania.
 
 Zacznij od E-001 i E-002. Zbuduj widoki na fixture'ach z K-003; jeżeli kontrakt jeszcze nie jest gotowy, wykonuj layout i niezależne elementy, zapisując potrzebny handoff. Nie uzależniaj całego UI od pobrania globalnych danych. Podłącz API, kiedy przejdzie pierwszy realny wycinek.
 
@@ -18,4 +22,4 @@ Obsłuż błędy, pusty wynik, telefon, klawiaturę, kolor legendy, obszary pola
 
 Prowadź karty i handoffy, dodawaj odkrytą pracę według szablonu. Po P0 przygotuj pakiet zgodnie z przewodnikiem 2026: właściwy limit demo, język, źródła, prawa, ujawnienie AI i publiczne linki. Opisuj wyłącznie rzeczywiście zrealizowane funkcje. Formalne zgłoszenie wymaga osobnej karty i potwierdzenia członka zespołu.
 
-Kontynuuj gotowe P0. Raport końcowy: ID, pliki, uruchomienie i sprawdzenia, ograniczenia, dodane karty oraz konkretne potrzeby wobec Kamila.
+Kontynuuj gotowe P0. Raport końcowy: ID, zdalne gałęzie, wysłane SHA/PR, stan integracji, uruchomienie i sprawdzenia, ograniczenia, dodane karty oraz konkretne potrzeby wobec Kamila. Wymień niewysłane zmiany, jeżeli blokuje je rzeczywisty brak dostępu; nie nazywaj ich przekazanymi.

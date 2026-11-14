@@ -6,6 +6,8 @@ P0: konieczne do uzgodnionego MVP lub zgłoszenia. P1: rozszerzenie po P0. P2: d
 
 Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLATE.md). Kolejność wynika z zależności, nie tylko numeru. K-003 należy przekazać jak najwcześniej; UI może do tego czasu robić własny szkielet i UX.
 
+**Dwa komputery, jedno remote:** [kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA). Przed każdym zadaniem pobierz `origin/main`, opublikuj tam osobny commit **IN PROGRESS** (`status: in_progress`) i potwierdź rezerwację. Następnie każdą poprawkę commituj i wysyłaj na zdalną gałąź; statusy i nowe karty również muszą być opublikowane. `done` dopiero po połączeniu rozwiązania do `origin/main`. Lokalny commit lub push rezerwacji wyłącznie na gałąź roboczą nie wystarcza.
+
 ## Tor Kamila — dane i obliczenia
 
 | Karta | Priorytet | Właściciel | Zależności | Cel |

@@ -6,6 +6,7 @@ priority: P0
 status: todo
 depends_on: []
 agent: unassigned
+work_branch: unassigned
 updated: 2026-11-14
 discovered_from: TASK-ID-or-source
 ---
@@ -34,7 +35,7 @@ Jak potwierdzisz działanie; nie kopiuj automatycznie komend, których repo jesz
 
 ## Przebieg i dowody
 
-Data, agent, wykonane kroki, sprawdzenia i wynik, PR/commit, ograniczenia. Przy blokadzie: dokładny warunek, właściciel zależności i możliwe niezależne działanie.
+Przed implementacją opublikuj osobny commit `tasks(ID): IN PROGRESS` w `origin/main`, ustawiający `status: in_progress`, agenta, datę i gałąź. Potwierdź zdalną rezerwację. Każdą poprawkę commituj i wysyłaj; synchronizuj remote i rozwiązuj rzeczywiste konflikty. Data, agent, kroki, sprawdzenia, wysłane SHA/URL PR i ograniczenia. `done` dopiero po odbiorze i integracji do `origin/main`. Przy blokadzie: warunek, zależność, niewysłane zmiany i następne działanie.
 
 ## Powód dodania / wpływ
 

@@ -5,11 +5,11 @@ Plan na dwie osoby i orientacyjnie 24–32 godziny pracy na osobę w ramach week
 ## 1. Ustalcie wspólny start — T+0–1 h
 
 1. Wybierzcie nazwę zespołu i potwierdźcie event oraz jego strefę i lokalny termin.
-2. Udostępnijcie jedno repozytorium zespołu, z oddzielnymi gałęziami i klonami.
+2. Używajcie wspólnego remote [kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA). Każda osoba klonuje je na własny komputer i potwierdza dostęp zapisu; I-001 obejmuje pierwsze zasilenie i uprawnienia.
 3. Przyjmijcie proponowany podział; wymiana ról wymaga aktualizacji kart.
-4. Kamil bierze K-001, Ewelina E-001. Oboje sprawdzają `docs/sources/`.
+4. Po skonfigurowaniu własnego dostępu Kamil rezerwuje K-001, Ewelina E-001. Każda rezerwacja wymaga osobnego commita IN PROGRESS opublikowanego w `origin/main` przed kodowaniem. Oboje sprawdzają `docs/sources/`.
 
-Wynik: gotowe środowiska i jasne granice zmian. Karty: I-001, K-001, E-001.
+Wynik: wspólny obieg zmian przez remote, gotowe środowiska i jasne granice. Karty: I-001, K-001, E-001. Wszystkie dalsze etapy stosują pętlę: mała poprawka → commit → synchronizacja i rozwiązanie konfliktów → push; zakończenie dopiero po integracji do `origin/main`.
 
 ## 2. Zamknijcie kontrakt i wykonalność — T+1–3 h
 

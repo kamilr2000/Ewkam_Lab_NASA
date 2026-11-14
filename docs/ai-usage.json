@@ -9,7 +9,8 @@
     "source review and proposed implementation methodology",
     "project plan, documentation and task cards",
     "initial request schema and synthetic regression vectors",
-    "planning document checker"
+    "planning document checker",
+    "remote collaboration workflow, task reservation commits and updated agent prompts"
   ],
   "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
   "scientific_observations_downloaded": false,
