@@ -18,6 +18,8 @@ Rejestr wspomagania pracy, aktualizowany przez każdy tor. Wymagania organizator
 
 2026-11-14 — I-007: Codex rozbudował oba prompty do samodzielnych Celów wykonawczych z kryteriami ukończenia, obowiązkowym pullem, rezerwacją przed implementacją, wykrywaniem braków oraz zlecaniem zadań i review drugiemu agentowi. Na wyraźną prośbę Kamila formalny submission oznaczono jako human_only; agenci kończą na gotowym pakiecie do ręcznego zgłoszenia. Zaktualizowano szablon przeglądu i instrukcje tak, by nie tworzyć zależności wymagającej done ocenianego zadania przed jego review.
 
+2026-11-14 — I-008: Codex doprecyzował pierwszeństwo gotowych review przy wyborze następnego zadania, także przed zwykłymi P0, bez przerywania już wykonywanej pracy. Zaktualizowano oba Cele, instrukcje i szablon przeglądu; sprawdzenia dotyczą dokumentacji, nie działania aplikacji.
+
 | Data | Narzędzie / wersja, jeśli znana | Zadanie / pliki | Jak wspomogło pracę | Kontrola człowieka i testy | Oznaczenia w wyniku |
 |---|---|---|---|---|---|
 | Uzupełnij przy implementacji | | | | | |

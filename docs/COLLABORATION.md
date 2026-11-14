@@ -19,7 +19,7 @@ Nazwy gałęzi: `kamil/K-006-scoring`, `ewelina/E-004-map`, `integration/I-003-a
 ## Obowiązkowy commit IN PROGRESS przed zadaniem
 
 1. Uporządkuj własne zmiany bez ich usuwania, przejdź do `main`, wykonaj `git fetch origin` i zaktualizuj lokalny `main` względem `origin/main`.
-2. Sprawdź zdalną kartę i ukończone zależności. Wybierz własne, wolne P0.
+2. Po zakończeniu bieżącej pracy sprawdź zdalne karty i warunki startu. Wybierz najpierw gotowe review przypisane Tobie, potem pozostałe P0 i następnie P1/P2. Nowe review nie przerywa wykonywanego zadania.
 3. Zmień tylko kartę: `status: in_progress`, `agent`, `updated`, planowana `work_branch` i wpis rozpoczęcia.
 4. Utwórz osobny commit, np. `tasks(K-006): IN PROGRESS`.
 5. Ponownie pobierz `origin`. Po przesunięciu `main` połącz zmiany, sprawdź rezerwację i rozwiąż konflikty. Jeżeli tę samą kartę wcześniej zajął inny agent, zachowaj jego rezerwację i wybierz inną kartę.
@@ -114,4 +114,18 @@ Recenzent rezerwuje kartę, pobiera wskazaną wersję, sprawdza kryteria, urucha
 
 Jeśli znaleziono błąd, recenzent dodaje kartę poprawki właścicielowi kodu lub odnotowuje ją w istniejącej karcie bez dublowania. Producent poprawia, pushuje i zleca kontrolę zmienionego zakresu. Nie oznacza parenta done, dopóki krytyczne uwagi nie są rozwiązane. Sam przegląd nie generuje automatycznie kolejnego przeglądu; jego kartę można zamknąć po opublikowaniu kompletnego raportu, nawet z wynikiem „wymagane poprawki”. To nie oznacza akceptacji implementacji.
 
-Przed rozpoczęciem nowej funkcji i przed zakończeniem Celu sprawdź nowe karty przypisane Tobie. Przeglądy P0 odblokowujące drugą osobę obsługuj przed rozszerzeniami P1. Publikuj wczesne wersje kontraktów i małe przekazania, aby obie strony mogły robić postępy. I-006 pozostaje zadaniem człowieka i nie jest zleceniem dla żadnego agenta.
+Przed rozpoczęciem następnego zadania i przed zakończeniem Celu sprawdź po pullu nowe karty przypisane Tobie. Publikuj wczesne wersje kontraktów i małe przekazania, aby obie strony mogły robić postępy. I-006 pozostaje zadaniem człowieka i nie jest zleceniem dla żadnego agenta.
+
+## Kolejność zadań: gotowe review przed zwykłym backlogiem
+
+To reguła wyboru **następnego** zadania, nie przerywania pracy. Jeśli agent jest w trakcie zadania, kontynuuje je i publikuje wynik. Dopiero potem robi pull i wybiera z własnej gotowej kolejki:
+
+1. Zadania `task_type: review` — również przed zwykłymi zadaniami P0.
+2. Inne zadania P0.
+3. Zadania P1/P2.
+
+Przy kilku gotowych review najpierw obsługuj te odblokowujące drugiego agenta, a w tej samej grupie najstarszą opublikowaną prośbę. Nie zaczynaj dwudziestu zwykłych zadań przed pierwszym dostępnym przeglądem. `queue_priority: review_first` dokumentuje tę kolejność; brak pola w starszej karcie review nie odbiera jej pierwszeństwa. Priorytet P0/P1/P2 nadal opisuje znaczenie pracy.
+
+Review musi mieć dostępny wskazany kod, spełniony warunek startu i brak aktywnej rezerwacji innego wykonawcy. Niedostępny `review_ref` lub niespełniona zależność oznacza zgłoszenie braku i wybór innego gotowego zadania, a nie blokadę całej kolejki. Gdy producent przekazał już ukończoną implementację do odbioru, może podjąć następne zadanie według powyższej kolejności bez czekania na finalny done swojej karty. Nie wolno natomiast porzucać trwającego zadania w środku tylko dlatego, że pojawiło się review.
+
+Recenzent zawsze najpierw publikuje własny commit IN PROGRESS w main. Pojawienie się review podczas pulla samo nie rezerwuje ani nie rozpoczyna przeglądu. Sam status review na karcie producenta nie jest odrębnym zadaniem do wykonania przez recenzenta.

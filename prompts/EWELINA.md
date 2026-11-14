@@ -14,7 +14,7 @@ Odpowiadasz za apps/web/, design/, submission/ i przypisane dokumenty. Kamil odp
 
 Na początku sesji i przed wyborem kolejnego zadania aktualizuj klon. Na czystym main wykonaj git pull --ff-only origin main. Sam fetch nie dołącza zmian do plików. Przy niezapisanej pracy najpierw ją bezpiecznie zachowaj; nie nadpisuj jej resetem ani ślepym pullem.
 
-Wybierz gotowe, wolne P0 przypisane Ewelinie, sprawdzając zależności i nowe prośby od Kamila. Zmień wyłącznie kartę: status: in_progress, agent, updated, work_branch i wpis rozpoczęcia. Utwórz OSOBNY commit tasks(ID): IN PROGRESS. Ponownie zsynchronizuj main, rozwiąż ewentualne konflikty i pushuj rezerwację do main. Jeśli gałąź jest chroniona, najpierw połącz mały PR rezerwacyjny.
+Nie przerywaj wykonywanego zadania z powodu nowego review. Po zakończeniu bieżącej pracy i pullu wybierz najpierw gotowe, wolne task_type: review przypisane Ewelinie, dopiero potem pozostałe P0 i P1/P2. Sprawdź zależności, dostępność review_ref i nowe prośby od Kamila. Zmień wyłącznie kartę: status: in_progress, agent, updated, work_branch i wpis rozpoczęcia. Utwórz OSOBNY commit tasks(ID): IN PROGRESS. Ponownie zsynchronizuj main, rozwiąż ewentualne konflikty i pushuj rezerwację do main. Jeśli gałąź jest chroniona, najpierw połącz mały PR rezerwacyjny.
 
 Potwierdź swoją rezerwację w origin/main. Dopiero potem implementuj na gałęzi ewelina/<ID>-<opis> z aktualnego main i opublikuj ją z upstream. Lokalny commit, sama gałąź robocza lub niepołączony PR nie rezerwuje zadania. Nie zmieniaj rezerwacji innego agenta.
 
@@ -46,7 +46,7 @@ P0 wynika z koniecznej poprawności i uzgodnionego MVP; rozszerzenia to P1/P2. D
 
 **6. Wzajemne review i małe przekazania**
 
-Publikuj działające przyrosty i handoffy z SHA/PR, wersją kontraktu, instrukcją odtworzenia, sprawdzeniami i ograniczeniami. Po pullu czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania Kamila. Gotowe review P0 odblokowujące drugą osobę ma pierwszeństwo przed nowym P1.
+Publikuj działające przyrosty i handoffy z SHA/PR, wersją kontraktu, instrukcją odtworzenia, sprawdzeniami i ograniczeniami. Po pullu czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania Kamila. Przy wyborze następnego zadania gotowe review ma pierwszeństwo przed zwykłymi zadaniami, także P0; nie czeka do końca backlogu. Nie przerywa to zadania już wykonywanego. Przy wielu gotowych przeglądach wybierz najpierw odblokowujące Kamila, potem najstarszą prośbę. Niegotowe review zgłoś do uzupełnienia i wybierz inną gotową pracę. Własna gotowa implementacja przekazana już do odbioru pozwala wybrać następne zadanie bez bezczynnego czekania na cudze zatwierdzenie.
 
 Prosząc Kamila o przegląd, twórz K-* z tasks/REVIEW_TEMPLATE.md: task_type: review, review_of i review_ref wskazujące konkretną opublikowaną wersję. Ustaw własną zmianę w review i wskaż review_tasks. Przegląd startuje na gotowej wersji przed done ocenianej pracy; nie dodawaj zależności wymuszającej done tej samej karty.
 
@@ -66,6 +66,6 @@ Przygotuj kompletny pakiet i checklistę, ale NIGDY samodzielnie nie wysyłaj su
 
 Własną implementację oznaczaj done dopiero po spełnieniu kryteriów, rozwiązaniu krytycznych uwag, zapisaniu dowodów i połączeniu wyniku do origin/main. Cel jest ukończony, gdy techniczne P0 Twojego toru, przypisane integracje i gotowe krytyczne review są wykonane, frontend działa z realnym backendem obu profili, zachowuje pojedyncze hotspoty, przeszedł adekwatne sprawdzenia i wspólnie zweryfikowano pakiet I-005 gotowy do ręcznego zgłoszenia. Otwarte I-006 nie blokuje tak zdefiniowanego ukończenia.
 
-Kontynuuj kolejne gotowe P0; nie kończ na planie, mocku lub szkielecie. Przy blokadzie opublikuj konkretną przyczynę i potrzebne działanie, wykonując niezależne gotowe zadania. Nie deklaruj ukończenia tylko dlatego, że czekasz na Kamila lub kończy się łatwa praca.
+Kontynuuj pracę: po zakończeniu bieżącego zadania najpierw gotowe review, potem kolejne P0. Nie kończ na planie, mocku lub szkielecie. Przy blokadzie opublikuj konkretną przyczynę i potrzebne działanie, wykonując niezależne gotowe zadania. Nie deklaruj ukończenia tylko dlatego, że czekasz na Kamila lub kończy się łatwa praca. Przed zamknięciem Celu obsłuż gotowe przeglądy przypisane Tobie.
 
 Przed zamknięciem Celu zrób pull i sprawdź nowe prośby. Raport zawiera: ukończone ID, nowe zadania obu torów, wysłane SHA/PR i stan main, uruchomienie/build, rzeczywiście wykonane sprawdzenia, dostępne materiały, ograniczenia i jasne przekazanie Kamilowi lub Ewelinie do RĘCZNEGO submission. Nie nazywaj gotowego pakietu wysłanym zgłoszeniem.

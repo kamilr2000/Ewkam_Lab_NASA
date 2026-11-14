@@ -8,6 +8,8 @@ Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLA
 
 **Dwa komputery, jedno remote:** [kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA). Przed każdym zadaniem pobierz `origin/main`, opublikuj tam osobny commit **IN PROGRESS** (`status: in_progress`) i potwierdź rezerwację. Następnie każdą poprawkę commituj i wysyłaj na zdalną gałąź; statusy i nowe karty również muszą być opublikowane. `done` dopiero po połączeniu rozwiązania do `origin/main`. Lokalny commit lub push rezerwacji wyłącznie na gałąź roboczą nie wystarcza.
 
+**Kolejność po zakończeniu bieżącego zadania i pullu: gotowe review → pozostałe P0 → P1/P2.** Review nie przerywa już wykonywanego zadania, ale nie czeka na koniec zwykłego backlogu. Przy kilku gotowych przeglądach najpierw odblokowujące drugą osobę, potem najstarsze prośby. Karta bez dostępnego kodu/warunków startu nie blokuje wyboru innej gotowej pracy.
+
 ## Tor Kamila — dane i obliczenia
 
 | Karta | Priorytet | Właściciel | Zależności | Cel |
