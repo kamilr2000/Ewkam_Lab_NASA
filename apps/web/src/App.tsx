@@ -61,6 +61,10 @@ function App() {
               <span className="count-badge">03</span>
             </div>
             <p className="section-hint">Available criteria depend on the selected profile.</p>
+            <p className="scope-note">
+              These three core criteria are related measures of topography, not independent environmental domains.
+              This topography-only MVP is not a full environmental comparison.
+            </p>
             <ul className="criteria-list" aria-label="Planned terrain criteria">
               {criteria.map((criterion) => (
                 <li className="criterion" key={criterion.label}>
@@ -128,7 +132,7 @@ function App() {
               </div>
               <p className="explanation-copy">Each score will show the measured value, its unit, reference range and weighted contribution—alongside source scale and quality flags.</p>
               <div className="legend-row"><span className="legend-swatch" aria-hidden="true" /><span>Similarity index</span><span className="legend-range">0–100%</span></div>
-              <p className="card-footnote">A similarity index describes selected terrain features; it does not establish that two environments are alike in every way.</p>
+              <p className="card-footnote">The current MVP covers three related topographic measures only; it is not a full environmental comparison. A similarity index does not establish that two environments are alike in every way.</p>
             </section>
           </div>
 

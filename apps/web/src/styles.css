@@ -57,6 +57,7 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
 .section-title-row h2 { margin: 7px 0 0; font: 600 14px var(--display); letter-spacing: -.2px; }
 .count-badge { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: #273633; color: #bdcf9d; font: 10px var(--mono); }
 .section-hint { margin: 10px 0 13px; color: #83928d; font-size: 10px; line-height: 1.5; }
+.scope-note { margin: 0 0 13px; padding-left: 10px; border-left: 2px solid #9eaa97; color: #bdc9bf; font-size: 11px; line-height: 1.55; }
 .criteria-list { list-style: none; margin: 0; padding: 0; }
 .criterion { display: flex; align-items: center; min-height: 53px; border-top: 1px solid rgba(188, 209, 197, .08); }
 .criterion-symbol { display: grid; place-items: center; width: 28px; height: 28px; margin-right: 11px; border: 1px solid rgba(188, 209, 197, .12); border-radius: 4px; color: #c8d4c7; font: 15px var(--display); }
@@ -108,7 +109,7 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
 .empty-list-state { display: flex; align-items: center; gap: 9px; min-height: 72px; color: #87958f; font-size: 10px; }
 .empty-list-state p { margin: 0; }
 .empty-glyph { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid rgba(214, 237, 133, .2); border-radius: 50%; color: #bed08f; }
-.card-footnote { margin: 0; padding-top: 9px; border-top: 1px solid rgba(188, 209, 197, .08); color: #71807a; font-size: 8px; line-height: 1.55; }
+.card-footnote { margin: 0; padding-top: 9px; border-top: 1px solid rgba(188, 209, 197, .08); color: #89978f; font-size: 9px; line-height: 1.55; }
 .info-mark { display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid rgba(188, 209, 197, .2); border-radius: 50%; color: #9eaea3; font: 10px Georgia, serif; font-style: italic; }
 .explanation-copy { max-width: 420px; margin: 12px 0 11px; color: #95a29b; font-size: 9px; line-height: 1.55; }
 .legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 10px; color: #a4b0a8; font-size: 8px; }
