@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terra-analog:dataset-manifest:1.0.0",
+  "title": "DatasetManifest v1",
+  "description": "Provenance and coverage metadata for one immutable dataset package. Null provenance values require a reason and must not be replaced by guesses.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "is_synthetic", "dataset_id", "dataset_version", "provider", "role", "body", "product_version", "generated_at", "sources", "files", "temporal_coverage", "spatial_coverage", "grid", "measurements", "processing", "quality", "limitations", "synthetic_reason", "missing_reasons"],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "is_synthetic": {"type": "boolean"},
+    "dataset_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "dataset_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "provider": {"type": "string", "minLength": 1, "maxLength": 200},
+    "role": {"enum": ["earth_search", "planetary_reference", "validation", "fixture_only"]},
+    "body": {"enum": ["earth", "mars", "moon"]},
+    "product_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}},
+    "files": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+    "temporal_coverage": {"$ref": "#/$defs/temporalCoverage"},
+    "spatial_coverage": {"$ref": "#/$defs/spatialCoverage"},
+    "grid": {"$ref": "#/$defs/grid"},
+    "measurements": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/measurement"}},
+    "processing": {"$ref": "#/$defs/processing"},
+    "quality": {"$ref": "#/$defs/quality"},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "synthetic_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 1000},
+    "missing_reasons": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 1000}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"is_synthetic": {"const": true}}},
+      "then": {"properties": {"synthetic_reason": {"type": "string", "minLength": 1}}},
+      "else": {
+        "properties": {
+          "synthetic_reason": {"type": "null"},
+          "files": {"minItems": 1},
+          "sources": {
+            "items": {
+              "properties": {
+                "url": {"type": "string", "format": "uri"},
+                "license": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "provider", "title", "product_version", "url", "doi", "citation", "accessed_at", "license", "role"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "provider": {"type": "string", "minLength": 1, "maxLength": 200},
+        "title": {"type": "string", "minLength": 1, "maxLength": 300},
+        "product_version": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "url": {"type": ["string", "null"], "format": "uri"},
+        "doi": {"type": ["string", "null"], "minLength": 1, "maxLength": 200},
+        "citation": {"type": "string", "minLength": 1, "maxLength": 2000},
+        "accessed_at": {"type": ["string", "null"], "format": "date-time"},
+        "license": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "url"],
+              "properties": {
+                "name": {"type": "string", "minLength": 1, "maxLength": 200},
+                "url": {"type": "string", "format": "uri"}
+              }
+            }
+          ]
+        },
+        "role": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes", "source_id"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "source_id": {"type": "string", "minLength": 1, "maxLength": 128}
+      }
+    },
+    "temporalCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_date", "end_date", "missing_reason"],
+      "properties": {
+        "start_date": {"type": ["string", "null"], "format": "date"},
+        "end_date": {"type": ["string", "null"], "format": "date"},
+        "missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 128}
+      }
+    },
+    "spatialCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate_system_id", "bounds", "bounds_order", "bounds_unit", "missing_reason", "total_pixels", "eligible_pixels", "excluded_by_reason", "total_area_km2", "eligible_area_km2"],
+      "properties": {
+        "coordinate_system_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "bounds": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "array",
+              "prefixItems": [{"type": "number"}, {"type": "number"}, {"type": "number"}, {"type": "number"}],
+              "items": false,
+              "minItems": 4,
+              "maxItems": 4
+            }
+          ]
+        },
+        "bounds_order": {"const": ["min_x", "min_y", "max_x", "max_y"]},
+        "bounds_unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "total_pixels": {"type": "integer", "minimum": 0},
+        "eligible_pixels": {"type": "integer", "minimum": 0},
+        "excluded_by_reason": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "total_area_km2": {"type": "number", "minimum": 0},
+        "eligible_area_km2": {"type": "number", "minimum": 0}
+      }
+    },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grid_version", "model_version", "cell_id_scheme", "nominal_resolution_m", "effective_resolution_m", "resolution_missing_reason", "mask_id", "vertical_reference"],
+      "properties": {
+        "grid_version": {"type": "string", "minLength": 1, "maxLength": 128},
+        "model_version": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "cell_id_scheme": {"type": "string", "minLength": 1, "maxLength": 500},
+        "nominal_resolution_m": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "effective_resolution_m": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "resolution_missing_reason": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "mask_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "vertical_reference": {"type": ["string", "null"], "minLength": 1, "maxLength": 200}
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature_id", "unit", "measurement_scale", "source_ids"],
+      "properties": {
+        "feature_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "measurement_scale": {"enum": ["ratio", "interval", "ordinal", "nominal"]},
+        "source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}}
+      }
+    },
+    "processing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code_version", "processed_at", "steps", "parameters"],
+      "properties": {
+        "code_version": {"type": ["string", "null"], "minLength": 1, "maxLength": 128},
+        "processed_at": {"type": ["string", "null"], "format": "date-time"},
+        "steps": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "parameters": {"type": "object"}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qa_rules", "nodata_convention", "interpolation_fraction"],
+      "properties": {
+        "qa_rules": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "nodata_convention": {"type": "string", "minLength": 1, "maxLength": 500},
+        "interpolation_fraction": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

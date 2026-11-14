@@ -1,0 +1,88 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-distinct-areas",
+  "is_synthetic": true,
+  "query": {
+    "body": "mars",
+    "profile_id": "synthetic-mars-reference",
+    "criteria": [{"feature_id": "slope_deg", "weight": 1, "normalized_weight": 1}],
+    "scope": {"type": "global"},
+    "result_mode": "distinct_areas",
+    "top_k": 2,
+    "min_distance_km": 25,
+    "area_selection_rule": "greedy_geodesic_representatives"
+  },
+  "elapsed_ms": 4,
+  "scope": {
+    "type": "global",
+    "region_id": null,
+    "region_name": null,
+    "geometry": null,
+    "mask_id": "synthetic-mask",
+    "grid_version": "synthetic-grid-v1",
+    "description": "Synthetic two-cell example; global denotes this fixture's complete test universe, not Earth coverage."
+  },
+  "coverage": {
+    "total_pixels": 2,
+    "eligible_pixels": 2,
+    "excluded_by_reason": {},
+    "total_area_km2": 2,
+    "eligible_area_km2": 2,
+    "eligible_area_fraction": 1,
+    "no_data_reason": null
+  },
+  "area_ranking": [
+    {
+      "rank": 1,
+      "candidate_id": "synthetic-area-candidate-001",
+      "representative_pixel": {
+        "pixel_id": "synthetic-area-pixel-001",
+        "score_pct": 100,
+        "center": [0, 0],
+        "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [0.01, 0], [0.01, 0.01], [0, 0.01], [0, 0]]]},
+        "pixel_area_km2": 1,
+        "coverage_fraction": 1,
+        "quality_flags": ["SYNTHETIC_FIXTURE"],
+        "features": [{"feature_id": "slope_deg", "value": 0, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 100, "normalized_weight": 1, "contribution_pct": 100, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+      },
+      "nearest_selected_distance_km": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "synthetic-area-candidate-002",
+      "representative_pixel": {
+        "pixel_id": "synthetic-area-pixel-002",
+        "score_pct": 80,
+        "center": [1, 0],
+        "geometry": {"type": "Polygon", "coordinates": [[[0.99, 0], [1.01, 0], [1.01, 0.01], [0.99, 0.01], [0.99, 0]]]},
+        "pixel_area_km2": 1,
+        "coverage_fraction": 1,
+        "quality_flags": ["SYNTHETIC_FIXTURE"],
+        "features": [{"feature_id": "slope_deg", "value": 0.2, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 80, "normalized_weight": 1, "contribution_pct": 80, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+      },
+      "nearest_selected_distance_km": 111.2
+    }
+  ],
+  "map_cells": [
+    {
+      "cell_id": "synthetic-area-map-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [1.01, 0], [1.01, 0.01], [0, 0.01], [0, 0]]]},
+      "max_score_pct": 100,
+      "mean_score_pct": 90,
+      "max_pixel_id": "synthetic-area-pixel-001",
+      "valid_pixel_count": 2,
+      "total_pixel_count": 2,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    }
+  ],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "All values and coordinates are synthetic; this does not represent global Earth data."},
+    {"code": "TOPOGRAPHY_ONLY", "message": "The example uses one synthetic topographic feature."}
+  ]
+}

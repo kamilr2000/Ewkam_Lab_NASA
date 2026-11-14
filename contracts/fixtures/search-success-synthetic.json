@@ -1,0 +1,141 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-success",
+  "is_synthetic": true,
+  "query": {
+    "body": "mars",
+    "profile_id": "synthetic-mars-reference",
+    "criteria": [
+      {"feature_id": "slope_deg", "weight": 1, "normalized_weight": 0.5},
+      {"feature_id": "roughness_m", "weight": 1, "normalized_weight": 0.5}
+    ],
+    "scope": {"type": "regional", "region_id": "synthetic-region-1"},
+    "result_mode": "pixels",
+    "top_k": 10,
+    "min_distance_km": null,
+    "area_selection_rule": "none"
+  },
+  "elapsed_ms": 3,
+  "scope": {
+    "type": "regional",
+    "region_id": "synthetic-region-1",
+    "region_name": "Synthetic demonstration region",
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [[[0, 0], [0.02, 0], [0.02, 0.01], [0, 0.01], [0, 0]]]
+    },
+    "mask_id": "synthetic-mask",
+    "grid_version": "synthetic-grid-v1",
+    "description": "Synthetic region used only to demonstrate a regional response."
+  },
+  "coverage": {
+    "total_pixels": 2,
+    "eligible_pixels": 2,
+    "excluded_by_reason": {},
+    "total_area_km2": 2,
+    "eligible_area_km2": 2,
+    "eligible_area_fraction": 1,
+    "no_data_reason": null
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "pixel_id": "synthetic-pixel-001",
+      "score_pct": 100,
+      "center": [0.005, 0.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [0.01, 0], [0.01, 0.01], [0, 0.01], [0, 0]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [
+        {
+          "feature_id": "slope_deg",
+          "value": 10,
+          "unit": "degree",
+          "measurement_scale": "ratio",
+          "similarity_pct": 100,
+          "normalized_weight": 0.5,
+          "contribution_pct": 50,
+          "reference_interval": [5, 15],
+          "tolerance": 5,
+          "source_ids": ["synthetic-fixture"],
+          "quality_flags": ["SYNTHETIC_FIXTURE"]
+        },
+        {
+          "feature_id": "roughness_m",
+          "value": 8,
+          "unit": "meter",
+          "measurement_scale": "ratio",
+          "similarity_pct": 100,
+          "normalized_weight": 0.5,
+          "contribution_pct": 50,
+          "reference_interval": [5, 10],
+          "tolerance": 5,
+          "source_ids": ["synthetic-fixture"],
+          "quality_flags": ["SYNTHETIC_FIXTURE"]
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "pixel_id": "synthetic-pixel-002",
+      "score_pct": 80,
+      "center": [0.015, 0.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[0.01, 0], [0.02, 0], [0.02, 0.01], [0.01, 0.01], [0.01, 0]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [
+        {
+          "feature_id": "slope_deg",
+          "value": 16,
+          "unit": "degree",
+          "measurement_scale": "ratio",
+          "similarity_pct": 80,
+          "normalized_weight": 0.5,
+          "contribution_pct": 40,
+          "reference_interval": [5, 15],
+          "tolerance": 5,
+          "source_ids": ["synthetic-fixture"],
+          "quality_flags": ["SYNTHETIC_FIXTURE"]
+        },
+        {
+          "feature_id": "roughness_m",
+          "value": 11,
+          "unit": "meter",
+          "measurement_scale": "ratio",
+          "similarity_pct": 80,
+          "normalized_weight": 0.5,
+          "contribution_pct": 40,
+          "reference_interval": [5, 10],
+          "tolerance": 5,
+          "source_ids": ["synthetic-fixture"],
+          "quality_flags": ["SYNTHETIC_FIXTURE"]
+        }
+      ]
+    }
+  ],
+  "map_cells": [
+    {
+      "cell_id": "synthetic-map-cell-001",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [0.02, 0], [0.02, 0.01], [0, 0.01], [0, 0]]]},
+      "max_score_pct": 100,
+      "mean_score_pct": 90,
+      "max_pixel_id": "synthetic-pixel-001",
+      "valid_pixel_count": 2,
+      "total_pixel_count": 2,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    }
+  ],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "All values and geometries in this response are synthetic."},
+    {"code": "REGIONAL_COVERAGE", "message": "This example has regional scope and does not demonstrate a global search."},
+    {"code": "TOPOGRAPHY_ONLY", "message": "The displayed feature examples are related topographic measures."}
+  ]
+}

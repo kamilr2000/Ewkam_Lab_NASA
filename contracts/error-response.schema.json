@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terra-analog:error-response:1.0.0",
+  "title": "ErrorResponse v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "is_synthetic", "request_id", "error"],
+  "properties": {
+    "contract_version": {"const": "1.0.0"},
+    "is_synthetic": {"type": "boolean"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_QUERY",
+            "DUPLICATE_FEATURE_ID",
+            "UNKNOWN_PROFILE",
+            "INCOMPATIBLE_FEATURE",
+            "DATASET_UNAVAILABLE",
+            "DATASET_VERSION_UNAVAILABLE",
+            "SCOPE_UNAVAILABLE",
+            "ANALYSIS_EXPIRED",
+            "LIMIT_EXCEEDED",
+            "NOT_FOUND",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "details": {"type": "object"}
+      }
+    }
+  }
+}

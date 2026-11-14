@@ -1,0 +1,115 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-hotspot",
+  "is_synthetic": true,
+  "query": {
+    "body": "mars",
+    "profile_id": "synthetic-mars-reference",
+    "criteria": [{"feature_id": "slope_deg", "weight": 1, "normalized_weight": 1}],
+    "scope": {"type": "regional", "region_id": "synthetic-hotspot-region"},
+    "result_mode": "pixels",
+    "top_k": 10,
+    "min_distance_km": null,
+    "area_selection_rule": "none"
+  },
+  "elapsed_ms": 2,
+  "scope": {
+    "type": "regional",
+    "region_id": "synthetic-hotspot-region",
+    "region_name": "Synthetic isolated-hotspot test region",
+    "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.04, 3], [3.04, 3.02], [3, 3.02], [3, 3]]]},
+    "mask_id": "synthetic-mask",
+    "grid_version": "synthetic-grid-v1",
+    "description": "A single high-scoring synthetic pixel sits inside a weaker map cell."
+  },
+  "coverage": {
+    "total_pixels": 4,
+    "eligible_pixels": 4,
+    "excluded_by_reason": {},
+    "total_area_km2": 4,
+    "eligible_area_km2": 4,
+    "eligible_area_fraction": 1,
+    "no_data_reason": null
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "pixel_id": "synthetic-hotspot-p001",
+      "score_pct": 100,
+      "center": [3.005, 3.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.01, 3], [3.01, 3.01], [3, 3.01], [3, 3]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [{"feature_id": "slope_deg", "value": 0, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 100, "normalized_weight": 1, "contribution_pct": 100, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+    },
+    {
+      "rank": 2,
+      "pixel_id": "synthetic-steady-p001",
+      "score_pct": 60,
+      "center": [3.035, 3.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[3.03, 3], [3.04, 3], [3.04, 3.01], [3.03, 3.01], [3.03, 3]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [{"feature_id": "slope_deg", "value": 0.4, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 60, "normalized_weight": 1, "contribution_pct": 60, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+    },
+    {
+      "rank": 3,
+      "pixel_id": "synthetic-weak-p001",
+      "score_pct": 20,
+      "center": [3.015, 3.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[3.01, 3], [3.02, 3], [3.02, 3.01], [3.01, 3.01], [3.01, 3]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [{"feature_id": "slope_deg", "value": 0.8, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 20, "normalized_weight": 1, "contribution_pct": 20, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+    },
+    {
+      "rank": 4,
+      "pixel_id": "synthetic-weak-p002",
+      "score_pct": 20,
+      "center": [3.025, 3.005],
+      "geometry": {"type": "Polygon", "coordinates": [[[3.02, 3], [3.03, 3], [3.03, 3.01], [3.02, 3.01], [3.02, 3]]]},
+      "pixel_area_km2": 1,
+      "coverage_fraction": 1,
+      "quality_flags": ["SYNTHETIC_FIXTURE"],
+      "features": [{"feature_id": "slope_deg", "value": 0.8, "unit": "degree", "measurement_scale": "ratio", "similarity_pct": 20, "normalized_weight": 1, "contribution_pct": 20, "reference_interval": [0, 0], "tolerance": 1, "source_ids": ["synthetic-fixture"], "quality_flags": ["SYNTHETIC_FIXTURE"]}]
+    }
+  ],
+  "map_cells": [
+    {
+      "cell_id": "synthetic-weak-map-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.03, 3], [3.03, 3.01], [3, 3.01], [3, 3]]]},
+      "max_score_pct": 100,
+      "mean_score_pct": 46.666666666666664,
+      "max_pixel_id": "synthetic-hotspot-p001",
+      "valid_pixel_count": 3,
+      "total_pixel_count": 3,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    },
+    {
+      "cell_id": "synthetic-steady-map-cell",
+      "level": 0,
+      "geometry": {"type": "Polygon", "coordinates": [[[3.03, 3], [3.04, 3], [3.04, 3.01], [3.03, 3.01], [3.03, 3]]]},
+      "max_score_pct": 60,
+      "mean_score_pct": 60,
+      "max_pixel_id": "synthetic-steady-p001",
+      "valid_pixel_count": 1,
+      "total_pixel_count": 1,
+      "coverage_fraction": 1,
+      "missing_reason": null
+    }
+  ],
+  "warnings": [
+    {"code": "SYNTHETIC_DATA", "message": "All measurements and geometries are synthetic regression values."},
+    {"code": "REGIONAL_COVERAGE", "message": "This example is regional and is not a global ranking."},
+    {"code": "TOPOGRAPHY_ONLY", "message": "The single feature is a synthetic topographic measurement."}
+  ]
+}

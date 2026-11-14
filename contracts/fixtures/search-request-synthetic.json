@@ -1,0 +1,13 @@
+{
+  "contract_version": "1.0.0",
+  "body": "mars",
+  "profile_id": "synthetic-mars-reference",
+  "dataset_version": "synthetic-earth-v1",
+  "scope": {"type": "regional", "region_id": "synthetic-region-1"},
+  "criteria": [
+    {"feature_id": "slope_deg", "weight": 1},
+    {"feature_id": "roughness_m", "weight": 1}
+  ],
+  "result_mode": "pixels",
+  "top_k": 10
+}

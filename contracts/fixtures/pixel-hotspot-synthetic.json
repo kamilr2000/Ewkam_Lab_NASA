@@ -1,0 +1,35 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "synthetic-earth-v1",
+  "grid_version": "synthetic-grid-v1",
+  "model_version": "synthetic-model-v1",
+  "profile_version": "synthetic-profile-v1",
+  "analysis_id": "synthetic-analysis-hotspot",
+  "is_synthetic": true,
+  "result_mode": "pixels",
+  "pixel": {
+    "pixel_id": "synthetic-hotspot-p001",
+    "score_pct": 100,
+    "center": [3.005, 3.005],
+    "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.01, 3], [3.01, 3.01], [3, 3.01], [3, 3]]]},
+    "pixel_area_km2": 1,
+    "coverage_fraction": 1,
+    "features": [
+      {
+        "feature_id": "slope_deg",
+        "value": 0,
+        "unit": "degree",
+        "measurement_scale": "ratio",
+        "similarity_pct": 100,
+        "normalized_weight": 1,
+        "contribution_pct": 100,
+        "reference_interval": [0, 0],
+        "tolerance": 1,
+        "source_ids": ["synthetic-fixture"],
+        "missing_reason": null
+      }
+    ],
+    "quality_flags": ["SYNTHETIC_FIXTURE"],
+    "missing_reasons": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terra-analog:health-response:1.0.0",
+  "title": "HealthResponse v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "dataset_ready", "dataset_version"],
+  "properties": {
+    "status": {"enum": ["starting", "ready", "degraded"]},
+    "dataset_ready": {"type": "boolean"},
+    "dataset_version": {"type": ["string", "null"], "minLength": 1, "maxLength": 128}
+  }
+}

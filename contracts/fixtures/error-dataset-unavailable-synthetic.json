@@ -1,0 +1,10 @@
+{
+  "contract_version": "1.0.0",
+  "is_synthetic": true,
+  "request_id": "synthetic-request-dataset-unavailable",
+  "error": {
+    "code": "DATASET_UNAVAILABLE",
+    "message": "The requested dataset is unavailable in this synthetic example.",
+    "details": {"dataset_version": "synthetic-missing-v1", "retryable": false}
+  }
+}

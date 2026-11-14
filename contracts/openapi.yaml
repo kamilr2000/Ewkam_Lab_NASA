@@ -1,0 +1,252 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Terra Analog API
+  version: 1.0.0
+  description: >-
+    Frozen v1 contract for catalog, profile, manifest, search, map and pixel-detail
+    responses. K-001 currently implements only GET /api/v1/health. Other operations
+    are planned contracts, not claims of a running API or available scientific data.
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local development server
+tags:
+  - name: health
+  - name: catalog
+  - name: analysis
+paths:
+  /api/v1/health:
+    get:
+      tags: [health]
+      operationId: getHealth
+      summary: Report API process readiness and dataset readiness separately
+      x-implemented-in-k001: true
+      responses:
+        '200':
+          description: The API process is responding. dataset_ready may still be false.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/catalog:
+    get:
+      tags: [catalog]
+      operationId: getCatalog
+      summary: List versioned datasets, features and reference profiles
+      x-implemented-in-k001: false
+      responses:
+        '200':
+          description: Catalog state, including explicit planned or synthetic-only entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /api/v1/catalog/profiles/{profile_id}:
+    get:
+      tags: [catalog]
+      operationId: getProfile
+      summary: Return one versioned planetary reference profile
+      x-implemented-in-k001: false
+      parameters:
+        - name: profile_id
+          in: path
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+      responses:
+        '200':
+          description: Profile definitions, units, tolerances and spatial support.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /api/v1/catalog/datasets/{dataset_version}/manifest:
+    get:
+      tags: [catalog]
+      operationId: getDatasetManifest
+      summary: Return provenance and coverage metadata for one immutable dataset package
+      x-implemented-in-k001: false
+      parameters:
+        - name: dataset_version
+          in: path
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+      responses:
+        '200':
+          description: Dataset sources, rights, files, grid, units, QA and processing metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetManifest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /api/v1/search:
+    post:
+      tags: [analysis]
+      operationId: createSearchAnalysis
+      summary: Score every eligible cell in the requested scope and freeze the analysis
+      x-implemented-in-k001: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: A pixel ranking or a separately named distinct-area representative ranking.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '413':
+          $ref: '#/components/responses/ContentTooLarge'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /api/v1/analyses/{analysis_id}/pixels/{pixel_id}:
+    get:
+      tags: [analysis]
+      operationId: getPixelDetails
+      summary: Return measurements and geometry for one cell in a frozen analysis
+      x-implemented-in-k001: false
+      parameters:
+        - name: analysis_id
+          in: path
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+        - name: pixel_id
+          in: path
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 200}
+      responses:
+        '200':
+          description: Details from the exact analysis configuration; missing values remain null with reasons.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PixelDetailsResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '410':
+          $ref: '#/components/responses/Gone'
+  /api/v1/analyses/{analysis_id}/map:
+    get:
+      tags: [analysis]
+      operationId: getAnalysisMapCells
+      summary: Return bounded map aggregates from the same frozen pixel scores
+      x-implemented-in-k001: false
+      parameters:
+        - name: analysis_id
+          in: path
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+        - name: bbox
+          in: query
+          required: true
+          style: form
+          explode: false
+          description: West, south, east, north in Earth WGS84 longitude/latitude degrees.
+          schema:
+            type: array
+            prefixItems:
+              - {type: number, minimum: -180, maximum: 180}
+              - {type: number, minimum: -90, maximum: 90}
+              - {type: number, minimum: -180, maximum: 180}
+              - {type: number, minimum: -90, maximum: 90}
+            items: false
+            minItems: 4
+            maxItems: 4
+        - name: level
+          in: query
+          required: true
+          schema: {type: integer, minimum: 0, maximum: 30}
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 10000, default: 1000}
+        - name: cursor
+          in: query
+          required: false
+          schema: {type: string, minLength: 1, maxLength: 512}
+      responses:
+        '200':
+          description: Map cells with maximum, area-weighted mean, coverage and maximum-pixel identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '410':
+          $ref: '#/components/responses/Gone'
+        '413':
+          $ref: '#/components/responses/ContentTooLarge'
+components:
+  schemas:
+    HealthResponse:
+      $ref: './health-response.schema.json'
+    CatalogResponse:
+      $ref: './catalog-response.schema.json'
+    ProfileResponse:
+      $ref: './profile-response.schema.json'
+    DatasetManifest:
+      $ref: './dataset-manifest.schema.json'
+    SearchRequest:
+      $ref: './search-request.schema.json'
+    SearchResponse:
+      $ref: './search-response.schema.json'
+    PixelDetailsResponse:
+      $ref: './pixel-details-response.schema.json'
+    MapResponse:
+      $ref: './map-response.schema.json'
+    ErrorResponse:
+      $ref: './error-response.schema.json'
+  responses:
+    BadRequest:
+      description: The request structure or its query parameters are invalid.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    Conflict:
+      description: A requested immutable dataset or version is incompatible with the query.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    ContentTooLarge:
+      description: The query or map request exceeds a documented limit.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    Gone:
+      description: The frozen analysis has expired and cannot be silently replaced.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    NotFound:
+      description: The profile, dataset, analysis or pixel identifier is unknown.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    ServiceUnavailable:
+      description: The requested scientific dataset is not ready or is unavailable.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+    UnprocessableEntity:
+      description: The request is structurally valid but semantically incompatible with the catalog.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
