@@ -68,10 +68,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-014 — Napraw widok mobilny E-002](E-014.md), Ewelina, P0: usuń ucinanie interfejsu przy 320–390 px wykryte w K-014; wymagany odbiór przed integracją E-002.
 - [E-015 — Review poprawki geometrii K-003](E-015.md), Ewelina, P0: potwierdź walidację zagnieżdżenia MultiPolygon i regresję po uwadze E-013 w PR #7.
 - [E-013 — Review kontraktu API v1 K-003](E-013.md), Ewelina, P0: sprawdzenie kontraktu, syntetycznych fixture'ów i zgodności z adapterem UI w PR #7.
+- [K-016 — Re-review poprawki widoku mobilnego E-002](K-016.md), Kamil, P0: sprawdzenie poprawki E-014 oraz dowodów w aktualnym headzie PR #5.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-016, E-016, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-017, E-016, I-010; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
