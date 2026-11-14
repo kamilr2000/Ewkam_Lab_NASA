@@ -1,6 +1,6 @@
 # Terra Analog web app
 
-The web client is a React + TypeScript application built with Vite. Its first screen establishes the workspace for an analysis; the search controls and results remain explicitly unavailable until the shared data API is connected. It does not calculate scientific scores in the browser or show sample values as measured results.
+The web client is a React + TypeScript application built with Vite. It reads contract `1.0.0` catalog/profile/search fixtures from `contracts/fixtures/` and includes an explicit live API mode. It never calculates scientific scores in the browser and never substitutes fixture responses after a live API failure.
 
 ## Requirements
 
@@ -27,6 +27,8 @@ npm run preview
 
 ## Integration notes
 
-- MapLibre GL JS is included for the map implementation task. This scaffold intentionally loads no basemap, tiles, or fabricated result layer; a tile provider and its attribution/licensing must be reviewed before use.
-- The controls are disabled and the empty states are deliberate. Connect them to the shared versioned API and its analysis IDs; do not add a second scoring implementation in this client.
+- The default **Synthetic fixture demo** mode is visibly labeled and offers success, empty-scope, no-data, isolated-hotspot, distinct-area, and dataset-unavailable fixtures. These are fixed contract examples, not measured planetary data or a live scoring service.
+- **Live API** mode requests the shared endpoints. Set `VITE_API_BASE_URL` to an absolute API origin when it is hosted separately; otherwise the client uses the current origin. Catalog, profile, search, map-cell, and pixel-detail paths follow `contracts/openapi.yaml`. As of K-003, only `/api/v1/health` is implemented, so the other live requests currently return an explicit API error.
+- The adapter checks response contract versions, required envelope fields, score ranges, and whether map/pixel details belong to the requested `analysis_id`. Abort signals and request epochs prevent an older response from replacing a newer selection.
+- MapLibre GL JS is included for the map implementation task. This E-003 view shows the response's map-cell summary but intentionally loads no basemap, tiles, or fabricated result layer. A tile provider and its attribution/licensing must be reviewed before map rendering is implemented.
 - Product copy is English. Internal setup and scientific source documentation is maintained in the repository docs.
