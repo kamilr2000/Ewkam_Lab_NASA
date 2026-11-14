@@ -58,6 +58,41 @@ def test_contract_fixture_matches_schema(schema_name: str, fixture_name: str) ->
     assert not errors, "\n".join(error.message for error in errors)
 
 
+@pytest.mark.parametrize(
+    ("schema_name", "fixture_name", "geometry_path"),
+    [
+        ("catalog-response.schema.json", "catalog-synthetic.json", ("search_regions", 0, "geometry")),
+        ("map-response.schema.json", "map-hotspot-synthetic.json", ("map_cells", 0, "geometry")),
+        ("pixel-details-response.schema.json", "pixel-hotspot-synthetic.json", ("pixel", "geometry")),
+    ],
+)
+@pytest.mark.parametrize(
+    "invalid_coordinates",
+    [
+        ["not-a-polygon"],
+        [[[[181, 0], [0, 0], [0, 0], [0, 0]]]],
+    ],
+    ids=["non-polygon-entry", "out-of-range-position"],
+)
+def test_response_schemas_reject_malformed_multipolygon_coordinates(
+    schema_name: str,
+    fixture_name: str,
+    geometry_path: tuple[str | int, ...],
+    invalid_coordinates: list,
+) -> None:
+    schema = load_json(CONTRACTS / schema_name)
+    instance = load_json(FIXTURES / fixture_name)
+    geometry = instance
+    for path_part in geometry_path[:-1]:
+        geometry = geometry[path_part]
+    geometry[geometry_path[-1]] = {
+        "type": "MultiPolygon",
+        "coordinates": invalid_coordinates,
+    }
+
+    assert not Draft202012Validator(schema).is_valid(instance)
+
+
 def test_search_request_rejects_invalid_mode_parameters() -> None:
     schema = load_json(CONTRACTS / "search-request.schema.json")
     validator = Draft202012Validator(schema)

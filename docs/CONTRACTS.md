@@ -11,7 +11,7 @@ K-001 wdraża obecnie wyłącznie `GET /api/v1/health`. Pozostałe operacje opis
 - Każda odpowiedź analityczna zawiera `contract_version`, `dataset_version`, `grid_version`, `model_version`, `profile_version`, `analysis_id` i `is_synthetic`.
 - `is_synthetic: true` oznacza wartości demonstracyjne/testowe, które nie są pomiarami planety. Każdy fixture w `contracts/fixtures/` z wynikiem analitycznym jest syntetyczny.
 - Pomiary mają `unit`, `measurement_scale`, `source_ids` i kontekst przestrzenny. Proxy ma `is_proxy: true` oraz opis, który mówi, czego jest przybliżeniem.
-- Earth GeoJSON używa WGS84 i kolejności `[longitude, latitude]`. Geometria profilu Księżyca lub Marsa pozostaje w osobnym układzie z nazwanym ciałem i referencją; nie traktujemy jej jako Earth GeoJSON.
+- Earth GeoJSON używa WGS84 i kolejności `[longitude, latitude]`. Schematy katalogu, mapy i szczegółów sprawdzają zagnieżdżenie Polygon/MultiPolygon, strukturę pierścieni oraz zakres długości i szerokości geograficznej. Nie sprawdzają domknięcia pierścienia ani topologicznej poprawności geometrii. Geometria profilu Księżyca lub Marsa pozostaje w osobnym układzie z nazwanym ciałem i referencją; nie traktujemy jej jako Earth GeoJSON.
 - Identyfikator piksela jest stringiem powiązanym z wersją siatki. Szczegóły i wynik zawsze należą do tego samego `analysis_id`.
 
 ## Operacje v1
