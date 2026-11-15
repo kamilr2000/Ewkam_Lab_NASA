@@ -33,7 +33,7 @@ python -m json.tool docs/ai-usage.json
 ## Sprawdzenia
 
 - `contracts/tests/test_contracts.py`: 42 passed na Pythonie 3.12.14, pytest 9.2.0.
-- `python tools/check_planning.py`: OK — dokumenty, JSON-y, 56 kart i acykliczne zależności.
+- `python tools/check_planning.py`: OK — 118 plików Markdown, 32 JSON-y, 58 kart i acykliczne zależności.
 - `git diff --check`: bez błędów.
 - `map-response.schema.json` i `search-response.schema.json` przechodzą w tym samym zestawie testowym; wersja kontraktu pozostaje 1.0.0.
 - Nie testowałem działającego API ani rzeczywistych danych; fixture jest syntetyczny.
