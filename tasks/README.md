@@ -14,7 +14,7 @@ Finish current work before choosing a next task. After synchronization, choose a
 
 Early implementation cards: [K-001](K-001.md) · [K-002](K-002.md) · [K-003](K-003.md) · [K-004](K-004.md) · [K-005](K-005.md) · [K-006](K-006.md) · [K-007](K-007.md) · [K-008](K-008.md) · [K-009](K-009.md) · [K-010](K-010.md) · [K-011](K-011.md)
 
-Reviews, validation, and integration cards: [K-012](K-012.md) · [K-013](K-013.md) · [K-014](K-014.md) · [K-015](K-015.md) · [K-016](K-016.md) · [K-017](K-017.md) · [K-018](K-018.md) · [K-019](K-019.md) · [K-020](K-020.md) · [K-021](K-021.md) · [K-022](K-022.md) · [K-023](K-023.md) · [K-024](K-024.md) · [K-025](K-025.md) · [K-026](K-026.md) · [K-027](K-027.md) · [K-028](K-028.md) · [K-029](K-029.md) · [K-030](K-030.md) · [K-031](K-031.md) · [K-032](K-032.md) · [K-033](K-033.md) · [K-034](K-034.md) · [K-035](K-035.md) · [K-036](K-036.md) · [K-037](K-037.md) · [K-038](K-038.md) · [K-039](K-039.md) · [K-040](K-040.md) · [K-041](K-041.md) · [K-042](K-042.md) · [K-043](K-043.md) · [K-044](K-044.md) · [K-045](K-045.md) · [K-046](K-046.md) · [K-047](K-047.md) · [K-048](K-048.md) · [K-049](K-049.md) · [K-050](K-050.md) · [K-051](K-051.md) · [K-052](K-052.md) · [K-053](K-053.md) · [K-054](K-054.md) · [K-055](K-055.md)
+Reviews, validation, and integration cards: [K-012](K-012.md) · [K-013](K-013.md) · [K-014](K-014.md) · [K-015](K-015.md) · [K-016](K-016.md) · [K-017](K-017.md) · [K-018](K-018.md) · [K-019](K-019.md) · [K-020](K-020.md) · [K-021](K-021.md) · [K-022](K-022.md) · [K-023](K-023.md) · [K-024](K-024.md) · [K-025](K-025.md) · [K-026](K-026.md) · [K-027](K-027.md) · [K-028](K-028.md) · [K-029](K-029.md) · [K-030](K-030.md) · [K-031](K-031.md) · [K-032](K-032.md) · [K-033](K-033.md) · [K-034](K-034.md) · [K-035](K-035.md) · [K-036](K-036.md) · [K-037](K-037.md) · [K-038](K-038.md) · [K-039](K-039.md) · [K-040](K-040.md) · [K-041](K-041.md) · [K-042](K-042.md) · [K-043](K-043.md) · [K-044](K-044.md) · [K-045](K-045.md) · [K-046](K-046.md) · [K-047](K-047.md) · [K-048](K-048.md) · [K-049](K-049.md) · [K-050](K-050.md) · [K-051](K-051.md) · [K-052](K-052.md) · [K-053](K-053.md) · [K-054](K-054.md) · [K-055](K-055.md) · [K-056](K-056.md)
 
 ## Ewelina — web app, map, design, and submission
 
@@ -26,9 +26,9 @@ Reviews and later implementation cards: [E-012](E-012.md) · [E-013](E-013.md) �
 
 [I-001](I-001.md) · [I-002](I-002.md) · [I-003](I-003.md) · [I-004](I-004.md) · [I-005](I-005.md) · [I-006](I-006.md) · [I-007](I-007.md) · [I-008](I-008.md) · [I-009](I-009.md) · [I-010](I-010.md) · [I-011](I-011.md) · [I-012](I-012.md) · [I-013](I-013.md) · [I-014](I-014.md)
 
-Current focus: E-035 is complete after the post-fix K-055 browser check. E-036 is cancelled as a duplicate; its fix is in E-035. E-010's English jury package remains in open PR #99 pending its assigned factual review. I-014 is the active repository inventory and English-documentation cleanup.
+Current focus: E-035 is complete after the post-fix K-055 browser check. E-036 is cancelled as a duplicate; its fix is in E-035. E-010's English jury package remains in open PR #99 pending its assigned factual review. I-014 is in review on PR #111; K-056 is the assigned cross-owner review.
 
-The next available IDs are K-056, E-037, and I-015. Check the repository before assigning any number because both owners work in parallel.
+The next available IDs are K-057, E-037, and I-015. Check the repository before assigning any number because both owners work in parallel.
 
 ## Templates and checks
 
