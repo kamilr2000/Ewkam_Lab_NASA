@@ -6,4 +6,6 @@ Odtwarzalne pobranie próbek publicznych z K-002: `python pipeline/download_samp
 
 Duże dane w ignorowanych katalogach `raw/`, `intermediate/`, `processed/`, `cache/`. Małe manifesty i raporty pokrycia mogą być wersjonowane. Pobranie gotowego pakietu ma sprawdzać wersję i sumy kontrolne; źródła i ograniczenia opisuje [DATA](../docs/DATA.md).
 
+K-005 publikuje trzy małe, skompresowane regionalne tabele komórek (`derived/k005-earth-grid/`) wraz z manifestami SHA-256, więc kolejne etapy API i UI mogą od razu pokazać rzeczywiste dane. Mają łącznie mniej niż 200 kB; zawierają wyłącznie pochodne cechy i QA, nie surowe rastry. Surowe ETOPO/GSHHG oraz checkpointy pozostają ignorowane i można je pobrać oraz odtworzyć według instrukcji w [pipeline README](../pipeline/README.md).
+
 Jedna wersja danych obejmuje jedną siatkę i skalę. Lokalnych wyników o większej szczegółowości nie dopisujemy do tej samej tabeli jako pozornie porównywalnych kandydatów globalnych.

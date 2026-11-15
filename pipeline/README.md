@@ -19,3 +19,16 @@ Downloader korzysta z `earthaccess` przez zmienną środowiskową, nie zapisuje 
 `compare_nasadem_etopo.py` transformuje HGT z EGM96 do EGM2008 lokalnymi gridami PROJ, przelicza oba DEM-y do wspólnej siatki lokalnego UTM 2 km, rasteruje niezależną maskę GSHHG oraz porównuje nachylenie, nierówność po odjęciu lokalnej płaszczyzny i P95−P05 w kołowym promieniu 10 km. Raport `data/reports/k017-validation.json` zawiera liczności, różnice masek, histogramy NUM, błędy wysokości i cech oraz cztery testy maski. Wynik obejmuje trzy AOI; nie jest globalnym rankingiem ani globalną walidacją DEM.
 
 Próbki z K-002 oraz wyniki K-017 dowodzą odczytu i pochodzenia wskazanych plików, nie pełnego globalnego przetwarzania. Preprocessing globalnej siatki, raport pokrycia i profile planetarne pozostają kolejnymi zadaniami. Źródła, licencje i ograniczenia opisuje [DATA](../docs/DATA.md) oraz [THIRD_PARTY](../THIRD_PARTY.md).
+
+## Regionalne pakiety cech K-005
+
+Pobierz tylko publiczne wejścia potrzebne do trzech AOI i zbuduj realne komórki kandydujące:
+
+```text
+uv run --locked --group data python pipeline/download_k005_sources.py
+uv run --locked --group data python pipeline/build_k005_earth_grid.py
+```
+
+To pobranie nie wymaga Earthdata tokenu. `--aoi atacama-andes`, `--aoi hawaii-big-island` i `--aoi himalaya` pozwalają wybrać region; można powtórzyć `--aoi` dla kilku. `--force` przelicza pakiety mimo zgodnych checkpointów. Każdy AOI jest osobną partią: plik CSV gzip powstaje atomowo, checkpoint zapisuje jego SHA-256 i konfigurację, a ponowne uruchomienie pomija tylko zweryfikowany pakiet.
+
+Skompresowane, małe tabele `earth-cells.csv.gz` trafiają do śledzonego `data/derived/k005-earth-grid/`, aby API i UI mogły od razu pokazać rzeczywiste komórki; manifest każdego regionu podaje ich SHA-256. Surowe wejścia, rastry pośrednie i checkpointy pozostają w ignorowanych katalogach, więc nie commituj ich. Manifesty źródłowe regionów pozostają w `data/manifests/k005-earth-grid-<aoi>.json`, a zbiorczy pomiar skali i QA w `data/reports/k005-earth-grid.json`. Pakiety używają komórek UTM 2 km. GSHHG maskuje ocean na natywnej siatce ETOPO 15″ przed średnim resamplingiem, a następnie wyznacza ląd niezależnie na siatce docelowej; cechy używają okna 10 km. Raport budżetu dla hipotetycznej globalnej siatki 60″ jest dokładnym rozmiarem tablic i planem partii; nie oznacza, że przetworzono cały glob.
