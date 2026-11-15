@@ -75,6 +75,49 @@ function parseProfile(value: unknown, expectedProfileId: string): ProfileRespons
   return value as unknown as ProfileResponse
 }
 
+function scopesMatchRequest(actual: unknown, expected: SearchRequest['scope']): boolean {
+  if (!isRecord(actual) || actual.type !== expected.type) return false
+  if (expected.type === 'regional') return actual.region_id === expected.region_id
+  return !Object.hasOwn(actual, 'region_id')
+}
+
+function criteriaMatchRequest(actual: unknown, expected: SearchRequest['criteria']): boolean {
+  if (!Array.isArray(actual) || actual.length !== expected.length) return false
+
+  const totalWeight = expected.reduce((sum, criterion) => sum + criterion.weight, 0)
+  if (!Number.isFinite(totalWeight) || totalWeight <= 0) return false
+
+  const expectedByFeature = new Map<string, { weight: number; normalizedWeight: number }>()
+  for (const criterion of expected) {
+    if (expectedByFeature.has(criterion.feature_id)) return false
+    expectedByFeature.set(criterion.feature_id, {
+      weight: criterion.weight,
+      normalizedWeight: criterion.weight / totalWeight,
+    })
+  }
+
+  const seenFeatures = new Set<string>()
+  for (const candidate of actual) {
+    if (
+      !isRecord(candidate) || typeof candidate.feature_id !== 'string' ||
+      typeof candidate.weight !== 'number' || !Number.isFinite(candidate.weight) ||
+      typeof candidate.normalized_weight !== 'number' || !Number.isFinite(candidate.normalized_weight) ||
+      seenFeatures.has(candidate.feature_id)
+    ) {
+      return false
+    }
+    const requested = expectedByFeature.get(candidate.feature_id)
+    if (
+      !requested || candidate.weight !== requested.weight ||
+      Math.abs(candidate.normalized_weight - requested.normalizedWeight) > 1e-9
+    ) {
+      return false
+    }
+    seenFeatures.add(candidate.feature_id)
+  }
+  return true
+}
+
 function parseSearch(value: unknown, expected?: SearchRequest): SearchResponse {
   assertVersionedEnvelope(value, 'Search')
   if (
@@ -89,8 +132,32 @@ function parseSearch(value: unknown, expected?: SearchRequest): SearchResponse {
   if (value.query.result_mode !== 'pixels' && value.query.result_mode !== 'distinct_areas') {
     throw new ApiError('Search response has an unsupported result_mode.')
   }
-  if (expected && (value.query.profile_id !== expected.profile_id || value.query.body !== expected.body || value.query.result_mode !== expected.result_mode)) {
-    throw new ApiError('Search response does not match the requested profile, body, or result mode.')
+  if (expected) {
+    if (value.dataset_version !== expected.dataset_version) {
+      throw new ApiError('Search response dataset_version does not match the requested dataset.')
+    }
+    if (value.query.profile_id !== expected.profile_id || value.query.body !== expected.body) {
+      throw new ApiError('Search response does not match the requested profile or planetary body.')
+    }
+    if (!scopesMatchRequest(value.query.scope, expected.scope)) {
+      throw new ApiError('Search response scope does not match the requested scope.')
+    }
+    if (value.query.result_mode !== expected.result_mode) {
+      throw new ApiError('Search response result_mode does not match the requested mode.')
+    }
+    if (value.query.top_k !== expected.top_k) {
+      throw new ApiError('Search response top_k does not match the requested ranking size.')
+    }
+    if (value.query.min_distance_km !== (expected.min_distance_km ?? null)) {
+      throw new ApiError('Search response min_distance_km does not match the requested distance.')
+    }
+    if (!criteriaMatchRequest(value.query.criteria, expected.criteria)) {
+      throw new ApiError('Search response features or weights do not match the requested criteria.')
+    }
+    const expectedAreaRule = expected.result_mode === 'distinct_areas' ? 'greedy_geodesic_representatives' : 'none'
+    if (value.query.area_selection_rule !== expectedAreaRule) {
+      throw new ApiError('Search response area_selection_rule does not match the requested mode.')
+    }
   }
   const response = value as unknown as SearchResponse
   const rankedPixels = value.query.result_mode === 'pixels'
@@ -190,14 +257,16 @@ export async function getAnalysisMap(
   if (response.analysis_id !== analysisId || !Array.isArray(response.map_cells)) {
     throw new ApiError(`Map response does not belong to analysis “${analysisId}”.`)
   }
-  if (mode === 'synthetic' && isRecord(response.query)) {
-    const fixtureQuery = response.query
-    if (
-      !Array.isArray(fixtureQuery.bbox) || fixtureQuery.bbox.some((value, index) => value !== bbox[index]) ||
-      fixtureQuery.level !== level || fixtureQuery.limit !== limit
-    ) {
-      throw new ApiError('The synthetic map fixture only represents its recorded bbox, level, and limit.')
-    }
+  if (!isRecord(response.query)) {
+    throw new ApiError('Map response is missing the requested bbox, level, and limit.')
+  }
+  const echoedBbox = response.query.bbox
+  if (
+    !Array.isArray(echoedBbox) || echoedBbox.length !== bbox.length ||
+    echoedBbox.some((value, index) => value !== bbox[index]) ||
+    response.query.level !== level || response.query.limit !== limit
+  ) {
+    throw new ApiError('Map response bbox, level, or limit does not match the request.')
   }
   return response as unknown as MapResponse
 }
