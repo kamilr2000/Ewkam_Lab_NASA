@@ -81,6 +81,12 @@ function scopesMatchRequest(actual: unknown, expected: SearchRequest['scope']): 
   return !Object.hasOwn(actual, 'region_id')
 }
 
+function responseScopeMatchesRequest(actual: unknown, expected: SearchRequest['scope']): boolean {
+  if (!isRecord(actual) || actual.type !== expected.type) return false
+  if (expected.type === 'regional') return actual.region_id === expected.region_id
+  return actual.region_id === null && actual.region_name === null && actual.geometry === null
+}
+
 function criteriaMatchRequest(actual: unknown, expected: SearchRequest['criteria']): boolean {
   if (!Array.isArray(actual) || actual.length !== expected.length) return false
 
@@ -141,6 +147,9 @@ function parseSearch(value: unknown, expected?: SearchRequest): SearchResponse {
     }
     if (!scopesMatchRequest(value.query.scope, expected.scope)) {
       throw new ApiError('Search response scope does not match the requested scope.')
+    }
+    if (!responseScopeMatchesRequest(value.scope, expected.scope)) {
+      throw new ApiError('Search response top-level scope does not match the requested scope.')
     }
     if (value.query.result_mode !== expected.result_mode) {
       throw new ApiError('Search response result_mode does not match the requested mode.')

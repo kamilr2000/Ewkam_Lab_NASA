@@ -138,6 +138,18 @@ test('rejects a live search with a different regional scope id', async () => {
   await rejectsLiveSearch(payload, pixelRequest, 'scope')
 })
 
+test('rejects a live search with a different top-level regional scope id', async () => {
+  const payload = liveSearchResponse()
+  payload.scope.region_id = 'unexpected-region'
+  await rejectsLiveSearch(payload, pixelRequest, 'top-level scope')
+})
+
+test('rejects a live search with a different top-level scope type', async () => {
+  const payload = liveSearchResponse()
+  payload.scope.type = 'global'
+  await rejectsLiveSearch(payload, pixelRequest, 'top-level scope')
+})
+
 test('rejects a live search that omits the null distance echo', async () => {
   const payload = liveSearchResponse()
   delete payload.query.min_distance_km
@@ -195,6 +207,20 @@ test('accepts a live distinct-area search with its requested distance', async ()
   } finally {
     stub.restore()
   }
+})
+
+test('rejects a global response scope that invents a regional id', async () => {
+  const payload = structuredClone(searchDistinct)
+  payload.is_synthetic = false
+  payload.scope.region_id = 'unexpected-region'
+  await rejectsLiveSearch(payload, distinctRequest, 'top-level scope')
+})
+
+test('rejects a global response scope with a non-null region name', async () => {
+  const payload = structuredClone(searchDistinct)
+  payload.is_synthetic = false
+  payload.scope.region_name = 'Unexpected region'
+  await rejectsLiveSearch(payload, distinctRequest, 'top-level scope')
 })
 
 test('rejects a live distinct-area search with a different distance', async () => {
