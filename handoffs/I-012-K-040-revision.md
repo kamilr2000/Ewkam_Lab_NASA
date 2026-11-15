@@ -23,4 +23,13 @@ Previous review ref: `3a7a313960a713c168f31caf63eaf83bef097c6e`; K-040 returned 
 
 ## Checks
 
-The exact correction ref and reproducible checks will be appended after the disclosure commit is recorded. Re-review will be requested from Kamil on the new exact ref before I-012 is marked `done` or integrated.
+Exact disclosure correction ref: `4585d80a42b6106e6e35db3bb99449d53625c20d` (`docs(I-012): refresh disclosure review state`). The commit updates `docs/AI_USAGE.md`, `docs/ai-usage.json`, the I-012 card instructions/history and the historical K-038 handoff. It does not change fixture data or scientific measurements.
+
+Checks on this correction:
+
+- `python tools/check_planning.py` — passed (170 Markdown, 40 JSON, 83 task cards, acyclic dependencies, five synthetic cases).
+- `python -m json.tool docs/ai-usage.json` — valid JSON.
+- Fixture audit — all 14 listed paths exist; `is_synthetic: true` is present in 12/14 and `ai_assisted: true` in 1/14; `generated_media` is empty and `measurements_generated_by_ai` is false.
+- `git diff --check` — clean.
+
+The review will be requested from Kamil on exact ref `4585d80a42b6106e6e35db3bb99449d53625c20d` after publishing the correction. I-012 remains `in_progress` until re-review and integration.
