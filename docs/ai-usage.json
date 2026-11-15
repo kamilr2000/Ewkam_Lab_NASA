@@ -13,22 +13,27 @@
     "remote collaboration workflow, task reservation commits and updated agent prompts",
     "detailed executable goals, bidirectional review tasks and human-only final submission boundary",
     "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader",
-    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion"
+    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
+    "K-004: public MOLA/LOLA source pinning, planetary profile feature extraction, quality reporting, and methodology documentation"
   ],
   "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
   "scientific_observations_downloaded": true,
   "scientific_sample_manifest": "data/manifests/k002-samples.json",
   "scientific_validation_manifest": "data/manifests/k017-earth-validation.json",
   "scientific_validation_report": "data/reports/k017-validation.json",
+  "scientific_profile_source_manifest": "data/manifests/k004-source-files.json",
+  "scientific_profile_manifest": "data/manifests/k004-planetary-profiles.json",
   "scientific_sample_sources": [
     "NOAA ETOPO 2022 v1",
     "NASA PDS LOLA LDEM_4",
     "NASA PDS MOLA MEGT/MEGC",
+    "NASA PDS MOLA MEGDR 128 px/degree Jezero tile MEGT44N000HB/MEGC44N000HB",
+    "NASA PGDA LOLA Product 90 lunar south-polar DEM, count, effective-resolution, and height-error rasters",
     "NASA/JPL NASADEM HGT/NUM/SWB v001",
     "GSHHG 2.3.7",
     "PROJ NGA EGM96/EGM2008 grids"
   ],
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
-  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. E-017 approved the K-017 scope, and Kamil reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. This does not establish global DEM accuracy or produce a global mask raster/ranking."
+  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. E-017 approved the K-017 scope, and Kamil reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-004 profiles were computed from pinned MOLA/LOLA rasters, their ProfileResponse v1 payloads were schema-validated, and manual feature/longitude checks passed; independent review E-023 remains pending. Neither result establishes global DEM accuracy or a global Earth ranking."
 }
