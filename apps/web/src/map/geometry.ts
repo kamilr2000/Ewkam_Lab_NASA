@@ -168,8 +168,9 @@ export function boundsForCoordinates(coordinates: LonLat[]): GeographicBounds | 
   const arcStart = longitudes[(gapIndex + 1) % longitudes.length]
   const span = 360 - largestGap
   const west = wrapLongitude(arcStart)
-  const south = Math.max(-89.5, Math.min(...latitudes))
-  const north = Math.min(89.5, Math.max(...latitudes))
+  const clampLatitude = (latitude: number) => Math.max(-89.5, Math.min(89.5, latitude))
+  const south = clampLatitude(Math.min(...latitudes))
+  const north = clampLatitude(Math.max(...latitudes))
   return { west, south, east: west + span, north }
 }
 
