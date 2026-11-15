@@ -21,7 +21,7 @@ Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLA
 | [K-005](K-005.md) | P0 | Kamil | K-002, K-003 | Zbuduj siatkę i cechy rzeczywistego ziemskiego wycinka |
 | [K-006](K-006.md) | P0 | Kamil | K-003 | Zaimplementuj MCDA i pełny ranking komórek |
 | [K-007](K-007.md) | P0 | Kamil | K-003, K-004, K-005, K-006 | Udostępnij API i pierwszy realny przebieg |
-| [K-008](K-008.md) | P0 | Kamil | K-004, K-005, K-006, K-007, K-042 | Przelicz globalny zbiór i agregaty mapy |
+| [K-008](K-008.md) | P0 | Kamil | K-004, K-005, K-006, K-007, K-042, K-044 | Przelicz globalny zbiór i agregaty mapy |
 | [K-009](K-009.md) | P0 | Kamil | K-004, K-008 | Zweryfikuj naukę, skalę i prawdziwe hotspoty |
 | [K-010](K-010.md) | P1 | Kamil | K-009 | Dodaj jedną niezależną dziedzinę danych |
 | [K-011](K-011.md) | P1 | Kamil | K-002, K-009 | Sprawdź pilotaż mineralogii |
@@ -112,10 +112,20 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-028 — Uaktualnij ujawnienie AI po wdrożeniu API](E-028.md), Ewelina, P0: po K-007 i I-013 zsynchronizuj Markdown/JSON disclosure z rzeczywistym API i jego ograniczeniami.
 - [K-041 — Dopasuj typy requestu API do JSON Schema](K-041.md), Kamil, P2: odrzuć string/boolean coercion w wagach i `top_k` zgodnie z kontraktem v1; follow-up z E-027.
 - [K-042 — Pilot globalnej siatki i pipeline'u](K-042.md), Kamil, P0: zmierz rzeczywiste zachowanie skali, źródła, maski i kafelkowego przetwarzania przed pełnym przebiegiem K-008; może ruszyć równolegle z review regionalnego API.
+- [K-043 — Re-review bieżącego disclosure I-012 po K-040](K-043.md), Kamil, P0: niezależnie sprawdź poprawione refy/statusy K-005, E-021, rejestru AI/SI i granic twierdzeń w PR #46.
+- [E-029 — Niezależny odbiór pilota globalnej siatki K-042](E-029.md), Ewelina, P0: zweryfikuj dokładny PR #72, źródła, liczniki, metodologię oraz ograniczenia przed integracją.
+- [E-030 — Re-review pobierania źródeł K-042 z czystego klonu](E-030.md), Ewelina, P0: potwierdź poprawkę brakującego katalogu `.part`, pobranie, sumy i test regresyjny w nowym exact ref PR #72.
+- [K-044 — Globalne ID i własność komórek](K-044.md), Kamil, P0: określ stabilną siatkę oraz sprawdź duplikaty, szczeliny i granice UTM/UPS/antimeridianu przed K-008; luka wykazana przez K-042.
+- [K-045 — Re-review aktualnych statusów w macierzy E-025](K-045.md), Kamil, P1: potwierdź stany E-004/E-021/K-007/I-012, regionalne dowody, S03 i bezpieczne granice twierdzeń w PR #50.
+- [K-046 — Re-review pilota K-042 w macierzy E-025](K-046.md), Kamil, P1: potwierdź aktualny snapshot, status otwartego pilota K-042, jego ograniczenia i poprawkę po K-045 w PR #50.
+- [E-031 — Odśwież aktualny snapshot macierzy submission](E-031.md), Ewelina, P1: zaktualizuj statusy K-042/E-030 i E-004 oraz exact refy PR #72 w macierzy i handoffie E-025 po K-046.
+- [K-047 — Oceń wykonalność porównywalnej warstwy termicznej](K-047.md), Kamil, P1: pobierz małe próbki Ziemi, Marsa i Księżyca, zmierz pokrycie/QA i rozstrzygnij `GO`/`NO-GO` dla porównywalnej cechy przed K-010.
+- [K-048 — Re-review widoczności hotspotu i legendy E-004](K-048.md), Kamil, P0: sprawdź exact follow-up PR #83, marker wybranego hotspotu, mobilny HUD, stałość rankingu po zoomie i zakres twierdzeń o biegunach.
+- [K-049 — Re-review aktualnego snapshotu macierzy submission](K-049.md), Kamil, P1: zweryfikuj exact PR #50 head, odświeżone statusy/refy i granice twierdzeń S03 po K-046.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-043, E-029, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-050, E-032, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
