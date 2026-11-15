@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 from typing import Any
 
 import httpx
@@ -128,6 +129,81 @@ def test_catalog_profiles_and_real_regional_search_match_contracts() -> None:
             sum(feature["contribution_pct"] for feature in details["pixel"]["features"])
             - details["pixel"]["score_pct"]
         ) < 1e-8
+
+
+def test_search_numeric_types_match_json_schema_without_coercion() -> None:
+    dataset = next(
+        item for item in load_registry().datasets.values() if item.region_id == "atacama-andes"
+    )
+    schema = json.loads(
+        (ROOT / "contracts" / "search-request.schema.json").read_text(encoding="utf-8")
+    )
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+
+    invalid_values = [
+        ("weight", "1"),
+        ("weight", True),
+        ("weight", 0),
+        ("weight", 1_000_001),
+        ("weight", float("nan")),
+        ("weight", float("inf")),
+        ("weight", float("-inf")),
+        ("top_k", "2"),
+        ("top_k", True),
+        ("top_k", 2.5),
+        ("top_k", 0),
+        ("top_k", 11),
+        ("top_k", float("nan")),
+        ("top_k", float("inf")),
+        ("top_k", float("-inf")),
+    ]
+    for field, value in invalid_values:
+        payload = _search_request(
+            body="mars",
+            profile_id="mars-jezero-mola128-v1",
+            dataset_version=dataset.version,
+            region_id=dataset.region_id,
+        )
+        if field == "weight":
+            payload["criteria"][0]["weight"] = value
+        else:
+            payload["top_k"] = value
+
+        # NaN/Infinity are not JSON numeric tokens. Exercise those only through
+        # the parser's non-standard extension; other invalid values must fail
+        # both the Draft 2020-12 request schema and the API validator.
+        non_finite = isinstance(value, float) and not math.isfinite(value)
+        if not non_finite:
+            assert not validator.is_valid(payload), (field, value)
+            response = _request("POST", "/api/v1/search", json=payload)
+        else:
+            response = _request(
+                "POST",
+                "/api/v1/search",
+                content=json.dumps(payload, allow_nan=True),
+                headers={"content-type": "application/json"},
+            )
+        assert response.status_code == 422, (field, value, response.text)
+        _assert_schema("error-response.schema.json", response.json())
+
+    valid_payload = _search_request(
+        body="mars",
+        profile_id="mars-jezero-mola128-v1",
+        dataset_version=dataset.version,
+        region_id=dataset.region_id,
+    )
+    valid_payload["criteria"][0]["weight"] = 1.25
+    # Draft 2020-12 integer includes a JSON number with no fractional part.
+    valid_payload["top_k"] = 2.0
+    assert validator.is_valid(valid_payload)
+
+    response = _request("POST", "/api/v1/search", json=valid_payload)
+    assert response.status_code == 200, response.text
+    result = response.json()
+    _assert_schema("search-response.schema.json", result)
+    assert len(result["ranking"]) == 2
+    assert result["query"]["top_k"] == 2
+    assert result["query"]["criteria"][0]["weight"] == 1.25
 
 
 def test_map_endpoint_pages_xyz_aggregates_from_same_analysis() -> None:
