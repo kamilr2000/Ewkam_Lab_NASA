@@ -53,7 +53,7 @@
     {
       "path": "design/map-hotspot-concept.svg",
       "description": "Static SVG schematic composed from a labeled synthetic contract fixture; no basemap, fabricated land shapes or NASA branding.",
-      "review_status": "E-019 remains in review; K-022 aligned synthetic scope and coverage, and E-022 approved exact code ref 8fb3ab5da9117090b430fbe29df76862c6e70cda. PR #28 is being synchronized with main before integration."
+      "review_status": "E-019 remains in review; K-022 aligned synthetic scope and coverage, E-022 approved exact code ref 8fb3ab5da9117090b430fbe29df76862c6e70cda, and PR #28 merged into origin/main as a8572d0dd5d255599f0a5d51f21a74d03f525960. K-022 is done."
     }
   ],
   "generated_media": [],

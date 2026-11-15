@@ -38,6 +38,6 @@ python -m json.tool docs/ai-usage.json
 - `map-response.schema.json` i `search-response.schema.json` przechodzą w tym samym zestawie testowym; wersja kontraktu pozostaje 1.0.0.
 - Nie testowałem działającego API ani rzeczywistych danych; fixture jest syntetyczny.
 
-## Ograniczenia i potrzebne działania
+## Ograniczenia i integracja
 
-Ewelina: opublikuj własny commit `tasks(E-022): IN PROGRESS` w `origin/main`, a następnie sprawdź PR #28 na exact reviewed commit `8fb3ab5da9117090b430fbe29df76862c6e70cda`. Potwierdź extent/bbox, test negatywny i zgodność handoffu E-019 z nowym fixture'em. Implementacja pozostaje poza `main` do zakończenia review; dane ani zachowanie API nie są przedmiotem tej poprawki.
+E-022 opublikowała niezależne `APPROVED` dla exact ref `8fb3ab5da9117090b430fbe29df76862c6e70cda` w PR #34. Po synchronizacji gałęzi z bieżącym `origin/main` sprawdzony kod i test nie zmieniły się; PR #28 scalono jako `a8572d0dd5d255599f0a5d51f21a74d03f525960`. K-022 jest zintegrowane. Fixture pozostaje syntetyczny; nie dowodzi działania runtime API, rzeczywistej powierzchni, obserwacji naukowych ani globalnego rankingu.
