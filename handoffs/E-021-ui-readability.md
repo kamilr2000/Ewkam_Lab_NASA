@@ -65,3 +65,7 @@ Chrome DevTools nie udostępnił dokładnego `innerWidth` 781 px, więc raport z
 Podczas podglądu konsola zgłosiła żądanie `favicon.ico` z odpowiedzią 404. Nie wpływa ono na pomiary układu i nie należy do zakresu E-021; wymaga osobnej decyzji o brakującym zasobie.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
+
+## Follow-up po K-030
+
+2026-11-15: Po rezerwacji poprawki ponownie zbudowano produkcyjny frontend — typecheck i build przechodzą. Próba otwarcia lokalnego preview w Chrome została zatrzymana przez politykę URL Computer Use, zanim strona się załadowała. Nie uzyskano nowego screenshotu ani pomiaru `innerWidth`, `clientWidth` lub `scrollWidth`; wynik 781 px z `handoffs/e014-viewport-metrics.json` pochodzi z wcześniejszej wersji CSS i nie jest używany jako dowód dla aktualnego review. Dokładny viewport 781 px oraz ręczna kontrola renderu nadal wymagają wykonania; E-021 pozostaje `in_progress` i nie ma nowego review ref.
