@@ -13,9 +13,14 @@
     "remote collaboration workflow, task reservation commits and updated agent prompts",
     "detailed executable goals, bidirectional review tasks and human-only final submission boundary",
     "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader",
-    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion"
+    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
+    "K-022: semantic regression guard for synthetic hotspot scope, map coverage and pixel/map aggregation"
   ],
-  "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
+  "synthetic_data_paths": [
+    "contracts/fixtures/hotspot-regression.json",
+    "contracts/fixtures/search-hotspot-synthetic.json",
+    "contracts/fixtures/map-hotspot-synthetic.json"
+  ],
   "scientific_observations_downloaded": true,
   "scientific_sample_manifest": "data/manifests/k002-samples.json",
   "scientific_validation_manifest": "data/manifests/k017-earth-validation.json",
