@@ -36,4 +36,18 @@ Siatka 60″ ma 233 280 000 komórek globalnych. Model float32 ETOPO i maski źr
 - Builder został uruchomiony ponownie bez `--force`; trzy zweryfikowane checkpointy zostały pominięte.
 - Manifesty są walidowane przez JSON Schema i kontrolę semantyczną; SHA-256 danych wynikowych i liczniki CSV zgadzają się z manifestami.
 
-Commit/PR i dokładny SHA wdrożenia zostaną dopisane po publikacji implementacji.
+Pierwotny pakiet opublikowano w PR #44 pod exact ref `a5dfe3d892235d31938dcdd56bdcc17a66e0f167`. Po review E-024 aktualny fingerprint metadanych poprawiono w exact commicie `d3b880c1dc804b3038f90faf9e9e8ee3ad6187f2`; bieżący head PR po synchronizacji z main to `b4ec9784b5168ebfbc325b2951132ebc81068158`.
+
+## Korekta po E-024: kod fingerprintu
+
+E-024 wykazała, że fingerprint `feab8cb9a942e6c7e8217f0d27d1a9b1f676d874d8c99ba32b6d4e9c2b81778f` zapisany w trzech manifestach i raporcie nie odpowiadał exact kodowi K-005. Po pobraniu i zweryfikowaniu przypiętych publicznych źródeł (`uv run --locked --group data python pipeline/download_k005_sources.py`) uruchomiono `uv run --locked --group data python pipeline/build_k005_earth_grid.py --force`. Aktualne `_code_fingerprint()` wylicza `56543c206661c3158999fd442f13a3ebc56e695333da8b2ad01b1e19d8d63829`; raport i wszystkie trzy manifesty zapisują zgodnie ten sam hash.
+
+| AOI | Wiersze danych | SHA-256 CSV po rebuildzie | Rozmiar |
+|---|---:|---|---:|
+| Atacama / Andy | 1 796 | `784ccc0dbebe4e846774ac819809029a31f082cb16931e6bbe882da26c0f570c` | 63 856 B |
+| Big Island | 1 854 | `5489e51b4ec4f1a770fe7e7511565de6e5083b4547ebb48d61ada3af0ec4668b` | 64 177 B |
+| Himalaje | 1 737 | `30a3dd1d93277a766b9d7d9ddcd8a2c05c9db4df374a4bb310eaac97f143479c` | 61 206 B |
+
+Wszystkie CSV zachowały SHA i rozmiary z poprzedniej publikacji; zmieniły się metadane pochodzenia, czas rebuilda i rzeczywiste czasy przetwarzania zamiast wartości z pominiętych checkpointów. Manifesty przechodzą `contracts/dataset-manifest.schema.json` (Draft 2020-12), a niezależna kontrola potwierdza zgodność fingerprintu, SHA, rozmiaru i liczby wierszy. `uv run --locked --group data python -m pytest pipeline/tests contracts/tests -q` — 45 passed. `python tools/check_planning.py` i `git diff --check origin/main --` przechodzą.
+
+Codex pomagał odtworzyć i zweryfikować metadane pochodzenia; nie utworzył ani nie edytował wartości pomiarowych ani CSV. Właścicielka rejestru, Ewelina, powinna ująć ten metadata-only follow-up w trwającym I-012 przed zamknięciem disclosure. Obecna walidacja nadal obejmuje trzy AOI regionalne; nie wykonano pełnego globu, biegunów ani globalnego rankingu.
