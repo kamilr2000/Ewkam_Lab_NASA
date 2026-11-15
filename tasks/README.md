@@ -78,12 +78,13 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-018 — Review silnika MCDA i rankingu pikseli K-006](E-018.md), Ewelina, P0: niezależne sprawdzenie punktacji, braków, deterministycznego Top K i selekcji różnych obszarów w PR #15.
 - [E-019 — Mapowy design handoff z hotspotem syntetycznym](E-019.md), Ewelina, P1: udokumentowanie legendy, projekcji i interakcji dla przyszłego E-004, z diagramem opartym wyłącznie na fixture'u.
 - [K-020 — Review map design handoff E-019](K-020.md), Kamil, P1: sprawdzenie semantyki agregatu, hotspotu, legendy i syntetycznych wartości w PR #18.
-- [K-021 — Uzgodnij zakres fixture'u hotspotu z coverage mapy](K-021.md), Kamil, P0: napraw zgodność geometrii scope/bbox, komórek i liczników coverage wykrytą w K-020.
 - [E-020 — Odrzucaj odpowiedzi API niespójne z żądaniem](E-020.md), Ewelina, P0: walidacja datasetu i echo query search oraz parametrów bbox/level/limit mapy.
+- [K-021 — Re-review adaptera API po poprawce E-020](K-021.md), Kamil, P0: sprawdzenie dokładnego headu PR #20 i regresji po uwagach K-019.
+- [K-022 — Uzgodnij zakres fixture'u hotspotu z coverage mapy](K-022.md), Kamil, P0: napraw zgodność geometrii scope/bbox, komórek i liczników coverage wykrytą w K-020.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-022, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-023, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 

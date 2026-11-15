@@ -6,7 +6,7 @@
 - Exact `review_ref`: `fde069cb35342986c5d2cc656a66fa90191377a9`
 - Current PR head during review: `25e53c8285da31f38139bf68c0048cb21ad6776e`; `design/` files are unchanged from `review_ref`.
 - Result: **REQUEST_CHANGES**, GitHub review ID `5908123529`.
-- Follow-up owner/task: Kamil / [K-021](../tasks/K-021.md).
+- Follow-up owner/task: Kamil / [K-022](../tasks/K-022.md). K-021 is a separate P0 re-review of E-020 created by Ewelina.
 
 ## Zakres i poprawne elementy
 
@@ -20,7 +20,7 @@ Fixture `search-hotspot-synthetic.json` declares a regional scope bbox `(3, 3, 3
 
 The response simultaneously reports `coverage.total_pixels = 4`, `eligible_pixels = 4`, `eligible_area_fraction = 1`, and the sum of map-cell `total_pixel_count` as 4. Under `docs/CONTRACTS.md`, coverage and surface fractions refer to the same scope and mask, and `map_cells[]` aggregates the counted pixels. The concept therefore depicts all coverage as complete while leaving part of the declared search extent unrepresented. This is a fixture/contract issue that the design artifact currently inherits; a static diagram that copies the fixture does not remove the inconsistency.
 
-K-021 asks Kamil to reconcile the search scope, map bbox, cells/pixels and coverage counts, or to represent any uncovered area explicitly as NoData with correct accounting. After that correction, recheck E-019 against the updated fixture. The design can keep its current cell positions if the corrected extent matches those cells.
+K-022 asks Kamil to reconcile the search scope, map bbox, cells/pixels and coverage counts, or to represent any uncovered area explicitly as NoData with correct accounting. After that correction, recheck E-019 against the updated fixture. The design can keep its current cell positions if the corrected extent matches those cells.
 
 ## Sprawdzenia i ograniczenia
 
@@ -28,4 +28,4 @@ K-021 asks Kamil to reconcile the search scope, map bbox, cells/pixels and cover
 - The check reproduced the spatial mismatch: scope bbox `(3, 3, 3.04, 3.02)`, map-cell union `(3, 3, 3.04, 3.01)`, northern difference `0.01°`; declared and summed pixel counts are both four.
 - `git diff` confirmed no design-file changes between `review_ref` and current PR head.
 - No rendered browser preview or CVD-simulator run was independently available in this review. E-004 should repeat those checks against its actual map renderer.
-- `python tools/check_planning.py` and `git diff --check` are recorded after the review report and K-021 card are added to this branch.
+- `python tools/check_planning.py` and `git diff --check` are recorded after the review report and K-022 card are added to this branch.
