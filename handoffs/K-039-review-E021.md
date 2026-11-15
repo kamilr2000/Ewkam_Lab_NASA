@@ -1,6 +1,6 @@
 # K-039 — Re-review E-021 render proof
 
-Date: 2026-11-15  
+Date: 2026-11-15
 Decision: **APPROVE** for the reviewed UI readability and responsive-render scope. This review does not mark E-021 done or merge PR #35.
 
 ## Reviewed refs
