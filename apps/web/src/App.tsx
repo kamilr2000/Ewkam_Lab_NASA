@@ -1,6 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ApiError, demoScenarios, getCatalog, getProfile, runSearch } from './api/client'
 import { RequestEpoch } from './api/requestEpoch'
+import { CriteriaControls } from './controls/CriteriaControls'
+import {
+  buildSearchRequest,
+  createInitialCriteriaSettings,
+  getActiveCriteria,
+  getAvailableProfileFeatures,
+  getCriteriaValidationError,
+  selectDatasetForMode,
+  setCriterionEnabled,
+  setCriterionWeight,
+} from './controls/criteria'
+import type { CriteriaSettings } from './controls/criteria'
 import type {
   CatalogResponse,
   DataMode,
@@ -12,8 +24,35 @@ import type {
   SearchResponse,
 } from './api/types'
 
-function isSelectableAvailability(value: string): boolean {
-  return value === 'available' || value === 'synthetic_only'
+const loadAnalysisMap = () => import('./map/AnalysisMap')
+const AnalysisMap = lazy(loadAnalysisMap)
+
+class MapModuleBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="map-frame map-frame-loading" role="alert">
+          <div className="map-frame-loading-content">
+            <p className="eyebrow">MAP UNAVAILABLE</p>
+            <strong>The interactive map could not be loaded.</strong>
+            <p>Your ranking and pixel details remain available below.</p>
+            <button className="secondary-button" type="button" onClick={() => window.location.reload()}>Reload the app to try again</button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+function isSelectableAvailability(mode: DataMode, value: string): boolean {
+  return value === (mode === 'synthetic' ? 'synthetic_only' : 'available')
 }
 
 function pixelsFromResponse(response: SearchResponse): SearchPixel[] {
@@ -33,36 +72,29 @@ function makeRequest(
   mode: DataMode,
   catalog: CatalogResponse,
   profile: ProfileResponse,
+  criteriaSettings: CriteriaSettings,
 ): SearchRequest {
-  const acceptedAvailability = mode === 'synthetic' ? ['synthetic_only'] : ['available']
-  const dataset = catalog.datasets.find((item) => item.body === 'earth' && acceptedAvailability.includes(item.availability))
-  if (!dataset) {
-    throw new ApiError(mode === 'synthetic'
-      ? 'The synthetic catalog does not include a fixture-only Earth dataset.'
-      : 'No available Earth dataset is listed in the live catalog.')
-  }
+  const dataset = selectDatasetForMode(mode, catalog)
 
-  const profileFeatures = profile.profile.features.filter((feature) =>
-    catalog.features.some((item) => item.feature_id === feature.feature_id && acceptedAvailability.includes(item.availability)),
-  )
+  const profileFeatures = getAvailableProfileFeatures(mode, catalog, profile)
   if (profileFeatures.length === 0) {
     throw new ApiError('This profile has no features available for the selected Earth dataset.')
   }
 
-  const region = catalog.search_regions.find((item) =>
-    item.dataset_version === dataset.dataset_version && acceptedAvailability.includes(item.availability),
-  )
-
-  return {
-    contract_version: '1.0.0',
-    body: profile.profile.body,
-    profile_id: profile.profile.profile_id,
-    dataset_version: dataset.dataset_version,
-    scope: region ? { type: 'regional', region_id: region.region_id } : { type: 'global' },
-    criteria: profileFeatures.map((feature) => ({ feature_id: feature.feature_id, weight: 1 })),
-    result_mode: 'pixels',
-    top_k: 10,
+  try {
+    return buildSearchRequest(profile.profile, dataset.dataset_version, profileFeatures, criteriaSettings)
+  } catch (error) {
+    throw new ApiError(error instanceof Error ? error.message : 'The selected criteria are not valid.')
   }
+}
+
+function configurationKey(mode: DataMode, catalog: CatalogResponse, profile: ProfileResponse): string {
+  return JSON.stringify([
+    mode,
+    catalog.catalog_version,
+    profile.profile.profile_id,
+    profile.profile.profile_version,
+  ])
 }
 
 function App() {
@@ -73,8 +105,13 @@ function App() {
   const [body, setBody] = useState<PlanetaryBody>('mars')
   const [profileId, setProfileId] = useState('')
   const [profile, setProfile] = useState<ProfileResponse | null>(null)
+  const [criteriaConfiguration, setCriteriaConfiguration] = useState<{
+    key: string
+    settings: CriteriaSettings
+  } | null>(null)
   const [analysis, setAnalysis] = useState<SearchResponse | null>(null)
   const [selectedPixelId, setSelectedPixelId] = useState<string | null>(null)
+  const [zoomRequest, setZoomRequest] = useState(0)
   const [catalogLoading, setCatalogLoading] = useState(true)
   const [profileLoading, setProfileLoading] = useState(false)
   const [searching, setSearching] = useState(false)
@@ -90,13 +127,27 @@ function App() {
   const searchController = useRef<AbortController | null>(null)
 
   const bodyProfiles = useMemo(
-    () => (catalog?.profiles ?? []).filter((item) => item.body === body && isSelectableAvailability(item.availability)),
-    [catalog, body],
+    () => (catalog?.profiles ?? []).filter((item) => item.body === body && isSelectableAvailability(mode, item.availability)),
+    [catalog, body, mode],
   )
   const visibleProfiles = useMemo(
-    () => (catalog?.profiles ?? []).filter((item) => isSelectableAvailability(item.availability)),
-    [catalog],
+    () => (catalog?.profiles ?? []).filter((item) => isSelectableAvailability(mode, item.availability)),
+    [catalog, mode],
   )
+  const profileFeatures = useMemo(
+    () => catalog && profile ? getAvailableProfileFeatures(mode, catalog, profile) : [],
+    [catalog, mode, profile],
+  )
+  const currentConfigurationKey = catalog && profile ? configurationKey(mode, catalog, profile) : null
+  const defaultCriteriaSettings = useMemo(
+    () => createInitialCriteriaSettings(profileFeatures),
+    [profileFeatures],
+  )
+  const criteriaSettings = currentConfigurationKey && criteriaConfiguration?.key === currentConfigurationKey
+    ? criteriaConfiguration.settings
+    : defaultCriteriaSettings
+  const activeCriteriaCount = getActiveCriteria(profileFeatures, criteriaSettings).length
+  const criteriaValidationError = getCriteriaValidationError(profileFeatures, criteriaSettings)
   const resultPixels = useMemo(() => (analysis ? pixelsFromResponse(analysis) : []), [analysis])
   const selectedPixel = resultPixels.find((pixel) => pixel.pixel_id === selectedPixelId) ?? null
   const activeScenario = demoScenarios.find((item) => item.id === scenario)
@@ -109,6 +160,7 @@ function App() {
     setCatalog(null)
     setCatalogMode(null)
     setProfile(null)
+    setCriteriaConfiguration(null)
     setAnalysis(null)
     setSelectedPixelId(null)
     setCatalogLoading(true)
@@ -123,7 +175,7 @@ function App() {
       if (!catalogEpoch.current.isCurrent(epoch)) return
       setCatalog(result)
       setCatalogMode(mode)
-      const firstProfile = result.profiles.find((item) => isSelectableAvailability(item.availability))
+      const firstProfile = result.profiles.find((item) => isSelectableAvailability(mode, item.availability))
       if (firstProfile) {
         setBody(firstProfile.body)
         setProfileId(firstProfile.profile_id)
@@ -161,6 +213,11 @@ function App() {
     void getProfile(mode, profileId, controller.signal).then((result) => {
       if (!profileEpoch.current.isCurrent(epoch)) return
       if (result.profile.body !== body) throw new ApiError('Profile body does not match the selected destination body.')
+      const availableFeatures = getAvailableProfileFeatures(mode, catalog, result)
+      const key = configurationKey(mode, catalog, result)
+      setCriteriaConfiguration((current) => current?.key === key
+        ? current
+        : { key, settings: createInitialCriteriaSettings(availableFeatures) })
       setProfile(result)
     }).catch((error: unknown) => {
       if (!profileEpoch.current.isCurrent(epoch) || (error instanceof DOMException && error.name === 'AbortError')) return
@@ -183,12 +240,13 @@ function App() {
   }, [])
 
   function chooseBody(value: PlanetaryBody): void {
-    const nextProfile = (catalog?.profiles ?? []).find((item) => item.body === value && isSelectableAvailability(item.availability))
+    const nextProfile = (catalog?.profiles ?? []).find((item) => item.body === value && isSelectableAvailability(mode, item.availability))
     searchController.current?.abort()
     searchEpoch.current.invalidate()
     setSearching(false)
     setBody(value)
     setProfileId(nextProfile?.profile_id ?? '')
+    setCriteriaConfiguration(null)
     setAnalysis(null)
     setSelectedPixelId(null)
     setSearchError(null)
@@ -202,6 +260,7 @@ function App() {
     setSearching(false)
     setBody(nextProfile.body)
     setProfileId(nextProfile.profile_id)
+    setCriteriaConfiguration(null)
     setAnalysis(null)
     setSelectedPixelId(null)
     setSearchError(null)
@@ -219,7 +278,7 @@ function App() {
     setSelectedPixelId(null)
 
     try {
-      const request = makeRequest(mode, catalog, profile)
+      const request = makeRequest(mode, catalog, profile, criteriaSettings)
       const response = await runSearch(mode, request, scenario, controller.signal)
       if (!searchEpoch.current.isCurrent(epoch)) return
       setAnalysis(response)
@@ -238,6 +297,7 @@ function App() {
     searchController.current?.abort()
     searchEpoch.current.invalidate()
     setSearching(false)
+    setCriteriaConfiguration(null)
     profileController.current?.abort()
     catalogController.current?.abort()
     setMode(nextMode)
@@ -253,8 +313,43 @@ function App() {
     setScenario(nextScenario)
   }
 
+  function selectPixelAndZoom(pixelId: string): void {
+    setSelectedPixelId(pixelId)
+    setZoomRequest((current) => current + 1)
+  }
+
+  function clearAnalysisForCriteriaChange(): void {
+    searchController.current?.abort()
+    searchEpoch.current.invalidate()
+    setSearching(false)
+    setAnalysis(null)
+    setSelectedPixelId(null)
+    setSearchError(null)
+  }
+
+  function changeCriterionEnabled(featureId: string, enabled: boolean): void {
+    if (!currentConfigurationKey) return
+    setCriteriaConfiguration((current) => {
+      const settings = current?.key === currentConfigurationKey
+        ? current.settings
+        : defaultCriteriaSettings
+      return { key: currentConfigurationKey, settings: setCriterionEnabled(settings, featureId, enabled) }
+    })
+    clearAnalysisForCriteriaChange()
+  }
+
+  function changeCriterionWeight(featureId: string, weight: number): void {
+    if (!currentConfigurationKey) return
+    setCriteriaConfiguration((current) => {
+      const settings = current?.key === currentConfigurationKey
+        ? current.settings
+        : defaultCriteriaSettings
+      return { key: currentConfigurationKey, settings: setCriterionWeight(settings, featureId, weight) }
+    })
+    clearAnalysisForCriteriaChange()
+  }
+
   const profileCatalogEntry = visibleProfiles.find((item) => item.profile_id === profileId)
-  const profileFeatures = profile?.profile.features ?? []
   const maxMapCell = analysis?.map_cells.reduce<typeof analysis.map_cells[number] | null>((best, cell) => {
     if (cell.max_score_pct === null) return best
     if (!best || best.max_score_pct === null || cell.max_score_pct > best.max_score_pct) return cell
@@ -332,17 +427,25 @@ function App() {
 
           <div className="criteria-section">
             <div className="section-title-row">
-              <div><p className="eyebrow">PROFILE FEATURES</p><h2>Available measurements</h2></div>
-              <span className="count-badge">{String(profileFeatures.length).padStart(2, '0')}</span>
+              <div><p className="eyebrow">PROFILE FEATURES</p><h2>{mode === 'live' ? 'Scoring measurements' : 'Available measurements'}</h2></div>
+              <span className="count-badge">{mode === 'live' ? `${activeCriteriaCount}/${profileFeatures.length}` : String(profileFeatures.length).padStart(2, '0')}</span>
             </div>
-            <p className="section-hint">Feature definitions, units and reference ranges come from the selected profile. Scoring is performed by the API.</p>
+            <p className="section-hint">Feature definitions, units and reference ranges come from the selected {body === 'mars' ? 'Mars' : 'Moon'} profile. {mode === 'live' ? 'Choose one or more available measurements; the API scores the submitted set.' : 'Fixture results use their recorded query and do not recalculate scores in this browser.'}</p>
             {profileLoading && <p className="inline-state">Loading profile…</p>}
             {profileError && <p className="inline-error" role="alert">{profileError}</p>}
             {catalogError && <p className="inline-error" role="alert">{catalogError}</p>}
-            {!profileLoading && !profileError && profileFeatures.length > 0 && (
-              <ul className="criteria-list" aria-label="Features in selected profile">
+            {!profileLoading && !profileError && mode === 'live' && (
+              <CriteriaControls
+                features={profileFeatures}
+                settings={criteriaSettings}
+                onEnabledChange={changeCriterionEnabled}
+                onWeightChange={changeCriterionWeight}
+              />
+            )}
+            {!profileLoading && !profileError && mode === 'synthetic' && profileFeatures.length > 0 && (
+              <ul className="criteria-list" aria-label="Measurements in the selected fixture profile">
                 {profileFeatures.map((feature) => (
-                  <li className="criterion" key={feature.feature_id}>
+                  <li className="criterion fixture-criterion" key={feature.feature_id}>
                     <span className="criterion-symbol" aria-hidden="true">{feature.feature_id === 'slope_deg' ? '∠' : feature.feature_id === 'roughness_m' ? '≈' : '↕'}</span>
                     <span className="criterion-copy">
                       <span className="criterion-name">{feature.name}</span>
@@ -353,7 +456,13 @@ function App() {
                 ))}
               </ul>
             )}
-            {mode === 'synthetic' && <p className="scope-note">Synthetic fixture inputs are fixed presets; changing the scenario changes the response. No score is recalculated in this browser.</p>}
+            {!profileLoading && !profileError && mode === 'synthetic' && profile && profileFeatures.length === 0 && (
+              <p className="inline-state">No measurements are available for this profile and selected Earth dataset.</p>
+            )}
+            {profile && profileFeatures.length > 0 && profileFeatures.length < profile.profile.features.length && (
+              <p className="scope-note">Some profile measurements are not selectable in the current catalog and will not be sent.</p>
+            )}
+            {mode === 'synthetic' && <p className="scope-note">Fixture scenarios use preset features and weights. Switch to Live API to select measurements and configure their weights.</p>}
           </div>
 
           <div className="panel-bottom">
@@ -364,7 +473,7 @@ function App() {
                 {mode === 'synthetic' ? 'Each example is marked synthetic in its response.' : 'Catalog and search are requested from the configured API.'}
               </span>
             </div>
-            <button className="run-button" type="button" onClick={() => void runAnalysis()} disabled={catalogLoading || profileLoading || !catalog || !profile || searching}>
+            <button className="run-button" type="button" onClick={() => void runAnalysis()} disabled={catalogLoading || profileLoading || !catalog || !profile || profileFeatures.length === 0 || Boolean(criteriaValidationError) || searching}>
               <span>{searching ? 'Running analysis…' : 'Run terrain analysis'}</span><span aria-hidden="true">↗</span>
             </button>
             <p className="fine-print">0–100% is a similarity index for selected features, not a probability or a measure of habitability.</p>
@@ -377,47 +486,57 @@ function App() {
             <div className={`toolbar-status ${analysis ? 'is-complete' : ''}`} role="status" aria-live="polite"><span className="status-dot" aria-hidden="true" />{searching ? 'Analysis in progress' : searchError ? 'Request failed' : analysis ? (analysis.is_synthetic ? 'Synthetic response' : 'API response') : 'Awaiting analysis'}</div>
           </div>
 
-          <div className={`map-frame ${analysis ? 'has-analysis' : ''}`} role="region" aria-label={analysis ? 'Analysis summary' : 'Analysis results awaiting data'} aria-describedby="map-scale-note">
-            <div className="map-grid" aria-hidden="true" />
-            <div className="map-coordinate coordinate-nw">{analysis?.scope.type === 'global' ? 'GLOBAL REQUEST' : 'REGIONAL REQUEST'} <span>·</span> EARTH WGS 84</div>
-            <div className="map-coordinate coordinate-ne">{analysis ? `${analysis.map_cells.length} MAP CELLS` : 'NO ACTIVE DATASET'}</div>
-            {searchError ? (
-              <div className="map-empty-state result-message" role="alert">
-                <div className="orbit-mark error-mark" aria-hidden="true"><span /><span /><span /></div>
-                <p className="eyebrow">REQUEST ERROR · NO DEMO FALLBACK</p>
-                <h2>Analysis could not be loaded.</h2>
-                <p>{searchError}</p>
-                <button className="secondary-button" type="button" onClick={() => void runAnalysis()} disabled={searching}>Try again</button>
+          {analysis || searching || searchError ? (
+            <MapModuleBoundary>
+              <Suspense fallback={<div className="map-frame map-frame-loading" role="status"><p>Loading interactive map…</p></div>}>
+                <AnalysisMap
+                  analysis={analysis}
+                  mode={mode}
+                  pixels={resultPixels}
+                  selectedPixel={selectedPixel}
+                  selectedPixelId={selectedPixelId}
+                  zoomRequest={zoomRequest}
+                  onSelectPixel={selectPixelAndZoom}
+                  searchError={searchError}
+                  onRetry={() => void runAnalysis()}
+                  emptyMessage={searchError
+                    ? `Analysis could not be loaded. ${searchError}`
+                    : catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run the synthetic fixture or connect the live API to inspect a versioned result.')}
+                />
+              </Suspense>
+            </MapModuleBoundary>
+          ) : (
+            <div className="map-frame map-frame-loading" role="region" aria-label="Interactive analysis map">
+              <div className="map-frame-loading-content">
+                <p className="eyebrow">MAP PREVIEW</p>
+                <strong>Run an analysis to load the interactive map.</strong>
+                <p>The map will use the same versioned result as the ranking and pixel details.</p>
               </div>
-            ) : analysis ? (
-              <div className="analysis-summary">
-                <p className="eyebrow">{analysis.is_synthetic ? 'SYNTHETIC CONTRACT FIXTURE' : 'LIVE API RESPONSE'}</p>
-                <h2>{analysis.scope.region_name ?? (analysis.scope.type === 'global' ? 'Global scope requested' : 'Regional scope')}</h2>
-                <p className="summary-description">{analysis.scope.description}</p>
-                <div className="summary-metrics">
-                  <div><span>Eligible cells</span><strong>{formatNumber(analysis.coverage.eligible_pixels, 0)} / {formatNumber(analysis.coverage.total_pixels, 0)}</strong></div>
-                  <div><span>Eligible area</span><strong>{formatNumber(analysis.coverage.eligible_area_fraction === null ? null : analysis.coverage.eligible_area_fraction * 100)}{analysis.coverage.eligible_area_fraction === null ? '' : '%'}</strong></div>
-                  <div><span>Map display cells</span><strong>{formatNumber(analysis.map_cells.length, 0)}</strong></div>
+            </div>
+          )}
+
+          {analysis && (
+            <div className="analysis-summary">
+              <div className="analysis-summary-heading">
+                <div>
+                  <p className="eyebrow">{analysis.is_synthetic ? 'SYNTHETIC CONTRACT FIXTURE' : 'LIVE API RESPONSE'}</p>
+                  <h2>{analysis.scope.region_name ?? (analysis.scope.type === 'global' ? 'Global scope requested' : 'Regional scope')}</h2>
                 </div>
-                {maxMapCell ? (
-                  <p className="map-maximum">Map-cell maximum: <strong>{formatNumber(maxMapCell.max_score_pct)}%</strong> · pixel <code>{maxMapCell.max_pixel_id}</code>. The mean ({formatNumber(maxMapCell.mean_score_pct)}%) is context for that display cell; it is not the pixel's score.</p>
-                ) : (
-                  <p className="map-maximum no-data-note">No eligible pixel scores are available for the map. Missing data remain null; they are not zero.</p>
-                )}
+                <span className="analysis-contract-tag">{analysis.grid_version} · {analysis.model_version}</span>
               </div>
-            ) : (
-              <div className="map-empty-state">
-                <div className="orbit-mark" aria-hidden="true"><span /><span /><span /></div>
-                <p className="eyebrow">YOUR NEXT FIELD SITE STARTS HERE</p>
-                <h2>A world of terrain,<br />waiting to be explored.</h2>
-                <p>{catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run a synthetic fixture or connect the live API to inspect a versioned result.')}</p>
+              <p className="summary-description">{analysis.scope.description}</p>
+              <div className="summary-metrics">
+                <div><span>Eligible cells</span><strong>{formatNumber(analysis.coverage.eligible_pixels, 0)} / {formatNumber(analysis.coverage.total_pixels, 0)}</strong></div>
+                <div><span>Eligible area</span><strong>{formatNumber(analysis.coverage.eligible_area_fraction === null ? null : analysis.coverage.eligible_area_fraction * 100)}{analysis.coverage.eligible_area_fraction === null ? '' : '%'}</strong></div>
+                <div><span>Map display cells</span><strong>{formatNumber(analysis.map_cells.length, 0)}</strong></div>
               </div>
-            )}
-            <div className="map-coordinate coordinate-sw">{analysis ? `${analysis.dataset_version} · GRID ${analysis.grid_version}` : 'MAP LAYERS · NOT YET LOADED'}</div>
-            <div className="map-coordinate coordinate-se">ANALYSIS CELLS · NOT SCREEN PIXELS</div>
-            <div className="map-scale" aria-label="Map scale unavailable"><span /><span>—</span><span>Scale unavailable</span></div>
-            <p className="map-scale-note" id="map-scale-note">Zoom changes the view, not the data resolution.</p>
-          </div>
+              {maxMapCell ? (
+                <p className="map-maximum">Highest display-cell maximum: <strong>{formatNumber(maxMapCell.max_score_pct)}%</strong> · pixel <code>{maxMapCell.max_pixel_id}</code>. Its mean ({formatNumber(maxMapCell.mean_score_pct)}%) describes the cell as context; the fill shows only the best eligible pixel.</p>
+              ) : (
+                <p className="map-maximum no-data-note">No eligible pixel scores are available for the map. Missing data remain null; they are not zero.</p>
+              )}
+            </div>
+          )}
 
           {analysis?.warnings.length ? <ul className="warning-list" aria-label="Analysis warnings">{analysis.warnings.map((warning) => <li key={`${warning.code}-${warning.message}`}>{warning.message}</li>)}</ul> : null}
           {analysis && <p className="analysis-id-line">Analysis <code>{analysis.analysis_id}</code> · contract {analysis.contract_version} · profile {analysis.profile_version} · model {analysis.model_version}</p>}

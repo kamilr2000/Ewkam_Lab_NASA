@@ -3,6 +3,7 @@ export type ResultMode = 'pixels' | 'distinct_areas'
 export type MeasurementScale = 'ratio' | 'interval' | 'ordinal' | 'nominal'
 export type DataMode = 'synthetic' | 'live'
 export type DemoScenario = 'success' | 'empty' | 'no-data' | 'hotspot' | 'distinct-areas' | 'dataset-unavailable'
+export type CatalogDatasetRole = 'earth_search' | 'planetary_reference' | 'validation' | 'fixture_only'
 
 export interface CatalogFeature {
   feature_id: string
@@ -31,7 +32,7 @@ export interface CatalogProfile {
 
 export interface CatalogDataset {
   dataset_version: string
-  role: string
+  role: CatalogDatasetRole
   body: 'earth'
   grid_version: string
   model_version: string
