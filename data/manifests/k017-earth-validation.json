@@ -1,0 +1,607 @@
+{
+  "manifest_version": 1,
+  "task_id": "K-017",
+  "accessed_at": "2026-11-14",
+  "purpose": "Authenticated NASADEM sample ingestion, ETOPO comparison at a common physical scale, and evaluation of a global independent land mask.",
+  "comparison": {
+    "common_horizontal_crs": "WGS 84 / local UTM zone for each AOI",
+    "common_grid_resolution_m": 2000,
+    "feature_window_radius_m": 10000,
+    "features": [
+      {
+        "id": "slope_deg",
+        "unit": "degree"
+      },
+      {
+        "id": "roughness_m",
+        "unit": "m"
+      },
+      {
+        "id": "relief_m",
+        "unit": "m"
+      }
+    ],
+    "vertical_reference_target": "EGM2008 geoid height",
+    "vertical_transformation": {
+      "source": "NASADEM_HGT heights relative to EGM96 geoid",
+      "target": "ETOPO 2022 heights relative to EGM2008 geoid",
+      "method": "PROJ vertical operation using the NGA EGM96 and EGM2008 geoid grids; do not compare raw absolute heights.",
+      "operation_name": "Inverse of WGS 84 to EGM96 height (1) + WGS 84 to EGM2008 height (1)",
+      "operation_accuracy_m": 1.113,
+      "operation_definition": "proj=pipeline step proj=unitconvert xy_in=deg xy_out=rad step proj=vgridshift grids=us_nga_egm96_15.tif multiplier=1 step inv proj=vgridshift grids=us_nga_egm08_25.tif multiplier=1 step proj=unitconvert xy_in=rad xy_out=deg",
+      "grid_files": [
+        "us_nga_egm96_15.tif",
+        "us_nga_egm08_25.tif"
+      ]
+    }
+  },
+  "comparison_aois": [
+    {
+      "aoi_id": "atacama-andes",
+      "label": "Atacama / Andes",
+      "bounds_wgs84": {
+        "west": -68.9,
+        "south": -24.9,
+        "east": -68.1,
+        "north": -24.1
+      },
+      "nasadem_granule": "NASADEM_HGT_s25w069",
+      "etopo_file": "data/raw/k017/etopo/ETOPO_2022_v1_15s_S15W075_surface.tif"
+    },
+    {
+      "aoi_id": "hawaii-big-island",
+      "label": "Hawaii, Big Island",
+      "bounds_wgs84": {
+        "west": -155.9,
+        "south": 19.1,
+        "east": -155.1,
+        "north": 19.9
+      },
+      "nasadem_granule": "NASADEM_HGT_n19w156",
+      "etopo_file": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30W165_surface.tif"
+    },
+    {
+      "aoi_id": "himalaya",
+      "label": "Himalaya",
+      "bounds_wgs84": {
+        "west": 86.1,
+        "south": 28.1,
+        "east": 86.9,
+        "north": 28.9
+      },
+      "nasadem_granule": "NASADEM_HGT_n28e086",
+      "etopo_file": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30E075_surface.tif"
+    }
+  ],
+  "nasadem": {
+    "short_name": "NASADEM_HGT",
+    "collection_version": "001",
+    "product_version": "V001",
+    "doi": "https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001",
+    "provider": "NASA JPL / NASA EOSDIS Land Processes Distributed Active Archive Center",
+    "license": {
+      "id": "CC0-1.0",
+      "evidence_url": "https://forum.earthdata.nasa.gov/viewtopic.php?p=18837&t=5421"
+    },
+    "access": {
+      "client": "earthaccess",
+      "authentication": "EARTHDATA_TOKEN environment variable; never write or log the token",
+      "metadata_api": "https://cmr.earthdata.nasa.gov/search/granules.umm_json",
+      "product_guide": "https://lpdaac.usgs.gov/documents/2237/NASADEM_User_Guide_V13.pdf"
+    },
+    "format": {
+      "native_resolution": "1 arc-second posting in latitude and longitude",
+      "hgt": {
+        "width": 3601,
+        "height": 3601,
+        "dtype": "signed int16 big-endian",
+        "units": "m relative to EGM96 geoid",
+        "fill_value": "N/A (none designated by the product guide)",
+        "no_data_value": "N/A (none designated by the product guide)",
+        "valid_range": [
+          -32767,
+          32767
+        ]
+      },
+      "num": {
+        "width": 3601,
+        "height": 3601,
+        "dtype": "uint8",
+        "meaning": "source class for merged height; retain for provenance and quality flags",
+        "source_classes": {
+          "0": "water in corrected SRTM water body data",
+          "1-23": "SRTM source, 1-23 swaths",
+          "41-94": "PRISM source, 1-54 (maximum varies by region)",
+          "110-160": "GDEM3 source, saturated at 50",
+          "170-220": "GDEM2 source, saturated at 50",
+          "231-234": "SRTM variants filled from GDEM/NGA sources",
+          "241-246": "NED, CDED, or Alaska DEM sources",
+          "250": "interpolation",
+          "251": "quad-edge average where neighboring quads disagreed",
+          "255": "error if NUM is missing; none known to exist in the product guide"
+        }
+      },
+      "swb": {
+        "width": 3601,
+        "height": 3601,
+        "dtype": "uint8",
+        "classes": {
+          "0": "land",
+          "255": "water"
+        },
+        "fill_value": "N/A (none designated by the product guide)",
+        "no_data_value": "N/A (none designated by the product guide)"
+      }
+    },
+    "coverage": "SRTM latitude coverage is approximately 56 degrees south to 60 degrees north; it does not cover polar regions.",
+    "tiles": [
+      {
+        "granule_id": "NASADEM_HGT_s25w069",
+        "archive_filename": "NASADEM_HGT_s25w069.zip",
+        "archive_sha256": "0bf7b325fd309c98c3e89a43137f940d95878e20e8a7f5026f10a4632898ee69",
+        "aoi_id": "atacama-andes",
+        "files": {
+          "hgt": {
+            "filename": "s25w069.hgt",
+            "size_bytes": 25934402,
+            "sha256": "f1ec048c7ed55fe1801043b94486f4711026de1b068f178b79deb5bd870f8f58"
+          },
+          "num": {
+            "filename": "s25w069.num",
+            "size_bytes": 12967201,
+            "sha256": "b359bc1116e74fb5bf65ab2ab7d22cbef5618141a552f8d572675af085999ff0"
+          },
+          "swb": {
+            "filename": "s25w069.swb",
+            "size_bytes": 12967201,
+            "sha256": "8eaa2196f307f909a164b5b87df7e29dc0813780a2abd945068b4ff5a2a06c81"
+          }
+        },
+        "archive_size_bytes": 13837115,
+        "observed_value_summary": {
+          "sample_count_per_layer": 12967201,
+          "hgt_m_egm96": {
+            "minimum": 2423,
+            "maximum": 6732,
+            "outside_documented_range_count": 0
+          },
+          "num_class_histogram": {
+            "0": 11709,
+            "1": 46371,
+            "2": 6087140,
+            "3": 6511097,
+            "4": 309991,
+            "124": 1,
+            "125": 1,
+            "128": 1,
+            "130": 1,
+            "131": 1,
+            "132": 4,
+            "133": 4,
+            "134": 4,
+            "135": 7,
+            "136": 10,
+            "137": 20,
+            "138": 13,
+            "139": 13,
+            "140": 19,
+            "141": 10,
+            "142": 13,
+            "143": 21,
+            "144": 18,
+            "145": 17,
+            "146": 20,
+            "147": 26,
+            "148": 32,
+            "149": 16,
+            "150": 24,
+            "151": 42,
+            "152": 32,
+            "153": 28,
+            "154": 31,
+            "155": 46,
+            "156": 34,
+            "157": 35,
+            "158": 39,
+            "159": 42,
+            "160": 256,
+            "180": 1,
+            "185": 1,
+            "189": 2,
+            "190": 1,
+            "194": 3,
+            "195": 2,
+            "197": 1,
+            "250": 1
+          },
+          "swb_class_histogram": {
+            "0": 12955492,
+            "255": 11709
+          }
+        }
+      },
+      {
+        "granule_id": "NASADEM_HGT_n19w156",
+        "archive_filename": "NASADEM_HGT_n19w156.zip",
+        "archive_sha256": "6c3ce653562a0e76d9204be0800124853deb77088167e63d7c1236a124cfdc31",
+        "aoi_id": "hawaii-big-island",
+        "files": {
+          "hgt": {
+            "filename": "n19w156.hgt",
+            "size_bytes": 25934402,
+            "sha256": "81152cfe0644ec55e4ed8f6575c1d69a444ef9bb7716baac4e03cde3066211be"
+          },
+          "num": {
+            "filename": "n19w156.num",
+            "size_bytes": 12967201,
+            "sha256": "107b427b930871e01a8f6485aad370292f3c3bb19498f2bde30ec20417baab9d"
+          },
+          "swb": {
+            "filename": "n19w156.swb",
+            "size_bytes": 12967201,
+            "sha256": "7bdf1ba4116256b66f9e8b05ca3e28912fcf19ab36f6cacb22420a287790d389"
+          }
+        },
+        "archive_size_bytes": 10982430,
+        "observed_value_summary": {
+          "sample_count_per_layer": 12967201,
+          "hgt_m_egm96": {
+            "minimum": -20,
+            "maximum": 4210,
+            "outside_documented_range_count": 0
+          },
+          "num_class_histogram": {
+            "0": 3051127,
+            "1": 7197,
+            "2": 5733106,
+            "3": 3922498,
+            "4": 252549,
+            "112": 23,
+            "113": 113,
+            "114": 232,
+            "115": 153,
+            "116": 39,
+            "117": 18,
+            "118": 9,
+            "119": 7,
+            "120": 8,
+            "121": 7,
+            "122": 1,
+            "123": 5,
+            "231": 102,
+            "250": 7
+          },
+          "swb_class_histogram": {
+            "0": 9916074,
+            "255": 3051127
+          }
+        }
+      },
+      {
+        "granule_id": "NASADEM_HGT_n28e086",
+        "archive_filename": "NASADEM_HGT_n28e086.zip",
+        "archive_sha256": "567e6afbbe94c5694e93c8467c9c8a8cb7ae3f09c2ce225b036755b1d80cb2eb",
+        "aoi_id": "himalaya",
+        "files": {
+          "hgt": {
+            "filename": "n28e086.hgt",
+            "size_bytes": 25934402,
+            "sha256": "fdec4a92dec8f44d2cfba023c8dddc4cba22be5542549c01e5fa81670cb5c517"
+          },
+          "num": {
+            "filename": "n28e086.num",
+            "size_bytes": 12967201,
+            "sha256": "1ed7517bef3ffbd7e25ac76d2cb82fb5520101aefa1521c14dbdc387c8b6da25"
+          },
+          "swb": {
+            "filename": "n28e086.swb",
+            "size_bytes": 12967201,
+            "sha256": "3aae6ae3584c47f1907d1259e684903eac0caf767273ca9283d87ff4f5a53a70"
+          }
+        },
+        "archive_size_bytes": 16647273,
+        "observed_value_summary": {
+          "sample_count_per_layer": 12967201,
+          "hgt_m_egm96": {
+            "minimum": 2567,
+            "maximum": 8269,
+            "outside_documented_range_count": 0
+          },
+          "num_class_histogram": {
+            "0": 19739,
+            "1": 1027649,
+            "2": 8107393,
+            "3": 3217953,
+            "4": 312073,
+            "5": 20019,
+            "41": 61,
+            "42": 208,
+            "43": 1376,
+            "44": 1459,
+            "45": 1082,
+            "46": 482,
+            "47": 173,
+            "48": 38,
+            "49": 16,
+            "50": 18,
+            "51": 2,
+            "111": 135,
+            "112": 1075,
+            "113": 1892,
+            "114": 3072,
+            "115": 4503,
+            "116": 5461,
+            "117": 6475,
+            "118": 7495,
+            "119": 8202,
+            "120": 8493,
+            "121": 9225,
+            "122": 9927,
+            "123": 10269,
+            "124": 10700,
+            "125": 11488,
+            "126": 11599,
+            "127": 10960,
+            "128": 10777,
+            "129": 10530,
+            "130": 10087,
+            "131": 10017,
+            "132": 9647,
+            "133": 8836,
+            "134": 8215,
+            "135": 7743,
+            "136": 7252,
+            "137": 6448,
+            "138": 5869,
+            "139": 5236,
+            "140": 4527,
+            "141": 4080,
+            "142": 3228,
+            "143": 2642,
+            "144": 2185,
+            "145": 1779,
+            "146": 1425,
+            "147": 1027,
+            "148": 681,
+            "149": 447,
+            "150": 246,
+            "151": 189,
+            "152": 105,
+            "153": 66,
+            "154": 28,
+            "155": 10,
+            "156": 2,
+            "157": 2,
+            "171": 33,
+            "172": 167,
+            "173": 211,
+            "174": 385,
+            "175": 498,
+            "176": 397,
+            "177": 319,
+            "178": 213,
+            "179": 217,
+            "180": 154,
+            "181": 154,
+            "182": 144,
+            "183": 109,
+            "184": 102,
+            "185": 91,
+            "186": 78,
+            "187": 57,
+            "188": 79,
+            "189": 46,
+            "190": 47,
+            "191": 45,
+            "192": 40,
+            "193": 30,
+            "194": 30,
+            "195": 27,
+            "196": 17,
+            "197": 18,
+            "198": 11,
+            "199": 2,
+            "200": 5,
+            "207": 1,
+            "208": 1,
+            "232": 12,
+            "250": 9346,
+            "251": 77
+          },
+          "swb_class_histogram": {
+            "0": 12947462,
+            "255": 19739
+          }
+        }
+      },
+      {
+        "granule_id": "NASADEM_HGT_n29e027",
+        "archive_filename": "NASADEM_HGT_n29e027.zip",
+        "archive_sha256": "fe3a1606ae107897b65a4ffef51f2d44eb25106b09aee93489c3cedda148b89f",
+        "aoi_id": "qattara-mask-check",
+        "files": {
+          "hgt": {
+            "filename": "n29e027.hgt",
+            "size_bytes": 25934402,
+            "sha256": "e03d431daf8419217f2132c50d62621065e5ee0c9d00adc9a2efb4ef9230e475"
+          },
+          "num": {
+            "filename": "n29e027.num",
+            "size_bytes": 12967201,
+            "sha256": "031b994d313a4a33a5b99b28235356177671f2898ff455f56d6b520ac1e92a35"
+          },
+          "swb": {
+            "filename": "n29e027.swb",
+            "size_bytes": 12967201,
+            "sha256": "e47549cc72469c03a4352052cabef673610c657781aa4f63c83d5c52748f4ef3"
+          }
+        },
+        "archive_size_bytes": 8883266,
+        "observed_value_summary": {
+          "sample_count_per_layer": 12967201,
+          "hgt_m_egm96": {
+            "minimum": -187,
+            "maximum": 135,
+            "outside_documented_range_count": 0
+          },
+          "num_class_histogram": {
+            "1": 880860,
+            "2": 5201175,
+            "3": 4733194,
+            "4": 1370836,
+            "5": 600202,
+            "6": 36093,
+            "42": 1,
+            "43": 1,
+            "113": 1,
+            "114": 2,
+            "115": 11,
+            "116": 29,
+            "117": 151,
+            "118": 656,
+            "119": 2105,
+            "120": 6104,
+            "121": 12382,
+            "122": 26906,
+            "123": 33990,
+            "124": 38428,
+            "125": 16509,
+            "126": 5342,
+            "127": 1980,
+            "128": 215,
+            "250": 28
+          },
+          "swb_class_histogram": {
+            "0": 12967201
+          }
+        }
+      }
+    ]
+  },
+  "datasets": [
+    {
+      "dataset_id": "ETOPO_2022_v1_15s_surface",
+      "title": "ETOPO 2022 15 Arc-Second Global Relief Model, surface elevation tiles",
+      "provider": "NOAA National Centers for Environmental Information",
+      "product_version": "ETOPO_2022_v1",
+      "doi": "https://doi.org/10.25921/fd45-gt74",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence_url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022"
+      },
+      "horizontal_crs": "WGS84",
+      "vertical_reference": "EGM2008 geoid",
+      "files": [
+        {
+          "filename": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "size_bytes": 22411557,
+          "sha256": "8265ec91d7db7644d227374afe91d23662203a4eb3fd580626b3f7d3d27dc85c"
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_N30E075_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30E075_surface.tif",
+          "size_bytes": 30871200,
+          "sha256": "cbb763175d331ed0222da35f357d3837aa8218aeda72e586974ef2a53f9027d4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "GSHHG",
+      "title": "Global Self-consistent, Hierarchical, High-resolution Geography Database",
+      "provider": "Paul Wessel, SOEST University of Hawai'i, and Walter H. F. Smith, NOAA",
+      "product_version": "2.3.7",
+      "released_at": "2017-06-15",
+      "doi": "https://doi.org/10.5281/zenodo.7007502",
+      "license": {
+        "id": "LGPL-3.0-or-later",
+        "evidence_url": "https://www.soest.hawaii.edu/wessel/gshhg/"
+      },
+      "horizontal_crs": "WGS84",
+      "source_components": [
+        "World Vector Shorelines",
+        "CIA World Data Bank II",
+        "Atlas of the Cryosphere"
+      ],
+      "role": "Selected global coastline, lake, island, and Antarctic grounded-land mask. Burn L1 land, L2 water, L3 land, L4 water; skip L5 ice-front and use L6 grounding-line polygons as land.",
+      "resolution": "full",
+      "files": [
+        {
+          "filename": "gshhg-shp-2.3.7.zip",
+          "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+          "size_bytes": 149157845,
+          "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41"
+        }
+      ]
+    },
+    {
+      "dataset_id": "PROJ_EGM_geoid_grids",
+      "title": "NGA EGM96 and EGM2008 geoid grids distributed by PROJ",
+      "provider": "PROJ CDN",
+      "role": "Vertical datum conversion from NASADEM EGM96 heights to ETOPO EGM2008 heights; raw data files remain local.",
+      "license": {
+        "id": null,
+        "status": "PROJ CDN metadata declares open_license=true; no SPDX identifier is recorded here.",
+        "evidence_url": "https://cdn.proj.org/"
+      },
+      "files": [
+        {
+          "filename": "ETOPO_2022_v1_15s_S15W075_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S15W075_surface.tif",
+          "size_bytes": 30004071,
+          "sha256": "1872b57145c8d18ebd44cf6d08de601bd34c067dc5a780038b0754398444eaf9"
+        },
+        {
+          "filename": "us_nga_egm96_15.tif",
+          "url": "https://cdn.proj.org/us_nga_egm96_15.tif",
+          "metadata_url": "https://cdn.proj.org/us_nga_egm96_15.tif.json",
+          "size_bytes": 2710815,
+          "sha256": "db493027562c9b004d7220fa881f5603adada4e1c5029b933fa7de4547b0e78d"
+        },
+        {
+          "filename": "us_nga_egm08_25.tif",
+          "url": "https://cdn.proj.org/us_nga_egm08_25.tif",
+          "metadata_url": "https://cdn.proj.org/us_nga_egm08_25.tif.json",
+          "size_bytes": 80585622,
+          "sha256": "4191d471eefebf24091b56dbc604353cb3b8cf8cc70e448bb9ae56a272bef17a"
+        }
+      ]
+    }
+  ],
+  "mask_checks": [
+    {
+      "id": "big-island-land",
+      "longitude": -155.5,
+      "latitude": 19.5,
+      "expected": "land",
+      "nasadem_granule": "NASADEM_HGT_n19w156",
+      "nasadem_swb_expected": "land",
+      "purpose": "island preservation"
+    },
+    {
+      "id": "big-island-ocean",
+      "longitude": -155.99,
+      "latitude": 19.5,
+      "expected": "water",
+      "nasadem_granule": "NASADEM_HGT_n19w156",
+      "nasadem_swb_expected": "water",
+      "purpose": "coastline / ocean separation"
+    },
+    {
+      "id": "qattara-depression",
+      "longitude": 27.1,
+      "latitude": 29.1,
+      "expected": "land",
+      "nasadem_hgt_below_m": 0,
+      "purpose": "below-sea-level land is not removed by an elevation threshold",
+      "nasadem_granule": "NASADEM_HGT_n29e027"
+    },
+    {
+      "id": "antarctica-grounded",
+      "longitude": 0.0,
+      "latitude": -85.0,
+      "expected": "land",
+      "purpose": "polar coverage uses GSHHG grounding line L6"
+    }
+  ]
+}
