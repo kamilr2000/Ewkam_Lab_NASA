@@ -1,4 +1,5 @@
 import type {
+  CatalogDataset,
   CatalogResponse,
   DataMode,
   ProfileFeature,
@@ -26,6 +27,25 @@ export interface ActiveCriterion {
 
 function expectedAvailability(mode: DataMode): 'available' | 'synthetic_only' {
   return mode === 'synthetic' ? 'synthetic_only' : 'available'
+}
+
+/** Select only the dataset role intended for this mode; never rely on catalog ordering. */
+export function selectDatasetForMode(mode: DataMode, catalog: CatalogResponse): CatalogDataset {
+  const role = mode === 'synthetic' ? 'fixture_only' : 'earth_search'
+  const availability = expectedAvailability(mode)
+  const candidates = catalog.datasets.filter((dataset) =>
+    dataset.body === 'earth' && dataset.role === role && dataset.availability === availability,
+  )
+
+  if (candidates.length === 0) {
+    throw new Error(mode === 'synthetic'
+      ? 'The synthetic catalog does not include a fixture-only Earth dataset.'
+      : 'No available Earth search dataset is listed in the live catalog.')
+  }
+  if (candidates.length > 1) {
+    throw new Error(`The ${mode} catalog contains multiple ${role} Earth datasets; selection is ambiguous.`)
+  }
+  return candidates[0]
 }
 
 function findDuplicate(values: readonly string[]): string | null {

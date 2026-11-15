@@ -73,6 +73,56 @@ test('one active measurement creates a one-feature global request with no hidden
   assert.equal(criteria.getActiveCriteria(available, settings)[0].normalizedWeight, 1)
 })
 
+test('live request selects earth_search when an available validation dataset comes first', () => {
+  const { catalog, profile } = liveProfileFixtures()
+  const template = catalog.datasets[0]
+  catalog.datasets = [
+    { ...template, dataset_version: 'validation-earth-v1', role: 'validation', availability: 'available' },
+    { ...template, dataset_version: 'earth-search-v2', role: 'earth_search', availability: 'available' },
+  ]
+
+  const dataset = criteria.selectDatasetForMode('live', catalog)
+  const features = criteria.getAvailableProfileFeatures('live', catalog, profile)
+  const settings = criteria.createInitialCriteriaSettings(features)
+  const request = criteria.buildSearchRequest(profile.profile, dataset.dataset_version, features, settings)
+
+  assert.equal(request.dataset_version, 'earth-search-v2')
+})
+
+test('dataset selection reports missing or ambiguous intended roles', () => {
+  const { catalog } = liveProfileFixtures()
+  catalog.datasets = [
+    { ...catalog.datasets[0], dataset_version: 'validation-earth-v1', role: 'validation', availability: 'available' },
+  ]
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog), /No available Earth search dataset/)
+
+  catalog.datasets.push({
+    ...catalog.datasets[0],
+    dataset_version: 'earth-search-v2',
+    role: 'earth_search',
+    availability: 'available',
+  })
+  catalog.datasets.push({
+    ...catalog.datasets[0],
+    dataset_version: 'earth-search-v3',
+    role: 'earth_search',
+    availability: 'available',
+  })
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog), /multiple earth_search Earth datasets/)
+})
+
+test('synthetic request selection requires the fixture_only role', () => {
+  const catalog = structuredClone(catalogFixture)
+  catalog.datasets.unshift({
+    ...catalog.datasets[0],
+    dataset_version: 'available-validation-v1',
+    role: 'validation',
+    availability: 'synthetic_only',
+  })
+
+  assert.equal(criteria.selectDatasetForMode('synthetic', catalog).dataset_version, 'synthetic-earth-v1')
+})
+
 test('three active measurements retain raw positive weights and show normalized shares', () => {
   const { catalog, profile } = liveProfileFixtures()
   const available = criteria.getAvailableProfileFeatures('live', catalog, profile)

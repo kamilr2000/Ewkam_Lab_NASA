@@ -8,6 +8,7 @@ import {
   getActiveCriteria,
   getAvailableProfileFeatures,
   getCriteriaValidationError,
+  selectDatasetForMode,
   setCriterionEnabled,
   setCriterionWeight,
 } from './controls/criteria'
@@ -46,13 +47,7 @@ function makeRequest(
   profile: ProfileResponse,
   criteriaSettings: CriteriaSettings,
 ): SearchRequest {
-  const availability = mode === 'synthetic' ? 'synthetic_only' : 'available'
-  const dataset = catalog.datasets.find((item) => item.body === 'earth' && item.availability === availability)
-  if (!dataset) {
-    throw new ApiError(mode === 'synthetic'
-      ? 'The synthetic catalog does not include a fixture-only Earth dataset.'
-      : 'No available Earth dataset is listed in the live catalog.')
-  }
+  const dataset = selectDatasetForMode(mode, catalog)
 
   const profileFeatures = getAvailableProfileFeatures(mode, catalog, profile)
   if (profileFeatures.length === 0) {
