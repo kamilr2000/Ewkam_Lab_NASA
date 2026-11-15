@@ -36,7 +36,7 @@ Siatka 60″ ma 233 280 000 komórek globalnych. Model float32 ETOPO i maski źr
 - Builder został uruchomiony ponownie bez `--force`; trzy zweryfikowane checkpointy zostały pominięte.
 - Manifesty są walidowane przez JSON Schema i kontrolę semantyczną; SHA-256 danych wynikowych i liczniki CSV zgadzają się z manifestami.
 
-Pierwotny pakiet opublikowano w PR #44 pod exact ref `a5dfe3d892235d31938dcdd56bdcc17a66e0f167`. Po review E-024 aktualny fingerprint metadanych poprawiono w exact commicie `d3b880c1dc804b3038f90faf9e9e8ee3ad6187f2`; bieżący head PR po synchronizacji z main to `b4ec9784b5168ebfbc325b2951132ebc81068158`.
+Pierwotny pakiet opublikowano w PR #44 pod exact ref `a5dfe3d892235d31938dcdd56bdcc17a66e0f167`. Po review E-024 fingerprint metadanych poprawiono w exact commicie `d3b880cacbbdf339d078a2fbedbe8fd373db7bef`. PR #44 zawiera również późniejsze commity dokumentujące korektę i synchronizujące branch; ocena danych wskazuje jawnie na ten exact commit.
 
 ## Korekta po E-024: kod fingerprintu
 
