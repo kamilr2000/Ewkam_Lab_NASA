@@ -61,10 +61,17 @@ export function applyCellCollectionData(
   source.setData(result.collection as never)
 }
 
-export function formatMapContextLabel(scopeType: 'global' | 'regional', cellCount: number): string {
-  const scopeLabel = scopeType.toUpperCase()
+export function formatMapContextLabel(
+  scopeType: 'global' | 'regional',
+  cellCount: number,
+  isSynthetic = false,
+): string {
   const cellLabel = cellCount === 1 ? 'CELL' : 'CELLS'
-  return `${scopeLabel} ANALYSIS · ${cellCount} ${scopeLabel} DISPLAY ${cellLabel}`
+  if (scopeType === 'global' && isSynthetic) {
+    return 'SYNTHETIC TEST FIXTURE · ' + cellCount + ' TEST ' + cellLabel
+  }
+  const scopeLabel = scopeType.toUpperCase()
+  return scopeLabel + ' ANALYSIS · ' + cellCount + ' ' + scopeLabel + ' DISPLAY ' + cellLabel
 }
 
 export function makeGeometryCollection(geometry: Geometry | null | undefined): FeatureCollection {

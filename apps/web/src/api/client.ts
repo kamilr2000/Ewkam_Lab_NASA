@@ -64,6 +64,34 @@ function parseCatalog(value: unknown): CatalogResponse {
   if (!Array.isArray(value.datasets) || !Array.isArray(value.features) || !Array.isArray(value.profiles) || !Array.isArray(value.search_regions)) {
     throw new ApiError('Catalog response is missing datasets, features, profiles, or search regions.')
   }
+
+  const expectedRole = value.is_synthetic ? 'fixture_only' : 'earth_search'
+  const expectedAvailability = value.is_synthetic ? 'synthetic_only' : 'available'
+  const regionIds = new Set<string>()
+  for (const region of value.search_regions) {
+    if (
+      !isRecord(region) || typeof region.region_id !== 'string' || !region.region_id ||
+      typeof region.name !== 'string' || !region.name ||
+      typeof region.dataset_version !== 'string' || !region.dataset_version ||
+      typeof region.availability !== 'string'
+    ) {
+      throw new ApiError('Catalog contains a search region without its required identity or dataset version.')
+    }
+    if (regionIds.has(region.region_id)) {
+      throw new ApiError('Catalog contains duplicate search region IDs.')
+    }
+    regionIds.add(region.region_id)
+
+    if (region.availability === expectedAvailability) {
+      const matchingDatasets = value.datasets.filter((dataset) =>
+        isRecord(dataset) && dataset.body === 'earth' && dataset.role === expectedRole &&
+        dataset.availability === expectedAvailability && dataset.dataset_version === region.dataset_version,
+      )
+      if (matchingDatasets.length !== 1) {
+        throw new ApiError('Catalog search region does not map to exactly one dataset available in this mode.')
+      }
+    }
+  }
   return value as unknown as CatalogResponse
 }
 

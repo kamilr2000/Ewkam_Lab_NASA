@@ -42,7 +42,7 @@ test('cell source receives a GeoJSON FeatureCollection with numeric and null res
   assert.equal(sourceData.features[1].properties.missing_reason, 'missing_feature_value')
 })
 
-test('map context labels follow the requested scope', () => {
-  assert.equal(renderData.formatMapContextLabel('global', 1), 'GLOBAL ANALYSIS · 1 GLOBAL DISPLAY CELL')
+test('map context labels identify synthetic global fixtures as a test universe', () => {
+  assert.equal(renderData.formatMapContextLabel('global', 1, true), 'SYNTHETIC TEST FIXTURE · 1 TEST CELL')
   assert.equal(renderData.formatMapContextLabel('regional', 2), 'REGIONAL ANALYSIS · 2 REGIONAL DISPLAY CELLS')
 })
