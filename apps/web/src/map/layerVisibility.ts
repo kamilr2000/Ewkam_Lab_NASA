@@ -9,7 +9,7 @@ type MapLayerVisibilityTarget = {
 }
 
 type MarkerVisibilityTarget = {
-  getElement(): { hidden: boolean | string }
+  getElement(): { hidden: boolean | string; style: { display: string } }
 }
 
 export function applyLayerVisibility(
@@ -21,5 +21,10 @@ export function applyLayerVisibility(
   const cellVisibility = visibility.cells ? 'visible' : 'none'
   ;['analysis-cells-fill', 'analysis-cells-outline', 'analysis-scope-outline', 'selected-pixel-fill', 'selected-pixel-outline']
     .forEach((layerId) => map.setLayoutProperty(layerId, 'visibility', cellVisibility))
-  for (const marker of markers) marker.getElement().hidden = !visibility.markers
+  for (const marker of markers) {
+    const element = marker.getElement()
+    element.hidden = !visibility.markers
+    // The marker button has an authored display:grid rule, so also set inline display.
+    element.style.display = visibility.markers ? '' : 'none'
+  }
 }

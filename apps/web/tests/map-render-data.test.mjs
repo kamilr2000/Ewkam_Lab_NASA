@@ -51,7 +51,7 @@ test('map context labels identify synthetic global fixtures as a test universe',
 
 test('map visibility switches affect presentation only and preserve independent overlays', () => {
   const layoutChanges = []
-  const markers = [{ element: { hidden: false } }, { element: { hidden: false } }]
+  const markers = [{ element: { hidden: false, style: { display: '' } } }, { element: { hidden: false, style: { display: '' } } }]
   const map = { setLayoutProperty(layerId, property, value) { layoutChanges.push([layerId, property, value]) } }
   const markerTargets = markers.map(({ element }) => ({ getElement() { return element } }))
 
@@ -60,5 +60,11 @@ test('map visibility switches affect presentation only and preserve independent 
   assert.deepEqual(layoutChanges[0], ['osm-basemap', 'visibility', 'none'])
   assert.deepEqual(layoutChanges.slice(1).map(([, , value]) => value), ['visible', 'visible', 'visible', 'visible', 'visible'])
   assert.ok(markers.every(({ element }) => element.hidden))
+  assert.ok(markers.every(({ element }) => element.style.display === 'none'))
   assert.equal(layoutChanges.length, 6)
+
+  layerVisibility.applyLayerVisibility(map, markerTargets, { basemap: true, cells: false, markers: true })
+  assert.ok(markers.every(({ element }) => !element.hidden && element.style.display === ''))
+  assert.equal(layoutChanges[6][2], 'visible')
+  assert.ok(layoutChanges.slice(7).every(([, , value]) => value === 'none'))
 })
