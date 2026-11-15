@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `review` na `origin/main` od commitu `f328846`. Gałąź: `ewelina/E-021-ui-readability`. Poprawka i bieżące render evidence są opublikowane w PR #35 na headzie `d85f717a645d4a23c67831d4d4c1e7ad4b981266`, a karta wskazuje ten exact `review_ref`. Scalanie statusowego commitu `f328846` do gałęzi PR jest w toku; po publikacji zaktualizuję bieżący head PR. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
+Status: `review` na `origin/main` od commitu `f3288465908d9e9843f76daf56f51aac06ba49c6`. Gałąź: `ewelina/E-021-ui-readability`. Poprawka i bieżące pomiary są opublikowane w PR #35; ostatni potwierdzony head przed dołączeniem świeżego zrzutu to `4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0`. Karta na `main` wskazuje exact ref `d85f717a645d4a23c67831d4d4c1e7ad4b981266`; odświeżę ją po publikacji nowego screenshotu. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
 
 ## Zmiana
 
@@ -150,8 +150,8 @@ Odtworzenie pomiaru w konsoli DevTools: ustaw responsive viewport na każdą sze
 
 Przy 320 px fokus można odtworzyć klawiaturą: kliknąć „Data source”, zamknąć menu przez Escape, nacisnąć Tab i sprawdzić `document.activeElement.matches(':focus-visible')` oraz `getComputedStyle(document.activeElement).outlineColor`.
 
-Trzy istniejące pliki PNG w `screenshots/` są z wcześniejszego snapshotu `99a016e` i scenariusza `Successful ranking`; nie są świeżymi zrzutami poprawionego renderu. Odtwarzalnym dowodem bieżącego układu jest powyższa tabela z instrukcją pomiaru i obserwacją odstępu; świeże PNG po poprawce nie zostały jeszcze zapisane.
+Świeży pełnostronicowy zrzut przy 320 px po poprawce zapisano w [E-021-320px-2026-11-15-postfix.png](screenshots/E-021-320px-2026-11-15-postfix.png); pokazuje fixture `Isolated hotspot` i dodatni odstęp pod selektorem. Trzy wcześniejsze pliki PNG bez sufiksu `postfix` są ze snapshotu `99a016e` i scenariusza `Successful ranking`, więc nie są dowodem dla poprawionego renderu. Pozostałe sześć szerokości obejrzano na żywo; ich pomiary i odtwarzalna procedura są w tabeli oraz JSON, bez osobnych świeżych zrzutów.
 
 Po zmianie CSS: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK (180 Markdown, 41 JSON, 93 karty, 5 synthetic cases); `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Statyczny skan 107 deklaracji `font`/`font-size` wykrył 106 jawnych wartości px, minimum 9 px i zero tekstów poniżej 9 px. Poprawka dotyczy wyłącznie odstępu, więc wcześniejsze 39 sprawdzonych par kontrastu (minimum 4.68:1) nie zmieniają się. Nie testowano fizycznego telefonu ani nie wymuszano klasycznego scrollbara.
 
-Commit CSS `c26663ca64153399f75f3e518efc6b6607c25799` i bieżący raport są opublikowane w PR #35 na headzie `d85f717a645d4a23c67831d4d4c1e7ad4b981266`. Status `review` opublikowano na `origin/main` jako `f328846`; scalanie tej aktualizacji do branchu PR pozostaje lokalne do czasu pushu. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`, ale późniejsza synchronizacja i push zadziałały.
+Commit CSS `c26663ca64153399f75f3e518efc6b6607c25799` oraz pomiary zostały opublikowane w PR #35. Status `review` opublikowano na `origin/main` jako `f3288465908d9e9843f76daf56f51aac06ba49c6`; merge do PR opublikowano w `4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0`. Świeży zrzut 320 px jest dołączany w kolejnym commicie, po czym zaktualizuję exact `review_ref`. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`, ale późniejsza synchronizacja i push zadziałały.

@@ -2,9 +2,9 @@
   "captured_at": "2026-11-15",
   "branch": "ewelina/E-021-ui-readability",
   "preview_source_head": "c26663ca64153399f75f3e518efc6b6607c25799",
-  "publish_state": "render_evidence_pushed; latest_main_status_merge_pending",
-  "last_confirmed_remote_branch_head": "d85f717a645d4a23c67831d4d4c1e7ad4b981266",
-  "remote_main_head": "f328846",
+  "publish_state": "included_in_this_snapshot",
+  "branch_head_before_fresh_screenshot": "4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0",
+  "remote_main_head": "f3288465908d9e9843f76daf56f51aac06ba49c6",
   "preview_url": "http://127.0.0.1:4180/",
   "preview_kind": "Vite production preview",
   "browser": "Chrome responsive mode on Windows",
@@ -40,7 +40,10 @@
     "helper_gap": "Compare the top of .field-help.getBoundingClientRect() with the bottom of #demo-scenario.getBoundingClientRect().",
     "keyboard_focus": "At 320 CSS px click Data source, press Escape, then Tab; check document.activeElement.matches(':focus-visible') and its computed outlineColor."
   },
-  "fresh_screenshots_saved": false,
+  "fresh_screenshots_saved": true,
+  "fresh_screenshot_paths": [
+    "screenshots/E-021-320px-2026-11-15-postfix.png"
+  ],
   "superseded_screenshot_paths": [
     "screenshots/E-021-320px-2026-11-15.png",
     "screenshots/E-021-782px-2026-11-15.png",
@@ -48,7 +51,7 @@
   ],
   "limitations": [
     "PNG files listed above show the older Successful ranking snapshot and are not evidence for this Isolated hotspot render or the spacing fix.",
-    "The latest main status commit f328846 is being merged into the PR branch; that merge had not yet been pushed when this JSON was updated.",
+    "Only the 320 CSS px post-fix render has a fresh saved PNG; the remaining six widths were visually inspected live and are recorded with reproducible measurements.",
     "No physical phone was tested.",
     "A classic non-overlay scrollbar was not forced."
   ]
