@@ -108,10 +108,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-039 — Re-review bieżących pomiarów czytelności E-021](K-039.md), Kamil, P0: zweryfikuj aktualny production render, siedem faktycznych szerokości, overflow, fokus i świeże zrzuty w PR #35.
 - [K-040 — Re-review korekty disclosure I-012 po K-038](K-040.md), Kamil, P0: potwierdź aktualne statusy E-021/K-005 i ograniczenia w Markdown/JSON po wynikach K-037/K-038/E-026 w PR #46.
 - [I-013 — Ujawnij lazy-load mapy E-004 w rejestrze AI/SI](I-013.md), Ewelina, P0: dopisz źródłowo poparte użycie Codex przy follow-upie `e63ded5`, po integracji I-012.
+- [E-027 — Review regionalnego API K-007](E-027.md), Ewelina, P0: niezależnie sprawdź kontrakt, realne przebiegi obu profili, ranking/mapę/szczegóły i jawny brak globalnego scope w PR #70.
+- [E-028 — Uaktualnij ujawnienie AI po wdrożeniu API](E-028.md), Ewelina, P0: po K-007 i I-013 zsynchronizuj Markdown/JSON disclosure z rzeczywistym API i jego ograniczeniami.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-041, E-027, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-041, E-029, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
