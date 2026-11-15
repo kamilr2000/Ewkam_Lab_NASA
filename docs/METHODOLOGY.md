@@ -68,6 +68,14 @@ Nie porównujemy wysokości nad ziemskim geoidem z wysokością nad marsjańskim
 
 Wiele cech jednego DEM nie stanowi niezależnych dowodów zgodności. P0 jest modelem topograficznym. Przed dodaniem dziedzin środowiskowych wprowadzamy grupy wag, aby trzy podobne cechy terenu nie zdominowały jednej warstwy temperatury.
 
+### Bramka termiczna K-047
+
+Nie aktywujemy jednej wspólnej cechy termicznej K-010 na podstawie obecnych produktów. MOD11A1 stosuje dzienny split-window dla bezchmurnych pikseli; wynik zależy od atmosfery i estymacji emisyjności. Próbka zachowuje dodatkowe flagi niepewności LST i emisyjności, ale ich nie używa do ukrytego filtrowania. Diviner TB3 jest jasnościową temperaturą w innym paśmie, z innego instrumentu i cyklu agregacji. Nie przeliczamy jej na temperaturę kinetyczną z emisyjnością. Wartości w kelwinach nie ustanawiają równoważnej wielkości mierzonej. Dla Ziemi raportujemy lokalny czas obserwacji i QA, a dla Księżyca cykl i lokalny czas, lecz nie wyrównujemy cienia ani geometrii sezonowego oświetlenia. Nie utożsamiamy żadnej temperatury powierzchni z temperaturą powietrza.
+
+Marsjański MGS TES produkt jest modelowym oszacowaniem bezwładności cieplnej materiału z wieloletnich dziennych/nocnych obserwacji temperatury, a nie mapą temperatury. Taka inwersja zależy między innymi od czasu lokalnego, sezonu, albeda, ciśnienia powierzchniowego i pyłu atmosferycznego; profil PDS zaznacza, że model tej mapy różni się od modelu tabel opublikowanych dla TES. Natywny posting przy Jezero wynosi około 2,8–3,0 km, więc nie przypisujemy niezależnych wartości do komórek 2 km. Dla Diviner 240 m oznacza posting mapy; jego skutecznej rozdzielczości nie podnosimy do 240 m bez potwierdzenia. Szczegółowe próbki, QA, pokrycie, interpolacja, warunki użycia oraz `NO-GO` są zapisane w [raporcie K-047](../data/reports/thermal-feasibility.md) i [manifeście](../data/manifests/thermal-feasibility.json).
+
+Późniejsza analiza może rozważyć osobną temperaturę powierzchni tylko po ustaleniu zgodnych wielkości i warunków obserwacji dla wszystkich trzech ciał albo osobną cechę bezwładności cieplnej z porównywalnymi produktami. Każdy tor musi jawnie określać aktywne kryteria, skalę, wymagane wsparcie, próg jakości i `null` z powodem. K-047 nie zmienia wag, rankingu ani kontraktu produkcyjnego.
+
 ## 5. Wynik pojedynczej warstwy
 
 Dla wartości `x`, przedziału referencyjnego `[a, b]` i dodatniej tolerancji `t`:

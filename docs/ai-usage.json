@@ -19,7 +19,8 @@
     "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
     "E-018/K-019: independent review and evidence reports for scoring and API integration",
     "E-019: map visual specification and a synthetic-fixture SVG concept",
-    "K-022: semantic regression guard for synthetic hotspot scope, map coverage and pixel/map aggregation"
+    "K-022: semantic regression guard for synthetic hotspot scope, map coverage and pixel/map aggregation",
+    "K-047: sampled MOD11A1, Diviner TB3 and MGS TES data, reproducible thermal feasibility analysis, and NO-GO documentation"
   ],
   "synthetic_data_paths": [
     "contracts/fixtures/catalog-synthetic.json",
@@ -41,6 +42,8 @@
   "scientific_sample_manifest": "data/manifests/k002-samples.json",
   "scientific_validation_manifest": "data/manifests/k017-earth-validation.json",
   "scientific_validation_report": "data/reports/k017-validation.json",
+  "scientific_thermal_feasibility_manifest": "data/manifests/thermal-feasibility.json",
+  "scientific_thermal_feasibility_report": "data/reports/thermal-feasibility.md",
   "scientific_sample_sources": [
     "NOAA ETOPO 2022 v1",
     "NASA PDS LOLA LDEM_4",
@@ -59,5 +62,5 @@
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
   "measurements_generated_by_ai": false,
-  "review_status": "K-002 and K-017 samples are real archive data; AI did not generate or edit their measurements. E-017 approved the documented K-017 scope but could not reread raw files or reproduce AOI metrics; Kamil later reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-006 scoring tests use synthetic fixtures and E-018 approved the stated code scope. K-019 and K-021 requested E-003/E-020 adapter corrections; K-024 approved exact snapshot 04aee3f6dc88f7338334d1d70a0fe51793c6911d and PR #20 merged as 639614b9c8216dc321a6b50ee10438cffcd2a546. The backend still implements only /api/v1/health. These checks do not establish global DEM accuracy, coverage, ranking or complete live application behavior."
+  "review_status": "K-002 and K-017 samples are real archive data; AI did not generate or edit their measurements. E-017 approved the documented K-017 scope but could not reread raw files or reproduce AOI metrics; Kamil later reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-006 scoring tests use synthetic fixtures and E-018 approved the stated code scope. K-019 and K-021 requested E-003/E-020 adapter corrections; K-024 approved exact snapshot 04aee3f6dc88f7338334d1d70a0fe51793c6911d and PR #20 merged as 639614b9c8216dc321a6b50ee10438cffcd2a546. K-047 thermal samples are real archived MOD11A1, Diviner and TES data; Codex created the downloader/analysis code and report, but did not generate or edit observations. The local run verified 39 file hashes/sizes and is awaiting independent review; it is not a global or seasonal analysis. The backend still implements only /api/v1/health. These checks do not establish global DEM accuracy, coverage, ranking or complete live application behavior."
 }
