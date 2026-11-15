@@ -58,6 +58,7 @@ def safe_filename(value: object) -> str:
 
 def download_public_file(record: dict[str, object], output_dir: Path) -> tuple[int, str]:
     filename = safe_filename(record["filename"])
+    output_dir.mkdir(parents=True, exist_ok=True)
     destination = output_dir / filename
     if destination.exists():
         return verify_pinned(destination, record)
