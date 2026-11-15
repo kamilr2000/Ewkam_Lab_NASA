@@ -378,8 +378,14 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         <div className="map-context">
           <span className="map-globe-icon" aria-hidden="true">◉</span>
           <div>
-            <p className="eyebrow">{analysis ? formatMapContextLabel(analysis.scope.type, analysis.map_cells.length) : 'GLOBAL SPATIAL VIEW'}</p>
-            <strong>{analysis?.scope.region_name ?? 'Earth terrain analogs'}</strong>
+            <p className="eyebrow">{analysis
+              ? formatMapContextLabel(analysis.scope.type, analysis.map_cells.length, analysis.is_synthetic)
+              : mode === 'live' ? 'LIVE RESULT PENDING' : 'SYNTHETIC FIXTURE PREVIEW'}</p>
+            <strong>{analysis?.scope.region_name ?? (
+              analysis
+                ? analysis.is_synthetic ? 'Synthetic fixture test universe' : analysis.scope.type === 'global' ? 'Global scope response' : 'Regional scope'
+                : mode === 'live' ? 'No live result yet' : 'Synthetic fixture preview'
+            )}</strong>
           </div>
         </div>
         <div className="map-actions" aria-label="Map controls">
@@ -391,8 +397,8 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
 
       {!analysis && (
         <div className={`map-empty-overlay ${searchError ? 'has-error' : ''}`}>
-          <p className="eyebrow">{searchError ? 'REQUEST ERROR · NO DEMO FALLBACK' : 'YOUR NEXT FIELD SITE STARTS HERE'}</p>
-          <h2>{searchError ? 'Analysis could not be loaded.' : 'Explore a world of terrain.'}</h2>
+          <p className="eyebrow">{searchError ? 'REQUEST ERROR · NO DEMO FALLBACK' : mode === 'live' ? 'NO LIVE RESPONSE' : 'SYNTHETIC FIXTURE PREVIEW'}</p>
+          <h2>{searchError ? 'Analysis could not be loaded.' : mode === 'live' ? 'No live result yet.' : 'Synthetic fixture preview.'}</h2>
           <p>{searchError ?? emptyMessage}</p>
           {searchError && <button className="secondary-button" type="button" onClick={onRetry}>Try again</button>}
         </div>

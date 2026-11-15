@@ -7,6 +7,7 @@ import { createServer } from 'vite'
 
 const appRoot = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const repositoryRoot = resolve(appRoot, '../..')
+const catalogSynthetic = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/catalog-synthetic.json'), 'utf8'))
 const searchSuccess = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/search-success-synthetic.json'), 'utf8'))
 const searchDistinct = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/search-distinct-areas-synthetic.json'), 'utf8'))
 const mapHotspot = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/map-hotspot-synthetic.json'), 'utf8'))
@@ -56,6 +57,32 @@ after(async () => {
   await server?.close()
 })
 
+
+function liveCatalogResponse() {
+  const response = structuredClone(catalogSynthetic)
+  const regionDefinitions = [
+    ['andes', 'Atacama/Andes', 'earth-atacama-v1'],
+    ['hawaii', 'Big Island', 'earth-hawaii-v1'],
+    ['himalaya', 'Himalayas', 'earth-himalaya-v1'],
+  ]
+  response.is_synthetic = false
+  response.catalog_version = 'live-regional-test-v1'
+  response.datasets = regionDefinitions.map(([, , dataset_version]) => ({
+    ...catalogSynthetic.datasets[0],
+    dataset_version,
+    role: 'earth_search',
+    availability: 'available',
+  }))
+  response.search_regions = regionDefinitions.map(([region_id, name, dataset_version]) => ({
+    ...catalogSynthetic.search_regions[0],
+    region_id,
+    name,
+    dataset_version,
+    availability: 'available',
+  }))
+  return response
+}
+
 function liveSearchResponse() {
   const response = structuredClone(searchSuccess)
   response.is_synthetic = false
@@ -93,6 +120,87 @@ async function rejectsLiveSearch(payload, request, expectedMessage) {
     stub.restore()
   }
 }
+
+
+test('accepts live catalog regions only when each maps to an available Earth search dataset', async () => {
+  const stub = installFetch(liveCatalogResponse())
+  try {
+    const result = await client.getCatalog('live')
+    assert.equal(result.is_synthetic, false)
+    assert.deepEqual(result.search_regions.map((region) => region.dataset_version), [
+      'earth-atacama-v1',
+      'earth-hawaii-v1',
+      'earth-himalaya-v1',
+    ])
+  } finally {
+    stub.restore()
+  }
+})
+
+test('rejects a live catalog region mapped to a different dataset version', async () => {
+  const payload = liveCatalogResponse()
+  payload.search_regions[1].dataset_version = 'unrelated-earth-v1'
+  const stub = installFetch(payload)
+  try {
+    await assert.rejects(
+      client.getCatalog('live'),
+      (error) => error instanceof client.ApiError && error.message.includes('does not map to exactly one dataset'),
+    )
+    assert.equal(stub.calls.length, 1)
+    assert.equal(payload.is_synthetic, false)
+  } finally {
+    stub.restore()
+  }
+})
+
+test('keeps the synthetic catalog marked synthetic and fixture-only', async () => {
+  const result = await client.getCatalog('synthetic')
+  assert.equal(result.is_synthetic, true)
+  assert.ok(result.datasets.every((dataset) => dataset.role === 'fixture_only' && dataset.availability === 'synthetic_only'))
+  assert.ok(result.search_regions.every((region) => region.availability === 'synthetic_only'))
+})
+
+test('accepts a regional distinct-area result when its scope and distance match the request', async () => {
+  const request = {
+    ...distinctRequest,
+    dataset_version: 'earth-atacama-v1',
+    scope: { type: 'regional', region_id: 'andes' },
+  }
+  const payload = structuredClone(searchDistinct)
+  payload.is_synthetic = false
+  payload.dataset_version = request.dataset_version
+  payload.query.scope = request.scope
+  payload.scope = {
+    ...payload.scope,
+    type: 'regional',
+    region_id: 'andes',
+    region_name: 'Atacama/Andes',
+  }
+  const stub = installFetch(payload)
+  try {
+    const result = await client.runSearch('live', request, 'distinct-areas')
+    assert.equal(result.is_synthetic, false)
+    assert.equal(result.query.result_mode, 'distinct_areas')
+    assert.equal(result.query.min_distance_km, 25)
+    assert.equal(result.scope.region_name, 'Atacama/Andes')
+  } finally {
+    stub.restore()
+  }
+})
+
+test('rejects a regional distinct-area response from a different region', async () => {
+  const request = {
+    ...distinctRequest,
+    dataset_version: 'earth-atacama-v1',
+    scope: { type: 'regional', region_id: 'andes' },
+  }
+  const payload = structuredClone(searchDistinct)
+  payload.is_synthetic = false
+  payload.dataset_version = request.dataset_version
+  payload.query.scope = request.scope
+  payload.scope = { ...payload.scope, type: 'regional', region_id: 'hawaii', region_name: 'Big Island' }
+  await rejectsLiveSearch(payload, request, 'top-level scope')
+})
 
 test('accepts a live search whose dataset and query match, regardless of criteria order', async () => {
   const payload = liveSearchResponse()
@@ -311,14 +419,14 @@ test('retains analysis id validation for live maps', async () => {
 })
 
 test('accepts the synthetic map fixture with its recorded bbox, level, and limit', async () => {
-  const result = await client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.04, 3.02], 0, 1000)
+  const result = await client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.04, 3.01], 0, 1000)
   assert.equal(result.is_synthetic, true)
   assert.equal(result.analysis_id, 'synthetic-analysis-hotspot')
 })
 
 test('synthetic maps reject a fixture with a different requested bbox', async () => {
   await assert.rejects(
-    client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.05, 3.02], 0, 1000),
+    client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.05, 3.01], 0, 1000),
     (error) => error instanceof client.ApiError && error.message.includes('bbox, level, or limit'),
   )
 })

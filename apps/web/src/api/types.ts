@@ -41,6 +41,16 @@ export interface CatalogDataset {
   manifest_path: string | null
 }
 
+export interface SearchRegion {
+  region_id: string
+  name: string
+  dataset_version: string
+  availability: 'available' | 'planned' | 'unavailable' | 'synthetic_only'
+  geometry: Geometry
+  mask_id: string | null
+  description: string
+}
+
 export interface CatalogResponse {
   contract_version: '1.0.0'
   catalog_version: string
@@ -49,15 +59,7 @@ export interface CatalogResponse {
   datasets: CatalogDataset[]
   features: CatalogFeature[]
   profiles: CatalogProfile[]
-  search_regions: Array<{
-    region_id: string
-    name: string
-    dataset_version: string
-    availability: 'available' | 'planned' | 'unavailable' | 'synthetic_only'
-    geometry: Geometry
-    mask_id: string | null
-    description: string
-  }>
+  search_regions: SearchRegion[]
   warnings: Array<{ code: string; message: string }>
   limitations: string[]
 }
