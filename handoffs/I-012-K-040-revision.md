@@ -1,7 +1,7 @@
 # I-012 — refreshed disclosure after K-040
 
-Date: 2026-11-15  
-Base used: `origin/main` at reservation `c474a93cd859fcf77d4eb354f6160038a563d708`.  
+Date: 2026-11-15
+Base used: `origin/main` at reservation `c474a93cd859fcf77d4eb354f6160038a563d708`.
 Previous review ref: `3a7a313960a713c168f31caf63eaf83bef097c6e`; K-040 returned `REQUEST_CHANGES` (review `5910708916`).
 
 ## Corrections
