@@ -1,3 +1,4 @@
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Map as MapLibreMap, Marker, setWorkerUrl, type GeoJSONSource, type LngLatBounds, type StyleSpecification } from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'

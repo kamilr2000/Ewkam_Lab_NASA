@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ApiError, demoScenarios, getCatalog, getProfile, runSearch } from './api/client'
 import { RequestEpoch } from './api/requestEpoch'
-import AnalysisMap from './map/AnalysisMap'
 import type {
   CatalogResponse,
   DataMode,
@@ -12,6 +11,33 @@ import type {
   SearchRequest,
   SearchResponse,
 } from './api/types'
+
+const loadAnalysisMap = () => import('./map/AnalysisMap')
+const AnalysisMap = lazy(loadAnalysisMap)
+
+class MapModuleBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="map-frame map-frame-loading" role="alert">
+          <div className="map-frame-loading-content">
+            <p className="eyebrow">MAP UNAVAILABLE</p>
+            <strong>The interactive map could not be loaded.</strong>
+            <p>Your ranking and pixel details remain available below.</p>
+            <button className="secondary-button" type="button" onClick={() => window.location.reload()}>Reload the app to try again</button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 function isSelectableAvailability(value: string): boolean {
   return value === 'available' || value === 'synthetic_only'
@@ -384,20 +410,34 @@ function App() {
             <div className={`toolbar-status ${analysis ? 'is-complete' : ''}`} role="status" aria-live="polite"><span className="status-dot" aria-hidden="true" />{searching ? 'Analysis in progress' : searchError ? 'Request failed' : analysis ? (analysis.is_synthetic ? 'Synthetic response' : 'API response') : 'Awaiting analysis'}</div>
           </div>
 
-          <AnalysisMap
-            analysis={analysis}
-            mode={mode}
-            pixels={resultPixels}
-            selectedPixel={selectedPixel}
-            selectedPixelId={selectedPixelId}
-            zoomRequest={zoomRequest}
-            onSelectPixel={selectPixelAndZoom}
-            searchError={searchError}
-            onRetry={() => void runAnalysis()}
-            emptyMessage={searchError
-              ? `Analysis could not be loaded. ${searchError}`
-              : catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run the synthetic fixture or connect the live API to inspect a versioned result.')}
-          />
+          {analysis || searching || searchError ? (
+            <MapModuleBoundary>
+              <Suspense fallback={<div className="map-frame map-frame-loading" role="status"><p>Loading interactive map…</p></div>}>
+                <AnalysisMap
+                  analysis={analysis}
+                  mode={mode}
+                  pixels={resultPixels}
+                  selectedPixel={selectedPixel}
+                  selectedPixelId={selectedPixelId}
+                  zoomRequest={zoomRequest}
+                  onSelectPixel={selectPixelAndZoom}
+                  searchError={searchError}
+                  onRetry={() => void runAnalysis()}
+                  emptyMessage={searchError
+                    ? `Analysis could not be loaded. ${searchError}`
+                    : catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run the synthetic fixture or connect the live API to inspect a versioned result.')}
+                />
+              </Suspense>
+            </MapModuleBoundary>
+          ) : (
+            <div className="map-frame map-frame-loading" role="region" aria-label="Interactive analysis map">
+              <div className="map-frame-loading-content">
+                <p className="eyebrow">MAP PREVIEW</p>
+                <strong>Run an analysis to load the interactive map.</strong>
+                <p>The map will use the same versioned result as the ranking and pixel details.</p>
+              </div>
+            </div>
+          )}
 
           {analysis && (
             <div className="analysis-summary">

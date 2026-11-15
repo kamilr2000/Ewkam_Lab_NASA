@@ -93,6 +93,10 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
 .toolbar-status { display: flex; align-items: center; gap: 8px; color: #8b9994; font: 9px var(--mono); }
 .toolbar-status .status-dot { margin: 0; }
 .map-frame { position: relative; flex: 1 0 520px; min-height: 520px; max-height: 680px; overflow: hidden; margin-top: 19px; border: 1px solid rgba(177, 203, 188, .15); border-radius: 7px; background: #10191b; isolation: isolate; }
+.map-frame-loading { display: grid; place-items: center; padding: 24px; color: var(--muted); font-size: 12px; text-align: center; }
+.map-frame-loading-content { max-width: 340px; }
+.map-frame-loading-content strong { display: block; margin: 8px 0; color: var(--ink); font-size: 13px; }
+.map-frame-loading-content p:last-child { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .map-viewport, .maplibregl-canvas-container, .maplibregl-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .map-viewport { z-index: 0; background: radial-gradient(ellipse at 49% 48%, #20302f, #10191b 73%); }
 .maplibregl-canvas { outline: none; }
