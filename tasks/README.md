@@ -21,7 +21,7 @@ Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLA
 | [K-005](K-005.md) | P0 | Kamil | K-002, K-003 | Zbuduj siatkę i cechy rzeczywistego ziemskiego wycinka |
 | [K-006](K-006.md) | P0 | Kamil | K-003 | Zaimplementuj MCDA i pełny ranking komórek |
 | [K-007](K-007.md) | P0 | Kamil | K-003, K-004, K-005, K-006 | Udostępnij API i pierwszy realny przebieg |
-| [K-008](K-008.md) | P0 | Kamil | K-004, K-005, K-006, K-007 | Przelicz globalny zbiór i agregaty mapy |
+| [K-008](K-008.md) | P0 | Kamil | K-004, K-005, K-006, K-007, K-042, K-044 | Przelicz globalny zbiór i agregaty mapy |
 | [K-009](K-009.md) | P0 | Kamil | K-004, K-008 | Zweryfikuj naukę, skalę i prawdziwe hotspoty |
 | [K-010](K-010.md) | P1 | Kamil | K-009 | Dodaj jedną niezależną dziedzinę danych |
 | [K-011](K-011.md) | P1 | Kamil | K-002, K-009 | Sprawdź pilotaż mineralogii |
@@ -86,11 +86,49 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-023 — Review aktualizacji rejestru AI/SI I-011](K-023.md), Kamil, P0: sprawdź aktualność disclosure, źródła K-017 i rozróżnienie syntetycznych fixture'ów w PR #22.
 - [K-024 — Re-review wiązania top-level scope w E-020](K-024.md), Kamil, P0: sprawdź poprawkę scope po P0 findingu K-021 w PR #20.
 - [K-025 — Re-review poprawki rejestru AI/SI I-011](K-025.md), Kamil, P0: potwierdź aktualny stan K-017/E-017, integrację E-003/E-020 i syntetyczne fixture'y w PR #22.
+- [K-026 — Review wyboru cech i wag E-005](K-026.md), Kamil, P0: potwierdź dostępność kryteriów, konfigurację 1–3 cech, wagi i request globalny w PR #31.
+- [K-027 — Review interaktywnej mapy hotspotów E-004](K-027.md), Kamil, P0: sprawdź renderowanie, hotspot, legendę, geometrię brzegową i zachowanie bez podkładu w PR #37.
+- [K-028 — Re-review wyboru roli datasetu po poprawce E-005](K-028.md), Kamil, P0: potwierdź `earth_search`/`fixture_only`, brak wieloznaczności i regresję na katalogu z `validation` przed właściwym datasetem w PR #31.
+- [K-029 — Re-review renderowania komórek mapy E-004](K-029.md), Kamil, P0: potwierdź FeatureCollection zamiast wrappera, komórki liczbowe/null i etykietę zakresu na dokładnym SHA w PR #37.
+- [K-030 — Review kontrastu i czytelności UI E-021](K-030.md), Kamil, P0: niezależnie sprawdź kontrast, fonty, pomiary viewportów i fokus na exact CSS SHA w PR #35.
 - [E-021 — Popraw kontrast i czytelność bazowego UI](E-021.md), Ewelina, P0: popraw niewystarczający kontrast drobnych tekstów szkieletu i zachowaj układ telefonu przed pełnym audytem E-008.
+- [E-023 — Review rzeczywistych profili K-004](E-023.md), Ewelina, P0: niezależnie odtwórz źródła i profile Jezero/księżycowego bieguna, geometrię, braki, schemę i ograniczenia w PR #36.
+- [E-024 — Review siatki i cech regionalnych K-005](E-024.md), Ewelina, P0: niezależnie odtwórz publiczne źródła, maskowanie batymetrii, cechy, QA, checkpointy i trzy realne pakiety w PR #44.
+- [E-026 — Re-review metadanych fingerprintu K-005](E-026.md), Ewelina, P0: potwierdź fingerprint kodu w raporcie i trzech manifestach oraz niezmienione SHA regionalnych CSV po poprawce P1 E-024 w PR #44.
+- [I-012 — Uzupełnij rejestr AI/SI o późniejsze prace web i review](I-012.md), Ewelina, P0: dodaj źródłowo poparte wpisy dla E-004/E-005/E-021/E-023/E-024 oraz zachowaj ograniczenia i statusy.
+- [K-031 — Review uzupełnienia rejestru AI/SI I-012](K-031.md), Kamil, P0: zweryfikuj exact ref disclosure, statusy, ograniczenia, linki i zachowanie syntetycznych ścieżek w PR #46.
+- [K-032 — Re-review ładowania mapy E-004](K-032.md), Kamil, P0: sprawdź renderowanie, no-data, fallbacki i lazy bundle MapLibre na nowym exact SHA w PR #37.
+- [E-025 — Zmapuj twierdzenia submission na dowody](E-025.md), Ewelina, P1: przygotuj wewnętrzną angielską macierz faktów, stanu funkcji i brakujących dowodów dla E-010.
+- [K-033 — Review wewnętrznej macierzy dowodów E-025](K-033.md), Kamil, P1: zweryfikuj pola S03, aktualne statusy repo i granice twierdzeń na exact SHA w PR #50.
+- [K-034 — Re-review korekty rejestru AI/SI I-012](K-034.md), Kamil, P0: potwierdź aktualne statusy, exact refy, ograniczenia i ścieżki syntetyczne po poprawkach K-031 w PR #46.
+- [K-035 — Re-review macierzy dowodów E-025 po K-033](K-035.md), Kamil, P1: potwierdź pełne pokrycie S03, aktualne statusy po integracji E-005 i granice bezpiecznych twierdzeń w PR #50.
+- [K-036 — Re-review I-012 po integracji E-005](K-036.md), Kamil, P0: potwierdź nowy exact status E-005, health-only API i pozostałe ograniczenia w PR #46.
+- [K-037 — Re-review czytelności E-021 po korekcie widoku kryteriów](K-037.md), Kamil, P0: sprawdź minimum 9 px, kontrast, interaktywny stan niezaznaczonych kryteriów i jawne ograniczenia pomiaru 781/782 px w PR #35.
+- [K-038 — Re-review korekty rejestru AI/SI po K-036](K-038.md), Kamil, P0: potwierdź rozkład flag fixture'ów, źródła K-004 oraz aktualne statusy E-004/E-021 i poprawność disclosure w PR #46.
+- [K-039 — Re-review bieżących pomiarów czytelności E-021](K-039.md), Kamil, P0: zweryfikuj aktualny production render, siedem faktycznych szerokości, overflow, fokus i świeże zrzuty w PR #35.
+- [K-040 — Re-review korekty disclosure I-012 po K-038](K-040.md), Kamil, P0: potwierdź aktualne statusy E-021/K-005 i ograniczenia w Markdown/JSON po wynikach K-037/K-038/E-026 w PR #46.
+- [I-013 — Ujawnij lazy-load mapy E-004 w rejestrze AI/SI](I-013.md), Ewelina, P0: dopisz źródłowo poparte użycie Codex przy follow-upie `e63ded5`, po integracji I-012.
+- [E-027 — Review regionalnego API K-007](E-027.md), Ewelina, P0: niezależnie sprawdź kontrakt, realne przebiegi obu profili, ranking/mapę/szczegóły i jawny brak globalnego scope w PR #70.
+- [E-028 — Uaktualnij ujawnienie AI po wdrożeniu API](E-028.md), Ewelina, P0: po K-007 i I-013 zsynchronizuj Markdown/JSON disclosure z rzeczywistym API i jego ograniczeniami.
+- [K-041 — Dopasuj typy requestu API do JSON Schema](K-041.md), Kamil, P2: odrzuć string/boolean coercion w wagach i `top_k` zgodnie z kontraktem v1; follow-up z E-027.
+- [K-042 — Pilot globalnej siatki i pipeline'u](K-042.md), Kamil, P0: zmierz rzeczywiste zachowanie skali, źródła, maski i kafelkowego przetwarzania przed pełnym przebiegiem K-008; może ruszyć równolegle z review regionalnego API.
+- [K-043 — Re-review bieżącego disclosure I-012 po K-040](K-043.md), Kamil, P0: niezależnie sprawdź poprawione refy/statusy K-005, E-021, rejestru AI/SI i granic twierdzeń w PR #46.
+- [E-029 — Niezależny odbiór pilota globalnej siatki K-042](E-029.md), Ewelina, P0: zweryfikuj dokładny PR #72, źródła, liczniki, metodologię oraz ograniczenia przed integracją.
+- [E-030 — Re-review pobierania źródeł K-042 z czystego klonu](E-030.md), Ewelina, P0: potwierdź poprawkę brakującego katalogu `.part`, pobranie, sumy i test regresyjny w nowym exact ref PR #72.
+- [K-044 — Globalne ID i własność komórek](K-044.md), Kamil, P0: określ stabilną siatkę oraz sprawdź duplikaty, szczeliny i granice UTM/UPS/antimeridianu przed K-008; luka wykazana przez K-042.
+- [K-045 — Re-review aktualnych statusów w macierzy E-025](K-045.md), Kamil, P1: potwierdź stany E-004/E-021/K-007/I-012, regionalne dowody, S03 i bezpieczne granice twierdzeń w PR #50.
+- [K-046 — Re-review pilota K-042 w macierzy E-025](K-046.md), Kamil, P1: potwierdź aktualny snapshot, status otwartego pilota K-042, jego ograniczenia i poprawkę po K-045 w PR #50.
+- [E-031 — Odśwież aktualny snapshot macierzy submission](E-031.md), Ewelina, P1: zaktualizuj statusy K-042/E-030 i E-004 oraz exact refy PR #72 w macierzy i handoffie E-025 po K-046.
+- [K-047 — Oceń wykonalność porównywalnej warstwy termicznej](K-047.md), Kamil, P1: pobierz małe próbki Ziemi, Marsa i Księżyca, zmierz pokrycie/QA i rozstrzygnij `GO`/`NO-GO` dla porównywalnej cechy przed K-010.
+- [K-048 — Re-review widoczności hotspotu i legendy E-004](K-048.md), Kamil, P0: sprawdź exact follow-up PR #83, marker wybranego hotspotu, mobilny HUD, stałość rankingu po zoomie i zakres twierdzeń o biegunach.
+- [K-049 — Re-review aktualnego snapshotu macierzy submission](K-049.md), Kamil, P1: zweryfikuj exact PR #50 head, odświeżone statusy/refy i granice twierdzeń S03 po K-046.
+- [K-050 — Re-review korekty snapshotu E-025 po K-049](K-050.md), Kamil, P1: sprawdź aktualne refy E-021, zakończony K-048, granice S03 i synchroniczność PR #50 dla exact matrix ref `3b219556`.
+- [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
+- [E-033 — Review ścisłej walidacji wejściowych typów liczbowych K-041](E-033.md), Ewelina, P2: sprawdź exact PR #90, zgodność Draft 2020-12, brak coercion i obsługę integralnego `top_k: 2.0`.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-026, E-023, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-051, E-034, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
