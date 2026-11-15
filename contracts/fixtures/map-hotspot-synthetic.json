@@ -6,7 +6,7 @@
   "profile_version": "synthetic-profile-v1",
   "analysis_id": "synthetic-analysis-hotspot",
   "is_synthetic": true,
-  "query": {"bbox": [3, 3, 3.04, 3.02], "level": 0, "limit": 1000},
+  "query": {"bbox": [3, 3, 3.04, 3.01], "level": 0, "limit": 1000},
   "map_cells": [
     {
       "cell_id": "synthetic-weak-map-cell",

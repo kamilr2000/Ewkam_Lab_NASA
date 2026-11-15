@@ -23,6 +23,85 @@ def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _rectangular_geometry_bounds(
+    geometry: dict,
+) -> tuple[float, float, float, float]:
+    assert geometry["type"] == "Polygon"
+    assert len(geometry["coordinates"]) == 1
+    ring = [tuple(position) for position in geometry["coordinates"][0]]
+    assert len(ring) == 5
+    assert ring[0] == ring[-1]
+
+    west = min(position[0] for position in ring[:-1])
+    east = max(position[0] for position in ring[:-1])
+    south = min(position[1] for position in ring[:-1])
+    north = max(position[1] for position in ring[:-1])
+    assert set(ring[:-1]) == {
+        (west, south),
+        (east, south),
+        (east, north),
+        (west, north),
+    }
+    return west, south, east, north
+
+
+def _assert_rectangles_partition_scope(
+    scope_bounds: tuple[float, float, float, float],
+    geometries: list[dict],
+    label: str,
+) -> None:
+    west, south, east, north = scope_bounds
+    assert west < east and south < north
+    rectangles = [_rectangular_geometry_bounds(geometry) for geometry in geometries]
+    for cell_west, cell_south, cell_east, cell_north in rectangles:
+        assert west <= cell_west < cell_east <= east
+        assert south <= cell_south < cell_north <= north
+
+    x_edges = sorted(
+        {
+            west,
+            east,
+            *(edge for rect in rectangles for edge in (rect[0], rect[2])),
+        }
+    )
+    y_edges = sorted(
+        {
+            south,
+            north,
+            *(edge for rect in rectangles for edge in (rect[1], rect[3])),
+        }
+    )
+    for left, right in zip(x_edges, x_edges[1:]):
+        for bottom, top in zip(y_edges, y_edges[1:]):
+            x_mid = (left + right) / 2
+            y_mid = (bottom + top) / 2
+            covering_rectangles = sum(
+                rect_west <= x_mid < rect_east and rect_south <= y_mid < rect_north
+                for rect_west, rect_south, rect_east, rect_north in rectangles
+            )
+            assert covering_rectangles == 1, (
+                f"{label} does not partition declared scope at "
+                f"({x_mid}, {y_mid}); found {covering_rectangles} covering geometries"
+            )
+
+
+def _assert_hotspot_fixture_spatial_coverage(search: dict, map_response: dict) -> None:
+    scope_bounds = _rectangular_geometry_bounds(search["scope"]["geometry"])
+    assert tuple(map_response["query"]["bbox"]) == scope_bounds
+    assert map_response["analysis_id"] == search["analysis_id"]
+    assert map_response["map_cells"] == search["map_cells"]
+    _assert_rectangles_partition_scope(
+        scope_bounds,
+        [cell["geometry"] for cell in search["map_cells"]],
+        "map-cell union",
+    )
+    _assert_rectangles_partition_scope(
+        scope_bounds,
+        [pixel["geometry"] for pixel in search["ranking"]],
+        "ranked-pixel union",
+    )
+
+
 SCHEMA_FIXTURES = [
     ("health-response.schema.json", "health-ready-no-dataset.json"),
     ("catalog-response.schema.json", "catalog-synthetic.json"),
@@ -208,6 +287,59 @@ def test_hotspot_survives_pixel_ranking_and_map_aggregation() -> None:
     assert weak_cell["max_pixel_id"] == "synthetic-hotspot-p001"
     assert weak_cell["max_score_pct"] == 100
     assert weak_cell["mean_score_pct"] < weak_cell["max_score_pct"]
+
+
+def test_hotspot_fixture_scope_map_cells_pixels_and_coverage_align() -> None:
+    search = load_json(FIXTURES / "search-hotspot-synthetic.json")
+    map_response = load_json(FIXTURES / "map-hotspot-synthetic.json")
+
+    assert search["is_synthetic"] is True
+    assert map_response["is_synthetic"] is True
+    _assert_hotspot_fixture_spatial_coverage(search, map_response)
+
+    coverage = search["coverage"]
+    excluded_count = sum(coverage["excluded_by_reason"].values())
+    assert coverage["total_pixels"] == coverage["eligible_pixels"] + excluded_count
+    assert len(search["ranking"]) == coverage["eligible_pixels"]
+    assert (
+        sum(cell["total_pixel_count"] for cell in search["map_cells"])
+        == coverage["total_pixels"]
+    )
+    assert (
+        sum(cell["valid_pixel_count"] for cell in search["map_cells"])
+        == coverage["eligible_pixels"]
+    )
+
+    total_pixel_area = sum(pixel["pixel_area_km2"] for pixel in search["ranking"])
+    eligible_pixel_area = sum(
+        pixel["pixel_area_km2"]
+        for pixel in search["ranking"]
+        if pixel["coverage_fraction"] == 1
+    )
+    assert coverage["total_area_km2"] == pytest.approx(total_pixel_area)
+    assert coverage["eligible_area_km2"] == pytest.approx(eligible_pixel_area)
+    assert coverage["eligible_area_fraction"] == pytest.approx(
+        eligible_pixel_area / total_pixel_area
+    )
+    for cell in search["map_cells"]:
+        assert cell["coverage_fraction"] == pytest.approx(
+            cell["valid_pixel_count"] / cell["total_pixel_count"]
+        )
+
+
+def test_hotspot_coverage_guard_rejects_unrepresented_scope_strip() -> None:
+    search = load_json(FIXTURES / "search-hotspot-synthetic.json")
+    map_response = load_json(FIXTURES / "map-hotspot-synthetic.json")
+    scope_ring = search["scope"]["geometry"]["coordinates"][0]
+    scope_ring[2][1] = 3.02
+    scope_ring[3][1] = 3.02
+    map_response["query"]["bbox"][3] = 3.02
+
+    with pytest.raises(
+        AssertionError,
+        match="map-cell union does not partition declared scope",
+    ):
+        _assert_hotspot_fixture_spatial_coverage(search, map_response)
 
 
 def test_success_contributions_and_map_mean_match_synthetic_ranking() -> None:
