@@ -33,7 +33,7 @@ Siatka 60″ ma 233 280 000 komórek globalnych. Model float32 ETOPO i maski źr
 
 - Pięć testów jednostkowych pokrywa budżet 60″, siatkę UTM/pole geodezyjne, ręczny wzór cech, brak wypełniania nodata zerem i wykluczanie batymetrii z lądowego resamplingu.
 - Testy pełnego pipeline, planera i kontraktów oraz kontrola dokumentacji są zapisywane w karcie K-005 po uruchomieniu przed publikacją.
-- Builder został uruchomiony ponownie bez `--force`; trzy zweryfikowane checkpointy zostały pominięte.
+- Po P1 E-024 wykonano końcowy rebuild z `--force`; raport i trzy manifesty mają aktualne czasy rebuilda oraz `resumed_from_checkpoint: false`. Wcześniejsze uruchomienie bez `--force` pominęło zweryfikowane checkpointy, ale nie opisuje opublikowanych metadanych po poprawce.
 - Manifesty są walidowane przez JSON Schema i kontrolę semantyczną; SHA-256 danych wynikowych i liczniki CSV zgadzają się z manifestami.
 
 Pierwotny pakiet opublikowano w PR #44 pod exact ref `a5dfe3d892235d31938dcdd56bdcc17a66e0f167`. Po review E-024 fingerprint metadanych poprawiono w exact commicie `d3b880cacbbdf339d078a2fbedbe8fd373db7bef`. PR #44 zawiera również późniejsze commity dokumentujące korektę i synchronizujące branch; ocena danych wskazuje jawnie na ten exact commit.
@@ -51,3 +51,7 @@ E-024 wykazała, że fingerprint `feab8cb9a942e6c7e8217f0d27d1a9b1f676d874d8c99b
 Wszystkie CSV zachowały SHA i rozmiary z poprzedniej publikacji; zmieniły się metadane pochodzenia, czas rebuilda i rzeczywiste czasy przetwarzania zamiast wartości z pominiętych checkpointów. Manifesty przechodzą `contracts/dataset-manifest.schema.json` (Draft 2020-12), a niezależna kontrola potwierdza zgodność fingerprintu, SHA, rozmiaru i liczby wierszy. `uv run --locked --group data python -m pytest pipeline/tests contracts/tests -q` — 45 passed. `python tools/check_planning.py` i `git diff --check origin/main --` przechodzą.
 
 Codex pomagał odtworzyć i zweryfikować metadane pochodzenia; nie utworzył ani nie edytował wartości pomiarowych ani CSV. Właścicielka rejestru, Ewelina, powinna ująć ten metadata-only follow-up w trwającym I-012 przed zamknięciem disclosure. Obecna walidacja nadal obejmuje trzy AOI regionalne; nie wykonano pełnego globu, biegunów ani globalnego rankingu.
+
+## Niezależny odbiór E-026
+
+E-026 zatwierdziło exact korektę `d3b880cacbbdf339d078a2fbedbe8fd373db7bef` i bieżący przed synchronizacją head PR #44 `3a07fc27fdad44472bcf61b1bc1347ae5b02fff6`; GitHub review ID `5910439313`. Niezależny odbiór potwierdził zgodność fingerprintu raportu i trzech manifestów, JSON Schema Draft 2020-12, rozmiarów/SHA/liczności CSV oraz niezmienione wyniki E-024. Surowe rastry nie były ponownie pobierane przez recenzentkę, a globalny ranking i obszary polarne pozostają poza zakresem. Lokalna gałąź została scalona z `origin/main` na `80459b3941418ba1fba5208b197afc4cbe9f33bd`, ale ta synchronizacja oraz poprawiony opis PR nie zostały jeszcze opublikowane. Następny krok: wypchnąć zsynchronizowaną gałąź, poprawić opis PR #44 i sprawdzić możliwość integracji.
