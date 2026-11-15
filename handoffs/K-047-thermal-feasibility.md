@@ -3,12 +3,13 @@
 - Od: Kamil / `codex-kamil-k047-thermal-preflight`
 - Do: Ewelina
 - Data i strefa: 2026-11-15, Europe/Warsaw
-- Zadanie / PR / commit: K-047 / [PR #84](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/84) / implementacja `062c433`
+- Zadanie / PR / commit: K-047 / [PR #84](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/84) / exact code ref `fad5b3b9b36043cd93fe5517c67a116fe8d899a4`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-047-thermal-feasibility`
-- Wysłane SHA i URL PR: commit `062c433` opublikowany; exact finalny PR head jest dostępny w PR #84 i zostanie przypięty do E-032 przed startem review.
-- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-047 oraz karta E-032 są w `origin/main`; wynik K-047 jest na gałęzi PR #84 i nie został jeszcze połączony.
-- Lokalne niewysłane zmiany i powód, jeśli występują: brak.
-- Stan: gotowe do niezależnego review; K-047 ma status `review`, a E-032 oczekuje na odświeżenie exact `review_ref`.
+- Baza PR #84: `origin/main` `db23641...`; head po synchronizacji main, przed tą aktualizacją handoffu: `44163689e17c027aed018b77ee9c7e7a4b1b95fc`.
+- Wysłane SHA i URL PR: poprawka runnera `fad5b3b9b36043cd93fe5517c67a116fe8d899a4` opublikowana; dokładny bieżący head PR jest w metadanych PR #84.
+- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-047 oraz karta E-032 są w `origin/main`; karta K-047 i wynik na gałęzi PR #84 mają `review`, ale kod nie jest jeszcze połączony.
+- Lokalne niewysłane zmiany i powód, jeśli występują: wyłącznie znany diff końców linii w `tasks/K-007.md`, wykluczony z commitów K-047.
+- Stan: pakiet K-047 jest gotowy do niezależnego review. E-032 w `origin/main` nadal ma stary placeholder `review_ref`; Ewelina musi go odświeżyć do `fad5b3b9b36043cd93fe5517c67a116fe8d899a4` i opublikować własną rezerwację przed rozpoczęciem oceny.
 
 ## Co jest dostępne
 
@@ -21,25 +22,28 @@ Najważniejsze wyniki: wsparcie MODIS zależy silnie od AOI i daty; księżycowa
 
 ## Jak odtworzyć
 
-W klonie z Pythonem 3.12:
+Gdy przypięte pliki źródłowe są już lokalnie dostępne, na Pythonie 3.12 odtwórz weryfikację i analizę bez pobierania:
 
 ```powershell
-uv run --locked --group data python pipeline/experiments/thermal/run_feasibility.py --download-missing
+.venv\Scripts\python.exe pipeline/experiments/thermal/run_feasibility.py --no-download-missing
 ```
 
-Pobranie brakujących MODIS wymaga lokalnego `EARTHDATA_TOKEN`, używanego przez `earthaccess`. Nie zapisuj go do plików projektu ani logów. Publiczne Diviner i zakresy bajtów PDS są pobierane z adresów w manifeście. Wynik bieżącego uruchomienia: 39 plików, 144 901 027 bajtów, wszystkie rozmiary i SHA-256 zgodne.
+Przy brakujących wejściach użyj `--download-missing`; pobieranie MODIS wymaga lokalnego `EARTHDATA_TOKEN` przez `earthaccess`. Nie zapisuj tokenu do plików projektu ani logów. Diviner i zakresy bajtów PDS są pobierane z URL-i przypiętych w manifeście. `--report` przyjmuje także ścieżkę absolutną poza repozytorium; test regresji sprawdza sposób jej wyświetlania po wygenerowaniu pliku.
 
 ## Sprawdzenia
 
-- Runner przeliczył trzy AOI Ziemi dla czterech dat dziennych i nocnych, księżycowy dzień/nocny cykl Diviner oraz próbki MGS TES 25×25 z maską bezpośredniości/interpolacji.
+- Bieżący runner zweryfikował wszystkie 39 dostępnych plików (144 901 027 bajtów), dopasowując zapisane rozmiary i SHA-256, oraz ponownie przeliczył trzy AOI Ziemi dla czterech dat dziennych i nocnych, cykl dzień/noc Diviner i próbki MGS TES 25×25 z maską bezpośredniości/interpolacji.
+- Wartości bloków `earth`, `moon`, `mars` i fingerprinty manifestów źródłowych są identyczne z poprzednim pomiarem. Manifest zapisuje nowy hash aktualnego runnera: `b5854aa1e93902b110555feb70b6611c37db352cf68b740ee1913ef926cf5f2a`.
+- `pipeline/tests/test_thermal_feasibility.py`: 1 passed; `pipeline/tests contracts/tests`: 48 passed. Testy i re-run nie pobierały danych; surowe próbki lokalne miały już poprawne SHA-256.
+- Runner raz zakończył kodem 1 po wygenerowaniu raportu, gdy `--report` wskazywał folder tymczasowy poza repozytorium. Poprawiłem wyłącznie wyświetlenie ścieżki i dodałem regresję; powtórzenie z absolutną ścieżką wyjściową zakończyło się kodem 0.
 - Osobno pobrano na próbę jeden MODIS przez Earthdata i jeden 25×25 wycinek przez zakres PDS; oba pliki zgodziły się z przypiętym SHA-256 i zostały usunięte po kontroli.
-- `python tools/check_planning.py` przeszedł; JSON manifestu jest poprawny; `git diff --check` przeszedł.
+- `python tools/check_planning.py`: 189 Markdown, 43 JSON, 96 kart, zależności acykliczne i pięć syntetycznych przypadków; manifest JSON oraz `git diff --check` przechodzą.
 - QA, jednostki, lokalne czasy, skale i model TES sprawdzono w dokumentacji wskazanej przy źródłach manifestu. `NO-GO` jest ograniczone do wymienionych produktów i próbek.
 
 Nie wykonano pełnego pobrania wszystkich próbek w świeżym klonie, globalnej analizy sezonowej ani uruchomienia aplikacji. Próbki nie są klimatologią i nie dowodzą globalnego pokrycia.
 
 ## Ograniczenia i potrzebne działania
 
-Ewelina: wykonaj E-032 na exact headzie PR #84 po opublikowaniu jego SHA w `review_ref`. Niezależnie sprawdź reguły wsparcia, konwersje i fizyczne interpretacje; jeśli Earthdata nie jest skonfigurowana na Twoim komputerze, zapisz ten brak jako ograniczenie i nie proś o token w czacie. Opublikuj werdykt i ewentualne poprawki z priorytetem, właścicielem oraz kryterium akceptacji.
+Ewelina: zaktualizuj kartę E-032 w `origin/main` do exact code ref `fad5b3b9b36043cd93fe5517c67a116fe8d899a4` i bieżącego headu PR #84, a następnie opublikuj osobny commit `tasks(E-032): IN PROGRESS` przed rozpoczęciem review. Niezależnie sprawdź reguły wsparcia, konwersje i fizyczne interpretacje; jeśli Earthdata nie jest skonfigurowana na Twoim komputerze, zapisz ten brak jako ograniczenie i nie proś o token w czacie. Opublikuj werdykt i ewentualne poprawki z priorytetem, właścicielem oraz kryterium akceptacji.
 
 Następna decyzja techniczna dotyczy K-010: `NO-GO` nie uzasadnia uruchomienia wspólnej termicznej funkcji. Osobna cecha temperatury albo bezwładności wymaga własnego, zgodnego zestawu obserwacji i modelu. NASA submission pozostaje działaniem wyłącznie człowieka.
