@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `review` na `origin/main` od commitu `f3288465908d9e9843f76daf56f51aac06ba49c6`. Gałąź: `ewelina/E-021-ui-readability`. Poprawka i bieżące pomiary są opublikowane w PR #35; ostatni potwierdzony head przed dołączeniem świeżego zrzutu to `4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0`. Karta na `main` wskazuje exact ref `d85f717a645d4a23c67831d4d4c1e7ad4b981266`; odświeżę ją po publikacji nowego screenshotu. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
+Status: `review` na `origin/main` od commitu `f3288465908d9e9843f76daf56f51aac06ba49c6`; exact review ref zaktualizowano na `bff33641cf44906ad3ad8fbe073e55cc6e3ccf42` w commicie `56fb2ed6ff0fa9faf13fc0c114ac9f3f8bfcc360`. Gałąź: `ewelina/E-021-ui-readability`. Poprawka, pomiary i świeży zrzut 320 px są opublikowane w PR #35. Gałąź jest zsynchronizowana z tym aktualnym mainem. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
 
 ## Zmiana
 
@@ -154,4 +154,4 @@ Przy 320 px fokus można odtworzyć klawiaturą: kliknąć „Data source”, za
 
 Po zmianie CSS: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK (180 Markdown, 41 JSON, 93 karty, 5 synthetic cases); `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Statyczny skan 107 deklaracji `font`/`font-size` wykrył 106 jawnych wartości px, minimum 9 px i zero tekstów poniżej 9 px. Poprawka dotyczy wyłącznie odstępu, więc wcześniejsze 39 sprawdzonych par kontrastu (minimum 4.68:1) nie zmieniają się. Nie testowano fizycznego telefonu ani nie wymuszano klasycznego scrollbara.
 
-Commit CSS `c26663ca64153399f75f3e518efc6b6607c25799` oraz pomiary zostały opublikowane w PR #35. Status `review` opublikowano na `origin/main` jako `f3288465908d9e9843f76daf56f51aac06ba49c6`; merge do PR opublikowano w `4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0`. Świeży zrzut 320 px jest dołączany w kolejnym commicie, po czym zaktualizuję exact `review_ref`. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`, ale późniejsza synchronizacja i push zadziałały.
+Commit CSS `c26663ca64153399f75f3e518efc6b6607c25799`, pomiary i świeży zrzut 320 px są opublikowane w PR #35; exact evidence ref to `bff33641cf44906ad3ad8fbe073e55cc6e3ccf42`. Status `review` opublikowano na `origin/main` jako `f3288465908d9e9843f76daf56f51aac06ba49c6`, a exact ref przypięto w `56fb2ed6ff0fa9faf13fc0c114ac9f3f8bfcc360`. Branch został zsynchronizowany z tym mainem przed aktualnym pushem. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`, ale późniejsza synchronizacja i push zadziałały.
