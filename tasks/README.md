@@ -73,6 +73,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-017 — Pozyskaj NASADEM i wybierz niezależną maskę lądu](K-017.md), Kamil, P0: pobranie NASADEM po lokalnym logowaniu i weryfikacja maski przed walidacją Earth DEM.
 - [K-018 — Re-review overflowu mobilnego przy klasycznym pasku](K-018.md), Kamil, P0: ponowne sprawdzenie E-014 wobec `clientWidth` na dokładnym nowym headzie PR #5.
 - [I-010 — Uzupełnij rejestr AI dla E-002, E-014 i E-016](I-010.md), Ewelina, P0: uzupełnienie wymaganej deklaracji Codex dla UI, poprawki mobilnej i review próbek.
+- [I-011 — Uaktualnij rejestr użycia AI/SI](I-011.md), Ewelina, P0: uzupełnienie udokumentowanych prac po I-010 oraz aktualizacja stanu rzeczywistych próbek NASADEM.
 - [E-017 — Niezależny review NASADEM i maski lądu](E-017.md), Ewelina, P0: sprawdzenie opublikowanego K-017, jego źródeł, porównania i ograniczeń w PR #12.
 - [K-019 — Review adaptera API i widoków fixture E-003](K-019.md), Kamil, P0: sprawdzenie kontraktu, trybu syntetycznego, braku fallbacku i spójności `analysis_id` w PR #16.
 - [E-018 — Review silnika MCDA i rankingu pikseli K-006](E-018.md), Ewelina, P0: niezależne sprawdzenie punktacji, braków, deterministycznego Top K i selekcji różnych obszarów w PR #15.
@@ -83,7 +84,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-022, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-022, E-021, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
