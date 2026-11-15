@@ -113,10 +113,14 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-041 — Dopasuj typy requestu API do JSON Schema](K-041.md), Kamil, P2: odrzuć string/boolean coercion w wagach i `top_k` zgodnie z kontraktem v1; follow-up z E-027.
 - [K-042 — Pilot globalnej siatki i pipeline'u](K-042.md), Kamil, P0: zmierz rzeczywiste zachowanie skali, źródła, maski i kafelkowego przetwarzania przed pełnym przebiegiem K-008; może ruszyć równolegle z review regionalnego API.
 - [K-043 — Re-review bieżącego disclosure I-012 po K-040](K-043.md), Kamil, P0: niezależnie sprawdź poprawione refy/statusy K-005, E-021, rejestru AI/SI i granic twierdzeń w PR #46.
+- [E-029 — Niezależny odbiór pilota globalnej siatki K-042](E-029.md), Ewelina, P0: zweryfikuj dokładny PR #72, źródła, liczniki, metodologię oraz ograniczenia przed integracją.
+- [K-044 — Globalne ID i własność komórek](K-044.md), Kamil, P0: określ stabilną siatkę oraz sprawdź duplikaty, szczeliny i granice UTM/UPS/antimeridianu przed K-008; luka wykazana przez K-042.
+- [K-045 — Re-review aktualnych statusów w macierzy E-025](K-045.md), Kamil, P1: potwierdź stany E-004/E-021/K-007/I-012, regionalne dowody, S03 i bezpieczne granice twierdzeń w PR #50.
+- [K-046 — Re-review pilota K-042 w macierzy E-025](K-046.md), Kamil, P1: potwierdź aktualny snapshot, status otwartego pilota K-042, jego ograniczenia i poprawkę po K-045 w PR #50.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-044, E-029, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-047, E-030, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
