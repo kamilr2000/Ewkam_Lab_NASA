@@ -58,8 +58,9 @@ Codex assisted with the source-verifying downloader, grid/pipeline code, control
 Update after the implementation commit and PR are published:
 
 - Implementation branch: `kamil/K-042-global-grid-pilot`
-- Exact implementation SHA: pending
-- PR: pending
+- Implementation commit: `a2b9c1aa755e1040e624b016f20f98fdc725bdc8`
+- PR #72: [K-042 measured 2 km global grid pilot](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/72)
+- Published branch head before this handoff metadata update: `5c99455a36cb6558e0e9269ef87ca867ebc5450e`; after this update, use the exact branch head recorded on the K-042 card.
 - `python -m pytest pipeline/tests contracts/tests -q` using the project `.venv`: 50 passed in 2.65 s; the pilot and K-005 feature regression subset: 10 passed in 1.45 s.
 - `python tools/check_planning.py`: passed (168 Markdown files, 42 JSON files, 84 task cards; acyclic dependencies).
 - `git diff --check`: passed. All four derived CSV gzip files match their manifest SHA-256 and byte sizes; report totals are 16,384 candidates and 13,912 eligible.
