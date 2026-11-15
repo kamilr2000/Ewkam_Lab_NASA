@@ -47,7 +47,7 @@ A fixed 60 arc-second grid contains 233,280,000 angular positions. Its WGS84 cel
 
 Linear extrapolation from the fastest/slowest measured pilot tiles gives 496,565–694,691 seconds (about 5.7–8.0 days), 5.94 GB compressed, and 24.76 GB uncompressed. This is a coarse extrapolation, not a global runtime promise. It omits global source selection and reads, GSHHG geometry selection/cache, scheduling, indexes, retries, and coverage-driven output differences.
 
-K-042 recommends a 2 km metric candidate scale, ETOPO Ice Surface 15″ as the input product, a 10 km physical feature radius, and 64 × 64 cores with a 14 km physical halo. D-024 records this as a recommendation pending global validation. K-043 is a required precursor to K-008: define a canonical global grid and prove unique stable cell IDs, no ownership gaps/duplicates at UTM/UPS boundaries, ±80°, ±180°, and the poles. K-008 must still establish full source mosaic, coverage counts, global processing cost, and global ranking before making any global claim.
+K-042 recommends a 2 km metric candidate scale, ETOPO Ice Surface 15″ as the input product, a 10 km physical feature radius, and 64 × 64 cores with a 14 km physical halo. D-024 records this as a recommendation pending global validation. K-044 is a required precursor to K-008: define a canonical global grid and prove unique stable cell IDs, no ownership gaps/duplicates at UTM/UPS boundaries, ±80°, ±180°, and the poles. K-008 must still establish full source mosaic, coverage counts, global processing cost, and global ranking before making any global claim.
 
 ## AI disclosure handoff
 

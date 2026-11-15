@@ -85,7 +85,7 @@ Każdy wiersz CSV jest pojedynczą komórką analityczną: stabilny ID wersji/wi
 
 To są rozkłady pomiarów topografii na trzech regionalnych wycinkach, nie podobieństwa do Jezero ani południowego bieguna Księżyca i nie ranking analogów. ETOPO 15″ ma nominalny posting ok. 0,42–0,46 km w tych szerokościach; resampling nie oznacza, że źródło rozpoznaje obiekty 2-kilometrowe równie dokładnie wszędzie. Komórki wodne nie są kandydatami; próbki batymetryczne są wykluczane z uśredniania już na źródłowej siatce GSHHG/ETOPO.
 
-Wstępny budżet stałej siatki 60″ wyliczono z wymiarów 21 600 × 10 800: 233 280 000 komórek, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech float32 cech i 6 065 280 000 B dla modelowanego pełnego stanu kandydatów. Model jednej partii 64 wierszy z 7 wierszami halo potrzebuje około 208,1 MB tablic roboczych, przed buforami GDAL, PROJ i geometrii. To historyczny rachunek kosztu tablic, nie benchmark pamięci ani czasu. K-042 zastąpiło stałą siatkę 60″ rekomendacją komórek metrycznych i zmierzyło cztery lokalne kafle; pełny grid, pokrycie, szwy i koszt globalny pozostają do sprawdzenia w K-008/K-043.
+Wstępny budżet stałej siatki 60″ wyliczono z wymiarów 21 600 × 10 800: 233 280 000 komórek, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech float32 cech i 6 065 280 000 B dla modelowanego pełnego stanu kandydatów. Model jednej partii 64 wierszy z 7 wierszami halo potrzebuje około 208,1 MB tablic roboczych, przed buforami GDAL, PROJ i geometrii. To historyczny rachunek kosztu tablic, nie benchmark pamięci ani czasu. K-042 zastąpiło stałą siatkę 60″ rekomendacją komórek metrycznych i zmierzyło cztery lokalne kafle; pełny grid, pokrycie, szwy i koszt globalny pozostają do sprawdzenia w K-008/K-044.
 
 ### Dowody próbek z K-002
 
