@@ -125,13 +125,14 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-050 — Re-review korekty snapshotu E-025 po K-049](K-050.md), Kamil, P1: sprawdź aktualne refy E-021, zakończony K-048, granice S03 i synchroniczność PR #50 dla exact matrix ref `3b219556`.
 - [K-052 — Połącz web z regionalnym API przez jawne CORS](K-052.md), Kamil, P0: odblokuj żądania z osobnego originu przeglądarki do prawdziwego regionalnego API na potrzeby E-006.
 - [K-051 — Odbiór regionalnego Live MVP E-006](K-051.md), Kamil, P0: sprawdź exact ref PR #96 pod kątem zgodności profile/dataset/scope, braku fallbacku, nulli, hotspotu i spójności analysis ID.
+- [K-053 — Szybko zweryfikuj opis jury i demo E-010](K-053.md), Kamil, P0: sprawdź źródła, liczby, znaczenie wyniku i twierdzenia w PR #99.
 - [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
 - [E-033 — Review ścisłej walidacji wejściowych typów liczbowych K-041](E-033.md), Ewelina, P2: sprawdź exact PR #90, zgodność Draft 2020-12, brak coercion i obsługę integralnego `top_k: 2.0`.
 - [E-034 — Pilny odbiór CORS regionalnego API K-052](E-034.md), Ewelina, P0: jako pierwsze zadanie po bieżącej pracy sprawdź exact PR #98 — allow-list originów, preflight, brak credentials i prawdziwy regionalny request.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-053, E-035, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-054, E-035, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
