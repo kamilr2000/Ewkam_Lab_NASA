@@ -2,10 +2,10 @@
   "captured_at": "2026-11-15",
   "branch": "ewelina/E-021-ui-readability",
   "preview_source_head": "c26663ca64153399f75f3e518efc6b6607c25799",
-  "publish_state": "render_and_screenshot_pushed; latest_main_review_ref_merged",
+  "publish_state": "render_and_screenshot_pushed; synced_through_latest_origin_main",
   "branch_head_before_fresh_screenshot": "4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0",
   "latest_confirmed_render_evidence_commit": "bff33641cf44906ad3ad8fbe073e55cc6e3ccf42",
-  "remote_main_head": "56fb2ed6ff0fa9faf13fc0c114ac9f3f8bfcc360",
+  "remote_main_head": "18803b793019069f87ce1fd2d51ebd78d24831e4",
   "preview_url": "http://127.0.0.1:4180/",
   "preview_kind": "Vite production preview",
   "browser": "Chrome responsive mode on Windows",
@@ -53,7 +53,7 @@
   "limitations": [
     "PNG files listed above show the older Successful ranking snapshot and are not evidence for this Isolated hotspot render or the spacing fix.",
     "Only the 320 CSS px post-fix render has a fresh saved PNG; the remaining six widths were visually inspected live and are recorded with reproducible measurements.",
-    "Origin main commit 56fb2ed pins the exact screenshot evidence ref and is included in the synchronized PR branch.",
+    "Origin main commit 56fb2ed pins the exact screenshot evidence ref; the synchronized PR branch also includes latest main commit 18803b7.",
     "No physical phone was tested.",
     "A classic non-overlay scrollbar was not forced."
   ]
