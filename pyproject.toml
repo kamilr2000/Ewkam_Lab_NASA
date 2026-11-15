@@ -15,6 +15,7 @@ dependencies = [
 data = [
     "earthaccess==0.19.0",
     "pyshp==2.3.1",
+    "pyhdf==0.11.7",
 ]
 dev = [
     "httpx==0.28.1",

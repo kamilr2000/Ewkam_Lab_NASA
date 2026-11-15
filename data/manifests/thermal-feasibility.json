@@ -1,0 +1,2166 @@
+{
+  "manifest_version": "1.0.0",
+  "task_id": "K-047",
+  "title": "Thermal-data feasibility samples for three Earth AOIs, Jezero, and the lunar south polar 80–90S profile",
+  "retrieved_at_utc": "2026-11-15",
+  "reference_manifests": [
+    "data/manifests/k004-planetary-profiles.json",
+    "data/manifests/k017-earth-validation.json"
+  ],
+  "sources": {
+    "earth": {
+      "product": "MODIS/Terra MOD11A1 Collection 6.1",
+      "provider": "NASA LP DAAC",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061",
+      "guide": "https://lpdaac.usgs.gov/documents/715/MOD11_User_Guide_V61.pdf",
+      "use_terms_url": "https://forum.earthdata.nasa.gov/viewtopic.php?t=6891",
+      "license_id": null,
+      "license_note": "No SPDX identifier assigned. LP DAAC guidance states that current products have no restrictions on reuse, sale, or redistribution and requests proper citation; confirm the product DOI citation before reuse.",
+      "measurement": "Daily daytime and nighttime 1 km land-surface temperature retrieved from clear-sky thermal infrared radiance, not air temperature.",
+      "retrieval": "MOD11A1.061 uses the generalized split-window LST retrieval. Atmospheric transmission and surface emissivity estimates affect the result; the audit retains but does not normalize those effects across AOIs.",
+      "native_grid": "Sinusoidal MODIS tile grid; 1200 x 1200 cells; sphere radius 6371007.181 m; nominal 1 km product, grid spacing about 926.625 m.",
+      "units": "K; raw LST scale 0.02 K. Local solar view time scale 0.1 h.",
+      "qa": "Mandatory QA bits 1-0: 00 produced/good, 01 produced/other quality, 10 not produced/cloud, 11 not produced/other; LST valid raw range 7500..65535; fill 0.",
+      "temporal": "Daily snapshots on four 2023 equinox/solstice dates. Per-pixel local solar observation time."
+    },
+    "moon": {
+      "product": "LRO Diviner GDR Level 2 south polar maps, channel TB3",
+      "provider": "NASA PDS Geosciences Node / Washington University in St. Louis",
+      "dataset_id": "LRO-L-DLRE-5-GDR-V1.0",
+      "product_version": "V5.0",
+      "archive": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm",
+      "gdr_description": "https://ode.rsl.wustl.edu/mars/pagehelp/Content/Missions_Instruments/LRO/DIVINER/GDR_L2.htm",
+      "use_terms_url": "https://pds-geosciences.wustl.edu/faq.html",
+      "citation_policy_url": "https://pds-geosciences.wustl.edu/citations.html",
+      "license_id": null,
+      "license_note": "No SPDX identifier is assigned. The PDS Geosciences Node states archived PDS data sets are public domain and may be used freely; cite the data set as required by its citation policy.",
+      "measurement": "Channel 3 brightness temperature, 7.55–8.05 micrometres; a spectral radiometric proxy, not an emissivity-normalized kinetic temperature or the MODIS LST retrieval.",
+      "crs": "Moon body-fixed DE421, planetocentric south polar stereographic; spherical radius 1737.4 km.",
+      "grid": "126.347 pixels/degree; nominal map posting 240 m/pixel. Footprint response is modeled in mapping; an effective resolution in metres is not specified for this sample.",
+      "units": "K; scale 0.02, offset 0; missing -32768. Count estimate scale 0.01, offset 0. Error estimate scale 0.01, offset 200 K. Local time scale 1/12 h, offset 2730.00273000273, missing -32768.",
+      "qa": "Retain TB3 in the GDR description 10–450 K range, positive count estimate and present error estimate; 2 km support rule additionally requires 80% valid posting centres.",
+      "temporal": "27-day LRO mapping cycles; each cycle split into local-time day 06–18 and night 18–06. Local time drifts across longitude.",
+      "interpretation_limit": "The GDR bins and averages radiance-derived channel brightness temperatures. This audit does not invert TB3 to kinetic temperature with an emissivity model, and does not match incidence, shadow or seasonal illumination."
+    },
+    "mars": {
+      "product": "MGS TES Derived Thermal Inertia Maps V1.0",
+      "provider": "NASA PDS Geosciences Node",
+      "dataset_id": "MGS-M-TES-5-TIMAP-V1.0",
+      "doi": "https://doi.org/10.17189/1519489",
+      "profile": "https://pds.nasa.gov/ds-view/pds/viewProfile.jsp?dsid=MGS-M-TES-5-TIMAP-V1.0",
+      "derivation_reference": "https://doi.org/10.1016/j.icarus.2007.05.013",
+      "use_terms_url": "https://pds-geosciences.wustl.edu/faq.html",
+      "citation_policy_url": "https://pds-geosciences.wustl.edu/citations.html",
+      "license_id": null,
+      "license_note": "No SPDX identifier is assigned. The PDS Geosciences Node states archived PDS data sets are public domain and may be used freely; cite the data set as required by its citation policy.",
+      "measurement": "Model-derived thermal inertia from TES bolometer surface-temperature observations; not a direct temperature observation.",
+      "crs": "Mars planetocentric, east-positive longitude, sphere radius 3396.0 km.",
+      "grid": "20 pixels/degree; about 2.96 km north-south and 2.81 km east-west at Jezero latitude.",
+      "units": "J/(m^2 K sqrt(s)); computed range 5–5000. Dayside/nightside maps with interpolation mask (mask 0 infilled, 1 directly mapped).",
+      "temporal": "Thermal inertia derived from dayside or nightside observations over three Mars years, February 1999–April 2004; not a single-time temperature map.",
+      "derivation_note": "The PDS profile describes the map product as a separate thermal-inertia derivation and warns that the model used for the published TES bolometer tables does not reproduce these maps. It points to Putzig and Mellon (2007) and Putzig et al. (2005) for product-specific derivation details. Related TES thermal-model documentation identifies local time, season, latitude, thermal inertia, albedo, surface pressure and dust opacity as interacting parameters, with atmospheric radiative effects. The audit does not recreate that inversion or treat map values as observations."
+    }
+  },
+  "analysis_grid": {
+    "earth_cell_size_m": 2000,
+    "earth_minimum_valid_land_fraction": 0.75,
+    "earth_minimum_land_pixel_centres_per_cell": 3,
+    "moon_minimum_valid_posting_fraction": 0.8,
+    "cell_support_rules_are": "Experiment QA thresholds, not published instrument guarantees."
+  },
+  "processing": {
+    "code_path": "pipeline/experiments/thermal/run_feasibility.py",
+    "earth": "Transform MODIS sinusoidal pixel centres to local UTM. Apply the K-017 NASADEM SWBD value at each native centre (0=land, 255=water). A target cell is land when its centre lies in the K-017 AOI bounds and is land by SWBD. Count good LST source centres per target cell; good means raw LST 7500..65535 and mandatory QA bits 1-0 equal 00. Retain the product's additional data-quality, emissivity-error and LST-error flag counts for passing pixels. Report coverage only if at least three land centres exist and at least 75% pass mandatory QA.",
+    "moon": "Use the K-004 304x304 polar grid and projected cap radius. Bin source map posting centres into 2 km cells without resampling values. Retain TB3 10..450 K with positive count product and present error product. Coverage-qualified cell requires at least 80% of posting centres valid; this is map-data coverage, not independent observation count or physical effective resolution.",
+    "mars": "Select the native 20 px/degree TES source pixel centres inside the spherical Jezero geometry. Use the product interpolation mask to separate direct from infilled pixels. Summarize direct pixels only; do not assign TES values to the finer 2 km target grid. This audit records that thermal inertia is an inversion output sensitive to observing time, season, albedo, surface pressure and dust opacity; it does not recreate the product model.",
+    "null_policy": "Unavailable temperature or local-time summaries remain JSON null; missing data are not zero-filled.",
+    "versions": "K-004 and K-017 reference-manifest SHA-256 values and the analysis code SHA-256 are emitted under analysis after every run."
+  },
+  "earth_aois": [
+    {
+      "aoi_id": "atacama-andes",
+      "label": "Atacama / Andes",
+      "bounds_wgs84": {
+        "west": -68.9,
+        "south": -24.9,
+        "east": -68.1,
+        "north": -24.1
+      },
+      "tile_id": "h11v11",
+      "nasadem_tile_suffix": "s25w069",
+      "analysis_epsg": 32719
+    },
+    {
+      "aoi_id": "hawaii-big-island",
+      "label": "Hawaii, Big Island",
+      "bounds_wgs84": {
+        "west": -155.9,
+        "south": 19.1,
+        "east": -155.1,
+        "north": 19.9
+      },
+      "tile_id": "h03v07",
+      "nasadem_tile_suffix": "n19w156",
+      "analysis_epsg": 32605
+    },
+    {
+      "aoi_id": "himalaya",
+      "label": "Himalaya",
+      "bounds_wgs84": {
+        "west": 86.1,
+        "south": 28.1,
+        "east": 86.9,
+        "north": 28.9
+      },
+      "tile_id": "h25v06",
+      "nasadem_tile_suffix": "n28e086",
+      "analysis_epsg": 32645
+    }
+  ],
+  "nasadem_swbd": [
+    {
+      "aoi_id": "atacama-andes",
+      "granule_id": "NASADEM_HGT_s25w069",
+      "path": "data/raw/k017/nasadem/s25w069.swb",
+      "filename": "s25w069.swb",
+      "size_bytes": 12967201,
+      "sha256": "8eaa2196f307f909a164b5b87df7e29dc0813780a2abd945068b4ff5a2a06c81",
+      "source_manifest": "data/manifests/k017-earth-validation.json",
+      "doi": "https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001"
+    },
+    {
+      "aoi_id": "hawaii-big-island",
+      "granule_id": "NASADEM_HGT_n19w156",
+      "path": "data/raw/k017/nasadem/n19w156.swb",
+      "filename": "n19w156.swb",
+      "size_bytes": 12967201,
+      "sha256": "7bdf1ba4116256b66f9e8b05ca3e28912fcf19ab36f6cacb22420a287790d389",
+      "source_manifest": "data/manifests/k017-earth-validation.json",
+      "doi": "https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001"
+    },
+    {
+      "aoi_id": "himalaya",
+      "granule_id": "NASADEM_HGT_n28e086",
+      "path": "data/raw/k017/nasadem/n28e086.swb",
+      "filename": "n28e086.swb",
+      "size_bytes": 12967201,
+      "sha256": "3aae6ae3584c47f1907d1259e684903eac0caf767273ca9283d87ff4f5a53a70",
+      "source_manifest": "data/manifests/k017-earth-validation.json",
+      "doi": "https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001"
+    }
+  ],
+  "moon_profile": {
+    "profile_id": "moon-south-polar-80s-lola80-v1",
+    "grid_width": 304,
+    "cell_size_m": 2000.0,
+    "cap_radius_m": 304005.6080198807,
+    "target_candidate_cells": 72580
+  },
+  "diviner_cycles": [
+    {
+      "period": "day",
+      "cycle_id": "20160111d"
+    },
+    {
+      "period": "night",
+      "cycle_id": "20160125n"
+    }
+  ],
+  "mars_profile": {
+    "profile_id": "mars-jezero-mola128-v1",
+    "center_planetocentric_lat_lon_east_deg": [
+      18.41,
+      77.69
+    ],
+    "region_diameter_m": 47520.0,
+    "planetary_radius_m": 3396000.0,
+    "target_cell_size_m": 2000.0,
+    "candidate_target_cells": 448
+  },
+  "mars_sample": {
+    "sample_width": 25,
+    "source_first_row": 1419,
+    "source_first_column": 5141,
+    "pixels_per_degree": 20,
+    "day_thermal_inertia_path": "data/raw/k047/mars/global_ti_day_2007_jezero_25x25.i16be",
+    "day_interpolation_mask_path": "data/raw/k047/mars/global_ti_msk_day_2007_jezero_25x25.u8",
+    "night_thermal_inertia_path": "data/raw/k047/mars/global_ti_night_2007_jezero_25x25.i16be",
+    "night_interpolation_mask_path": "data/raw/k047/mars/global_ti_msk_night_2007_jezero_25x25.u8"
+  },
+  "assets": [
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023079.h03v07.061.2023080120636.hdf",
+      "filename": "MOD11A1.A2023079.h03v07.061.2023080120636.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023079.h03v07.061.2023080120636/MOD11A1.A2023079.h03v07.061.2023080120636.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 197192,
+      "sha256": "6c7ad59dd748c49b3c0074c6a6e181348c03c570288f12157fe182bf4e51ab25",
+      "aoi_tile": "h03v07",
+      "acquisition_date": "2023-03-20",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023079.h11v11.061.2023080120630.hdf",
+      "filename": "MOD11A1.A2023079.h11v11.061.2023080120630.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023079.h11v11.061.2023080120630/MOD11A1.A2023079.h11v11.061.2023080120630.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 3088376,
+      "sha256": "ef2333c1647c723c97393dc10bd45161ed4d1576b2adf4c9f84122b37517e321",
+      "aoi_tile": "h11v11",
+      "acquisition_date": "2023-03-20",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023079.h25v06.061.2023080120407.hdf",
+      "filename": "MOD11A1.A2023079.h25v06.061.2023080120407.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023079.h25v06.061.2023080120407/MOD11A1.A2023079.h25v06.061.2023080120407.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 3205338,
+      "sha256": "33f94310c0cbd335611c087121d019564e6c01a3eb6fcb9664f30be3c8cf8421",
+      "aoi_tile": "h25v06",
+      "acquisition_date": "2023-03-20",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023172.h03v07.061.2023173104740.hdf",
+      "filename": "MOD11A1.A2023172.h03v07.061.2023173104740.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023172.h03v07.061.2023173104740/MOD11A1.A2023172.h03v07.061.2023173104740.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 228093,
+      "sha256": "fd46e3249847e99cc15de4294ec15781e068ffb59207599b7481d843b25db791",
+      "aoi_tile": "h03v07",
+      "acquisition_date": "2023-06-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023172.h11v11.061.2023173104910.hdf",
+      "filename": "MOD11A1.A2023172.h11v11.061.2023173104910.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023172.h11v11.061.2023173104910/MOD11A1.A2023172.h11v11.061.2023173104910.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 2591393,
+      "sha256": "2ab005660db5edefa13be82e226c9add601685bfd28df106f8413f135621fa6d",
+      "aoi_tile": "h11v11",
+      "acquisition_date": "2023-06-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023172.h25v06.061.2023173104942.hdf",
+      "filename": "MOD11A1.A2023172.h25v06.061.2023173104942.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023172.h25v06.061.2023173104942/MOD11A1.A2023172.h25v06.061.2023173104942.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 2047644,
+      "sha256": "d65352b66277aac9ca0ce15808d7cc023ee2fbb844b19d910922b9853b631a47",
+      "aoi_tile": "h25v06",
+      "acquisition_date": "2023-06-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023266.h03v07.061.2023267094027.hdf",
+      "filename": "MOD11A1.A2023266.h03v07.061.2023267094027.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023266.h03v07.061.2023267094027/MOD11A1.A2023266.h03v07.061.2023267094027.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 208254,
+      "sha256": "2d0987abd835749632d69cf27b9e50508bea651f2efdefba862687f463aa6bc2",
+      "aoi_tile": "h03v07",
+      "acquisition_date": "2023-09-23",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023266.h11v11.061.2023267095213.hdf",
+      "filename": "MOD11A1.A2023266.h11v11.061.2023267095213.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023266.h11v11.061.2023267095213/MOD11A1.A2023266.h11v11.061.2023267095213.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 3166449,
+      "sha256": "7a86c2fd3922581bae65645836395dfd763ee743af649ec78ad5fd4fdc02b7ae",
+      "aoi_tile": "h11v11",
+      "acquisition_date": "2023-09-23",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023266.h25v06.061.2023267094040.hdf",
+      "filename": "MOD11A1.A2023266.h25v06.061.2023267094040.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023266.h25v06.061.2023267094040/MOD11A1.A2023266.h25v06.061.2023267094040.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 1543259,
+      "sha256": "482be3ad44e9839784cc4f01dc8273808c73b51e3c511a1f3c0738b1969a3b20",
+      "aoi_tile": "h25v06",
+      "acquisition_date": "2023-09-23",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023355.h03v07.061.2023357020449.hdf",
+      "filename": "MOD11A1.A2023355.h03v07.061.2023357020449.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023355.h03v07.061.2023357020449/MOD11A1.A2023355.h03v07.061.2023357020449.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 180726,
+      "sha256": "8a5f275f43adcaf6247c7f676cb70263c7dfbeab62d1754b232c2ed55a5a6555",
+      "aoi_tile": "h03v07",
+      "acquisition_date": "2023-12-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023355.h11v11.061.2023357020435.hdf",
+      "filename": "MOD11A1.A2023355.h11v11.061.2023357020435.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023355.h11v11.061.2023357020435/MOD11A1.A2023355.h11v11.061.2023357020435.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 1877526,
+      "sha256": "7bf796cb92e7c78bb59a61c3fd8902b4079b5140da341d367cfef29284cab116",
+      "aoi_tile": "h11v11",
+      "acquisition_date": "2023-12-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/modis/MOD11A1.A2023355.h25v06.061.2023357020551.hdf",
+      "filename": "MOD11A1.A2023355.h25v06.061.2023357020551.hdf",
+      "url": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/MOD11A1.061/MOD11A1.A2023355.h25v06.061.2023357020551/MOD11A1.A2023355.h25v06.061.2023357020551.hdf",
+      "product": "MOD11A1.061",
+      "access": "earthdata",
+      "size_bytes": 5612534,
+      "sha256": "b467ccaf9364a8328e492c97b77dbdab8936d5ba92cb4654fbad1ec52fd79567",
+      "aoi_tile": "h25v06",
+      "acquisition_date": "2023-12-21",
+      "doi": "https://doi.org/10.5067/MODIS/MOD11A1.061"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160111d_240_jp2.jp2",
+      "filename": "dgdr_ltim_avg_pols_20160111d_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_ltim_avg_pols_20160111d_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 3832252,
+      "sha256": "25a1cc080a9a6a82d28af10947f7f6a017f521d5bf1049941568f7a93e9e94bb",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160111d_240_jp2.lbl",
+      "filename": "dgdr_ltim_avg_pols_20160111d_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_ltim_avg_pols_20160111d_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4893,
+      "sha256": "39f9d7b00df09928b30c24cd530185230754f5bc8c352a6a9fe1fc69f05e7c57",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160125n_240_jp2.jp2",
+      "filename": "dgdr_ltim_avg_pols_20160125n_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_ltim_avg_pols_20160125n_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 2779472,
+      "sha256": "fa5470ebe8596560599b3453269bf152dc5a66c52f911aa04fd24cce34302496",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160125n_240_jp2.lbl",
+      "filename": "dgdr_ltim_avg_pols_20160125n_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_ltim_avg_pols_20160125n_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4886,
+      "sha256": "65e71828f375bb70be7a7202c1a5dffb726794aaa266f41d165a8fe197afcaac",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160111d_240_jp2.jp2",
+      "filename": "dgdr_tb3_avg_pols_20160111d_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_avg_pols_20160111d_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 13854840,
+      "sha256": "6e6d1328a1f68445ca382fae81f5b5ceb90acf4509615213bd13b8b1caca5e59",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160111d_240_jp2.lbl",
+      "filename": "dgdr_tb3_avg_pols_20160111d_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_avg_pols_20160111d_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4897,
+      "sha256": "839db92886f225fec78c11fa4e84dca3d53f5326cb23c6e71318850f8af92d23",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160125n_240_jp2.jp2",
+      "filename": "dgdr_tb3_avg_pols_20160125n_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_avg_pols_20160125n_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 15075392,
+      "sha256": "0ce397ebc3aec3f4d762f56c9b3ed65711f9957d7c30f3505db8539c1b8ffa47",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160125n_240_jp2.lbl",
+      "filename": "dgdr_tb3_avg_pols_20160125n_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_avg_pols_20160125n_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4897,
+      "sha256": "49f70ae919a967a7c9bb4c01a5bd60d3f1a48ee8e31e04fa7793d2bc67cb63d4",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160111d_240_jp2.jp2",
+      "filename": "dgdr_tb3_cnt_pols_20160111d_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_cnt_pols_20160111d_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 9538730,
+      "sha256": "0977dcf9eb8a9dad961e42271e8625ac379bfa2b68efcf5f00b5ff5d015b1e8a",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160111d_240_jp2.lbl",
+      "filename": "dgdr_tb3_cnt_pols_20160111d_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_cnt_pols_20160111d_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4887,
+      "sha256": "1d5fb0b834c1b0ce83cc478f00015ceca38c6b893c15e0634c8217f16d73c043",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160125n_240_jp2.jp2",
+      "filename": "dgdr_tb3_cnt_pols_20160125n_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_cnt_pols_20160125n_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 9501995,
+      "sha256": "dd7e3e40f3f533ed1a1cb8f285ca0cd52cff17c61cadd16961e3c1ef1e5eaa40",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160125n_240_jp2.lbl",
+      "filename": "dgdr_tb3_cnt_pols_20160125n_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_cnt_pols_20160125n_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4887,
+      "sha256": "91b328bdb1f58d2642b99d39cbb66babe4fb8f33946483e883091dd37f7e111d",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160111d_240_jp2.jp2",
+      "filename": "dgdr_tb3_err_pols_20160111d_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_err_pols_20160111d_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 13867079,
+      "sha256": "352f42c2bae3c879a8092bfd247e85995a4f9073981be300077d5bcc786ee6b0",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160111d_240_jp2.lbl",
+      "filename": "dgdr_tb3_err_pols_20160111d_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_err_pols_20160111d_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4889,
+      "sha256": "70a057ae225edc088c40bde63f755ca6c54747765c407e67ce4e6e966f804d82",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160125n_240_jp2.jp2",
+      "filename": "dgdr_tb3_err_pols_20160125n_240_jp2.jp2",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_err_pols_20160125n_240_jp2.jp2",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 13550220,
+      "sha256": "84e5dae5a85f2ce6e2053280cfdadf38a7cc7abee0ae5f9ede5100a5c8f92076",
+      "product_version": null
+    },
+    {
+      "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160125n_240_jp2.lbl",
+      "filename": "dgdr_tb3_err_pols_20160125n_240_jp2.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l2/2016/polar/jp2/dgdr_tb3_err_pols_20160125n_240_jp2.lbl",
+      "product": "LRO-DLRE-5-GDR-V1.0",
+      "access": "public_pds",
+      "size_bytes": 4888,
+      "sha256": "0402b0c9b05eec41ed9558235c3057a183677eb7166ef78467dfb4a25e437ca5",
+      "product_version": "V5.0"
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_day_2007.lbl",
+      "filename": "global_ti_day_2007.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_day_2007.lbl",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "public_pds",
+      "size_bytes": 2408,
+      "sha256": "9355e67000b0018768b04b2a8ebfed2b278099dde14e49633081a8ffe6d13631",
+      "doi": "https://doi.org/10.17189/1519489"
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_msk_day_2007.lbl",
+      "filename": "global_ti_msk_day_2007.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_msk_day_2007.lbl",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "public_pds",
+      "size_bytes": 2478,
+      "sha256": "4189613d7fe1407f991a27fd2809b708ef3087cb48ca297a2df8f492cfe2c9fd",
+      "doi": "https://doi.org/10.17189/1519489"
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_msk_night_2007.lbl",
+      "filename": "global_ti_msk_night_2007.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_msk_night_2007.lbl",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "public_pds",
+      "size_bytes": 2485,
+      "sha256": "164838970c1405b2dc6cf367a74c60c0de96d18f05f5e924db6c00f77038ee8a",
+      "doi": "https://doi.org/10.17189/1519489"
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_night_2007.lbl",
+      "filename": "global_ti_night_2007.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_night_2007.lbl",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "public_pds",
+      "size_bytes": 2415,
+      "sha256": "c1c897d9bd5399292166f99d84a29a73e42432cedfb9dd9a81a1441b3004b72b",
+      "doi": "https://doi.org/10.17189/1519489"
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_day_2007_jezero_25x25.i16be",
+      "filename": "global_ti_day_2007_jezero_25x25.i16be",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_day_2007.img",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "pds_range",
+      "size_bytes": 1250,
+      "sha256": "a798b323c23f9e2ec8f937d5eadde8b01a40f532aff14f245cdff8d49b317c43",
+      "doi": "https://doi.org/10.17189/1519489",
+      "source_window": {
+        "first_row": 1419,
+        "first_column": 5141,
+        "width": 25,
+        "pixels_per_degree": 20,
+        "body_fixed_sphere_radius_m": 3396000.0
+      },
+      "byte_range": [
+        20443882,
+        20789531
+      ],
+      "crop": {
+        "sample_width": 25,
+        "row_bytes": 14400,
+        "bytes_per_sample": 2,
+        "first_row": 1419,
+        "first_column": 5141
+      }
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_msk_day_2007_jezero_25x25.u8",
+      "filename": "global_ti_msk_day_2007_jezero_25x25.u8",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_msk_day_2007.img",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "pds_range",
+      "size_bytes": 625,
+      "sha256": "922506f232b717e4b9fcfffcaa4d80f65cd2c86e5fb7c8e1b2cbe27f8c6dd2b5",
+      "doi": "https://doi.org/10.17189/1519489",
+      "source_window": {
+        "first_row": 1419,
+        "first_column": 5141,
+        "width": 25,
+        "pixels_per_degree": 20,
+        "body_fixed_sphere_radius_m": 3396000.0
+      },
+      "byte_range": [
+        10221941,
+        10394765
+      ],
+      "crop": {
+        "sample_width": 25,
+        "row_bytes": 7200,
+        "bytes_per_sample": 1,
+        "first_row": 1419,
+        "first_column": 5141
+      }
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_night_2007_jezero_25x25.i16be",
+      "filename": "global_ti_night_2007_jezero_25x25.i16be",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_night_2007.img",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "pds_range",
+      "size_bytes": 1250,
+      "sha256": "c7db22d96c50825a4725f4aaf53c5fc7baead99afeee984d5ac864e93a437f98",
+      "doi": "https://doi.org/10.17189/1519489",
+      "source_window": {
+        "first_row": 1419,
+        "first_column": 5141,
+        "width": 25,
+        "pixels_per_degree": 20,
+        "body_fixed_sphere_radius_m": 3396000.0
+      },
+      "byte_range": [
+        20443882,
+        20789531
+      ],
+      "crop": {
+        "sample_width": 25,
+        "row_bytes": 14400,
+        "bytes_per_sample": 2,
+        "first_row": 1419,
+        "first_column": 5141
+      }
+    },
+    {
+      "path": "data/raw/k047/mars/global_ti_msk_night_2007_jezero_25x25.u8",
+      "filename": "global_ti_msk_night_2007_jezero_25x25.u8",
+      "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/mgst_9001/data/global_ti_msk_night_2007.img",
+      "product": "MGS-M-TES-5-TIMAP-V1.0",
+      "access": "pds_range",
+      "size_bytes": 625,
+      "sha256": "5333a1fc7991d88796d602b66ff1d490f84b50153c569c533819c337e3bc1bf9",
+      "doi": "https://doi.org/10.17189/1519489",
+      "source_window": {
+        "first_row": 1419,
+        "first_column": 5141,
+        "width": 25,
+        "pixels_per_degree": 20,
+        "body_fixed_sphere_radius_m": 3396000.0
+      },
+      "byte_range": [
+        10221941,
+        10394765
+      ],
+      "crop": {
+        "sample_width": 25,
+        "row_bytes": 7200,
+        "bytes_per_sample": 1,
+        "first_row": 1419,
+        "first_column": 5141
+      }
+    }
+  ],
+  "decision": {
+    "outcome": "NO-GO",
+    "feature": "One shared surface thermal measurement scored across Earth, Mars, and Moon in K-010.",
+    "reason": "Earth MOD11A1 and lunar Diviner TB3 have distinct radiometric retrievals, spectral responses, temporal aggregation and local-time conditions; Mars TES input is derived thermal inertia, not temperature. TES posting near Jezero also exceeds the 2 km target cell.",
+    "follow_up": "If pursued, evaluate temperature-only and thermal-inertia features as separate P1 research cards with explicit shared measurand, seasonal/local-time matching, QA, support, null handling and coverage rules. No production scoring changes in K-047."
+  },
+  "analysis": {
+    "generated_at_utc": "2026-11-15T16:05:42+00:00",
+    "software": {
+      "python": "3.12.14",
+      "numpy": "2.5.4",
+      "rasterio": "1.5.2",
+      "pyhdf": "0.11.7",
+      "pyproj": "3.8.0",
+      "earthaccess": "0.19.0"
+    },
+    "code_sha256": "1151442c40c8bebbcc509b96c3596fe711c7a5b5d046052b76b46d50947d4626",
+    "reference_manifest_sha256": {
+      "data/manifests/k004-planetary-profiles.json": "fb12e02fe066e819af69fff35b455cfa438afe0da9a640aef0d74699bb9950a6",
+      "data/manifests/k017-earth-validation.json": "794cd3348c389cfa7f7147755223a3e9090a642707f2fd7705f8e6ca0c684af9"
+    },
+    "asset_verification": {
+      "verified_file_count": 39,
+      "verified_bytes": 144901027,
+      "files": [
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023079.h03v07.061.2023080120636.hdf",
+          "size_bytes": 197192,
+          "sha256": "6c7ad59dd748c49b3c0074c6a6e181348c03c570288f12157fe182bf4e51ab25"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023079.h11v11.061.2023080120630.hdf",
+          "size_bytes": 3088376,
+          "sha256": "ef2333c1647c723c97393dc10bd45161ed4d1576b2adf4c9f84122b37517e321"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023079.h25v06.061.2023080120407.hdf",
+          "size_bytes": 3205338,
+          "sha256": "33f94310c0cbd335611c087121d019564e6c01a3eb6fcb9664f30be3c8cf8421"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023172.h03v07.061.2023173104740.hdf",
+          "size_bytes": 228093,
+          "sha256": "fd46e3249847e99cc15de4294ec15781e068ffb59207599b7481d843b25db791"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023172.h11v11.061.2023173104910.hdf",
+          "size_bytes": 2591393,
+          "sha256": "2ab005660db5edefa13be82e226c9add601685bfd28df106f8413f135621fa6d"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023172.h25v06.061.2023173104942.hdf",
+          "size_bytes": 2047644,
+          "sha256": "d65352b66277aac9ca0ce15808d7cc023ee2fbb844b19d910922b9853b631a47"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023266.h03v07.061.2023267094027.hdf",
+          "size_bytes": 208254,
+          "sha256": "2d0987abd835749632d69cf27b9e50508bea651f2efdefba862687f463aa6bc2"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023266.h11v11.061.2023267095213.hdf",
+          "size_bytes": 3166449,
+          "sha256": "7a86c2fd3922581bae65645836395dfd763ee743af649ec78ad5fd4fdc02b7ae"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023266.h25v06.061.2023267094040.hdf",
+          "size_bytes": 1543259,
+          "sha256": "482be3ad44e9839784cc4f01dc8273808c73b51e3c511a1f3c0738b1969a3b20"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023355.h03v07.061.2023357020449.hdf",
+          "size_bytes": 180726,
+          "sha256": "8a5f275f43adcaf6247c7f676cb70263c7dfbeab62d1754b232c2ed55a5a6555"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023355.h11v11.061.2023357020435.hdf",
+          "size_bytes": 1877526,
+          "sha256": "7bf796cb92e7c78bb59a61c3fd8902b4079b5140da341d367cfef29284cab116"
+        },
+        {
+          "path": "data/raw/k047/modis/MOD11A1.A2023355.h25v06.061.2023357020551.hdf",
+          "size_bytes": 5612534,
+          "sha256": "b467ccaf9364a8328e492c97b77dbdab8936d5ba92cb4654fbad1ec52fd79567"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160111d_240_jp2.jp2",
+          "size_bytes": 3832252,
+          "sha256": "25a1cc080a9a6a82d28af10947f7f6a017f521d5bf1049941568f7a93e9e94bb"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160111d_240_jp2.lbl",
+          "size_bytes": 4893,
+          "sha256": "39f9d7b00df09928b30c24cd530185230754f5bc8c352a6a9fe1fc69f05e7c57"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160125n_240_jp2.jp2",
+          "size_bytes": 2779472,
+          "sha256": "fa5470ebe8596560599b3453269bf152dc5a66c52f911aa04fd24cce34302496"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_ltim_avg_pols_20160125n_240_jp2.lbl",
+          "size_bytes": 4886,
+          "sha256": "65e71828f375bb70be7a7202c1a5dffb726794aaa266f41d165a8fe197afcaac"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160111d_240_jp2.jp2",
+          "size_bytes": 13854840,
+          "sha256": "6e6d1328a1f68445ca382fae81f5b5ceb90acf4509615213bd13b8b1caca5e59"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160111d_240_jp2.lbl",
+          "size_bytes": 4897,
+          "sha256": "839db92886f225fec78c11fa4e84dca3d53f5326cb23c6e71318850f8af92d23"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160125n_240_jp2.jp2",
+          "size_bytes": 15075392,
+          "sha256": "0ce397ebc3aec3f4d762f56c9b3ed65711f9957d7c30f3505db8539c1b8ffa47"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_avg_pols_20160125n_240_jp2.lbl",
+          "size_bytes": 4897,
+          "sha256": "49f70ae919a967a7c9bb4c01a5bd60d3f1a48ee8e31e04fa7793d2bc67cb63d4"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160111d_240_jp2.jp2",
+          "size_bytes": 9538730,
+          "sha256": "0977dcf9eb8a9dad961e42271e8625ac379bfa2b68efcf5f00b5ff5d015b1e8a"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160111d_240_jp2.lbl",
+          "size_bytes": 4887,
+          "sha256": "1d5fb0b834c1b0ce83cc478f00015ceca38c6b893c15e0634c8217f16d73c043"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160125n_240_jp2.jp2",
+          "size_bytes": 9501995,
+          "sha256": "dd7e3e40f3f533ed1a1cb8f285ca0cd52cff17c61cadd16961e3c1ef1e5eaa40"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_cnt_pols_20160125n_240_jp2.lbl",
+          "size_bytes": 4887,
+          "sha256": "91b328bdb1f58d2642b99d39cbb66babe4fb8f33946483e883091dd37f7e111d"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160111d_240_jp2.jp2",
+          "size_bytes": 13867079,
+          "sha256": "352f42c2bae3c879a8092bfd247e85995a4f9073981be300077d5bcc786ee6b0"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160111d_240_jp2.lbl",
+          "size_bytes": 4889,
+          "sha256": "70a057ae225edc088c40bde63f755ca6c54747765c407e67ce4e6e966f804d82"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160125n_240_jp2.jp2",
+          "size_bytes": 13550220,
+          "sha256": "84e5dae5a85f2ce6e2053280cfdadf38a7cc7abee0ae5f9ede5100a5c8f92076"
+        },
+        {
+          "path": "data/raw/k047/diviner/dgdr_tb3_err_pols_20160125n_240_jp2.lbl",
+          "size_bytes": 4888,
+          "sha256": "0402b0c9b05eec41ed9558235c3057a183677eb7166ef78467dfb4a25e437ca5"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_day_2007.lbl",
+          "size_bytes": 2408,
+          "sha256": "9355e67000b0018768b04b2a8ebfed2b278099dde14e49633081a8ffe6d13631"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_msk_day_2007.lbl",
+          "size_bytes": 2478,
+          "sha256": "4189613d7fe1407f991a27fd2809b708ef3087cb48ca297a2df8f492cfe2c9fd"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_msk_night_2007.lbl",
+          "size_bytes": 2485,
+          "sha256": "164838970c1405b2dc6cf367a74c60c0de96d18f05f5e924db6c00f77038ee8a"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_night_2007.lbl",
+          "size_bytes": 2415,
+          "sha256": "c1c897d9bd5399292166f99d84a29a73e42432cedfb9dd9a81a1441b3004b72b"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_day_2007_jezero_25x25.i16be",
+          "size_bytes": 1250,
+          "sha256": "a798b323c23f9e2ec8f937d5eadde8b01a40f532aff14f245cdff8d49b317c43"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_msk_day_2007_jezero_25x25.u8",
+          "size_bytes": 625,
+          "sha256": "922506f232b717e4b9fcfffcaa4d80f65cd2c86e5fb7c8e1b2cbe27f8c6dd2b5"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_night_2007_jezero_25x25.i16be",
+          "size_bytes": 1250,
+          "sha256": "c7db22d96c50825a4725f4aaf53c5fc7baead99afeee984d5ac864e93a437f98"
+        },
+        {
+          "path": "data/raw/k047/mars/global_ti_msk_night_2007_jezero_25x25.u8",
+          "size_bytes": 625,
+          "sha256": "5333a1fc7991d88796d602b66ff1d490f84b50153c569c533819c337e3bc1bf9"
+        },
+        {
+          "path": "data/raw/k017/nasadem/s25w069.swb",
+          "size_bytes": 12967201,
+          "sha256": "8eaa2196f307f909a164b5b87df7e29dc0813780a2abd945068b4ff5a2a06c81"
+        },
+        {
+          "path": "data/raw/k017/nasadem/n19w156.swb",
+          "size_bytes": 12967201,
+          "sha256": "7bdf1ba4116256b66f9e8b05ca3e28912fcf19ab36f6cacb22420a287790d389"
+        },
+        {
+          "path": "data/raw/k017/nasadem/n28e086.swb",
+          "size_bytes": 12967201,
+          "sha256": "3aae6ae3584c47f1907d1259e684903eac0caf767273ca9283d87ff4f5a53a70"
+        }
+      ]
+    },
+    "earth": {
+      "atacama-andes": {
+        "label": "Atacama / Andes",
+        "tile_id": "h11v11",
+        "target_grid": {
+          "crs": "EPSG:32719",
+          "cell_size_m": 2000.0,
+          "candidate_land_cells": 1793,
+          "support_rule": "at least 3 native land pixel centres and 75% or more of those centres with good mandatory QA"
+        },
+        "dates": [
+          {
+            "date": "2023-03-20",
+            "land_modis_pixel_centres": 8377,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 8375,
+                "good_native_land_coverage_pct": 99.97612510445266,
+                "supported_2km_land_cells": 1783,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 99.44227551589515,
+                "qa_pixel_centre_counts": {
+                  "good": 8375,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 2,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 2,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 8368,
+                      "other": 0,
+                      "tbd_10": 7,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 8375,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 8375,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 300.954,
+                  "p50": 309.7,
+                  "p95": 316.5
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.4,
+                  "p50": 10.5,
+                  "p95": 10.5
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 8377,
+                "good_native_land_coverage_pct": 100.0,
+                "supported_2km_land_cells": 1783,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 99.44227551589515,
+                "qa_pixel_centre_counts": {
+                  "good": 8377,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 0,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 0,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 8363,
+                      "other": 0,
+                      "tbd_10": 14,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 8377,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 8377,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 272.96,
+                  "p50": 279.54,
+                  "p95": 284.7
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.900000000000002,
+                  "p50": 21.900000000000002,
+                  "p95": 21.900000000000002
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-06-21",
+            "land_modis_pixel_centres": 8377,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 7649,
+                "good_native_land_coverage_pct": 91.30953802077116,
+                "supported_2km_land_cells": 1608,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 89.68209704406023,
+                "qa_pixel_centre_counts": {
+                  "good": 7649,
+                  "other_quality_produced": 599,
+                  "not_produced_cloud": 129,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 129,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 7649,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 7649,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 7649,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 278.36,
+                  "p50": 290.14,
+                  "p95": 296.8
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.100000000000001,
+                  "p50": 10.100000000000001,
+                  "p95": 10.100000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 407,
+                "good_native_land_coverage_pct": 4.858541243882058,
+                "supported_2km_land_cells": 78,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 4.350250976017847,
+                "qa_pixel_centre_counts": {
+                  "good": 407,
+                  "other_quality_produced": 80,
+                  "not_produced_cloud": 7890,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 7890,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 407,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 407,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 407,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 264.92,
+                  "p50": 268.56,
+                  "p95": 270.35400000000004
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 23.1,
+                  "p50": 23.1,
+                  "p95": 23.1
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-09-23",
+            "land_modis_pixel_centres": 8377,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 8377,
+                "good_native_land_coverage_pct": 100.0,
+                "supported_2km_land_cells": 1783,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 99.44227551589515,
+                "qa_pixel_centre_counts": {
+                  "good": 8377,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 0,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 0,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 8373,
+                      "other": 0,
+                      "tbd_10": 4,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 8377,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 8377,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 299.84000000000003,
+                  "p50": 309.40000000000003,
+                  "p95": 316.74
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.200000000000001,
+                  "p50": 10.200000000000001,
+                  "p95": 10.200000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 7816,
+                "good_native_land_coverage_pct": 93.30309179897338,
+                "supported_2km_land_cells": 1622,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 90.46291132180703,
+                "qa_pixel_centre_counts": {
+                  "good": 7816,
+                  "other_quality_produced": 547,
+                  "not_produced_cloud": 14,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 14,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 7816,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 7816,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 7816,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 266.98,
+                  "p50": 274.14,
+                  "p95": 280.26
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.6,
+                  "p50": 21.700000000000003,
+                  "p95": 21.700000000000003
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-12-21",
+            "land_modis_pixel_centres": 8377,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 8375,
+                "good_native_land_coverage_pct": 99.97612510445266,
+                "supported_2km_land_cells": 1783,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 99.44227551589515,
+                "qa_pixel_centre_counts": {
+                  "good": 8375,
+                  "other_quality_produced": 2,
+                  "not_produced_cloud": 0,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 0,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 8375,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 8375,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 8375,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 304.88,
+                  "p50": 315.94,
+                  "p95": 323.94
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.0,
+                  "p50": 10.0,
+                  "p95": 10.100000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 0,
+                "good_native_land_coverage_pct": 0.0,
+                "supported_2km_land_cells": 0,
+                "candidate_2km_land_cells": 1793,
+                "supported_2km_land_cell_pct": 0.0,
+                "qa_pixel_centre_counts": {
+                  "good": 0,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 8377,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 8377,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 0,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 0,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 0,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "hawaii-big-island": {
+        "label": "Hawaii, Big Island",
+        "tile_id": "h03v07",
+        "target_grid": {
+          "crs": "EPSG:32605",
+          "cell_size_m": 2000.0,
+          "candidate_land_cells": 1704,
+          "support_rule": "at least 3 native land pixel centres and 75% or more of those centres with good mandatory QA"
+        },
+        "dates": [
+          {
+            "date": "2023-03-20",
+            "land_modis_pixel_centres": 7960,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 17,
+                "good_native_land_coverage_pct": 0.2135678391959799,
+                "supported_2km_land_cells": 1,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 0.05868544600938967,
+                "qa_pixel_centre_counts": {
+                  "good": 17,
+                  "other_quality_produced": 1715,
+                  "not_produced_cloud": 6225,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 6228,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 17,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 17,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 17,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 289.62399999999997,
+                  "p50": 294.2,
+                  "p95": 297.2
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 11.0,
+                  "p50": 11.0,
+                  "p95": 11.100000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 0,
+                "good_native_land_coverage_pct": 0.0,
+                "supported_2km_land_cells": 0,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 0.0,
+                "qa_pixel_centre_counts": {
+                  "good": 0,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 7957,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 7960,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 0,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 0,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 0,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-06-21",
+            "land_modis_pixel_centres": 7960,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 847,
+                "good_native_land_coverage_pct": 10.640703517587939,
+                "supported_2km_land_cells": 145,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 8.509389671361502,
+                "qa_pixel_centre_counts": {
+                  "good": 847,
+                  "other_quality_produced": 1333,
+                  "not_produced_cloud": 5777,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 5780,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 847,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 847,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 847,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 299.806,
+                  "p50": 308.44,
+                  "p95": 314.40000000000003
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.600000000000001,
+                  "p50": 10.700000000000001,
+                  "p95": 10.700000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 961,
+                "good_native_land_coverage_pct": 12.07286432160804,
+                "supported_2km_land_cells": 187,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 10.974178403755868,
+                "qa_pixel_centre_counts": {
+                  "good": 961,
+                  "other_quality_produced": 2161,
+                  "not_produced_cloud": 4835,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 4838,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 958,
+                      "other": 0,
+                      "tbd_10": 3,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 961,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 961,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 272.24,
+                  "p50": 279.06,
+                  "p95": 285.40000000000003
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 22.5,
+                  "p50": 22.5,
+                  "p95": 22.5
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-09-23",
+            "land_modis_pixel_centres": 7960,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 509,
+                "good_native_land_coverage_pct": 6.394472361809045,
+                "supported_2km_land_cells": 84,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 4.929577464788732,
+                "qa_pixel_centre_counts": {
+                  "good": 509,
+                  "other_quality_produced": 2515,
+                  "not_produced_cloud": 4933,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 4936,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 509,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 509,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 509,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 302.844,
+                  "p50": 310.46,
+                  "p95": 313.652
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.8,
+                  "p50": 10.8,
+                  "p95": 10.8
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 0,
+                "good_native_land_coverage_pct": 0.0,
+                "supported_2km_land_cells": 0,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 0.0,
+                "qa_pixel_centre_counts": {
+                  "good": 0,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 7957,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 7960,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 0,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 0,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 0,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-12-21",
+            "land_modis_pixel_centres": 7960,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 0,
+                "good_native_land_coverage_pct": 0.0,
+                "supported_2km_land_cells": 0,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 0.0,
+                "qa_pixel_centre_counts": {
+                  "good": 0,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 7957,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 7960,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 0,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 0,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 0,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 0,
+                "good_native_land_coverage_pct": 0.0,
+                "supported_2km_land_cells": 0,
+                "candidate_2km_land_cells": 1704,
+                "supported_2km_land_cell_pct": 0.0,
+                "qa_pixel_centre_counts": {
+                  "good": 0,
+                  "other_quality_produced": 0,
+                  "not_produced_cloud": 7957,
+                  "not_produced_other": 3,
+                  "fill_or_outside_valid_range": 7960,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 0,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 0,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 0,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": null,
+                  "p50": null,
+                  "p95": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "himalaya": {
+        "label": "Himalaya",
+        "tile_id": "h25v06",
+        "target_grid": {
+          "crs": "EPSG:32645",
+          "cell_size_m": 2000.0,
+          "candidate_land_cells": 1731,
+          "support_rule": "at least 3 native land pixel centres and 75% or more of those centres with good mandatory QA"
+        },
+        "dates": [
+          {
+            "date": "2023-03-20",
+            "land_modis_pixel_centres": 8080,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 4654,
+                "good_native_land_coverage_pct": 57.5990099009901,
+                "supported_2km_land_cells": 898,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 51.87752744078567,
+                "qa_pixel_centre_counts": {
+                  "good": 4654,
+                  "other_quality_produced": 1815,
+                  "not_produced_cloud": 1611,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 1611,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 4654,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 4654,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 4654,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 276.94,
+                  "p50": 288.48,
+                  "p95": 297.467
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.700000000000001,
+                  "p50": 10.700000000000001,
+                  "p95": 10.700000000000001
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 642,
+                "good_native_land_coverage_pct": 7.945544554455446,
+                "supported_2km_land_cells": 108,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 6.239168110918544,
+                "qa_pixel_centre_counts": {
+                  "good": 642,
+                  "other_quality_produced": 1811,
+                  "not_produced_cloud": 5627,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 5627,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 642,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 642,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 642,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 255.244,
+                  "p50": 261.02,
+                  "p95": 264.577
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.605,
+                  "p50": 21.700000000000003,
+                  "p95": 21.700000000000003
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-06-21",
+            "land_modis_pixel_centres": 8080,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 1785,
+                "good_native_land_coverage_pct": 22.09158415841584,
+                "supported_2km_land_cells": 315,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 18.197573656845755,
+                "qa_pixel_centre_counts": {
+                  "good": 1785,
+                  "other_quality_produced": 3041,
+                  "not_produced_cloud": 3254,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 3254,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 1782,
+                      "other": 0,
+                      "tbd_10": 3,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 1785,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 1785,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 286.08799999999997,
+                  "p50": 305.36,
+                  "p95": 313.596
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.3,
+                  "p50": 10.3,
+                  "p95": 10.3
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 1625,
+                "good_native_land_coverage_pct": 20.111386138613863,
+                "supported_2km_land_cells": 304,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 17.56210283073368,
+                "qa_pixel_centre_counts": {
+                  "good": 1625,
+                  "other_quality_produced": 2120,
+                  "not_produced_cloud": 4335,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 4335,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 1625,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 1625,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 1625,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 271.624,
+                  "p50": 276.78000000000003,
+                  "p95": 281.97200000000004
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.200000000000003,
+                  "p50": 21.3,
+                  "p95": 21.3
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-09-23",
+            "land_modis_pixel_centres": 8080,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 270,
+                "good_native_land_coverage_pct": 3.3415841584158414,
+                "supported_2km_land_cells": 39,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 2.2530329289428077,
+                "qa_pixel_centre_counts": {
+                  "good": 270,
+                  "other_quality_produced": 1583,
+                  "not_produced_cloud": 6227,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 6227,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 270,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 270,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 270,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 289.87,
+                  "p50": 298.95,
+                  "p95": 305.618
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.4,
+                  "p50": 10.4,
+                  "p95": 10.4
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 5547,
+                "good_native_land_coverage_pct": 68.6509900990099,
+                "supported_2km_land_cells": 1108,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 64.00924321201617,
+                "qa_pixel_centre_counts": {
+                  "good": 5547,
+                  "other_quality_produced": 1747,
+                  "not_produced_cloud": 786,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 786,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 5546,
+                      "other": 0,
+                      "tbd_10": 1,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 5547,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 5547,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 267.36,
+                  "p50": 272.02,
+                  "p95": 278.994
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.400000000000002,
+                  "p50": 21.400000000000002,
+                  "p95": 21.400000000000002
+                }
+              }
+            }
+          },
+          {
+            "date": "2023-12-21",
+            "land_modis_pixel_centres": 8080,
+            "periods": {
+              "day": {
+                "good_native_land_pixel_centres": 6468,
+                "good_native_land_coverage_pct": 80.04950495049505,
+                "supported_2km_land_cells": 1321,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 76.31426920854997,
+                "qa_pixel_centre_counts": {
+                  "good": 6468,
+                  "other_quality_produced": 1159,
+                  "not_produced_cloud": 453,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 453,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 6468,
+                      "other": 0,
+                      "tbd_10": 0,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 6468,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 6468,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 269.407,
+                  "p50": 280.72,
+                  "p95": 287.28000000000003
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 10.200000000000001,
+                  "p50": 10.3,
+                  "p95": 10.3
+                }
+              },
+              "night": {
+                "good_native_land_pixel_centres": 6355,
+                "good_native_land_coverage_pct": 78.6509900990099,
+                "supported_2km_land_cells": 1284,
+                "candidate_2km_land_cells": 1731,
+                "supported_2km_land_cell_pct": 74.17677642980937,
+                "qa_pixel_centre_counts": {
+                  "good": 6355,
+                  "other_quality_produced": 1168,
+                  "not_produced_cloud": 557,
+                  "not_produced_other": 0,
+                  "fill_or_outside_valid_range": 557,
+                  "detailed_flags_for_mandatory_good_pixels": {
+                    "data_quality": {
+                      "good": 6354,
+                      "other": 0,
+                      "tbd_10": 1,
+                      "tbd_11": 0
+                    },
+                    "emissivity_error": {
+                      "<=0.01": 6355,
+                      "<=0.02": 0,
+                      "<=0.04": 0,
+                      ">0.04": 0
+                    },
+                    "lst_error_k": {
+                      "<=1": 6355,
+                      "<=2": 0,
+                      "<=3": 0,
+                      ">3": 0
+                    }
+                  }
+                },
+                "surface_temperature_k": {
+                  "p05": 255.72,
+                  "p50": 260.18,
+                  "p95": 263.58
+                },
+                "local_solar_observation_time_hours": {
+                  "p05": 21.200000000000003,
+                  "p50": 21.200000000000003,
+                  "p95": 21.200000000000003
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "moon": {
+      "profile_id": "moon-south-polar-80s-lola80-v1",
+      "candidate_2km_cells": 72580,
+      "grid_cell_size_m": 2000.0,
+      "periods": {
+        "day": {
+          "cycle_id": "20160111d",
+          "cycle_start_utc": "2016-01-11T22:00:00.000",
+          "cycle_stop_utc": "2016-02-08T04:00:00.000",
+          "source_label_product_version": "V5.0",
+          "valid_source_posting_centres": 2674678,
+          "candidate_2km_cells": 72580,
+          "coverage_qualified_2km_cells": 26576,
+          "coverage_qualified_2km_cell_pct": 36.61614769909066,
+          "posting_coverage_fraction_in_candidate_cells": {
+            "p05": 0.0,
+            "p50": 0.5802469135802469,
+            "p95": 1.0
+          },
+          "brightness_temperature_k": {
+            "p05": 101.34,
+            "p50": 231.84,
+            "p95": 284.24
+          },
+          "local_solar_time_hours": {
+            "p05": 9.00273109112959,
+            "p50": 11.086064423629978,
+            "p95": 12.586064423029711
+          },
+          "count_product_values": {
+            "p05": 0.09,
+            "p50": 0.26,
+            "p95": 0.49
+          },
+          "error_estimates_k": {
+            "p05": 2.969999999999999,
+            "p50": 13.949999999999989,
+            "p95": 193.49
+          },
+          "qa_rule": "TB3 in the PDS-described 10–450 K range, a positive count estimate, a present error estimate, and at least 80% of native posting centres valid per 2 km target cell.",
+          "grid_posting_m": 240.0,
+          "effective_spatial_resolution_m": null,
+          "crs": "PROJCS[\"POLAR_STEREOGRAPHIC MOON\",GEOGCS[\"GCS_MOON\",DATUM[\"D_MOON\",SPHEROID[\"MOON\",1737400,0]],PRIMEM[\"Reference_Meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH]]"
+        },
+        "night": {
+          "cycle_id": "20160125n",
+          "cycle_start_utc": "2016-01-25T12:00:00.000",
+          "cycle_stop_utc": "2016-02-21T19:00:00.000",
+          "source_label_product_version": "V5.0",
+          "valid_source_posting_centres": 578672,
+          "candidate_2km_cells": 72580,
+          "coverage_qualified_2km_cells": 828,
+          "coverage_qualified_2km_cell_pct": 1.1408101405345825,
+          "posting_coverage_fraction_in_candidate_cells": {
+            "p05": 0.0,
+            "p50": 0.037037037037037035,
+            "p95": 0.5
+          },
+          "brightness_temperature_k": {
+            "p05": 18.44,
+            "p50": 101.60000000000001,
+            "p95": 154.66
+          },
+          "local_solar_time_hours": {
+            "p05": 0.9193977610298134,
+            "p50": 2.002731093929924,
+            "p95": 4.252731093029979
+          },
+          "count_product_values": {
+            "p05": 0.11,
+            "p50": 0.28,
+            "p95": 0.45
+          },
+          "error_estimates_k": {
+            "p05": 154.15,
+            "p50": 159.91,
+            "p95": 168.07
+          },
+          "qa_rule": "TB3 in the PDS-described 10–450 K range, a positive count estimate, a present error estimate, and at least 80% of native posting centres valid per 2 km target cell.",
+          "grid_posting_m": 240.0,
+          "effective_spatial_resolution_m": null,
+          "crs": "PROJCS[\"POLAR_STEREOGRAPHIC MOON\",GEOGCS[\"GCS_MOON\",DATUM[\"D_MOON\",SPHEROID[\"MOON\",1737400,0]],PRIMEM[\"Reference_Meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH]]"
+        }
+      }
+    },
+    "mars": {
+      "profile_id": "mars-jezero-mola128-v1",
+      "target_grid_cell_size_m": 2000.0,
+      "candidate_target_2km_cells": 448,
+      "independent_2km_target_support": {
+        "cell_count": null,
+        "reason": "The native TES posting near Jezero (about 2.8–3.0 km) is coarser than the 2 km target cell; no independent per-cell target values are assigned."
+      },
+      "sample_window_source_pixels": 625,
+      "periods": {
+        "day": {
+          "native_source_pixels_inside_jezero_geometry": 214,
+          "valid_source_pixels": 214,
+          "direct_source_pixels": 212,
+          "interpolated_source_pixels": 2,
+          "direct_source_pixel_pct": 99.06542056074767,
+          "thermal_inertia_j_m2_k_sqrt_s": {
+            "p05": 168.75,
+            "p50": 282.5,
+            "p95": 447.5999999999999
+          },
+          "source_pixel_size_at_profile_latitude_m": {
+            "north_south_posting_m": 2963.569069886372,
+            "east_west_posting_m": 2811.896290010045
+          }
+        },
+        "night": {
+          "native_source_pixels_inside_jezero_geometry": 214,
+          "valid_source_pixels": 214,
+          "direct_source_pixels": 210,
+          "interpolated_source_pixels": 4,
+          "direct_source_pixel_pct": 98.13084112149532,
+          "thermal_inertia_j_m2_k_sqrt_s": {
+            "p05": 230.15,
+            "p50": 301.0,
+            "p95": 401.19999999999993
+          },
+          "source_pixel_size_at_profile_latitude_m": {
+            "north_south_posting_m": 2963.569069886372,
+            "east_west_posting_m": 2811.896290010045
+          }
+        }
+      }
+    }
+  }
+}
