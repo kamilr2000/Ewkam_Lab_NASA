@@ -1,8 +1,8 @@
 {
   "report_version": 1,
   "task_id": "K-005",
-  "generated_at": "2026-11-15T04:33:56Z",
-  "code_sha256": "feab8cb9a942e6c7e8217f0d27d1a9b1f676d874d8c99ba32b6d4e9c2b81778f",
+  "generated_at": "2026-11-15T10:58:32Z",
+  "code_sha256": "56543c206661c3158999fd442f13a3ebc56e695333da8b2ad01b1e19d8d63829",
   "global_scale_budget": {
     "grid": {
       "angular_resolution_arc_seconds": 60,
@@ -232,8 +232,8 @@
         "passed": true
       },
       "retained_numpy_array_bytes_lower_bound": 171600,
-      "processing_seconds": 0.0,
-      "resumed_from_checkpoint": true,
+      "processing_seconds": 19.439582599996356,
+      "resumed_from_checkpoint": false,
       "manifest_path": "data/manifests/k005-earth-grid-atacama-andes.json"
     },
     {
@@ -375,8 +375,8 @@
         "passed": true
       },
       "retained_numpy_array_bytes_lower_bound": 180960,
-      "processing_seconds": 0.0,
-      "resumed_from_checkpoint": true,
+      "processing_seconds": 23.465775800010306,
+      "resumed_from_checkpoint": false,
       "manifest_path": "data/manifests/k005-earth-grid-hawaii-big-island.json"
     },
     {
@@ -514,8 +514,8 @@
         "passed": true
       },
       "retained_numpy_array_bytes_lower_bound": 168740,
-      "processing_seconds": 0.0,
-      "resumed_from_checkpoint": true,
+      "processing_seconds": 28.65059730000212,
+      "resumed_from_checkpoint": false,
       "manifest_path": "data/manifests/k005-earth-grid-himalaya.json"
     }
   ],

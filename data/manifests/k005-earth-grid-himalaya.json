@@ -7,7 +7,7 @@
   "role": "earth_search",
   "body": "earth",
   "product_version": "K-005 v2 land-masked features; ETOPO_2022_v1 15 arc-second surface",
-  "generated_at": "2026-11-15T04:33:18Z",
+  "generated_at": "2026-11-15T10:58:32Z",
   "sources": [
     {
       "source_id": "noaa-etopo-2022",
@@ -117,8 +117,8 @@
     }
   ],
   "processing": {
-    "code_version": "sha256:feab8cb9a942e6c7e8217f0d27d1a9b1f676d874d8c99ba32b6d4e9c2b81778f",
-    "processed_at": "2026-11-15T04:33:18Z",
+    "code_version": "sha256:56543c206661c3158999fd442f13a3ebc56e695333da8b2ad01b1e19d8d63829",
+    "processed_at": "2026-11-15T10:58:32Z",
     "steps": [
       "Verify input file size and SHA-256 against the pinned K-017 source manifest.",
       "Rasterize GSHHG L1/L3/L6 as land and L2/L4 as water at the ETOPO source posting; mask ocean and source no-data before area-averaging land heights to the metric grid.",
