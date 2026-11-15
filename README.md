@@ -4,7 +4,7 @@ Zespół: **Kamil i Ewelina** · NASA Space Apps Challenge 2026 · nazwa robocza
 
 Webapp wyszukujący na Ziemi komórki najbardziej podobne do wybranego regionu Marsa lub Księżyca. Użytkownik wybiera warstwy, nadaje im wagi i otrzymuje mapę oraz ranking Top 10 z wyjaśnieniem wyniku.
 
-**Stan repo: dokumentacja, plan i kontrakty startowe. Aplikacja i rzeczywiste wyniki nie są jeszcze zaimplementowane.** Wspólne prywatne repo: **[kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA)**. Remote to `origin`; I-001 potwierdza pierwszą wysyłkę i dostęp obu osób.
+**Stan repo: profile referencyjne Marsa i Księżyca są wyznaczone z rzeczywistych rastrów NASA i mają reprodukowalne metadane. Globalny preprocessing, ranking Ziemi i pełne demo aplikacji pozostają w realizacji.** Wspólne prywatne repo: **[kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA)**. Remote to `origin`; I-001 potwierdza pierwszą wysyłkę i dostęp obu osób.
 
 ## Zacznij tutaj
 
@@ -54,6 +54,6 @@ To podział organizacyjny, nie założenie o Waszym doświadczeniu. Można zamie
 
 ## Co można uruchomić teraz
 
-Można czytać dokumentację, przeglądać zadania, uruchomić kontrolę przygotowania poleceniem `python tools/check_planning.py` i odtworzyć pobranie małych rzeczywistych próbek ETOPO, LOLA i MOLA poleceniem `python pipeline/download_samples.py`. Manifest i sumy są w `data/manifests/k002-samples.json`; próbki pozostają w ignorowanym `data/raw/k002`. Aplikacja nie ma jeszcze działającego demo, preprocessingu ani rzeczywistego rankingu. NASADEM wymaga lokalnego uwierzytelnienia Earthdata.
+Można czytać dokumentację, przeglądać zadania i uruchomić kontrolę planu poleceniem `python tools/check_planning.py`. Profile K-004 odtworzysz poleceniami `python pipeline/download_k004_sources.py` i `python pipeline/profiles/build_profiles.py`; wejścia są publiczne, przypięte sumami SHA-256 i pozostają w ignorowanym `data/raw/k004`. To działa na dwóch rzeczywistych regionach planetarnych, nie jest jeszcze globalnym rankingiem Ziemi ani pełnym demo aplikacji. NASADEM dla K-017 wymaga lokalnego uwierzytelnienia Earthdata.
 
 Dokumentacja operacyjna jest po polsku. Interfejs i publiczny pakiet zgłoszeniowy powstają po angielsku. Kod własny i dokumentacja: [MIT](LICENSE); dane oraz cudze materiały zachowują własne warunki.

@@ -1,5 +1,5 @@
 {
-  "record_date": "2026-11-14",
+  "record_date": "2026-11-15",
   "tool": "Codex assistant",
   "model_version": null,
   "original_product_idea_by": ["Kamil", "Ewelina"],
@@ -13,9 +13,29 @@
     "remote collaboration workflow, task reservation commits and updated agent prompts",
     "detailed executable goals, bidirectional review tasks and human-only final submission boundary",
     "K-002: audit of official NOAA/PDS metadata, sample manifest and checksum-verifying downloader",
-    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion"
+    "K-003: API contract schemas, documentation and labeled synthetic fixtures",
+    "E-003/E-020: React API adapter, fixture views, query-echo validation and deterministic regression harness",
+    "K-006: backend MCDA scoring and pixel ranking implementation with tests",
+    "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
+    "E-018/K-019: independent review and evidence reports for scoring and API integration",
+    "E-019: map visual specification and a synthetic-fixture SVG concept"
   ],
-  "synthetic_data_paths": ["contracts/fixtures/hotspot-regression.json"],
+  "synthetic_data_paths": [
+    "contracts/fixtures/catalog-synthetic.json",
+    "contracts/fixtures/dataset-manifest-synthetic.json",
+    "contracts/fixtures/error-dataset-unavailable-synthetic.json",
+    "contracts/fixtures/health-ready-no-dataset.json",
+    "contracts/fixtures/hotspot-regression.json",
+    "contracts/fixtures/map-hotspot-synthetic.json",
+    "contracts/fixtures/pixel-hotspot-synthetic.json",
+    "contracts/fixtures/profile-synthetic.json",
+    "contracts/fixtures/search-distinct-areas-synthetic.json",
+    "contracts/fixtures/search-empty-synthetic.json",
+    "contracts/fixtures/search-hotspot-synthetic.json",
+    "contracts/fixtures/search-no-data-synthetic.json",
+    "contracts/fixtures/search-request-synthetic.json",
+    "contracts/fixtures/search-success-synthetic.json"
+  ],
   "scientific_observations_downloaded": true,
   "scientific_sample_manifest": "data/manifests/k002-samples.json",
   "scientific_validation_manifest": "data/manifests/k017-earth-validation.json",
@@ -28,7 +48,15 @@
     "GSHHG 2.3.7",
     "PROJ NGA EGM96/EGM2008 grids"
   ],
+  "ai_assisted_visuals": [
+    {
+      "path": "design/map-hotspot-concept.svg",
+      "description": "Static SVG schematic composed from a labeled synthetic contract fixture; no basemap, fabricated land shapes or NASA branding.",
+      "review_status": "E-019 is in review; K-020 requested a scope/coverage correction tracked in K-022."
+    }
+  ],
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
-  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. E-017 approved the K-017 scope, and Kamil reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. This does not establish global DEM accuracy or produce a global mask raster/ranking."
+  "measurements_generated_by_ai": false,
+  "review_status": "K-002 and K-017 samples are real archive data; AI did not generate or edit their measurements. E-017 approved the documented K-017 scope but could not reread raw files or reproduce AOI metrics; Kamil later reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-006 scoring tests use synthetic fixtures and E-018 approved the stated code scope. K-019 and K-021 requested E-003/E-020 adapter corrections; K-024 approved exact snapshot 04aee3f6dc88f7338334d1d70a0fe51793c6911d and PR #20 merged as 639614b9c8216dc321a6b50ee10438cffcd2a546. The backend still implements only /api/v1/health. These checks do not establish global DEM accuracy, coverage, ranking or complete live application behavior."
 }
