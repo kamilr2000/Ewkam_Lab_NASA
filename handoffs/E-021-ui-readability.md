@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. CSS po integracji zmian z `origin/main` znajduje się w merge commicie `a3f8fde`; PR raportujący i `review_ref` zostaną dopisane po publikacji dowodów.
+Status: `review`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. CSS po integracji zmian z `origin/main` znajduje się w commicie `a3f8fdeb3fe5845538083e76d359acc35a9abce8`; raport jest w PR #35 w commicie `d3c99c13e14c95a98af517a142cc11e5903a88b3`.
 
 ## Zmiana
 
