@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import platform
 import re
 import subprocess
 import xml.etree.ElementTree as ET
@@ -14,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import pyproj
 import rasterio
 from affine import Affine
 from pyproj import CRS, Geod, Transformer
@@ -67,6 +69,12 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def sha256_text_file(path: Path) -> str:
+    """Hash UTF-8 text with normalized newlines so provenance is cross-platform stable."""
+    canonical = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def xml_value(path: Path, local_name: str) -> str:
@@ -429,6 +437,8 @@ def _mars_source(raw_dir: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         raise ValueError("MOLA 128 ppd tile has an unexpected byte size")
     if pds3_value(dem_label, "SAMPLE_TYPE") != "MSB_INTEGER" or pds3_value(dem_label, "SAMPLE_BITS") != "16":
         raise ValueError("MOLA topography label does not match signed MSB 16-bit values")
+    if pds3_value(dem_label, "UNIT") != "METER":
+        raise ValueError("MOLA topography label does not declare metre values")
     if pds3_value(count_label, "SAMPLE_TYPE") != "UNSIGNED_INTEGER" or pds3_value(count_label, "SAMPLE_BITS") != "8":
         raise ValueError("MOLA count label does not match unsigned byte values")
     if pds3_value(count_label, "PRODUCT_VERSION_ID") != pds3_value(dem_label, "PRODUCT_VERSION_ID"):
@@ -451,6 +461,9 @@ def _mars_source(raw_dir: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         raise ValueError("MOLA source resolution differs from the selected 128 ppd tile")
     if pds3_value(dem_label, "PRODUCT_VERSION_ID") != "2.0":
         raise ValueError("MOLA source is not the final product version 2.0")
+    for key in ("START_TIME", "STOP_TIME"):
+        if pds3_value(count_label, key) != pds3_value(dem_label, key):
+            raise ValueError(f"MOLA topography and count time coverage differs at {key}")
     if not math.isclose(float(xml_value(dem_xml, "pixel_resolution_x")) * 1000.0, MOLA_PX_M, abs_tol=1e-9):
         raise ValueError("MOLA source PDS4 map scale changed")
     x_ul = float(xml_value(dem_xml, "upperleft_corner_x"))
@@ -464,6 +477,8 @@ def _mars_source(raw_dir: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         raise ValueError("MOLA count PDS4 map scale differs from the topography map")
     if not math.isclose(count_x_ul, x_ul, abs_tol=0.001) or not math.isclose(count_y_ul, y_ul, abs_tol=0.001):
         raise ValueError("MOLA count PDS4 upper-left map coordinate differs from topography")
+    if xml_value(count_xml, "version_id") != xml_value(dem_xml, "version_id"):
+        raise ValueError("MOLA topography and count PDS4 labels have different label versions")
 
     metadata = {
         "dem_path": dem_path,
@@ -624,6 +639,21 @@ def _moon_source(raw_dir: Path, output_shape: tuple[int, int], output_transform:
     count_path = raw_dir / "LDEC_80S_80MPP_ADJ.TIF"
     effres_path = raw_dir / "LDEM_80S_80MPP_ADJ_EFFRES.TIF"
     error_path = raw_dir / "LDEM_80S_80MPP_ADJ_ERR.TIF"
+    dem_label = raw_dir / "ldem_80s_80m.lbl"
+    count_label = raw_dir / "ldec_80s_80m.lbl"
+    for label in (dem_label, count_label):
+        if pds3_value(label, "POSITIVE_LONGITUDE_DIRECTION") != "EAST":
+            raise ValueError(f"{label.name}: source longitude direction is not east-positive")
+        if pds3_value(label, "COORDINATE_SYSTEM_NAME") != "MEAN EARTH/POLAR AXIS OF DE421":
+            raise ValueError(f"{label.name}: source coordinate frame is not MOON_ME/DE421")
+        if pds3_value(label, "MAP_PROJECTION_TYPE") != "POLAR STEREOGRAPHIC":
+            raise ValueError(f"{label.name}: expected a south polar stereographic source")
+        for key, expected in (("A_AXIS_RADIUS", 1737.4), ("B_AXIS_RADIUS", 1737.4), ("C_AXIS_RADIUS", 1737.4), ("MAP_SCALE", 80.0), ("CENTER_LATITUDE", -90.0), ("CENTER_LONGITUDE", 0.0), ("MINIMUM_LATITUDE", -90.0), ("MAXIMUM_LATITUDE", -80.0)):
+            if not math.isclose(pds3_number(label, key), expected, abs_tol=1e-9):
+                raise ValueError(f"{label.name}: unexpected {key} value")
+    for key in ("START_TIME", "STOP_TIME"):
+        if pds3_value(count_label, key) != pds3_value(dem_label, key):
+            raise ValueError(f"LOLA DEM and count reference labels differ at {key}")
     with rasterio.open(dem_path) as dem_source:
         if dem_source.width != 7600 or dem_source.height != 7600 or dem_source.res != (80.0, 80.0):
             raise ValueError("LOLA PGDA DEM is not the selected 7600 x 7600, 80 m posting product")
@@ -696,9 +726,9 @@ def _moon_source(raw_dir: Path, output_shape: tuple[int, int], output_transform:
     test_x, test_y = source_roundtrip.transform(45.0, -85.0)
     test_lon, test_lat = source_inverse.transform(test_x, test_y)
     longitude_check = {
-        "source_positive_longitude_direction_from_PDS_label": pds3_value(raw_dir / "ldem_80s_80m.lbl", "POSITIVE_LONGITUDE_DIRECTION"),
-        "source_longitude_projection_center_deg": pds3_number(raw_dir / "ldem_80s_80m.lbl", "CENTER_LONGITUDE"),
-        "source_coordinate_system": pds3_value(raw_dir / "ldem_80s_80m.lbl", "COORDINATE_SYSTEM_NAME"),
+        "source_positive_longitude_direction_from_PDS_label": pds3_value(dem_label, "POSITIVE_LONGITUDE_DIRECTION"),
+        "source_longitude_projection_center_deg": pds3_number(dem_label, "CENTER_LONGITUDE"),
+        "source_coordinate_system": pds3_value(dem_label, "COORDINATE_SYSTEM_NAME"),
         "PGDA_projection_wkt": dem_meta["crs_wkt"],
         "round_trip_input_lon_east_deg": 45.0,
         "round_trip_input_lat_planetocentric_deg": -85.0,
@@ -869,8 +899,21 @@ def _verify_source_lock(raw_dir: Path, source_manifest_path: Path) -> tuple[dict
     return source_lock, actual_records
 
 
-def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _source_catalog(file_records: list[dict[str, Any]], raw_dir: Path) -> list[dict[str, Any]]:
     ids = sorted({record["dataset_id"] for record in file_records})
+    mola_label = raw_dir / "megt44n000hb.lbl"
+    lola_label = raw_dir / "ldem_80s_80m.lbl"
+    mola_period = {
+        "start_utc": pds3_value(mola_label, "START_TIME"),
+        "stop_utc": pds3_value(mola_label, "STOP_TIME"),
+        "metadata_file": mola_label.name,
+    }
+    lola_reference_period = {
+        "start_utc": pds3_value(lola_label, "START_TIME"),
+        "stop_utc": pds3_value(lola_label, "STOP_TIME"),
+        "metadata_file": lola_label.name,
+        "note": "Observation interval copied from the associated LOLA PDS3 GDR label; the PGDA adjusted raster has no per-pixel timestamps.",
+    }
     metadata = {
         MARS_DEM_ID: {
             "title": "MGS MOLA MEGDR map of Mars topography, 128 pixels/degree, 44N 0E tile",
@@ -880,6 +923,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pds-geosciences.wustl.edu/missions/mgs/megdr.html",
             "citation": "MGS MOLA Topography Derived Bundle, MEGT44N000HB; cite DOI 10.17189/1z1b-kv84.",
             "license": "PDS archived data are public domain; cite the PDS data set and product.",
+            "license_evidence_url": "https://pds-geosciences.wustl.edu/faq.html",
+            "temporal_coverage": mola_period,
+            "spatial_coverage": {"minimum_latitude_deg": 0.0, "maximum_latitude_deg": 44.0, "westernmost_longitude_east_deg": 0.0, "easternmost_longitude_east_deg": 90.0},
+            "horizontal_reference": "Planetocentric east-positive simple cylindrical map on the 3,396,000 m Mars sphere.",
+            "measurement_units": "m relative to the MOLA GMM-3 areoid, degree/order 50.",
             "role": "Mars target topography; values are relative to the MOLA GMM-3 areoid and unobserved bins are interpolated by the product.",
         },
         MARS_COUNT_ID: {
@@ -890,6 +938,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pds-geosciences.wustl.edu/missions/mgs/megdr.html",
             "citation": "MGS MOLA Topography Derived Bundle, MEGC44N000HB; cite DOI 10.17189/1z1b-kv84.",
             "license": "PDS archived data are public domain; cite the PDS data set and product.",
+            "license_evidence_url": "https://pds-geosciences.wustl.edu/faq.html",
+            "temporal_coverage": mola_period,
+            "spatial_coverage": {"minimum_latitude_deg": 0.0, "maximum_latitude_deg": 44.0, "westernmost_longitude_east_deg": 0.0, "easternmost_longitude_east_deg": 90.0},
+            "horizontal_reference": "Planetocentric east-positive simple cylindrical map on the 3,396,000 m Mars sphere.",
+            "measurement_units": "Unsigned count of direct observations per 1/128 degree bin.",
             "role": "Quality layer identifying direct MOLA observation counts in each 1/128 degree bin.",
         },
         MOON_DEM_ID: {
@@ -901,6 +954,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pgda.gsfc.nasa.gov/products/90",
             "citation": "Barker et al. 2023, Planetary Science Journal 4, 183; data DOI 10.60903/gsfcpgda-lola-spole.",
             "license": "The PGDA product page requests citation but lists no explicit license identifier; do not assign one.",
+            "license_evidence_url": "https://pgda.gsfc.nasa.gov/products/90",
+            "reference_product_temporal_coverage": lola_reference_period,
+            "spatial_coverage": "South-polar stereographic raster covering 80–90°S in the MOON_ME/DE421 frame.",
+            "horizontal_reference": "MOON_ME body-fixed frame of JPL DE421; south polar stereographic coordinates in metres.",
+            "measurement_units": "m relative to the 1,737,400 m lunar reference sphere.",
             "role": "Lunar target surface heights in the MOON_ME/DE421 south polar stereographic frame; height datum is the 1,737,400 m reference sphere.",
         },
         MOON_COUNT_ID: {
@@ -912,6 +970,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pgda.gsfc.nasa.gov/products/90",
             "citation": "Barker et al. 2023, Planetary Science Journal 4, 183; data DOI 10.60903/gsfcpgda-lola-spole.",
             "license": "The PGDA product page requests citation but lists no explicit license identifier; do not assign one.",
+            "license_evidence_url": "https://pgda.gsfc.nasa.gov/products/90",
+            "reference_product_temporal_coverage": lola_reference_period,
+            "spatial_coverage": "South-polar stereographic raster covering 80–90°S in the MOON_ME/DE421 frame.",
+            "horizontal_reference": "MOON_ME body-fixed frame of JPL DE421; south polar stereographic coordinates in metres.",
+            "measurement_units": "Number of LOLA laser spots per native raster pixel.",
             "role": "LOLA return count per native 80 m DEM pixel; a count is a measurement-support indicator, not area coverage.",
         },
         MOON_EFFRES_ID: {
@@ -923,6 +986,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pgda.gsfc.nasa.gov/products/90",
             "citation": "Barker et al. 2023, Planetary Science Journal 4, 183; data DOI 10.60903/gsfcpgda-lola-spole.",
             "license": "The PGDA product page requests citation but lists no explicit license identifier; do not assign one.",
+            "license_evidence_url": "https://pgda.gsfc.nasa.gov/products/90",
+            "reference_product_temporal_coverage": lola_reference_period,
+            "spatial_coverage": "South-polar stereographic raster covering 80–90°S in the MOON_ME/DE421 frame.",
+            "horizontal_reference": "MOON_ME body-fixed frame of JPL DE421; south polar stereographic coordinates in metres.",
+            "measurement_units": "m, reported effective horizontal resolution.",
             "role": "Source quality layer; cells averaging above the 2 km analysis scale are excluded from lunar profile features.",
         },
         MOON_ERROR_ID: {
@@ -934,6 +1002,11 @@ def _source_catalog(file_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "source_url": "https://pgda.gsfc.nasa.gov/products/90",
             "citation": "Barker et al. 2023, Planetary Science Journal 4, 183; data DOI 10.60903/gsfcpgda-lola-spole.",
             "license": "The PGDA product page requests citation but lists no explicit license identifier; do not assign one.",
+            "license_evidence_url": "https://pgda.gsfc.nasa.gov/products/90",
+            "reference_product_temporal_coverage": lola_reference_period,
+            "spatial_coverage": "South-polar stereographic raster covering 80–90°S in the MOON_ME/DE421 frame.",
+            "horizontal_reference": "MOON_ME body-fixed frame of JPL DE421; south polar stereographic coordinates in metres.",
+            "measurement_units": "m, reported height error.",
             "role": "Source uncertainty layer; summarized with the lunar profile and not mistaken for target terrain roughness.",
         },
     }
@@ -950,7 +1023,7 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
     source_manifest_path = source_manifest_path.resolve()
     source_lock, file_records = _verify_source_lock(raw_dir, source_manifest_path)
     try:
-        source_manifest_location = str(source_manifest_path.relative_to(ROOT))
+        source_manifest_location = source_manifest_path.relative_to(ROOT).as_posix()
     except ValueError:
         source_manifest_location = str(source_manifest_path)
     mars_outer = MARS_RADIUS_REGION_M + WINDOW_RADIUS_M
@@ -1012,12 +1085,14 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
         "USGS Gazetteer center and diameter define a circular envelope; the USGS depiction is approximate and this is not a digitized crater-rim polygon.",
         "MOLA MEGT interpolates bins without direct observations. MEGC support is retained in the source-quality report; interpolated values are not direct measurements.",
         "Topographic derivatives use a 2 km area-averaged grid and 10 km physical-radius windows; no absolute elevations are compared across bodies.",
+        "Neighbouring target-cell feature windows overlap heavily; profile cells are spatially dependent and are not independent samples.",
     ]
     moon_limitations = [
         "The profile is limited to the source-covered 80–90°S cap; it does not represent the full lunar south-polar region north of 80°S.",
         "80 m is raster posting, not a claim of 80 m effective resolution. LOLA return counts, effective resolution, and height error remain separate quality layers.",
         "LOLA heights are relative to the 1,737,400 m reference sphere; only terrain derivatives are used, never cross-body absolute height.",
         "Polar-stereographic metric scale is corrected in feature windows; the nominal 2 km cell ground size varies slightly toward the 80°S boundary.",
+        "Neighbouring target-cell feature windows overlap heavily; profile cells are spatially dependent and are not independent samples.",
     ]
     mars_profile = {
         "profile_id": "mars-jezero-mola128-v1",
@@ -1097,8 +1172,8 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
         "limitations": moon_limitations,
     }
 
-    source_datasets = _source_catalog(file_records)
-    code_hash = sha256_file(Path(__file__))
+    source_datasets = _source_catalog(file_records, raw_dir)
+    code_hash = sha256_text_file(Path(__file__))
     try:
         code_revision = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -1115,11 +1190,19 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
         "accessed_at": source_lock["accessed_at"],
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "source_file_manifest": source_manifest_location,
-        "source_file_manifest_sha256": sha256_file(source_manifest_path),
+        "source_file_manifest_sha256": sha256_text_file(source_manifest_path),
         "processing": {
             "code_file": "pipeline/profiles/build_profiles.py",
             "code_sha256": code_hash,
             "git_revision": code_revision,
+            "software_versions": {
+                "python": platform.python_version(),
+                "numpy": np.__version__,
+                "rasterio": rasterio.__version__,
+                "gdal": rasterio.__gdal_version__,
+                "pyproj": pyproj.__version__,
+                "proj": pyproj.proj_version_str,
+            },
             "analysis_cell_resolution_m": GRID_M,
             "source_resampling": "area-weighted average of source DEM bins/cells",
             "feature_window_radius_m": WINDOW_RADIUS_M,
@@ -1194,6 +1277,7 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
         "files": file_records,
         "limitations": [
             "The two target regions have different physical area and geomorphology; their source statistics are not interchangeable targets.",
+            "Neighbouring target-cell feature windows overlap heavily; profile cells are spatially dependent and are not independent samples.",
             "Reference intervals and tolerances are provisional, result-blind engineering rules; validate their sensitivity before using them as scientific thresholds.",
             "Mars MEGT bins without direct MOLA observations are product-provided interpolations; the MEGC support fraction is reported.",
             "LOLA map posting, effective resolution, return counts, and height error are separate quantities and must not be conflated.",
