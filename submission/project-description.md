@@ -60,7 +60,7 @@ The API returned `SCOPE_UNAVAILABLE` for a global request. Global Earth ranking 
 
 ## AI assistance disclosure
 
-OpenAI Codex (exact model version not recorded) assisted with web application code, source and documentation checks, translation/editing into English, and authoring the seven-slide presentation. The project team and deterministic software performed the data processing and ran the API analyses. Codex did not create or alter scientific measurements, analysis results, or source data. No AI-generated photographs, illustrations, video, audio, or NASA-branded material are included. This disclosure describes this package; the internal project AI-use ledger remains under its separate follow-up tasks.
+OpenAI Codex (exact model version not recorded) assisted with parts of the data-acquisition, terrain-processing, scoring, and web application code; source and documentation checks; explicitly synthetic test fixtures; English editing; and authoring this deck. The project team set the project goals and reviewed the workflow. Deterministic software processed cited archive inputs into the versioned profiles, regional features, and API results described above, so some processing code was AI-assisted. Codex did not fabricate source observations or manually change the measurements or API values reported here. Synthetic fixtures are marked as synthetic and were not used in the two reported Live examples. No AI-generated photographs, illustrations, video, audio, or NASA-branded material are included. This disclosure describes the jury package; the internal project AI-use ledger remains under its owner-assigned follow-up tasks.
 
 ## Scope and limitations
 
