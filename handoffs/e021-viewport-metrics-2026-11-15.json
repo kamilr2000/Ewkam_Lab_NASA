@@ -1,36 +1,54 @@
 {
   "captured_at": "2026-11-15",
   "branch": "ewelina/E-021-ui-readability",
-  "preview_source_head": "99a016e",
-  "preview_url": "http://127.0.0.1:4174/",
+  "preview_source_head": "c26663ca64153399f75f3e518efc6b6607c25799",
+  "publish_state": "local_unpushed",
+  "last_confirmed_remote_branch_head": "676554f12ea2d66aab34f5cfdf2100c6d9db3057",
+  "remote_main_head": "b2dceb2c7a393fad1fd48001a3fe237602c6fc62",
+  "preview_url": "http://127.0.0.1:4180/",
   "preview_kind": "Vite production preview",
   "browser": "Chrome responsive mode on Windows",
-  "viewport_height_css_px": 800,
+  "viewport_height_css_px": 900,
+  "scrollbar_gutter_css_px": 15,
   "data_source": "Synthetic fixture demo",
-  "fixture_scenario": "Successful ranking",
+  "fixture_scenario": "Isolated hotspot",
   "live_api_called": false,
   "viewports": [
-    { "requested_css_px": 320, "innerWidth": 320, "clientWidth": 320, "scrollWidth": 320, "bodyScrollWidth": 320 },
-    { "requested_css_px": 375, "innerWidth": 375, "clientWidth": 375, "scrollWidth": 375, "bodyScrollWidth": 375 },
-    { "requested_css_px": 390, "innerWidth": 390, "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390 },
-    { "requested_css_px": 780, "innerWidth": 780, "clientWidth": 780, "scrollWidth": 780, "bodyScrollWidth": 780 },
-    { "requested_css_px": 782, "innerWidth": 782, "clientWidth": 782, "scrollWidth": 782, "bodyScrollWidth": 782 },
-    { "requested_css_px": 1150, "innerWidth": 1150, "clientWidth": 1150, "scrollWidth": 1150, "bodyScrollWidth": 1150 },
-    { "requested_css_px": 1151, "innerWidth": 1151, "clientWidth": 1151, "scrollWidth": 1151, "bodyScrollWidth": 1151 }
+    { "requested_css_px": 320, "innerWidth": 320, "clientWidth": 305, "scrollWidth": 305, "bodyScrollWidth": 305, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 375, "innerWidth": 375, "clientWidth": 360, "scrollWidth": 360, "bodyScrollWidth": 360, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 390, "innerWidth": 390, "clientWidth": 375, "scrollWidth": 375, "bodyScrollWidth": 375, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 780, "innerWidth": 780, "clientWidth": 765, "scrollWidth": 765, "bodyScrollWidth": 765, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 782, "innerWidth": 782, "clientWidth": 767, "scrollWidth": 767, "bodyScrollWidth": 767, "scenarioHelpGapCssPx": 3 },
+    { "requested_css_px": 1150, "innerWidth": 1150, "clientWidth": 1135, "scrollWidth": 1135, "bodyScrollWidth": 1135, "scenarioHelpGapCssPx": 3 },
+    { "requested_css_px": 1151, "innerWidth": 1151, "clientWidth": 1136, "scrollWidth": 1136, "bodyScrollWidth": 1136, "scenarioHelpGapCssPx": 3 }
   ],
+  "before_after_field_help_gap_css_px": {
+    "320_375_390_780": { "before": 6, "after": 12 },
+    "782_1150_1151": { "before": -3, "after": 3 }
+  },
   "visual_review_css_px": [320, 375, 390, 780, 782, 1150, 1151],
-  "visual_review_result": "No horizontal overflow, clipped text, or overlapping labels observed.",
+  "visual_review_result": "After the margin fix, no horizontal overflow, clipped text, or overlapping labels were observed. The fixture scenario helper gap is positive at every viewport.",
   "focus_check": {
     "viewport_css_px": 320,
-    "result": "Keyboard Tab transition showed the 2px :focus-visible outline on the focused select.",
-    "outline_css": "2px solid #d6ed85"
+    "result": "Keyboard Tab transition from Data source to Fixture scenario showed :focus-visible.",
+    "outline_css_rule": "2px solid #d6ed85",
+    "computed_outline_width_css_px": 1.6,
+    "computed_outline_color": "rgb(214, 237, 133)"
   },
-  "screenshots": [
+  "reproduction": {
+    "viewport_metrics": "In Chrome DevTools responsive mode, set each requested width and evaluate window.innerWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, and document.body.scrollWidth.",
+    "helper_gap": "Compare the top of .field-help.getBoundingClientRect() with the bottom of #demo-scenario.getBoundingClientRect().",
+    "keyboard_focus": "At 320 CSS px click Data source, press Escape, then Tab; check document.activeElement.matches(':focus-visible') and its computed outlineColor."
+  },
+  "fresh_screenshots_saved": false,
+  "superseded_screenshot_paths": [
     "screenshots/E-021-320px-2026-11-15.png",
     "screenshots/E-021-782px-2026-11-15.png",
     "screenshots/E-021-1151px-2026-11-15.png"
   ],
   "limitations": [
+    "PNG files listed above show the older Successful ranking snapshot and are not evidence for this Isolated hotspot render or the spacing fix.",
+    "The local source commit and these measurements are not yet pushed to PR #35.",
     "No physical phone was tested.",
     "A classic non-overlay scrollbar was not forced."
   ]

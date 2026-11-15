@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `review`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. Bieżący zakres typografii, kryterium viewportu i limitations opublikowano w PR #35 pod exact commit `874d41ab92290146f0a9f9484a75f5a8f15c30a8`; K-037 jest przypisane do niezależnego re-review. Poprzednia wersja CSS po integracji zmian z `origin/main` znajduje się w commicie `a3f8fdeb3fe5845538083e76d359acc35a9abce8`.
+Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `b2dceb2c7a393fad1fd48001a3fe237602c6fc62`. Ostatni head PR #35 potwierdzony na origin to `676554f12ea2d66aab34f5cfdf2100c6d9db3057`; lokalna poprawka renderu jest w `c26663ca64153399f75f3e518efc6b6607c25799` i wymaga publikacji przed re-review. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
 
 ## Zmiana
 
@@ -68,7 +68,7 @@ Podczas podglądu konsola zgłosiła żądanie `favicon.ico` z odpowiedzią 404.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
 
-## Follow-up po K-037 i synchronizacji aktualnej mapy
+## Follow-up po K-037 i synchronizacji aktualnej mapy — stan historyczny
 
 2026-11-15: Rezerwację follow-upu opublikowano na `origin/main`. PR #35 zsynchronizowano z aktualnym main; konflikt CSS rozwiązano, zachowując style MapLibre z E-004, kontrolki E-005 i poprawki czytelności E-021. Nowe etykiety mapy o rozmiarze 7–8 px podniesiono do 9 px, również w mobilnych nadpisaniach. Skan deklaracji `font`/`font-size` w `apps/web/src/styles.css` zwraca zero tekstów poniżej 9 px.
 
@@ -103,30 +103,55 @@ Przegląd CSS po scaleniu ujawnił nowe teksty kontrolek E-005 o rozmiarze 8 px,
 
 K-030 odnotowało, że żądany viewport 781 px dał `innerWidth=782`, `clientWidth=782`, `scrollWidth=782` i `body.scrollWidth=782`. W CSS breakpointem jest `max-width: 780px`; 782 px leży po jego drugiej stronie. Proponowana zmiana kryterium zastępuje nieosiągalny dokładny pomiar 781 px faktycznie raportowanym 782 px oraz jawnie zachowuje ograniczenie, że 781 px nie zmierzono. K-037 ma ocenić zasadność tej zmiany. Nie deklarujemy braku overflow ani widocznego fokusu dla aktualnego commitu: wcześniejsze oględziny tabeli powyżej dotyczą starszego snapshotu, a bieżący podgląd został zablokowany przed załadowaniem przez Computer Use. Poszerzone kolumny etykiet również nie mają jeszcze potwierdzenia w aktualnym renderze.
 
-## Synchronizacja z aktualnym main — 2026-11-15
+## Synchronizacja z aktualnym main — stan przed powtórnym renderem, uzupełniony poniżej
 
 Gałąź PR #35 została zaktualizowana z `origin/main` `5273ca1008aa87c339fb6ef864d80ffe307c893c` w merge commicie `99c15f908d064149645802ee37e82db966ad0b9e`. Po synchronizacji `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny Vite build przechodzą. Vite nadal ostrzega o asynchronicznym chunku mapy 1,085.35 kB. `python tools/check_planning.py` — OK (161 Markdown, 40 JSON, 79 kart, 5 synthetic cases), a `git diff --check origin/main...HEAD` — czysto.
 
 Nie powstał nowy renderowy dowód. Lokalny podgląd wcześniej zablokowała polityka URL; nie ma świeżych pomiarów siedmiu szerokości, inspekcji przycięć/nakładania, testu fokusu przy 320 px ani screenshotów. Historyczna tabela responsywności pozostaje dowodem wyłącznie dla starszego snapshotu. K-039 nie powinno rozpoczynać review, dopóki te P1 nie zostaną uzupełnione.
 
-## Bieżący production preview — 2026-11-15
+## Bieżący production preview — poprawka lokalna, 2026-11-15
 
-Po synchronizacji `origin/main` i buildzie z gałęzi `ewelina/E-021-ui-readability` (`99a016e`) uruchomiono Vite production preview pod `http://127.0.0.1:4174/`. Oględziny wykonano w Chrome responsive mode, przy wysokości viewportu 800 CSS px. Widok używa `Synthetic fixture demo` i scenariusza `Successful ranking`; nie uruchamiano API ani nie przedstawia się tu pomiarów planetarnych.
+Po buildzie z lokalnego commitu `c26663ca64153399f75f3e518efc6b6607c25799` uruchomiono Vite production preview pod `http://127.0.0.1:4180/`. Oględziny wykonano w Chrome responsive mode przy wysokości 900 CSS px. Widok używa `Synthetic fixture demo` i scenariusza `Isolated hotspot`; API nie było wywoływane, a wyniki są syntetyczne i regionalne.
 
-Wszystkie faktycznie raportowane szerokości zostały sprawdzone po zmianie viewportu. Dokument i `body` mają dokładnie szerokość viewportu. Ręczne oględziny przy każdym z siedmiu rozmiarów nie pokazały poziomego overflow, uciętego tekstu ani nachodzących etykiet.
+W przeglądarce z widocznym 15-pikselowym gutterem paska przewijania `clientWidth` jest o 15 px mniejsze od `innerWidth`. We wszystkich punktach `scrollWidth == clientWidth` i `body.scrollWidth == clientWidth`, więc nie ma poziomego overflow.
 
-| Żądane CSS px | `innerWidth` | `clientWidth` | `scrollWidth` | `body.scrollWidth` |
-|---:|---:|---:|---:|---:|
-| 320 | 320 | 320 | 320 | 320 |
-| 375 | 375 | 375 | 375 | 375 |
-| 390 | 390 | 390 | 390 | 390 |
-| 780 | 780 | 780 | 780 | 780 |
-| 782 | 782 | 782 | 782 | 782 |
-| 1150 | 1150 | 1150 | 1150 | 1150 |
-| 1151 | 1151 | 1151 | 1151 | 1151 |
+| Żądane i faktyczne `innerWidth` | `clientWidth` | `scrollWidth` | `body.scrollWidth` |
+|---:|---:|---:|---:|
+| 320 | 305 | 305 | 305 |
+| 375 | 360 | 360 | 360 |
+| 390 | 375 | 375 | 375 |
+| 780 | 765 | 765 | 765 |
+| 782 | 767 | 767 | 767 |
+| 1150 | 1135 | 1135 | 1135 |
+| 1151 | 1136 | 1136 | 1136 |
 
-Przy 320 px sprawdzono klawiaturą widoczny fokus na selektorze; po przejściu klawiszem Tab widać skonfigurowany obrys `:focus-visible` o grubości 2 px i kolorze `#d6ed85`. Reguła dotyczy `button`, `select`, `input` i linków.
+Poprawka zmienia górny margines `.field-help` z `-3px` na `3px`. Oględziny geometrii przed/po pokazują odstęp między selektorem scenariusza a jego objaśnieniem: przy 320/375/390/780 px zwiększył się z 6 do 12 px; przy 782/1150/1151 px z nachodzenia o 3 px do odstępu 3 px. Na każdym z siedmiu viewportów po poprawce nie zaobserwowano przycięć ani nakładania tekstu.
 
-Zapisane świeże zrzuty: [320 px](screenshots/E-021-320px-2026-11-15.png), [782 px](screenshots/E-021-782px-2026-11-15.png), [1151 px](screenshots/E-021-1151px-2026-11-15.png). Pozostałe szerokości również obejrzano w tym samym podglądzie; tabela pomiarów jest kompletna. Dane maszynowe znajdują się w [e021-viewport-metrics-2026-11-15.json](e021-viewport-metrics-2026-11-15.json).
+Przy 320 px fokus klawiatury sprawdzono sekwencją Tab z pola „Data source” do „Fixture scenario”. `:focus-visible` był aktywny; obrys był widoczny i miał kolor `#d6ed85` (reguła CSS: `2px solid`; przeglądarka raportowała obliczoną szerokość 1.6 px).
 
-Połączone kontrole: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK; `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Nie wymuszano klasycznego paska przewijania ani nie testowano na fizycznym telefonie.
+Odtworzenie pomiaru w konsoli DevTools: ustaw responsive viewport na każdą szerokość z tabeli i wykonaj:
+
+```js
+(() => {
+  const root = document.documentElement;
+  const help = document.querySelector('.field-help');
+  const select = document.querySelector('#demo-scenario');
+  return {
+    innerWidth,
+    clientWidth: root.clientWidth,
+    scrollWidth: root.scrollWidth,
+    bodyScrollWidth: document.body.scrollWidth,
+    scenarioHelpGap: help && select
+      ? Math.round((help.getBoundingClientRect().top - select.getBoundingClientRect().bottom) * 100) / 100
+      : null,
+  };
+})()
+```
+
+Przy 320 px fokus można odtworzyć klawiaturą: kliknąć „Data source”, zamknąć menu przez Escape, nacisnąć Tab i sprawdzić `document.activeElement.matches(':focus-visible')` oraz `getComputedStyle(document.activeElement).outlineColor`.
+
+Trzy istniejące pliki PNG w `screenshots/` są z wcześniejszego snapshotu `99a016e` i scenariusza `Successful ranking`; nie są świeżymi zrzutami poprawionego renderu. Odtwarzalnym dowodem bieżącego układu jest powyższa tabela z instrukcją pomiaru i obserwacją odstępu; świeże PNG po poprawce nie zostały jeszcze zapisane.
+
+Po zmianie CSS: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK (180 Markdown, 41 JSON, 93 karty, 5 synthetic cases); `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Statyczny skan 107 deklaracji `font`/`font-size` wykrył 106 jawnych wartości px, minimum 9 px i zero tekstów poniżej 9 px. Poprawka dotyczy wyłącznie odstępu, więc wcześniejsze 39 sprawdzonych par kontrastu (minimum 4.68:1) nie zmieniają się. Nie testowano fizycznego telefonu ani nie wymuszano klasycznego scrollbara.
+
+Ten lokalny dowód i commit `c26663ca64153399f75f3e518efc6b6607c25799` nie są jeszcze dostępne w PR. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`; synchronizacja origin później zadziałała, lecz publikacja poprawki i re-review nadal wymagają aktualnego pushu.
