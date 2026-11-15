@@ -124,6 +124,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-049 — Re-review aktualnego snapshotu macierzy submission](K-049.md), Kamil, P1: zweryfikuj exact PR #50 head, odświeżone statusy/refy i granice twierdzeń S03 po K-046.
 - [K-050 — Re-review korekty snapshotu E-025 po K-049](K-050.md), Kamil, P1: sprawdź aktualne refy E-021, zakończony K-048, granice S03 i synchroniczność PR #50 dla exact matrix ref `3b219556`.
 - [K-052 — Połącz web z regionalnym API przez jawne CORS](K-052.md), Kamil, P0: odblokuj żądania z osobnego originu przeglądarki do prawdziwego regionalnego API na potrzeby E-006.
+- [K-051 — Odbiór regionalnego Live MVP E-006](K-051.md), Kamil, P0: sprawdź exact ref PR #96 pod kątem zgodności profile/dataset/scope, braku fallbacku, nulli, hotspotu i spójności analysis ID.
 - [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
 - [E-033 — Review ścisłej walidacji wejściowych typów liczbowych K-041](E-033.md), Ewelina, P2: sprawdź exact PR #90, zgodność Draft 2020-12, brak coercion i obsługę integralnego `top_k: 2.0`.
 
