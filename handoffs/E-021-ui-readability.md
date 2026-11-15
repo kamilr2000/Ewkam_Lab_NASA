@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `b2dceb2c7a393fad1fd48001a3fe237602c6fc62`. Ostatni head PR #35 potwierdzony na origin to `676554f12ea2d66aab34f5cfdf2100c6d9db3057`; lokalna poprawka renderu jest w `c26663ca64153399f75f3e518efc6b6607c25799` i wymaga publikacji przed re-review. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
+Status: `review` na `origin/main` od commitu `f328846`. Gałąź: `ewelina/E-021-ui-readability`. Poprawka i bieżące render evidence są opublikowane w PR #35 na headzie `d85f717a645d4a23c67831d4d4c1e7ad4b981266`, a karta wskazuje ten exact `review_ref`. Scalanie statusowego commitu `f328846` do gałęzi PR jest w toku; po publikacji zaktualizuję bieżący head PR. Poprzednie exact refs oraz historyczne pomiary poniżej nie obejmują tej poprawki.
 
 ## Zmiana
 
@@ -154,4 +154,4 @@ Trzy istniejące pliki PNG w `screenshots/` są z wcześniejszego snapshotu `99a
 
 Po zmianie CSS: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK (180 Markdown, 41 JSON, 93 karty, 5 synthetic cases); `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Statyczny skan 107 deklaracji `font`/`font-size` wykrył 106 jawnych wartości px, minimum 9 px i zero tekstów poniżej 9 px. Poprawka dotyczy wyłącznie odstępu, więc wcześniejsze 39 sprawdzonych par kontrastu (minimum 4.68:1) nie zmieniają się. Nie testowano fizycznego telefonu ani nie wymuszano klasycznego scrollbara.
 
-Ten lokalny dowód i commit `c26663ca64153399f75f3e518efc6b6607c25799` nie są jeszcze dostępne w PR. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`; synchronizacja origin później zadziałała, lecz publikacja poprawki i re-review nadal wymagają aktualnego pushu.
+Commit CSS `c26663ca64153399f75f3e518efc6b6607c25799` i bieżący raport są opublikowane w PR #35 na headzie `d85f717a645d4a23c67831d4d4c1e7ad4b981266`. Status `review` opublikowano na `origin/main` jako `f328846`; scalanie tej aktualizacji do branchu PR pozostaje lokalne do czasu pushu. Pierwsza próba `git ls-remote` nie rozwiązała `github.com`, ale późniejsza synchronizacja i push zadziałały.

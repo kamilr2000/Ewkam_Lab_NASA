@@ -2,9 +2,9 @@
   "captured_at": "2026-11-15",
   "branch": "ewelina/E-021-ui-readability",
   "preview_source_head": "c26663ca64153399f75f3e518efc6b6607c25799",
-  "publish_state": "local_unpushed",
-  "last_confirmed_remote_branch_head": "676554f12ea2d66aab34f5cfdf2100c6d9db3057",
-  "remote_main_head": "b2dceb2c7a393fad1fd48001a3fe237602c6fc62",
+  "publish_state": "render_evidence_pushed; latest_main_status_merge_pending",
+  "last_confirmed_remote_branch_head": "d85f717a645d4a23c67831d4d4c1e7ad4b981266",
+  "remote_main_head": "f328846",
   "preview_url": "http://127.0.0.1:4180/",
   "preview_kind": "Vite production preview",
   "browser": "Chrome responsive mode on Windows",
@@ -48,7 +48,7 @@
   ],
   "limitations": [
     "PNG files listed above show the older Successful ranking snapshot and are not evidence for this Isolated hotspot render or the spacing fix.",
-    "The local source commit and these measurements are not yet pushed to PR #35.",
+    "The latest main status commit f328846 is being merged into the PR branch; that merge had not yet been pushed when this JSON was updated.",
     "No physical phone was tested.",
     "A classic non-overlay scrollbar was not forced."
   ]
