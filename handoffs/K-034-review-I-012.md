@@ -5,7 +5,7 @@
 - Data i strefa: 2026-11-15, Europe/Warsaw
 - Zadanie / PR / exact commit: K-034 / [PR #46](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/46) / `7481397528d190bd4f7be69e925cc43848bcb034`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-034-review-I-012`
-- Wysłane SHA i URL PR: raport i zamknięcie K-034 są publikowane w PR rezerwacyjnym tego handoffu; dane dopisano przed integracją.
+- Wysłane SHA i URL PR: raport `2803751b3833453ccf2e145dbab79b551c19390d` oraz [PR #59](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/59); karta K-034 jest zamykana w tym samym PR.
 - Rezerwacja w `origin/main`: tak, PR #58, squash `d23694404dfdc041f8022cfcf421e98489e95685`.
 - Lokalne niewysłane zmiany: brak.
 - Stan: wymaga poprawki I-012; review K-034 zakończone wynikiem `REQUEST_CHANGES` na bieżącym headzie PR #46.
