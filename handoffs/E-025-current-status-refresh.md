@@ -3,7 +3,7 @@
 - From: Ewelina, `codex-ewelina-e025-k045-revision`
 - To: Kamil
 - Date: 2026-11-15
-- Task / PR / prior matrix commit: E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50) / `343df614dbadccef0dbf4eb3a66c0099f9313662`; new exact matrix ref will be recorded after this refresh commit.
+- Task / PR / exact matrix commit: E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50) / `be69b7c4356f0b60787325bfdb0338dd516a8280`.
 - Repository / branch: `kamilr2000/Ewkam_Lab_NASA`, `ewelina/E-025-submission-evidence-matrix`
 - Scope: internal English `submission/evidence-matrix.md`; status refresh after K-045 requested changes to the previous exact matrix ref.
 - Integrated base inspected: `origin/main` at `bd76906317822b3b3b96af210e4898bda31941a1`.
@@ -22,4 +22,4 @@
 
 The planning check, local-link audit, and `git diff --check` are recorded after they pass on the published branch. This is a documentation refresh only; no application run, new scientific processing, public-link availability check, or submission action was performed.
 
-K-045 reviewed prior matrix commit `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` and issued `REQUEST_CHANGES` review `5911168157`, requiring K-042 to be added as an unintegrated pilot and the integrated-base snapshot to be refreshed. E-025 was reserved on `origin/main` for this follow-up as `6b1bbece8989d299fc46dc181740e493cb5cd2df`; a second reservation `bd76906317822b3b3b96af210e4898bda31941a1` is required because main advanced while the first correction awaited review. The current matrix refresh now uses base `bd76906317822b3b3b96af210e4898bda31941a1` and records K-042's new in-progress clean-clone follow-up separately from the old measured pilot ref. Its new exact matrix commit and K-046 ref will be set on `origin/main` after this updated branch is published.
+K-045 reviewed prior matrix commit `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` and issued `REQUEST_CHANGES` review `5911168157`, requiring K-042 to be added as an unintegrated pilot and the integrated-base snapshot to be refreshed. E-025 was reserved on `origin/main` for this follow-up as `6b1bbece8989d299fc46dc181740e493cb5cd2df`; a second reservation `bd76906317822b3b3b96af210e4898bda31941a1` was required because main advanced while the first correction awaited review. The refreshed matrix is exact commit `be69b7c4356f0b60787325bfdb0338dd516a8280`, checked against the integrated snapshot `bd76906317822b3b3b96af210e4898bda31941a1`. It records the original pilot ref and the current K-042 in-progress follow-up as separate states. `tasks/E-025.md` and `tasks/K-046.md` now point to this exact matrix ref on `origin/main` (`8a45a0aa96c2ad68af30b88d13c03bf3ac907bd7`); K-046's start condition is satisfied.
