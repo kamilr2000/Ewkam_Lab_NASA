@@ -1,8 +1,8 @@
 # Dane
 
-Właściciel: Kamil. K-002 pobrał małe próbki ETOPO 2022, LOLA LDEM_4 i MOLA MEGT/MEGC. Metadane, etykiety PDS3/PDS4, rozmiary i SHA-256 są w manifeście próbek. Dane surowe nie są commitowane.
+Właściciel: Kamil. K-002 pobrał małe próbki ETOPO 2022, LOLA LDEM_4 i MOLA MEGT/MEGC. K-017 dodał NASADEM HGT/NUM/SWB, porównawcze kafle ETOPO, GSHHG 2.3.7 i gridy geoid PROJ. Metadane, pochodzenie, rozmiary i SHA-256 są w `manifests/`; sprawdzone porównanie zapisuje `reports/k017-validation.json`. Dane surowe nie są commitowane.
 
-Odtwarzalne pobranie próbek publicznych: uruchom z katalogu repo polecenie `python pipeline/download_samples.py`. Program sprawdza rozmiar i SHA-256, a poprawne pliki już obecne tylko weryfikuje. NASADEM wymaga lokalnego logowania Earthdata i nie jest pobierany przez ten skrypt.
+Odtwarzalne pobranie próbek publicznych z K-002: `python pipeline/download_samples.py`. Dla K-017 po `uv sync --locked --group data` uruchom `uv run --locked --group data python pipeline/download_k017_assets.py`, a potem `uv run --locked --group data python pipeline/compare_nasadem_etopo.py`. Downloader K-017 korzysta z lokalnej zmiennej `EARTHDATA_TOKEN` do Earthdata Login, sprawdza przypięte rozmiary i SHA-256 oraz nie zapisuje tokenu. Szczegóły są w [instrukcji pipeline](../pipeline/README.md).
 
 Duże dane w ignorowanych katalogach `raw/`, `intermediate/`, `processed/`, `cache/`. Małe manifesty i raporty pokrycia mogą być wersjonowane. Pobranie gotowego pakietu ma sprawdzać wersję i sumy kontrolne; źródła i ograniczenia opisuje [DATA](../docs/DATA.md).
 
