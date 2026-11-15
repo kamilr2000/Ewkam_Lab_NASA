@@ -134,9 +134,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-036 — Utrzymaj stan warstw przy wyborze piksela i ponownym przeliczeniu](E-036.md), Ewelina, P0 (cancelled): duplikat poprawki E-035, już scalonej do `main` jako `f82ebabe`; K-055 wykonuje pozostały test Live w przeglądarce.
 - [E-034 — Pilny odbiór CORS regionalnego API K-052](E-034.md), Ewelina, P0: po E-035 sprawdź exact PR #98 — allow-list originów, preflight, brak credentials i prawdziwy regionalny request.
 
+- [I-014 — Repository inventory and English documentation cleanup](I-014.md), Ewelina, P1: inventory the whole repository, retain source/reproducibility records, and bring maintained documentation into clear English.
+
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-056, E-037, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-056, E-037, I-015; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
