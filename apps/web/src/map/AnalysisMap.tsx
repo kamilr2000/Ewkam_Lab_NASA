@@ -4,6 +4,14 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { getAnalysisMap } from '../api/client'
 import type { DataMode, Geometry, SearchMapCell, SearchPixel, SearchResponse } from '../api/types'
 import { boundsForCoordinates, splitGeometryAtAntimeridian, type GeographicBounds, type LonLat, type MapGeometry } from './geometry'
+import {
+  applyCellCollectionData,
+  formatMapContextLabel,
+  makeCellCollection,
+  makeGeometryCollection,
+  type FeatureCollection,
+  type MapFeature,
+} from './renderData'
 
 const EMPTY_STYLE: StyleSpecification = {
   version: 8,
@@ -16,25 +24,6 @@ setWorkerUrl(maplibreWorkerUrl)
 
 const EMPTY_COLLECTION = { type: 'FeatureCollection', features: [] } as const
 const MAX_VIEWPORT_CELLS = 1000
-
-type CellProperties = {
-  cell_id: string
-  score: number | null
-  mean: number | null
-  max_pixel_id: string | null
-  valid_pixel_count: number
-  total_pixel_count: number
-  coverage_fraction: number
-  missing_reason: string | null
-}
-
-type MapFeature<G = MapGeometry | { type: 'Point'; coordinates: LonLat }> = {
-  type: 'Feature'
-  id?: string | number
-  geometry: G
-  properties: Record<string, unknown>
-}
-type FeatureCollection<G = MapGeometry | { type: 'Point'; coordinates: LonLat }> = { type: 'FeatureCollection'; features: Array<MapFeature<G>> }
 
 function formatNumber(value: number | null, maximumFractionDigits = 2): string {
   if (value === null || !Number.isFinite(value)) return 'Not available'
@@ -71,36 +60,6 @@ function boundsForCells(cells: SearchMapCell[]): GeographicBounds | null {
 
 function boundsForPixel(pixel: SearchPixel | null): GeographicBounds | null {
   return pixel ? boundsForGeometry(pixel.geometry) : null
-}
-
-function makeCellCollection(cells: SearchMapCell[]): { collection: FeatureCollection; invalidCount: number } {
-  let invalidCount = 0
-  const features = cells.flatMap((cell) => {
-    const geometry = splitGeometryAtAntimeridian(cell.geometry)
-    if (!geometry) {
-      invalidCount += 1
-      return []
-    }
-    const properties: CellProperties = {
-      cell_id: cell.cell_id,
-      score: cell.max_score_pct,
-      mean: cell.mean_score_pct,
-      max_pixel_id: cell.max_pixel_id,
-      valid_pixel_count: cell.valid_pixel_count,
-      total_pixel_count: cell.total_pixel_count,
-      coverage_fraction: cell.coverage_fraction,
-      missing_reason: cell.missing_reason,
-    }
-    return [{ type: 'Feature' as const, id: cell.cell_id, geometry, properties }]
-  })
-  return { collection: { type: 'FeatureCollection', features }, invalidCount }
-}
-
-function makeGeometryCollection(geometry: Geometry | null | undefined): FeatureCollection {
-  const normalized = geometry ? splitGeometryAtAntimeridian(geometry) : null
-  return normalized
-    ? { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: normalized, properties: {} }] }
-    : { type: 'FeatureCollection', features: [] }
 }
 
 function makeGraticule(): FeatureCollection<{ type: 'LineString'; coordinates: LonLat[] }> {
@@ -338,7 +297,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
     const cellsSource = map.getSource('analysis-cells') as GeoJSONSource | undefined
     const selectionSource = map.getSource('selected-pixel') as GeoJSONSource | undefined
     const scopeSource = map.getSource('analysis-scope') as GeoJSONSource | undefined
-    cellsSource?.setData(collection as never)
+    if (cellsSource) applyCellCollectionData(cellsSource, collection)
     selectionSource?.setData(selectionCollection as never)
     scopeSource?.setData(scopeCollection as never)
   }, [collection, mapReady, scopeCollection, selectionCollection])
@@ -417,7 +376,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         <div className="map-context">
           <span className="map-globe-icon" aria-hidden="true">◉</span>
           <div>
-            <p className="eyebrow">{analysis ? `${analysis.scope.type.toUpperCase()} ANALYSIS · ${analysis.map_cells.length} GLOBAL DISPLAY CELLS` : 'GLOBAL SPATIAL VIEW'}</p>
+            <p className="eyebrow">{analysis ? formatMapContextLabel(analysis.scope.type, analysis.map_cells.length) : 'GLOBAL SPATIAL VIEW'}</p>
             <strong>{analysis?.scope.region_name ?? 'Earth terrain analogs'}</strong>
           </div>
         </div>
