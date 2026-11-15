@@ -8,7 +8,7 @@
 - `git diff --check fd2a9f5a71e9d039e3e7c538621d7f42e24f23bf e44614187c19eb9f8898115cf4512de2bc9078b9` — czysto.
 - Kontrola linków względnych w macierzy exact ref — 13/13 istnieje; linki zewnętrzne pominięto w tym sprawdzeniu.
 - Porównałem każdą sekcję `docs/sources/03-submission.md` z polami macierzy, `docs/SUBMISSION.md` i szablonem `submission/project-template.md`.
-- PR #50 jest otwarty, head `6c1bb7c...`, baza PR to `fd2a9f5...`, podczas gdy aktualny `origin/main` to `8b17e17...`. Macierz nie została odświeżona od `review_ref`.
+- PR #50 jest otwarty, head `6c1bb7c...`, baza PR to `fd2a9f5...`, podczas gdy bieżący `origin/main` to `0d56f8f...`. Macierz nie została odświeżona od `review_ref`.
 
 ## Ustalenia wymagające poprawy
 
@@ -21,7 +21,7 @@ Macierz mówi, że K-028 i K-031 czekają na review, a E-004/E-005/E-021 są w t
 | E-005 / K-028 | K-028 jest `done`, zaakceptował exact `98be49cac38e6d72245a092e7a59bab7c5599424` (GitHub review `5909896192`); PR #31 pozostaje otwarty i kod nie jest zintegrowany | Review zaakceptowane; integracja nadal oczekuje |
 | E-021 / K-030 | K-030 jest `done` z `REQUEST_CHANGES` (`5909971282`); E-021 jest `in_progress`; wymagane 781 px dało `innerWidth=782` | Zapisać wynik i aktywną poprawkę, nie „review pending” |
 | E-004 / K-032 | K-032 zaakceptował exact `e63ded588f07b9925c54075a31e581d07bfc5fc9` (review `5910052573`); PR #37 pozostaje otwarty i nie jest zintegrowany | Review zaakceptowane; status PR/integracji nadal otwarty |
-| I-012 / K-031 | K-031 jest `done` z `REQUEST_CHANGES` (`5910015378`); PR #46 i I-012 pozostają otwarte / `review` | Zmienić „review pending” na wynik zmian wymagających poprawy; nie oznaczać disclosure jako kompletnego |
+| I-012 / K-031 | K-031 jest `done` z `REQUEST_CHANGES` (`5910015378`); I-012 wróciło do `in_progress`, PR #46 pozostaje otwarty | Zmienić „review pending” na wynik zmian wymagających poprawy; nie oznaczać disclosure jako kompletnego |
 
 E-023 i E-024 oraz ograniczenia K-004/K-005 są zgodne ze źródłowymi kartami. K-007/K-008 nie są ukończone. E-004 lazy-map nadal wymaga wpisu I-013, który oczekuje na integrację I-012.
 
