@@ -3,18 +3,55 @@
 from __future__ import annotations
 
 import math
+import os
 from typing import Annotated, Literal, Union
+from urllib.parse import urlsplit
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from starlette.middleware.cors import CORSMiddleware
 
 from apps.api.data_store import DataIntegrityError, load_registry
 from apps.api.errors import ApiProblem
 from apps.api.service import build_catalog, get_map_cells, get_manifest, get_pixel_details, get_profile, run_search
 from contracts.validation import ContractSemanticError, validate_search_request_semantics
+
+
+DEFAULT_CORS_ORIGINS = ("http://localhost:5173", "http://127.0.0.1:5173")
+
+
+def _parse_cors_origins(value: str) -> list[str]:
+    origins = [origin.strip() for origin in value.split(",") if origin.strip()]
+    for origin in origins:
+        parsed = urlsplit(origin)
+        if (
+            "*" in origin
+            or parsed.scheme not in {"http", "https"}
+            or not parsed.netloc
+            or parsed.hostname is None
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path
+            or parsed.query
+            or parsed.fragment
+            or origin != f"{parsed.scheme}://{parsed.netloc}"
+        ):
+            raise ValueError(
+                "TERRA_ANALOG_CORS_ORIGINS must contain exact HTTP(S) origins without paths or wildcards."
+            )
+        try:
+            parsed.port
+        except ValueError as exc:
+            raise ValueError("TERRA_ANALOG_CORS_ORIGINS contains an invalid port.") from exc
+    return list(dict.fromkeys(origins))
+
+
+def _configured_cors_origins() -> list[str]:
+    value = os.getenv("TERRA_ANALOG_CORS_ORIGINS")
+    return list(DEFAULT_CORS_ORIGINS) if value is None else _parse_cors_origins(value)
 
 
 class GlobalScopeRequest(BaseModel):
@@ -64,6 +101,14 @@ app = FastAPI(
         "Version-pinned API for real planetary reference profiles and three regional Earth "
         "topography packages. Global Earth coverage is not yet available."
     ),
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_configured_cors_origins(),
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+    allow_credentials=False,
+    max_age=600,
 )
 
 

@@ -7,10 +7,11 @@ import json
 from typing import Any
 
 import httpx
+import pytest
 from jsonschema import Draft202012Validator, FormatChecker
 
 from apps.api.data_store import ROOT, load_registry
-from apps.api.main import app
+from apps.api.main import DEFAULT_CORS_ORIGINS, _configured_cors_origins, _parse_cors_origins, app
 
 
 def _request(method: str, path: str, **kwargs: Any) -> httpx.Response:
@@ -32,6 +33,76 @@ def _assert_schema(schema_name: str, value: dict[str, Any]) -> None:
     assert not errors, "\n".join(
         f"{list(error.absolute_path)}: {error.message}" for error in errors
     )
+
+
+def test_cors_configuration_uses_exact_origins_and_rejects_wildcards(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("TERRA_ANALOG_CORS_ORIGINS", raising=False)
+    assert _configured_cors_origins() == list(DEFAULT_CORS_ORIGINS)
+
+    monkeypatch.setenv(
+        "TERRA_ANALOG_CORS_ORIGINS", "https://demo.example, https://review.example"
+    )
+    assert _configured_cors_origins() == ["https://demo.example", "https://review.example"]
+
+    for invalid in ("*", "https://*.example", "https://demo.example/path"):
+        with pytest.raises(ValueError, match=r"exact HTTP\(S\) origins"):
+            _parse_cors_origins(invalid)
+
+
+def test_cors_allows_local_live_catalog_and_blocks_unlisted_origin() -> None:
+    allowed = _request(
+        "GET",
+        "/api/v1/catalog",
+        headers={"Origin": "http://localhost:5173"},
+    )
+    assert allowed.status_code == 200
+    assert allowed.headers["access-control-allow-origin"] == "http://localhost:5173"
+    assert "access-control-allow-credentials" not in allowed.headers
+
+    unlisted = _request(
+        "GET",
+        "/api/v1/catalog",
+        headers={"Origin": "https://unlisted.example"},
+    )
+    assert unlisted.status_code == 200
+    assert "access-control-allow-origin" not in unlisted.headers
+
+
+def test_cors_preflight_and_regional_search_work_without_credentials() -> None:
+    origin = "http://localhost:5173"
+    preflight = _request(
+        "OPTIONS",
+        "/api/v1/search",
+        headers={
+            "Origin": origin,
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+    assert preflight.status_code == 200
+    assert preflight.headers["access-control-allow-origin"] == origin
+    assert "POST" in preflight.headers["access-control-allow-methods"]
+    assert "content-type" in preflight.headers["access-control-allow-headers"].lower()
+    assert "access-control-allow-credentials" not in preflight.headers
+
+    response = _request(
+        "POST",
+        "/api/v1/search",
+        headers={"Origin": origin},
+        json=_search_request(
+            body="mars",
+            profile_id="mars-jezero-mola128-v1",
+            dataset_version="k005-earth-2km-atacama-andes-v2",
+            region_id="atacama-andes",
+        ),
+    )
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == origin
+    assert response.json()["is_synthetic"] is False
+    assert response.json()["scope"]["type"] == "regional"
+    assert response.json()["scope"]["region_id"] == "atacama-andes"
 
 
 def _search_request(
