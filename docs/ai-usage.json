@@ -18,7 +18,12 @@
     "K-006: backend MCDA scoring and pixel ranking implementation with tests",
     "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
     "E-018/K-019: independent review and evidence reports for scoring and API integration",
-    "E-019: map visual specification and a synthetic-fixture SVG concept"
+    "E-019: map visual specification and a synthetic-fixture SVG concept",
+    "E-004: MapLibre display-cell rendering, map-scope labels and numeric/null regression tests",
+    "E-005: React criteria controls, dataset-role selection, request construction and regression tests",
+    "E-021: CSS readability improvements and documented responsive/focus checks",
+    "E-023: independent K-004 regional-profile review and reproduction report",
+    "E-024: independent K-005 regional-grid review and source/provenance QA report"
   ],
   "synthetic_data_paths": [
     "contracts/fixtures/catalog-synthetic.json",
@@ -58,5 +63,5 @@
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
   "measurements_generated_by_ai": false,
-  "review_status": "K-002 and K-017 samples are real archive data; AI did not generate or edit their measurements. E-017 approved the documented K-017 scope but could not reread raw files or reproduce AOI metrics; Kamil later reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-006 scoring tests use synthetic fixtures and E-018 approved the stated code scope. K-019 and K-021 requested E-003/E-020 adapter corrections; K-024 approved exact snapshot 04aee3f6dc88f7338334d1d70a0fe51793c6911d and PR #20 merged as 639614b9c8216dc321a6b50ee10438cffcd2a546. The backend still implements only /api/v1/health. These checks do not establish global DEM accuracy, coverage, ranking or complete live application behavior."
+  "review_status": "K-002 and K-017 samples are real archive data; AI did not generate or edit their measurements. E-017 approved the documented K-017 scope but could not reread raw files or reproduce AOI metrics; Kamil later reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. K-006 scoring tests use synthetic fixtures and E-018 approved the stated code scope. K-019 and K-021 requested E-003/E-020 adapter corrections; K-024 approved exact snapshot 04aee3f6dc88f7338334d1d70a0fe51793c6911d and PR #20 merged as 639614b9c8216dc321a6b50ee10438cffcd2a546. Post-I-011, E-005 code ref 98be49cac38e6d72245a092e7a59bab7c5599424 in PR #31 adds UI controls and request construction; K-028 review is pending and the live API remains health-only. E-004 fix ref 0c4f509752e12893f5dd8203390aa919e578c132 in PR #37 adds GeoJSON rendering and numeric/null regressions (30 frontend tests passed); visual map output was not confirmed in the latest session and K-029 is pending. E-021 CSS ref a3f8fdeb3fe5845538083e76d359acc35a9abce8 in PR #35 documents contrast and responsive checks; the requested 781 px viewport reported 782 px, no classic scrollbar was forced, and K-030 is pending. E-023 approved exact K-004 ref d9ff76f7d5f3cfd18a55b82def271b9cc35030dc in PR #36. E-024 reviewed exact K-005 ref a5dfe3d892235d31938dcdd56bdcc17a66e0f167 in PR #44 and reported REQUEST_CHANGES P1 for a mismatched code fingerprint; a forced rebuild corrected the fingerprint without changing the CSVs, and that exact snapshot is not approved. These UI and review tasks did not generate or edit scientific measurements. The backend still implements only /api/v1/health. These checks do not establish global DEM accuracy, coverage, ranking or complete live application behavior."
 }
