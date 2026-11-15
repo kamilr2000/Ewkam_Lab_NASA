@@ -153,6 +153,7 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
 .rank-map-marker:hover, .rank-map-marker:focus-visible { z-index: 3; transform: scale(1.18); outline: 2px solid #f8f2c2; outline-offset: 2px; }
 .rank-map-marker.is-selected { border-color: #fff2ab; background: #d6ed85; color: #182422; box-shadow: 0 0 0 4px rgba(214, 237, 133, .25), 0 2px 12px rgba(0, 0, 0, .55); }
 .map-frame .maplibregl-marker { z-index: 2; }
+.map-frame .maplibregl-marker.is-selected-pixel-marker { z-index: 3; }
 .analysis-summary { position: relative; z-index: 1; width: 100%; margin: 13px 0 0; padding: 17px 19px 15px; border: 1px solid rgba(177, 203, 188, .15); border-radius: 5px; background: #172122; }
 .analysis-summary-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .analysis-contract-tag { flex: 0 0 auto; padding: 5px 7px; border: 1px solid rgba(188, 209, 197, .12); border-radius: 3px; color: #9aaba0; font: 8px var(--mono); }
@@ -266,6 +267,7 @@ select:disabled { opacity: 1; color: #788984; -webkit-text-fill-color: #788984; 
   .map-actions button { height: 30px; padding: 0 7px; font-size: 9px; }
   .map-actions button:first-child, .map-actions button:nth-child(2) { width: 29px; }
   .map-hud-bottom { flex-direction: column; align-items: stretch; gap: 8px; padding: 30px 11px 10px; }
+  .map-hud-bottom .map-legend, .map-hud-bottom .map-footnote { flex: 0 1 auto; }
   .map-legend { width: 100%; min-width: 0; padding: 8px 9px; }
   .map-footnote { align-items: flex-end; gap: 3px; font-size: 7px; }
   .map-cell-inspector { right: 11px; bottom: 206px; width: min(310px, calc(100% - 22px)); }

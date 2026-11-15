@@ -19,6 +19,7 @@
     "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
     "E-018/K-019: independent review and evidence reports for scoring and API integration",
     "E-019: map visual specification and a synthetic-fixture SVG concept",
+    "K-022: semantic regression guard for synthetic hotspot scope, map coverage and pixel/map aggregation",
     "K-047: sampled MOD11A1, Diviner TB3 and MGS TES data, reproducible thermal feasibility analysis, and NO-GO documentation"
   ],
   "synthetic_data_paths": [
@@ -55,7 +56,7 @@
     {
       "path": "design/map-hotspot-concept.svg",
       "description": "Static SVG schematic composed from a labeled synthetic contract fixture; no basemap, fabricated land shapes or NASA branding.",
-      "review_status": "E-019 is in review; K-020 requested a scope/coverage correction tracked in K-022."
+      "review_status": "E-019 remains in review; K-022 aligned synthetic scope and coverage, E-022 approved exact code ref 8fb3ab5da9117090b430fbe29df76862c6e70cda, and PR #28 merged into origin/main as a8572d0dd5d255599f0a5d51f21a74d03f525960. K-022 is done."
     }
   ],
   "generated_media": [],

@@ -5,8 +5,8 @@ info:
   version: 1.0.0
   description: >-
     Frozen v1 contract for catalog, profile, manifest, search, map and pixel-detail
-    responses. K-001 currently implements only GET /api/v1/health. Other operations
-    are planned contracts, not claims of a running API or available scientific data.
+    responses. K-007 implements these operations for two versioned planetary profiles
+    and three real regional Earth packages. Global Earth coverage is unavailable.
 servers:
   - url: http://127.0.0.1:8000
     description: Local development server
@@ -32,11 +32,11 @@ paths:
     get:
       tags: [catalog]
       operationId: getCatalog
-      summary: List versioned datasets, features and reference profiles
+      summary: List versioned datasets, features, reference profiles and searchable regions
       x-implemented-in-k001: false
       responses:
         '200':
-          description: Catalog state, including explicit planned or synthetic-only entries.
+          description: Real regional datasets and profiles, with explicit scope and coverage limitations.
           content:
             application/json:
               schema:
@@ -91,7 +91,7 @@ paths:
     post:
       tags: [analysis]
       operationId: createSearchAnalysis
-      summary: Score every eligible cell in the requested scope and freeze the analysis
+      summary: Score every eligible cell in one supported regional dataset and freeze the analysis
       x-implemented-in-k001: false
       requestBody:
         required: true
@@ -101,7 +101,7 @@ paths:
               $ref: '#/components/schemas/SearchRequest'
       responses:
         '200':
-          description: A pixel ranking or a separately named distinct-area representative ranking.
+          description: A pixel ranking or a separately named distinct-area representative ranking, with regional coverage and overview map cells.
           content:
             application/json:
               schema:
@@ -172,6 +172,7 @@ paths:
         - name: level
           in: query
           required: true
+          description: XYZ Web Mercator tile zoom level; 0 is the whole world and each increment halves tile width and height.
           schema: {type: integer, minimum: 0, maximum: 30}
         - name: limit
           in: query

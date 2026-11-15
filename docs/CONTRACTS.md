@@ -2,7 +2,7 @@
 
 Status: **zamrożony kontrakt `1.0.0` dla K-003**. Źródłem operacji HTTP jest [OpenAPI](../contracts/openapi.yaml), a źródłem kształtu payloadów są wskazane w nim schematy JSON Schema Draft 2020-12.
 
-K-001 wdraża obecnie wyłącznie `GET /api/v1/health`. Pozostałe operacje opisują uzgodniony interfejs do wdrożenia w kolejnych kartach; sama obecność w OpenAPI nie oznacza działającego API, danych ani wyników naukowych.
+K-007 wdraża operacje katalogu, profili, manifestów, wyszukiwania, szczegółów piksela i mapy dla dwóch rzeczywistych profili planetarnych oraz trzech regionalnych pakietów Ziemi K-005. To działające API na realnych danych regionalnych; nie oznacza globalnego pokrycia ani globalnego optimum.
 
 ## Wspólne reguły
 
@@ -18,15 +18,15 @@ K-001 wdraża obecnie wyłącznie `GET /api/v1/health`. Pozostałe operacje opis
 
 | Operacja | Kontrakt odpowiedzi | Stan implementacji po K-001 |
 |---|---|---|
-| `GET /api/v1/health` | [HealthResponse](../contracts/health-response.schema.json) | Zaimplementowana |
-| `GET /api/v1/catalog` | [CatalogResponse](../contracts/catalog-response.schema.json) | Planowana |
-| `GET /api/v1/catalog/profiles/{profile_id}` | [ProfileResponse](../contracts/profile-response.schema.json) | Planowana |
-| `GET /api/v1/catalog/datasets/{dataset_version}/manifest` | [DatasetManifest](../contracts/dataset-manifest.schema.json) | Planowana |
-| `POST /api/v1/search` | [SearchRequest](../contracts/search-request.schema.json) → [SearchResponse](../contracts/search-response.schema.json) | Planowana |
-| `GET /api/v1/analyses/{analysis_id}/pixels/{pixel_id}` | [PixelDetailsResponse](../contracts/pixel-details-response.schema.json) | Planowana |
-| `GET /api/v1/analyses/{analysis_id}/map` | [MapResponse](../contracts/map-response.schema.json) | Planowana |
+| `GET /api/v1/health` | [HealthResponse](../contracts/health-response.schema.json) | Zaimplementowana; `dataset_ready` sprawdza lokalne pakiety regionalne |
+| `GET /api/v1/catalog` | [CatalogResponse](../contracts/catalog-response.schema.json) | Zaimplementowana; dwa profile i trzy regiony K-005 |
+| `GET /api/v1/catalog/profiles/{profile_id}` | [ProfileResponse](../contracts/profile-response.schema.json) | Zaimplementowana dla Jezero i księżycowego 80–90°S |
+| `GET /api/v1/catalog/datasets/{dataset_version}/manifest` | [DatasetManifest](../contracts/dataset-manifest.schema.json) | Zaimplementowana dla trzech regionalnych pakietów K-005 |
+| `POST /api/v1/search` | [SearchRequest](../contracts/search-request.schema.json) → [SearchResponse](../contracts/search-response.schema.json) | Zaimplementowana dla pełnego skanu wybranego regionu |
+| `GET /api/v1/analyses/{analysis_id}/pixels/{pixel_id}` | [PixelDetailsResponse](../contracts/pixel-details-response.schema.json) | Zaimplementowana dla komórek lądowych w zapisanej analizie |
+| `GET /api/v1/analyses/{analysis_id}/map` | [MapResponse](../contracts/map-response.schema.json) | Zaimplementowana jako stronicowane agregaty kafli XYZ Web Mercator |
 
-`CatalogResponse.search_regions` wylicza regionalne scope ID dopuszczone dla wskazanych datasetów. Scope globalny jest jawny i nie wymaga geometrii w request.
+`CatalogResponse.search_regions` wylicza regionalne scope ID dopuszczone dla wskazanych datasetów. Scope globalny jest jawny i nie wymaga geometrii w request, ale obecne dane nie pokrywają całego globu; globalne żądanie zwraca `SCOPE_UNAVAILABLE`, nigdy cichą próbkę regionów K-005.
 
 Eksport wyników i asynchroniczne job API nie należą do tego zamrożenia; wymagają osobnej decyzji i wersjonowanej zmiany kontraktu.
 
@@ -68,7 +68,7 @@ Odpowiedź zawiera skuteczną konfigurację w `query`, zadeklarowany `scope`, ra
 | `ranking[]` | Tryb `pixels`: pojedyncze kwalifikujące się piksele. Każdy ma `rank`, `pixel_id`, `score_pct`, geometrię, faktyczną powierzchnię, jakość i wyniki cech. |
 | `features[]` | Wartość, jednostka, skala pomiaru, podobieństwo, znormalizowana waga, wkład, przedział referencyjny, tolerancja, źródła i flagi QA. W kwalifikującym się rankingu wszystkie aktywne cechy mają wartość. |
 | `area_ranking[]` | Tryb `distinct_areas`: wybrane reprezentatywne piksele z `candidate_id` oraz odległością od poprzednio wybranego reprezentanta. To heurystyka różnorodności, nie granice klastrów ani średnie obszarów. |
-| `map_cells[]` | Agregaty liczone dopiero po wspólnym wyniku pikseli: maksimum, średnia ważona powierzchnią, ID piksela maksimum, liczność kwalifikująca się/całkowita i geometria komórki mapy. |
+| `map_cells[]` | Agregaty liczone dopiero po wspólnym wyniku pikseli: maksimum, średnia ważona powierzchnią, ID piksela maksimum, liczność kwalifikująca się/całkowita i geometria komórki mapy. K-007 przypisuje komórki do kafli XYZ Web Mercator według środka piksela; `level` jest poziomem zoom 0–30. Odpowiedź wyszukiwania zawiera przegląd na poziomie 8, a endpoint mapy filtruje kafle przecinające bbox i stronicuje po `cell_id`. |
 
 W `distinct_areas` selekcja zachłanna porównuje kandydatów od najlepszych do spełnienia `top_k` lub wyczerpania zbioru. Używa geodezyjnej odległości na Ziemi i jawnego `min_distance_km`; nie ogranicza się do pierwszych 10 pikseli. `map_cells` nadal agreguje wszystkie policzone piksele, a nie tylko reprezentantów.
 
