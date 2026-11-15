@@ -1,0 +1,48 @@
+import assert from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import { after, before, test } from 'node:test'
+import { resolve } from 'node:path'
+import { createServer } from 'vite'
+
+const appRoot = resolve(fileURLToPath(new URL('..', import.meta.url)))
+const repositoryRoot = resolve(appRoot, '../..')
+const hotspotFixture = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/search-hotspot-synthetic.json'), 'utf8'))
+const noDataFixture = JSON.parse(await readFile(resolve(repositoryRoot, 'contracts/fixtures/search-no-data-synthetic.json'), 'utf8'))
+
+let server
+let renderData
+
+before(async () => {
+  server = await createServer({
+    configFile: false,
+    root: appRoot,
+    server: { middlewareMode: true, hmr: false, ws: false },
+    appType: 'custom',
+  })
+  renderData = await server.ssrLoadModule('/src/map/renderData.ts')
+})
+
+after(async () => {
+  await server?.close()
+})
+
+test('cell source receives a GeoJSON FeatureCollection with numeric and null results', () => {
+  const cells = [hotspotFixture.map_cells[0], noDataFixture.map_cells[0]]
+  const result = renderData.makeCellCollection(cells)
+  let sourceData = null
+
+  renderData.applyCellCollectionData({ setData(value) { sourceData = value } }, result)
+
+  assert.equal(result.invalidCount, 0)
+  assert.equal(sourceData.type, 'FeatureCollection')
+  assert.equal(sourceData.features.length, 2)
+  assert.notStrictEqual(sourceData, result)
+  assert.deepEqual(sourceData.features.map((feature) => feature.properties.score), [100, null])
+  assert.equal(sourceData.features[1].properties.missing_reason, 'missing_feature_value')
+})
+
+test('map context labels follow the requested scope', () => {
+  assert.equal(renderData.formatMapContextLabel('global', 1), 'GLOBAL ANALYSIS · 1 GLOBAL DISPLAY CELL')
+  assert.equal(renderData.formatMapContextLabel('regional', 2), 'REGIONAL ANALYSIS · 2 REGIONAL DISPLAY CELLS')
+})
