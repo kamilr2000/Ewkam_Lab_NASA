@@ -8,7 +8,7 @@
 - Oceniony head PR #70: `4f7e296624b7ea1e9889906c23b3b9fedcb94f4a`
 - Gałąź Eweliny: `ewelina/E-027-review-k007-real-api`
 - Bieżący `origin/main` po opublikowaniu K-041: `ad829f10e53ec982165ae2d57b9c1101bf208137`
-- Decyzja review: APPROVED dla exact `review_ref` i bieżącego headu. Po opublikowaniu tego raportu przypnę decyzję do PR #70; PR #70 pozostaje otwarty i nie jest scalony.
+- Decyzja review: APPROVED dla exact `review_ref` i bieżącego headu; GitHub review [#5910789661](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/70#pullrequestreview-5910789661) przypięto do `4f7e296`. PR #70 pozostaje otwarty i nie jest scalony.
 
 ## Decyzja
 
@@ -59,6 +59,6 @@ Bezpośrednie sprawdzenie modeli wykazało, że `SearchCriterionRequest.model_va
 
 ## Integracja i ograniczenia
 
-PR #70 jest nadal otwarty. Ostatni odczyt GitHub zwrócił `mergeable: false`; baza PR wskazuje `23c57b1`, starszy od aktualnego `origin/main` `ad829f1`. Kamil powinien zsynchronizować swoją gałąź z aktualnym `main` przed scaleniem. Nie zmieniałam jego gałęzi ani nie scalałam PR.
+PR #70 jest nadal otwarty. Najnowszy odczyt GitHub zwrócił `mergeable: true`, ale baza PR nadal wskazuje `23c57b1`, starszy od aktualnego `origin/main` `ad829f1`. Zgodnie z przepływem repozytorium Kamil powinien zsynchronizować swoją gałąź z aktualnym `main` przed integracją. Nie zmieniałam jego gałęzi ani nie scalałam PR.
 
 Review potwierdza dwie regionalne analizy rzeczywistych danych o nominalnej rozdzielczości komórki 2 km. Nie waliduje globalnego rankingu, wydajności na zbiorze globalnym ani wdrożenia wieloworkerowego.
