@@ -1,0 +1,529 @@
+{
+  "report_version": 1,
+  "task_id": "K-005",
+  "generated_at": "2026-11-15T10:58:32Z",
+  "code_sha256": "56543c206661c3158999fd442f13a3ebc56e695333da8b2ad01b1e19d8d63829",
+  "global_scale_budget": {
+    "grid": {
+      "angular_resolution_arc_seconds": 60,
+      "cell_layout": "one cell-centred sample per angular interval; no duplicate seam or pole endpoint",
+      "columns": 21600,
+      "rows": 10800,
+      "total_cells": 233280000
+    },
+    "storage_model": {
+      "raw_60_arcsecond_float32_dem_bytes": 933120000,
+      "three_float32_feature_arrays_bytes": 2799360000,
+      "full_candidate_state_bytes_per_cell": 26,
+      "full_candidate_state_bytes": 6065280000
+    },
+    "working_batch_model": {
+      "core_rows": 64,
+      "halo_rows_each_side": 7,
+      "resident_rows_including_halo": 78,
+      "working_arrays_bytes_per_cell": 43,
+      "working_arrays_bytes": 72446400,
+      "source_grid_arc_seconds": 15,
+      "source_window_rows": 314,
+      "source_window_columns": 86400,
+      "source_float32_window_bytes": 108518400,
+      "source_gshhg_land_mask_bytes": 27129600,
+      "estimated_bytes_before_gdal_and_geometry_buffers": 208094400,
+      "batch_count": 169
+    },
+    "basis": "Exact integer grid/array arithmetic for a 60-arc-second global layout; byte totals exclude file compression, Python objects, GDAL/PROJ caches, GSHHG geometry buffers, and polar-specific reprojection.",
+    "global_run_performed": false,
+    "polar_processing": "A latitude/longitude disk is singular at the poles; use a separate polar stereographic metric processing tile and map its cell results back to the declared angular candidate IDs. This is a planned control, not implemented by the regional UTM builder."
+  },
+  "regional_processing": {
+    "analytical_cell_size_m": 2000,
+    "effective_dem_output_scale_m": 2000,
+    "effective_dem_source": "NOAA ETOPO 2022 v1 surface, 15 arc-second posting; GSHHG ocean samples are masked before land-only area averaging to metric target cells",
+    "feature_window_radius_m": 10000,
+    "minimum_window_valid_fraction": 0.9,
+    "regional_batch_unit": "one AOI package; output and checkpoint are atomically written after each AOI, and a verified checkpoint lets subsequent runs resume without recalculation",
+    "global_scope_status": "not built; this task establishes exact scale arithmetic and reproducible regional processing only"
+  },
+  "mask_controls": [
+    {
+      "id": "big-island-land",
+      "longitude": -155.5,
+      "latitude": 19.5,
+      "expected_land": true,
+      "actual_land": true,
+      "deepest_gshhg_level": 1,
+      "passed": true,
+      "purpose": "island land is retained"
+    },
+    {
+      "id": "big-island-ocean",
+      "longitude": -155.99,
+      "latitude": 19.5,
+      "expected_land": false,
+      "actual_land": false,
+      "deepest_gshhg_level": null,
+      "passed": true,
+      "purpose": "coastal ocean is excluded"
+    },
+    {
+      "id": "qattara-depression",
+      "longitude": 27.1,
+      "latitude": 29.1,
+      "expected_land": true,
+      "actual_land": true,
+      "deepest_gshhg_level": 1,
+      "passed": true,
+      "purpose": "below-sea-level land is retained",
+      "nasadem_height_m_egm96": -80.0,
+      "nasadem_swb_class": "land",
+      "validation_evidence": {
+        "report_path": "data/reports/k017-validation.json",
+        "report_sha256": "786d54a49d18ec04ad1e9529342e3e86970af299f165e3dc7db2bfb7e480b11f",
+        "method": "Reuse the already committed K-017 point check; it records the raw NASADEM HGT value, SWB class, and GSHHG classification."
+      }
+    },
+    {
+      "id": "antarctica-grounded",
+      "longitude": 0.0,
+      "latitude": -85.0,
+      "expected_land": true,
+      "actual_land": true,
+      "deepest_gshhg_level": 6,
+      "passed": true,
+      "purpose": "grounded Antarctic L6 land is retained"
+    }
+  ],
+  "mask_controls_passed": true,
+  "regional_packages": [
+    {
+      "aoi_id": "atacama-andes",
+      "label": "Atacama / Andes",
+      "bounds_wgs84": [
+        -68.9,
+        -24.9,
+        -68.1,
+        -24.1
+      ],
+      "candidate_rule": "Cell centre lies inside the declared bbox; margin cells are used only for metric windows.",
+      "grid_version": "k005-earth-2km-atacama-andes-v2",
+      "target_crs": "EPSG:32719",
+      "grid_shape_rows_columns": [
+        60,
+        55
+      ],
+      "grid_cells_in_full_metric_buffer": 3300,
+      "candidate_cells": 1796,
+      "land_center_cells": 1796,
+      "cells_with_valid_dem_center": 1796,
+      "eligible_cells": 1791,
+      "excluded_by_reason": {
+        "insufficient_window_support": 5
+      },
+      "counts": {
+        "total_pixels": 1796,
+        "eligible_pixels": 1791,
+        "excluded_by_reason": {
+          "not_land": 0,
+          "dem_nodata": 0,
+          "insufficient_slope_support": 0,
+          "insufficient_window_support": 5
+        },
+        "nominal_cell_area_km2": 4.0,
+        "minimum_pixel_area_km2": 4.002382821039423,
+        "maximum_pixel_area_km2": 4.003189952568882,
+        "total_area_km2": 7189.193164204999,
+        "eligible_area_km2": 7169.17721444561
+      },
+      "feature_summaries_eligible_only": {
+        "slope_deg": {
+          "count": 1791,
+          "mean": 4.30327844619751,
+          "p05": 0.7559003829956055,
+          "median": 3.398782968521118,
+          "p95": 11.23033332824707
+        },
+        "roughness_m": {
+          "count": 1791,
+          "mean": 172.5887451171875,
+          "p05": 41.94874572753906,
+          "median": 161.6832733154297,
+          "p95": 350.76043701171875
+        },
+        "relief_m": {
+          "count": 1791,
+          "mean": 903.3338623046875,
+          "p05": 388.174560546875,
+          "median": 858.891357421875,
+          "p95": 1535.369140625
+        }
+      },
+      "nodata_center_cells": 0,
+      "land_fraction_4x_summary_candidates": {
+        "count": 1796,
+        "mean": 1.0,
+        "p05": 1.0,
+        "median": 1.0,
+        "p95": 1.0
+      },
+      "mean_window_valid_fraction_land_centres": 0.9991476535797119,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "sample_count": 81,
+        "minimum_valid_fraction": 0.9,
+        "minimum_valid_samples": 73
+      },
+      "input_etopo": {
+        "filename": "ETOPO_2022_v1_15s_S15W075_surface.tif",
+        "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S15W075_surface.tif",
+        "size_bytes": 30004071,
+        "sha256": "1872b57145c8d18ebd44cf6d08de601bd34c067dc5a780038b0754398444eaf9",
+        "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_S15W075_surface.tif",
+        "raster": {
+          "width": 3600,
+          "height": 3600,
+          "crs": "EPSG:9518",
+          "transform": [
+            0.004166666666666667,
+            0.0,
+            -75.0,
+            0.0,
+            -0.004166666666666667,
+            -15.0
+          ],
+          "nodata": -99999.0,
+          "dtype": "float32",
+          "source_valid_mask": "GSHHG 2.3.7 land at native ETOPO grid; ocean and source no-data excluded before resampling"
+        }
+      },
+      "input_gshhg_archive": {
+        "filename": "gshhg-shp-2.3.7.zip",
+        "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+        "size_bytes": 149157845,
+        "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+        "path": "data/raw/k017/gshhg/gshhg-shp-2.3.7.zip"
+      },
+      "output": {
+        "path": "data/derived/k005-earth-grid/atacama-andes/earth-cells.csv.gz",
+        "sha256": "784ccc0dbebe4e846774ac819809029a31f082cb16931e6bbe882da26c0f570c",
+        "size_bytes": 63856
+      },
+      "manual_feature_check": {
+        "pixel_id": "earth:k005-earth-2km-atacama-andes-v2:r00029:c00027",
+        "center_lon_deg": -68.49664435054328,
+        "center_lat_deg": -24.493874784444955,
+        "pipeline_values": {
+          "slope_deg": 5.164045810699463,
+          "roughness_m": 192.67848205566406,
+          "relief_m": 689.4033203125
+        },
+        "manual_values": {
+          "slope_deg": 5.164046142335558,
+          "roughness_m": 192.6784882207111,
+          "relief_m": 689.4033203125
+        },
+        "absolute_differences": {
+          "slope_deg": 3.316360954741526e-07,
+          "roughness_m": 6.1650470399854385e-06,
+          "relief_m": 0.0
+        },
+        "maximum_absolute_difference": 6.1650470399854385e-06,
+        "passed": true
+      },
+      "retained_numpy_array_bytes_lower_bound": 171600,
+      "processing_seconds": 19.439582599996356,
+      "resumed_from_checkpoint": false,
+      "manifest_path": "data/manifests/k005-earth-grid-atacama-andes.json"
+    },
+    {
+      "aoi_id": "hawaii-big-island",
+      "label": "Hawaii, Big Island",
+      "bounds_wgs84": [
+        -155.9,
+        19.1,
+        -155.1,
+        19.9
+      ],
+      "candidate_rule": "Cell centre lies inside the declared bbox; margin cells are used only for metric windows.",
+      "grid_version": "k005-earth-2km-hawaii-big-island-v2",
+      "target_crs": "EPSG:32605",
+      "grid_shape_rows_columns": [
+        60,
+        58
+      ],
+      "grid_cells_in_full_metric_buffer": 3480,
+      "candidate_cells": 1854,
+      "land_center_cells": 1703,
+      "cells_with_valid_dem_center": 1720,
+      "eligible_cells": 1497,
+      "excluded_by_reason": {
+        "not_land": 151,
+        "insufficient_slope_support": 62,
+        "insufficient_window_support": 144
+      },
+      "counts": {
+        "total_pixels": 1854,
+        "eligible_pixels": 1497,
+        "excluded_by_reason": {
+          "not_land": 151,
+          "dem_nodata": 0,
+          "insufficient_slope_support": 62,
+          "insufficient_window_support": 144
+        },
+        "nominal_cell_area_km2": 4.0,
+        "minimum_pixel_area_km2": 3.9940059886619745,
+        "maximum_pixel_area_km2": 3.9983708198228105,
+        "total_area_km2": 7409.230122143466,
+        "eligible_area_km2": 5982.35610663917
+      },
+      "feature_summaries_eligible_only": {
+        "slope_deg": {
+          "count": 1497,
+          "mean": 5.127594470977783,
+          "p05": 1.6807512044906616,
+          "median": 4.628726959228516,
+          "p95": 9.8702392578125
+        },
+        "roughness_m": {
+          "count": 1497,
+          "mean": 140.17518615722656,
+          "p05": 37.4161376953125,
+          "median": 118.98505401611328,
+          "p95": 312.203857421875
+        },
+        "relief_m": {
+          "count": 1497,
+          "mean": 1361.2509765625,
+          "p05": 673.45703125,
+          "median": 1311.7431640625,
+          "p95": 2161.972900390625
+        }
+      },
+      "nodata_center_cells": 134,
+      "land_fraction_4x_summary_candidates": {
+        "count": 1854,
+        "mean": 0.9179139733314514,
+        "p05": 0.0,
+        "median": 1.0,
+        "p95": 1.0
+      },
+      "mean_window_valid_fraction_land_centres": 0.9636516571044922,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "sample_count": 81,
+        "minimum_valid_fraction": 0.9,
+        "minimum_valid_samples": 73
+      },
+      "input_etopo": {
+        "filename": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "size_bytes": 22411557,
+        "sha256": "8265ec91d7db7644d227374afe91d23662203a4eb3fd580626b3f7d3d27dc85c",
+        "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "raster": {
+          "width": 3600,
+          "height": 3600,
+          "crs": "EPSG:9518",
+          "transform": [
+            0.004166666666666667,
+            0.0,
+            -165.0,
+            0.0,
+            -0.004166666666666667,
+            30.0
+          ],
+          "nodata": -99999.0,
+          "dtype": "float32",
+          "source_valid_mask": "GSHHG 2.3.7 land at native ETOPO grid; ocean and source no-data excluded before resampling"
+        }
+      },
+      "input_gshhg_archive": {
+        "filename": "gshhg-shp-2.3.7.zip",
+        "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+        "size_bytes": 149157845,
+        "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+        "path": "data/raw/k017/gshhg/gshhg-shp-2.3.7.zip"
+      },
+      "output": {
+        "path": "data/derived/k005-earth-grid/hawaii-big-island/earth-cells.csv.gz",
+        "sha256": "5489e51b4ec4f1a770fe7e7511565de6e5083b4547ebb48d61ada3af0ec4668b",
+        "size_bytes": 64177
+      },
+      "manual_feature_check": {
+        "pixel_id": "earth:k005-earth-2km-hawaii-big-island-v2:r00029:c00028",
+        "center_lon_deg": -155.5058997780944,
+        "center_lat_deg": 19.508365421166975,
+        "pipeline_values": {
+          "slope_deg": 5.864031791687012,
+          "roughness_m": 268.3960266113281,
+          "relief_m": 1517.441650390625
+        },
+        "manual_values": {
+          "slope_deg": 5.864031876146142,
+          "roughness_m": 268.3960408133625,
+          "relief_m": 1517.441650390625
+        },
+        "absolute_differences": {
+          "slope_deg": 8.445913035615149e-08,
+          "roughness_m": 1.4202034378740791e-05,
+          "relief_m": 0.0
+        },
+        "maximum_absolute_difference": 1.4202034378740791e-05,
+        "passed": true
+      },
+      "retained_numpy_array_bytes_lower_bound": 180960,
+      "processing_seconds": 23.465775800010306,
+      "resumed_from_checkpoint": false,
+      "manifest_path": "data/manifests/k005-earth-grid-hawaii-big-island.json"
+    },
+    {
+      "aoi_id": "himalaya",
+      "label": "Himalaya",
+      "bounds_wgs84": [
+        86.1,
+        28.1,
+        86.9,
+        28.9
+      ],
+      "candidate_rule": "Cell centre lies inside the declared bbox; margin cells are used only for metric windows.",
+      "grid_version": "k005-earth-2km-himalaya-v2",
+      "target_crs": "EPSG:32645",
+      "grid_shape_rows_columns": [
+        59,
+        55
+      ],
+      "grid_cells_in_full_metric_buffer": 3245,
+      "candidate_cells": 1737,
+      "land_center_cells": 1737,
+      "cells_with_valid_dem_center": 1737,
+      "eligible_cells": 1737,
+      "excluded_by_reason": {},
+      "counts": {
+        "total_pixels": 1737,
+        "eligible_pixels": 1737,
+        "excluded_by_reason": {
+          "not_land": 0,
+          "dem_nodata": 0,
+          "insufficient_slope_support": 0,
+          "insufficient_window_support": 0
+        },
+        "nominal_cell_area_km2": 4.0,
+        "minimum_pixel_area_km2": 4.002453790363684,
+        "maximum_pixel_area_km2": 4.003189961572204,
+        "total_area_km2": 6953.058954901529,
+        "eligible_area_km2": 6953.0589549015285
+      },
+      "feature_summaries_eligible_only": {
+        "slope_deg": {
+          "count": 1737,
+          "mean": 5.006016254425049,
+          "p05": 0.8046038150787354,
+          "median": 4.576015949249268,
+          "p95": 10.78630542755127
+        },
+        "roughness_m": {
+          "count": 1737,
+          "mean": 204.29940795898438,
+          "p05": 112.71353149414062,
+          "median": 197.47605895996094,
+          "p95": 313.98272705078125
+        },
+        "relief_m": {
+          "count": 1737,
+          "mean": 945.4331665039062,
+          "p05": 492.31036376953125,
+          "median": 913.72412109375,
+          "p95": 1430.362060546875
+        }
+      },
+      "nodata_center_cells": 0,
+      "land_fraction_4x_summary_candidates": {
+        "count": 1737,
+        "mean": 1.0,
+        "p05": 1.0,
+        "median": 1.0,
+        "p95": 1.0
+      },
+      "mean_window_valid_fraction_land_centres": 1.0,
+      "feature_window": {
+        "shape": "circular",
+        "radius_m": 10000,
+        "radius_cells": 5,
+        "sample_count": 81,
+        "minimum_valid_fraction": 0.9,
+        "minimum_valid_samples": 73
+      },
+      "input_etopo": {
+        "filename": "ETOPO_2022_v1_15s_N30E075_surface.tif",
+        "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30E075_surface.tif",
+        "size_bytes": 30871200,
+        "sha256": "cbb763175d331ed0222da35f357d3837aa8218aeda72e586974ef2a53f9027d4",
+        "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30E075_surface.tif",
+        "raster": {
+          "width": 3600,
+          "height": 3600,
+          "crs": "EPSG:9518",
+          "transform": [
+            0.004166666666666667,
+            0.0,
+            75.0,
+            0.0,
+            -0.004166666666666667,
+            30.0
+          ],
+          "nodata": -99999.0,
+          "dtype": "float32",
+          "source_valid_mask": "GSHHG 2.3.7 land at native ETOPO grid; ocean and source no-data excluded before resampling"
+        }
+      },
+      "input_gshhg_archive": {
+        "filename": "gshhg-shp-2.3.7.zip",
+        "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+        "size_bytes": 149157845,
+        "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+        "path": "data/raw/k017/gshhg/gshhg-shp-2.3.7.zip"
+      },
+      "output": {
+        "path": "data/derived/k005-earth-grid/himalaya/earth-cells.csv.gz",
+        "sha256": "30a3dd1d93277a766b9d7d9ddcd8a2c05c9db4df374a4bb310eaac97f143479c",
+        "size_bytes": 61206
+      },
+      "manual_feature_check": {
+        "pixel_id": "earth:k005-earth-2km-himalaya-v2:r00029:c00027",
+        "center_lon_deg": 86.4993004915784,
+        "center_lat_deg": 28.502761010269793,
+        "pipeline_values": {
+          "slope_deg": 2.052802085876465,
+          "roughness_m": 143.85598754882812,
+          "relief_m": 781.52392578125
+        },
+        "manual_values": {
+          "slope_deg": 2.0528022895534,
+          "roughness_m": 143.85598226069442,
+          "relief_m": 781.52392578125
+        },
+        "absolute_differences": {
+          "slope_deg": 2.0367693531753162e-07,
+          "roughness_m": 5.288133706926601e-06,
+          "relief_m": 0.0
+        },
+        "maximum_absolute_difference": 5.288133706926601e-06,
+        "passed": true
+      },
+      "retained_numpy_array_bytes_lower_bound": 168740,
+      "processing_seconds": 28.65059730000212,
+      "resumed_from_checkpoint": false,
+      "manifest_path": "data/manifests/k005-earth-grid-himalaya.json"
+    }
+  ],
+  "limitations": [
+    "Three regional AOIs do not establish global coverage, global feature validity, or a global ranking.",
+    "Global cost figures are exact grid and array-size arithmetic, not a measured whole-world runtime or measured peak resident set.",
+    "The regional builder stores one AOI in memory; global processing still needs spatial tiles, bounded raster windows, and checkpoints per tile.",
+    "Polar metric windows and raster geometry require a separate stereographic tile path; the current UTM builder intentionally rejects polar AOIs.",
+    "Coastal land fraction is a 4x sampled estimate; small islands and sub-cell coastline detail require a higher-resolution regional check."
+  ]
+}
