@@ -1,7 +1,7 @@
 # K-039 — Re-review E-021 render proof
 
 Date: 2026-11-15
-Decision: **APPROVE** for the reviewed UI readability and responsive-render scope. This review does not mark E-021 done or merge PR #35.
+Decision: **RECOMMEND APPROVE** for the reviewed UI readability and responsive-render scope. This review does not mark E-021 done or merge PR #35.
 
 ## Reviewed refs
 
@@ -44,3 +44,5 @@ Static CSS review found no text font declarations below 9 px. Recomputed represe
 No physical phone was tested and a classic non-overlay scrollbar was not forced. The preview shows synthetic fixture data, not scientific results. These limitations are explicit and do not block the stated E-021 acceptance criteria.
 
 The old PR description incorrectly said that current render evidence was missing. It has been refreshed to point to the current ref and proof. No owner follow-up is needed for the reviewed scope. E-021 remains `review` until Kamil integrates and accepts it on `origin/main`.
+
+GitHub rejected the formal `APPROVE` review with HTTP 422 because the connected account authored PR #35. The review outcome and evidence were therefore published as PR comment [6895059234](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/35#issuecomment-6895059234), anchored in its text to current head `676554f12ea2d66aab34f5cfdf2100c6d9db3057`.
