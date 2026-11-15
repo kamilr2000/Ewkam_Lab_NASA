@@ -32,7 +32,7 @@ git diff --check
 
 ## Sprawdzenia
 
-- `npm test --prefix apps/web` — 35 testów przechodzi, w tym 1/3/0 aktywnych cech, niepoprawne wagi, brak dostępności cechy, zachowanie body/profile ID Marsa i Księżyca oraz niezależność metadanych widoczności od requestu.
+- Przed K-026 baseline `npm test --prefix apps/web` — 35 testów przechodziło, w tym 1/3/0 aktywnych cech, niepoprawne wagi, brak dostępności cechy, zachowanie body/profile ID Marsa i Księżyca oraz niezależność metadanych widoczności od requestu.
 - Po poprawce K-026: `npm test --prefix apps/web` — **38/38 passed**, w tym dostępny `validation` przed `earth_search`, brak roli docelowej, wieloznaczność i właściwa rola `fixture_only` dla Synthetic.
 - `npm run build --prefix apps/web` — TypeScript i produkcyjny build Vite przechodzą.
 - `python tools/check_planning.py` — OK; `git diff --check` — OK.
@@ -48,3 +48,5 @@ git diff --check
 ## Poprawka po K-026
 
 Review K-026 zgłosił P1: kod wybierał pierwszy dostępny Earth dataset, nie sprawdzając `role`, więc katalog mógł skierować request na dataset walidacyjny. Poprawka jest w `98be49cac38e6d72245a092e7a59bab7c5599424`; pełne testy frontendowe i build produkcyjny przechodzą. Katalog zawierający więcej niż jeden dataset właściwej roli odrzucamy jawnie jako niejednoznaczny. Re-review powinien sprawdzić dokładny aktualny head PR #31; live endpointy nie są dostępne, więc zachowanie oceniono na kopiach syntetycznych katalogu.
+
+Karta E-005 i nowa karta K-028 w `origin/main` wskażą dokładny head PR #31 do ponownego review po publikacji tego handoffu.
