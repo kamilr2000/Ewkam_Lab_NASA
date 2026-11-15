@@ -21,7 +21,7 @@
     "type": "regional",
     "region_id": "synthetic-hotspot-region",
     "region_name": "Synthetic isolated-hotspot test region",
-    "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.04, 3], [3.04, 3.02], [3, 3.02], [3, 3]]]},
+    "geometry": {"type": "Polygon", "coordinates": [[[3, 3], [3.04, 3], [3.04, 3.01], [3, 3.01], [3, 3]]]},
     "mask_id": "synthetic-mask",
     "grid_version": "synthetic-grid-v1",
     "description": "A single high-scoring synthetic pixel sits inside a weaker map cell."
