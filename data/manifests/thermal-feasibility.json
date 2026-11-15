@@ -652,7 +652,7 @@
     "follow_up": "If pursued, evaluate temperature-only and thermal-inertia features as separate P1 research cards with explicit shared measurand, seasonal/local-time matching, QA, support, null handling and coverage rules. No production scoring changes in K-047."
   },
   "analysis": {
-    "generated_at_utc": "2026-11-15T16:05:42+00:00",
+    "generated_at_utc": "2026-11-15T17:51:57+00:00",
     "software": {
       "python": "3.12.14",
       "numpy": "2.5.4",
@@ -661,7 +661,7 @@
       "pyproj": "3.8.0",
       "earthaccess": "0.19.0"
     },
-    "code_sha256": "1151442c40c8bebbcc509b96c3596fe711c7a5b5d046052b76b46d50947d4626",
+    "code_sha256": "b5854aa1e93902b110555feb70b6611c37db352cf68b740ee1913ef926cf5f2a",
     "reference_manifest_sha256": {
       "data/manifests/k004-planetary-profiles.json": "fb12e02fe066e819af69fff35b455cfa438afe0da9a640aef0d74699bb9950a6",
       "data/manifests/k017-earth-validation.json": "794cd3348c389cfa7f7147755223a3e9090a642707f2fd7705f8e6ca0c684af9"

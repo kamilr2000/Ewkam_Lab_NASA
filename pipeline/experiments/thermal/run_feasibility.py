@@ -558,6 +558,13 @@ def render_report(manifest: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _display_report_path(report_path: Path) -> str:
+    try:
+        return report_path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return str(report_path)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
@@ -583,7 +590,7 @@ def main() -> int:
     report_path = args.report if args.report.is_absolute() else ROOT / args.report
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(render_report(manifest), encoding="utf-8")
-    print(f"Verified {verified['verified_file_count']} files ({verified['verified_bytes']} bytes); wrote {report_path.relative_to(ROOT)}")
+    print(f"Verified {verified['verified_file_count']} files ({verified['verified_bytes']} bytes); wrote {_display_report_path(report_path)}")
     return 0
 
 
