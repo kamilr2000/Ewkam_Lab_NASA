@@ -1,6 +1,6 @@
 # Dane, warstwy i profile
 
-Stan 2026-11-14: K-002 pobrał i poprawnie odczytał małe rzeczywiste próbki ETOPO, LOLA i MOLA. Ich pochodzenie, etykiety, rozmiary i SHA-256 zapisano w manifeście próbek w data/manifests/k002-samples.json; odtwarzalne pobranie uruchamia pipeline/download_samples.py. To próbki techniczne, nie gotowe warstwy aplikacji ani dowód globalnego pokrycia. NASADEM jest widoczny w katalogu, ale wymaga lokalnego logowania Earthdata; bez uwierzytelnienia nie pobrano pomiarów.
+Stan 2026-11-14: K-002 pobrał i poprawnie odczytał próbki ETOPO, LOLA i MOLA. K-017 dodał cztery rzeczywiste kafle NASADEM HGT/NUM/SWB oraz niezależny produkt GSHHG 2.3.7; rozmiary i SHA-256 zapisano w `data/manifests/k017-earth-validation.json`. Trzy nakładające się AOI porównano z ETOPO na siatce 2 km po transformacji NASADEM z EGM96 do EGM2008. Wynik jest walidacją wybranych próbek, nie dowodem globalnej dokładności ani gotową globalną warstwą aplikacji. Surowe pliki pozostają w ignorowanym `data/raw/`.
 
 ## 1. Kolejność pozyskiwania
 
@@ -15,12 +15,30 @@ Stan 2026-11-14: K-002 pobrał i poprawnie odczytał małe rzeczywiste próbki E
 | ID | Źródło i rola | Ograniczenie / działanie |
 |---|---|---|
 | D01 | [NOAA ETOPO 2022](https://www.ncei.noaa.gov/products/etopo-global-relief-model): globalna rzeźba powierzchni Ziemi | Rozważyć wariant Ice Surface 60 arc-second dla screeningu; angularny piksel nie ma stałego rozmiaru w metrach. Nie używać Bedrock jako terenu po powierzchni lodu. |
-| D02 | [NASA/METI ASTER GDEM v3](https://asterweb.jpl.nasa.gov/gdem.asp) lub NASADEM: niezależna walidacja ziemskich cech | Do kolejnego sprawdzenia wybrano NASADEM HGT v001 (DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001, CC0-1.0). CMR potwierdza granule, ale plik LP DAAC wymaga Earthdata Login; próbki nie pobrano. Porównać w co najmniej trzech AOI po wspólnym przeskalowaniu i jawnie rozdzielić EGM96 od EGM2008. NASADEM SWB może dostarczyć maskę lądu/wody tylko w zasięgu SRTM, bez obszarów polarnych. |
+| D02 | [NASA/METI ASTER GDEM v3](https://asterweb.jpl.nasa.gov/gdem.asp) lub NASADEM: kontrola ziemskich cech na drugim produkcie DEM | NASADEM HGT v001 (DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001, CC0-1.0) pobrano dla Atacamy, Hawajów, Himalajów i testu Qattary. Trzy AOI porównano z ETOPO po wspólnej siatce i transformacji EGM96→EGM2008. `NUM` zachowuje pochodzenie komórek. `SWB` opisuje ląd/wodę tylko w zasięgu SRTM i nie obejmuje biegunów. Wyników z trzech AOI nie uogólniamy na cały glob. |
 | D03 | [LRO LOLA w NASA PDS](https://pds-geosciences.wustl.edu/missions/lro/lola.htm): profil Księżyca; pobrano LDEM_4 i etykiety PDS3/PDS4 | Globalny produkt 4 piksele/stopień przechowuje promień względem sfery odniesienia (DN × 0,5 m + 1 737 400 m); topografia względem geoidy wymaga odjęcia promienia geoidy. Nie porównywać surowych wysokości między ciałami. |
 | D04 | [MGS MOLA MEGDR / Topography Derived](https://pds-geosciences.wustl.edu/missions/mgs/megdr.html): profil Marsa; pobrano globalny MEGT 4 px/deg oraz MEGC | Używaj utrzymywanego bundle PDS4 z 2026 r. MEGT jest topografią względem areoidy MOLA GMM-3; MEGC zawiera liczbę obserwacji. Produkt interpoluje nieobserwowane komórki — zachowuj MEGC i oznaczaj zerową liczbę obserwacji jako brak bezpośredniego pomiaru. |
-| D05 | [GSHHG przez NOAA](https://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html): kandydat na globalną maskę lądu i jezior | NOAA wskazuje wersję 2.3.7, WGS84 i LGPL. Kandydat nie został pobrany ani wdrożony. Nie wyznaczać lądu progiem wysokości 0 m. |
+| D05 | [GSHHG 2.3.7](https://www.soest.hawaii.edu/wessel/gshhg/): wybrana globalna maska lądu, wysp, jezior i uziemionej Antarktydy | Pobrano pełną rozdzielczość, WGS84, LGPL-3.0-or-later. Maska nie zależy od wysokości DEM: L1/L3 oznaczają ląd, L2/L4 wodę, L5 pomijamy, a L6 wybieramy dla uziemionej Antarktydy. Szczegóły i sumy są w manifeście K-017. |
 
-D01 jest produktem NOAA, nie NASA ani agencji partnerskiej Space Apps. Próbki D03/D04 są rzeczywistymi produktami NASA PDS, ale nie zastępują niezależnej walidacji cech Ziemi przez dane NASA Earth. Rola NASA Earth w obliczeniach pozostaje otwarta do czasu pobrania i porównania NASADEM lub uzgodnionego zamiennika.
+D01 jest produktem NOAA, nie NASA ani agencji partnerskiej Space Apps. NASADEM wnosi rzeczywisty produkt NASA Earth do kontroli ziemskich pomiarów i maski w zasięgu SRTM. D03/D04 są rzeczywistymi produktami NASA PDS dla profili planetarnych. Żadne z tych użyć nie oznacza poparcia projektu przez NASA.
+
+### Dowody porównania K-017
+
+Odtworzenie: `python pipeline/download_k017_assets.py`, następnie `python pipeline/compare_nasadem_etopo.py`. Szczegółowe sumy, histogramy klas `NUM`, wersje bibliotek i metryki zapisuje `data/reports/k017-validation.json`.
+
+| AOI | Kwalifikujące się wspólne komórki lądu | Zgodność GSHHG/SWB | MAE wysokości po transformacji | MAE nachylenia | MAE nierówności | MAE deniwelacji |
+|---|---:|---:|---:|---:|---:|---:|
+| Atacama / Andes | 1 793 | 1 793/1 796; 3 różnice | 3,64 m | 0,077° | 2,44 m | 6,72 m |
+| Hawaii, Big Island | 1 703 | 1 853/1 854; 1 różnica | 5,24 m | 0,062° | 1,26 m | 6,68 m |
+| Himalaya | 1 731 | 1 731/1 737; 6 różnic | 7,43 m | 0,164° | 4,92 m | 14,12 m |
+
+Siatka ma komórkę 2 000 m w lokalnym UTM. `slope_deg` liczono po gradientach w metrach; `roughness_m` to odchylenie reszt od lokalnej płaszczyzny; `relief_m` to P95−P05. Dwie ostatnie cechy używają kołowego promienia 10 km i wymagają co najmniej 70% ważnych próbek. Dla każdej cechy oba DEM-y używają tych samych komórek GSHHG land ∩ NASADEM SWB land ∩ ważne wysokości. MAE opisuje różnicę produktów w tych AOI, nie niepewność ani błąd globalny. Różnice masek: 10 z 5 387 komórek (99,81% zgodności w ocenionych AOI); GSHHG pozostaje maską wybraną, a rozbieżności SWB są jawnie raportowane.
+
+NASADEM ma 3 601 × 3 601 próbek na kafel, HGT to big-endian int16 w metrach względem geoidy EGM96, NUM i SWB to bajty. Przewodnik NASADEM nie deklaruje fill/no-data dla tych trzech warstw; kontrola czterech kafli nie znalazła HGT poza zakresem −32 767…32 767 ani nieznanych klas SWB/NUM. NUM zachowujemy, bo kafel może łączyć SRTM, PRISM, GDEM, inne źródła i interpolację.
+
+Wysokości NASADEM przeliczono do EGM2008 za pomocą operacji PROJ z lokalnymi siatkami NGA `us_nga_egm96_15.tif` i `us_nga_egm08_25.tif`; ETOPO już opisuje EGM2008. Dokładną definicję, deklarowaną przez PROJ dokładność operacji 1,113 m oraz sumy siatek podaje manifest. Ta wartość jest metadanymi transformacji, nie wynikiem empirycznej walidacji.
+
+Kontrola maski przeszła cztery przypadki: punkt lądu Big Island (SWB land), ocean na zachód od wyspy (SWB water), Qattara jako ląd przy NASADEM HGT −80 m względem EGM96 oraz punkt uziemionej Antarktydy jako L6. GSHHG został pobrany i użyty lokalnie; kod umożliwia rasteryzację wybranego obszaru. K-017 nie buduje pełnego globalnego rastra maski. NASADEM/SWB nie pokrywa obszarów polarnych, a małe wyspy mogą być nierozpoznawalne po przejściu na komórki analityczne 2 km.
 
 ### Dowody próbek z K-002
 
