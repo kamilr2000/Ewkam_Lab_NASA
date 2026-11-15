@@ -136,9 +136,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 
 - [I-014 — Repository inventory and English documentation cleanup](I-014.md), Ewelina, P1: inventory the whole repository, retain source/reproducibility records, and bring maintained documentation into clear English.
 
+- [K-056 — Review repository inventory and English documentation cleanup](K-056.md), Kamil, P1: check I-014’s technical descriptions, retention decisions, links, and current status against the exact PR ref.
+
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-056, E-037, I-015; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-057, E-037, I-015; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
