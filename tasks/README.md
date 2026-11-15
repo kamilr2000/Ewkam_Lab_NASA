@@ -89,13 +89,17 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-026 — Review wyboru cech i wag E-005](K-026.md), Kamil, P0: potwierdź dostępność kryteriów, konfigurację 1–3 cech, wagi i request globalny w PR #31.
 - [K-027 — Review interaktywnej mapy hotspotów E-004](K-027.md), Kamil, P0: sprawdź renderowanie, hotspot, legendę, geometrię brzegową i zachowanie bez podkładu w PR #37.
 - [K-028 — Re-review wyboru roli datasetu po poprawce E-005](K-028.md), Kamil, P0: potwierdź `earth_search`/`fixture_only`, brak wieloznaczności i regresję na katalogu z `validation` przed właściwym datasetem w PR #31.
+- [K-029 — Re-review renderowania komórek mapy E-004](K-029.md), Kamil, P0: potwierdź FeatureCollection zamiast wrappera, komórki liczbowe/null i etykietę zakresu na dokładnym SHA w PR #37.
+- [K-030 — Review kontrastu i czytelności UI E-021](K-030.md), Kamil, P0: niezależnie sprawdź kontrast, fonty, pomiary viewportów i fokus na exact CSS SHA w PR #35.
 - [E-021 — Popraw kontrast i czytelność bazowego UI](E-021.md), Ewelina, P0: popraw niewystarczający kontrast drobnych tekstów szkieletu i zachowaj układ telefonu przed pełnym audytem E-008.
 - [E-023 — Review rzeczywistych profili K-004](E-023.md), Ewelina, P0: niezależnie odtwórz źródła i profile Jezero/księżycowego bieguna, geometrię, braki, schemę i ograniczenia w PR #36.
 - [E-024 — Review siatki i cech regionalnych K-005](E-024.md), Ewelina, P0: niezależnie odtwórz publiczne źródła, maskowanie batymetrii, cechy, QA, checkpointy i trzy realne pakiety w PR #44.
+- [I-012 — Uzupełnij rejestr AI/SI o późniejsze prace web i review](I-012.md), Ewelina, P0: dodaj źródłowo poparte wpisy dla E-004/E-005/E-021/E-023/E-024 oraz zachowaj ograniczenia i statusy.
+- [K-031 — Review uzupełnienia rejestru AI/SI I-012](K-031.md), Kamil, P0: zweryfikuj exact ref disclosure, statusy, ograniczenia, linki i zachowanie syntetycznych ścieżek w PR #46.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-029, E-025, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-032, E-025, I-013; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
