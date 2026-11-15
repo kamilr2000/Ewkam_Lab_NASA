@@ -1,0 +1,205 @@
+{
+  "manifest_version": 1,
+  "task_id": "K-042",
+  "generated_at": "2026-11-15T13:26:01Z",
+  "purpose": "Measured real-data pilot for selecting the global Earth candidate grid, DEM source scale, physical feature windows, and processing tile size.",
+  "source_datasets": [
+    {
+      "dataset_id": "ETOPO_2022_v1_15s_surface",
+      "title": "ETOPO 2022 15 arc-second global relief model, Ice Surface tiles",
+      "provider": "NOAA National Centers for Environmental Information",
+      "product_version": "ETOPO_2022_v1",
+      "doi": "https://doi.org/10.25921/fd45-gt74",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence_url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022"
+      },
+      "horizontal_crs": "WGS84 longitude/latitude",
+      "vertical_reference": "EGM2008 geoid",
+      "surface_variant": "Ice Surface: top of Greenland and Antarctic ice sheets; ground-surface elevations elsewhere.",
+      "files": [
+        {
+          "filename": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "size_bytes": 22411557,
+          "sha256": "8265ec91d7db7644d227374afe91d23662203a4eb3fd580626b3f7d3d27dc85c",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_N30E015_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N30E015_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30E015_surface.tif",
+          "size_bytes": 33429495,
+          "sha256": "1ee225cb379eb7c95d446337004f413a2eb270a4682383afb6930270ec04515c",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_N90W045_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N90W045_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N90W045_surface.tif",
+          "size_bytes": 14851825,
+          "sha256": "d0999cc6b029eae2eb266c607778ac109052d9beb9588d53117e33d637bf92fe",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_S75W015_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_S75W015_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S75W015_surface.tif",
+          "size_bytes": 23694802,
+          "sha256": "f3329a47b67dff29382cf1679302bb0db3940b091dba110331615f12b9d736b0",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_S75E000_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_S75E000_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S75E000_surface.tif",
+          "size_bytes": 22866882,
+          "sha256": "946c142b64712f789931a3e9c863328343a517a2987f84cadd4c7ddfb75b5f4f",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_N00E165_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N00E165_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N00E165_surface.tif",
+          "size_bytes": 11640090,
+          "sha256": "228580011ba4995553da6c72e2d17af3f55df4ac730dd64a27bfcb26648bf516",
+          "verified": true
+        },
+        {
+          "filename": "ETOPO_2022_v1_15s_N00W180_surface.tif",
+          "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N00W180_surface.tif",
+          "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N00W180_surface.tif",
+          "size_bytes": 16843500,
+          "sha256": "62ac5ab585cff2a6cffd862d63123f187bf03aff81fee0ffc08cadaf2d601fdc",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "dataset_id": "GSHHG_2.3.7_full_resolution",
+      "title": "Global Self-consistent, Hierarchical, High-resolution Geography Database",
+      "provider": "Paul Wessel, SOEST University of Hawai'i, and Walter H. F. Smith, NOAA",
+      "doi": "https://doi.org/10.5281/zenodo.7007502",
+      "license": {
+        "id": "LGPL-3.0-or-later",
+        "evidence_url": "https://www.soest.hawaii.edu/wessel/gshhg/"
+      },
+      "role": "Independent land/water mask: L1/L3 land, L2/L4 water, L6 Antarctic grounding line; L5 ice front omitted.",
+      "files": [
+        {
+          "filename": "gshhg-shp-2.3.7.zip",
+          "path": "data/raw/k017/gshhg/gshhg-shp-2.3.7.zip",
+          "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+          "size_bytes": 149157845,
+          "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "processing": {
+    "grid_version": "k042-metric-2km-pilot-v1",
+    "candidate_cell_size_m": 2000,
+    "tile_core_cells": [
+      64,
+      64
+    ],
+    "feature_radius_m": 10000,
+    "feature_window_minimum_valid_fraction": 0.9,
+    "tile_halo_m": 14000,
+    "candidate_policy": "Every cell in each projected tile core is retained as a candidate row; no area-average pruning, region score, or ranking is performed.",
+    "source_mask_policy": "Rasterize GSHHG at the native ETOPO 15-arc-second window; exclude non-land and source NoData before averaging to metric cells; apply independent target land-centre mask.",
+    "feature_model_version": "terrain-p0-k005-v2",
+    "feature_model_source": "pipeline/features/terrain.py",
+    "nodata_policy": "Missing source or QA support remains NaN/null with an explicit missing_reason; negative land elevation remains valid.",
+    "polar_crs_policy": "UTM by 6-degree zone for |latitude|<80 degrees; EPSG:3413 north and EPSG:3031 south for polar tiles.",
+    "code_sha256": "1c0b7ec4975fd9444c1f397e5696067f188824d0341167d53b3e59d4c1521a45"
+  },
+  "outputs": [
+    {
+      "path": "data/derived/k042-global-grid-pilot/hawaii-coast.csv.gz",
+      "sha256": "6a4f1cdee44e749587d6b305aa44cc48310abf6ab433126e9bbde95a8f3394d8",
+      "size_bytes": 149129
+    },
+    {
+      "path": "data/derived/k042-global-grid-pilot/qattara-depression.csv.gz",
+      "sha256": "70e7556bc20a9dc1882e31638eeea21756b5731e80819c011bf138d64b384f81",
+      "size_bytes": 180760
+    },
+    {
+      "path": "data/derived/k042-global-grid-pilot/greenland-high-north.csv.gz",
+      "sha256": "cd7c0700af1f99d52b7d488c749aa419b860ecff98c019213a26875cd2ec887f",
+      "size_bytes": 192928
+    },
+    {
+      "path": "data/derived/k042-global-grid-pilot/antarctica-grounded.csv.gz",
+      "sha256": "d3d5dfafc29c9e2013cd968855c21cd90c3ec58938b07cd1de88f859d5124a5a",
+      "size_bytes": 183069
+    }
+  ],
+  "validation_controls": {
+    "sites": [
+      {
+        "id": "focus:hawaii-coast",
+        "longitude_deg": -155.5,
+        "latitude_deg": 19.5,
+        "expected_land": true,
+        "gshhg_land": true,
+        "gshhg_deepest_level": 1,
+        "etopo_surface_m_egm2008": 3173.581298828125,
+        "source_tile": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "negative_land_elevation_required": false,
+        "passed": true
+      },
+      {
+        "id": "focus:qattara-depression",
+        "longitude_deg": 27.1,
+        "latitude_deg": 29.1,
+        "expected_land": true,
+        "gshhg_land": true,
+        "gshhg_deepest_level": 1,
+        "etopo_surface_m_egm2008": -78.35311126708984,
+        "source_tile": "ETOPO_2022_v1_15s_N30E015_surface.tif",
+        "negative_land_elevation_required": true,
+        "passed": true
+      },
+      {
+        "id": "focus:greenland-high-north",
+        "longitude_deg": -40.0,
+        "latitude_deg": 82.0,
+        "expected_land": true,
+        "gshhg_land": true,
+        "gshhg_deepest_level": 1,
+        "etopo_surface_m_egm2008": 945.621337890625,
+        "source_tile": "ETOPO_2022_v1_15s_N90W045_surface.tif",
+        "negative_land_elevation_required": false,
+        "passed": true
+      },
+      {
+        "id": "focus:antarctica-grounded",
+        "longitude_deg": 5.0,
+        "latitude_deg": -85.0,
+        "expected_land": true,
+        "gshhg_land": true,
+        "gshhg_deepest_level": 6,
+        "etopo_surface_m_egm2008": 2617.722412109375,
+        "source_tile": "ETOPO_2022_v1_15s_S75E000_surface.tif",
+        "negative_land_elevation_required": false,
+        "passed": true
+      }
+    ],
+    "hawaii_ocean_control": {
+      "id": "hawaii-ocean",
+      "longitude_deg": -155.99,
+      "latitude_deg": 19.5,
+      "gshhg_land": false,
+      "etopo_bathymetry_m_egm2008": -792.7115478515625,
+      "expected_candidate_land": false,
+      "passed": true
+    },
+    "passed": true
+  },
+  "global_run_performed": false,
+  "global_ranking_performed": false
+}

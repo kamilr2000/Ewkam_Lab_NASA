@@ -1,6 +1,6 @@
 # Dane, warstwy i profile
 
-Stan 2026-11-15: K-002 pobrał próbki ETOPO, LOLA i MOLA; K-017 pobrał rzeczywiste kafle NASADEM HGT/NUM/SWB, ETOPO, GSHHG i gridy PROJ oraz porównał trzy AOI na siatce 2 km. K-004 pobrał rzeczywiste produkty MOLA MEGDR 128 px/° i LOLA PGDA 80 m, zbudował profile Jezero i księżycowego obszaru 80–90°S oraz odtworzył ręcznie cechy i konwencję długości. Rozmiary i SHA-256 wejść K-004 zapisano w `data/manifests/k004-source-files.json`, a wyniki w `data/manifests/k004-planetary-profiles.json`. Wyniki dotyczą wskazanych obszarów; nie są dowodem globalnej dokładności ani globalnym rankingiem. Surowe pliki pozostają w ignorowanym `data/raw/`.
+Stan 2026-11-15: K-002 pobrał próbki ETOPO, LOLA i MOLA; K-017 pobrał rzeczywiste kafle NASADEM HGT/NUM/SWB, ETOPO, GSHHG i gridy PROJ oraz porównał trzy AOI na siatce 2 km. K-042 wykonał rzeczywisty pilot globalnej siatki metrycznej NOAA ETOPO + GSHHG w czterech regionach i kontrolę antimeridianu. K-004 pobrał rzeczywiste produkty MOLA MEGDR 128 px/° i LOLA PGDA 80 m, zbudował profile Jezero i księżycowego obszaru 80–90°S oraz odtworzył ręcznie cechy i konwencję długości. Rozmiary i SHA-256 wejść K-004 zapisano w `data/manifests/k004-source-files.json`, a wyniki w `data/manifests/k004-planetary-profiles.json`. Wyniki dotyczą wskazanych obszarów; nie są dowodem globalnej dokładności ani globalnym rankingiem. Surowe pliki pozostają w ignorowanym `data/raw/`.
 
 ## 1. Kolejność pozyskiwania
 
@@ -14,13 +14,34 @@ Stan 2026-11-15: K-002 pobrał próbki ETOPO, LOLA i MOLA; K-017 pobrał rzeczyw
 
 | ID | Źródło i rola | Ograniczenie / działanie |
 |---|---|---|
-| D01 | [NOAA ETOPO 2022](https://www.ncei.noaa.gov/products/etopo-global-relief-model): globalna rzeźba powierzchni Ziemi | Rozważyć wariant Ice Surface 60 arc-second dla screeningu; angularny piksel nie ma stałego rozmiaru w metrach. Nie używać Bedrock jako terenu po powierzchni lodu. |
+| D01 | [NOAA ETOPO 2022](https://www.ncei.noaa.gov/products/etopo-global-relief-model): globalna rzeźba powierzchni Ziemi | K-042 sprawdziło rzeczywiste kafle Ice Surface 15 arc-second jako źródło do agregacji w komórkach metrycznych około 2 km. 60 arc-second pozostaje porównaniem geometrycznym; piksel kątowy nie ma stałego pola. Nie używać Bedrock jako terenu po powierzchni lodu. |
 | D02 | [NASA/METI ASTER GDEM v3](https://asterweb.jpl.nasa.gov/gdem.asp) lub NASADEM: kontrola ziemskich cech na drugim produkcie DEM | NASADEM HGT v001 (DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001, CC0-1.0) pobrano dla Atacamy, Hawajów, Himalajów i testu Qattary. Trzy AOI porównano z ETOPO po wspólnej siatce i transformacji EGM96→EGM2008. `NUM` zachowuje pochodzenie komórek. `SWB` opisuje ląd/wodę tylko w zasięgu SRTM i nie obejmuje biegunów. Wyników z trzech AOI nie uogólniamy na cały glob. |
 | D03 | [NASA PGDA LOLA Product 90](https://pgda.gsfc.nasa.gov/products/90): rzeczywisty profil 80–90°S; pobrano DEM 80 m, zwroty LOLA, efektywną rozdzielczość i błąd wysokości | Posting rastra 80 m nie jest jego efektywną rozdzielczością. Profil ogranicza się do pokrycia źródła 80–90°S; wsparcie zwrotów i jakość pozostają osobnymi warstwami. Produkt prosi o cytowanie, ale nie podaje identyfikatora licencji; manifest nie przypisuje licencji. Dane DOI: 10.60903/gsfcpgda-lola-spole. |
 | D04 | [NASA PDS MOLA MEGDR / Topography Derived](https://pds-geosciences.wustl.edu/missions/mgs/megdr.html): profil Jezero; pobrano biny MEGT 128 px/° i MEGC, kafel 44N000HB oraz etykiety PDS3/PDS4/ENVI | MEGT jest topografią względem areoidy MOLA GMM-3; MEGC zachowuje liczbę obserwacji. MEGT zawiera interpolowane wartości tam, gdzie MEGC wynosi 0. DOI: 10.17189/1z1b-kv84. |
 | D05 | [GSHHG 2.3.7](https://www.soest.hawaii.edu/wessel/gshhg/): wybrana globalna maska lądu, wysp, jezior i uziemionej Antarktydy | Pobrano pełną rozdzielczość, WGS84, LGPL-3.0-or-later. Maska nie zależy od wysokości DEM: L1/L3 oznaczają ląd, L2/L4 wodę, L5 pomijamy, a L6 wybieramy dla uziemionej Antarktydy. Szczegóły i sumy są w manifeście K-017. |
 
 D01 jest produktem NOAA, nie NASA ani agencji partnerskiej Space Apps. NASADEM wnosi rzeczywisty produkt NASA Earth do kontroli ziemskich pomiarów i maski w zasięgu SRTM. D03/D04 są rzeczywistymi produktami NASA PDS dla profili planetarnych. Żadne z tych użyć nie oznacza poparcia projektu przez NASA.
+
+### Pilot globalnej siatki K-042
+
+Źródłem wysokości jest **ETOPO 2022 v1, 15″ Ice Surface**, NOAA NCEI, DOI [10.25921/fd45-gt74](https://doi.org/10.25921/fd45-gt74), WGS84 i wysokości względem geoidy EGM2008. Ten wariant opisuje powierzchnię lodu na Grenlandii i Antarktydzie oraz powierzchnię terenu poza pokrywami lodowymi; nie jest modelem podłoża skalnego ani miarą grubości lodu. NOAA opisuje dane jako CC0-1.0 w [metadanych produktu](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022). Natywne 15″ posting ma gęstość próbek większą od komórki celu; resampling nie tworzy dodatkowej informacji terenowej.
+
+Maska lądu pochodzi z GSHHG 2.3.7 full resolution, LGPL-3.0-or-later, [Zenodo DOI 10.5281/zenodo.7007502](https://doi.org/10.5281/zenodo.7007502). Użyto L1/L3 dla lądu i L6 dla uziemionej Antarktydy, pominięto L5 (ice front), a poziomy wody pozostawiono poza kandydatami. GSHHG jest stosowane na siatce wejściowego ETOPO przed agregacją i ponownie jako niezależna maska środka komórki. Ujemna wysokość terenu nie zmienia klasy lądu.
+
+Kandydat do globalnego przebiegu to komórka nominalnie 2 km w lokalnym UTM albo UPS (EPSG:3413 na północy i EPSG:3031 na południu od 80° szerokości). Rozmiar komórki w rzucie koryguje lokalny współczynnik skali; pole zapisuje się geodezyjnie z narożników WGS84. Pilot użył 64 × 64 komórek rdzenia i halo 14 km dla okna cech o promieniu 10 km, z minimum 73/81 prawidłowych próbek. Każdy kandydat rdzenia pozostaje w tabeli wraz z maską, pokryciem, cechami i powodem braków.
+
+| AOI | Kafle ETOPO | Rdzeń | Ląd w środku | Kwalifikujące się |
+|---|---|---:|---:|---:|
+| Big Island / wybrzeże | N30W165 | 4 096 | 2 449 | 1 861 |
+| Depresja Qattara | N30E015 | 4 096 | 4 096 | 4 096 |
+| Grenlandia 82°N | N90W045 | 4 096 | 4 046 | 3 859 |
+| Uziemiona Antarktyda 85°S | S75W015 + S75E000 | 4 096 | 4 096 | 4 096 |
+
+Łącznie: 16 384 kandydatów, 13 912 kwalifikujących się. Qattara zachowała 2 424 komórki z ujemną wysokością lądu (minimum −128,45 m); punkt kontrolny ma −78,35 m w ETOPO i L1 w GSHHG. W punkcie oceanu przy Big Island GSHHG wskazuje wodę, mimo prawidłowej batymetrii −792,71 m. Próbka Antarktydy użyła dwóch sąsiednich rastrów, bo pojedynczy kafel kończył się NoData na granicy. Antimeridian zweryfikowano punktowo po obu stronach ze źródłami N00E165/N00W180; pełny raster przez seam pozostaje niezweryfikowany.
+
+Rzeczywisty czas czterech kafli rdzenia wyniósł 66,93 s, szczytowy working set 447 012 864 B, a zapisane gzip zajęły 705 886 B (2 941 138 B przed kompresją). Ekstrapolacja 5,7–8,0 dnia i około 5,94 GB gzip jest liniową ekstrapolacją z czterech małych kafli, nie czasem/rozmiarem zmierzonym globalnie. Nie obejmuje globalnego wyboru źródeł i geometrii, indeksów, harmonogramu ani retry.
+
+Manifest [K-042](../data/manifests/k042-global-grid-pilot.json) zawiera ścieżki, wersje i SHA-256 źródeł/wyjść; [raport](../data/reports/k042-global-grid-pilot.json) zapisuje warunki i ograniczenia. Na czystym klonie przygotuj przypięte źródła poleceniem `uv run --locked --group data python -m pipeline.download_k042_sources`, następnie odtwórz próbki przez `uv run --locked --group data python -m pipeline.global_grid_pilot --force`. Pobierane są publiczne pliki NOAA/GSHHG (łącznie około 295 MB); token Earthdata nie jest wymagany. `--verify-only` sprawdza istniejące pliki bez pobierania brakujących. Surowe dane pozostają w ignorowanym `data/raw/`; w Git zapisano tylko małe, skompresowane tabele wynikowe. Pilot nie wykonał globalnej siatki, rankingu ani pełnego testu pokrycia; 60″ liczba komórek i ~2 km geometryczny count są wyłącznie porównaniem, nie gotowym rasterem.
 
 ### Dowody porównania K-017
 
@@ -64,7 +85,7 @@ Każdy wiersz CSV jest pojedynczą komórką analityczną: stabilny ID wersji/wi
 
 To są rozkłady pomiarów topografii na trzech regionalnych wycinkach, nie podobieństwa do Jezero ani południowego bieguna Księżyca i nie ranking analogów. ETOPO 15″ ma nominalny posting ok. 0,42–0,46 km w tych szerokościach; resampling nie oznacza, że źródło rozpoznaje obiekty 2-kilometrowe równie dokładnie wszędzie. Komórki wodne nie są kandydatami; próbki batymetryczne są wykluczane z uśredniania już na źródłowej siatce GSHHG/ETOPO.
 
-Globalny budżet siatki komórkowej 60″ wyliczono z wymiarów 21 600 × 10 800: 233 280 000 komórek, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech float32 cech i 6 065 280 000 B dla modelowanego pełnego stanu komórek. Model partii 64 wierszy z 7 wierszami halo potrzebuje około 208,1 MB tablic roboczych oraz okna źródłowego float32 i maski GSHHG 15″, przed buforami GDAL, PROJ i geometrii. To rachunek kosztu pamięci dla formatu używanego przez ETOPO, nie uruchomiony globalny raster ani pomiar szczytowego RSS lub czasu całego globu. Pełna siatka, bieguny i globalne pokrycie nadal wymagają osobnej bramki.
+Wstępny budżet stałej siatki 60″ wyliczono z wymiarów 21 600 × 10 800: 233 280 000 komórek, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech float32 cech i 6 065 280 000 B dla modelowanego pełnego stanu kandydatów. Model jednej partii 64 wierszy z 7 wierszami halo potrzebuje około 208,1 MB tablic roboczych, przed buforami GDAL, PROJ i geometrii. To historyczny rachunek kosztu tablic, nie benchmark pamięci ani czasu. K-042 zastąpiło stałą siatkę 60″ rekomendacją komórek metrycznych i zmierzyło cztery lokalne kafle; pełny grid, pokrycie, szwy i koszt globalny pozostają do sprawdzenia w K-008/K-044.
 
 ### Dowody próbek z K-002
 

@@ -1,0 +1,788 @@
+{
+  "report_version": 1,
+  "task_id": "K-042",
+  "generated_at": "2026-11-15T13:26:01Z",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "rasterio": "1.5.2",
+    "gdal": "3.12.2",
+    "proj": "9.7.1",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+    "peak_working_set_bytes": 447012864
+  },
+  "global_grid_geometry_comparison": {
+    "proposed_angular_grid": {
+      "cell_size_arc_seconds": 60,
+      "rows": 10800,
+      "columns_per_row": 21600,
+      "candidate_positions": 233280000
+    },
+    "approximately_2km_metric_reference": {
+      "north_south_row_step_arc_seconds": 60,
+      "east_west_spacing_m": 2000,
+      "estimated_cell_count": 137921962,
+      "estimate_method": "Sum of rounded WGS84 parallel circumferences / 2,000 m for each 60-arcsecond latitude-row centre; geometric estimate, not a generated global grid."
+    },
+    "sample_latitudes": [
+      {
+        "latitude_deg": -89.5,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 16.245020400312313,
+          "north_south_height_m": 1861.5648927404309,
+          "ellipsoidal_area_km2": 0.030241159231185914
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 175
+      },
+      {
+        "latitude_deg": -85.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 162.2420423872413,
+          "north_south_height_m": 1861.4233833254884,
+          "ellipsoidal_area_km2": 0.30200112717437744
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 1752
+      },
+      {
+        "latitude_deg": -60.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 930.0000237481171,
+          "north_south_height_m": 1856.871457563982,
+          "ellipsoidal_area_km2": 1.7268904826278686
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 10044
+      },
+      {
+        "latitude_deg": 0.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 1855.3248465545594,
+          "north_south_height_m": 1842.9045971570617,
+          "ellipsoidal_area_km2": 3.4191867012332096
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 20038
+      },
+      {
+        "latitude_deg": 60.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 930.0000237481171,
+          "north_south_height_m": 1856.871457563982,
+          "ellipsoidal_area_km2": 1.7268904826278686
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 10044
+      },
+      {
+        "latitude_deg": 82.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 259.06304905646954,
+          "north_south_height_m": 1861.2018766697042,
+          "ellipsoidal_area_km2": 0.4821686263427734
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 2798
+      },
+      {
+        "latitude_deg": 85.0,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 162.2420423872413,
+          "north_south_height_m": 1861.4233833254884,
+          "ellipsoidal_area_km2": 0.30200112717437744
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 1752
+      },
+      {
+        "latitude_deg": 89.5,
+        "fixed_60_arcsecond_cell": {
+          "east_west_width_m": 16.245020400312313,
+          "north_south_height_m": 1861.5648927404309,
+          "ellipsoidal_area_km2": 0.030241159231185914
+        },
+        "fixed_60_arcsecond_columns_per_row": 21600,
+        "approximately_2km_metric_columns_per_row": 175
+      }
+    ]
+  },
+  "measured_pilot": {
+    "site_count": 4,
+    "candidate_cells_processed": 16384,
+    "eligible_cells": 13912,
+    "total_processing_seconds": 66.93336900000577,
+    "output_compressed_bytes": 705886,
+    "output_uncompressed_bytes": 2941138,
+    "compressed_bytes_per_candidate": 43.0838623046875,
+    "uncompressed_bytes_per_candidate": 179.5128173828125,
+    "sites": [
+      {
+        "site_id": "hawaii-coast",
+        "purpose": "Big Island coast and small-island preservation",
+        "focus_point": {
+          "longitude_deg": -155.5,
+          "latitude_deg": 19.5,
+          "expected_land": true
+        },
+        "tile_family": "utm05n",
+        "grid_version": "k042-metric-2km-pilot-v1",
+        "grid_crs": "EPSG:32605",
+        "physical_cell_size_target_m": 2000,
+        "projected_grid_spacing_m": 2001,
+        "projection_scale_factor_at_focus": 1.0004511278771944,
+        "projection_scale_factor_core_corners_min": 1.0000986208315406,
+        "projection_scale_factor_core_corners_max": 1.000921369048306,
+        "physical_cell_size_method": "Projected spacing is rounded from target_m * local conformal scale at the tile focus; feature distances use target physical metres, and geodesic cell areas are stored.",
+        "core_cells_rows_columns": [
+          64,
+          64
+        ],
+        "core_candidate_rule": "Every cell in the declared projected 64x64 tile core is emitted once; halo cells are context only.",
+        "feature_window": {
+          "shape": "circular",
+          "radius_m": 10000,
+          "sample_count": 81,
+          "minimum_valid_fraction": 0.9,
+          "minimum_valid_samples": 73,
+          "projected_equivalent_radius_at_focus_m": 10004.511278771944,
+          "halo_cells_each_side": 7,
+          "halo_size_m_each_side": 14000
+        },
+        "candidate_counts": {
+          "candidate_cells": 4096,
+          "land_center_cells": 2449,
+          "valid_dem_center_cells": 2559,
+          "eligible_cells": 1861,
+          "excluded_by_reason": {
+            "not_land": 1647,
+            "insufficient_slope_support": 230,
+            "insufficient_window_support": 358
+          }
+        },
+        "center_land_fraction": 0.597900390625,
+        "negative_elevation_land_cells": 8,
+        "minimum_negative_land_elevation_m": -6.6462483406066895,
+        "feature_summaries_eligible_only": {
+          "slope_deg": {
+            "count": 1861,
+            "minimum": 0.35706838965415955,
+            "p50": 4.403038024902344,
+            "p95": 9.951775550842285,
+            "maximum": 18.006080627441406
+          },
+          "roughness_m": {
+            "count": 1861,
+            "minimum": 17.269920349121094,
+            "p50": 116.26256561279297,
+            "p95": 306.9466247558594,
+            "maximum": 527.4242553710938
+          },
+          "relief_m": {
+            "count": 1861,
+            "minimum": 342.7591857910156,
+            "p50": 1263.638427734375,
+            "p95": 2180.92626953125,
+            "maximum": 2614.17529296875
+          }
+        },
+        "candidate_cell_area_km2": {
+          "count": 4096,
+          "minimum": 3.99663285955365,
+          "p50": 4.00031328624104,
+          "p95": 4.002969026216738,
+          "maximum": 4.003211361010298
+        },
+        "source_raster": {
+          "width": 362,
+          "height": 343,
+          "dtype": "float32",
+          "native_crs": "EPSG:9518",
+          "horizontal_crs_used_for_warp": "EPSG:4326",
+          "vertical_reference": "EGM2008 geoid; values are unchanged by horizontal reprojection",
+          "nodata": -99999.0,
+          "source_tile_count": 1,
+          "source_tile_window_shape_rows_columns": [
+            343,
+            362
+          ],
+          "source_window_bounds_wgs84": [
+            -156.271117165018,
+            18.77541416851423,
+            -154.7627838316847,
+            20.2045808351809
+          ],
+          "source_window_land_cells": 51578,
+          "source_window_valid_land_dem_cells": 51578,
+          "source_window_nodata_cells": 0,
+          "source_window_nonland_cells": 72588,
+          "source_window_nodata_or_water_cells": 72588
+        },
+        "source_files": [
+          {
+            "filename": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+            "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30W165_surface.tif",
+            "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+            "size_bytes": 22411557,
+            "sha256": "8265ec91d7db7644d227374afe91d23662203a4eb3fd580626b3f7d3d27dc85c",
+            "verified": true
+          }
+        ],
+        "manual_feature_check": {
+          "pixel_id": "earth:k042-metric-2km:utm05n:hawaii-coast:r031:c032",
+          "center_lon_deg": -155.50464335758258,
+          "center_lat_deg": 19.500061283208318,
+          "distance_to_focus_m": 487.47675014525436,
+          "direct_check": {
+            "slope_deg": 6.936864669415126,
+            "roughness_m": 264.4843007346317,
+            "relief_m": 1692.215576171875,
+            "window_valid_count": 81
+          },
+          "pipeline_values": {
+            "slope_deg": 6.936864852905273,
+            "roughness_m": 264.48431396484375,
+            "relief_m": 1692.215576171875
+          },
+          "passed": true
+        },
+        "output": {
+          "path": "data/derived/k042-global-grid-pilot/hawaii-coast.csv.gz",
+          "sha256": "6a4f1cdee44e749587d6b305aa44cc48310abf6ab433126e9bbde95a8f3394d8",
+          "size_bytes": 149129
+        },
+        "processing_seconds": 16.390526999995927,
+        "resumed_from_checkpoint": false
+      },
+      {
+        "site_id": "qattara-depression",
+        "purpose": "Below-sea-level land must remain land and retain negative elevation",
+        "focus_point": {
+          "longitude_deg": 27.1,
+          "latitude_deg": 29.1,
+          "expected_land": true
+        },
+        "tile_family": "utm35n",
+        "grid_version": "k042-metric-2km-pilot-v1",
+        "grid_crs": "EPSG:32635",
+        "physical_cell_size_target_m": 2000,
+        "projected_grid_spacing_m": 1999,
+        "projection_scale_factor_at_focus": 0.9996011683509931,
+        "projection_scale_factor_core_corners_min": 0.9996376255375479,
+        "projection_scale_factor_core_corners_max": 0.9996617117055278,
+        "physical_cell_size_method": "Projected spacing is rounded from target_m * local conformal scale at the tile focus; feature distances use target physical metres, and geodesic cell areas are stored.",
+        "core_cells_rows_columns": [
+          64,
+          64
+        ],
+        "core_candidate_rule": "Every cell in the declared projected 64x64 tile core is emitted once; halo cells are context only.",
+        "feature_window": {
+          "shape": "circular",
+          "radius_m": 10000,
+          "sample_count": 81,
+          "minimum_valid_fraction": 0.9,
+          "minimum_valid_samples": 73,
+          "projected_equivalent_radius_at_focus_m": 9996.01168350993,
+          "halo_cells_each_side": 7,
+          "halo_size_m_each_side": 14000
+        },
+        "candidate_counts": {
+          "candidate_cells": 4096,
+          "land_center_cells": 4096,
+          "valid_dem_center_cells": 4096,
+          "eligible_cells": 4096,
+          "excluded_by_reason": {}
+        },
+        "center_land_fraction": 1.0,
+        "negative_elevation_land_cells": 2424,
+        "minimum_negative_land_elevation_m": -128.4494171142578,
+        "feature_summaries_eligible_only": {
+          "slope_deg": {
+            "count": 4096,
+            "minimum": 0.0005828197463415563,
+            "p50": 0.263788104057312,
+            "p95": 1.0090503692626953,
+            "maximum": 2.5387747287750244
+          },
+          "roughness_m": {
+            "count": 4096,
+            "minimum": 2.135972499847412,
+            "p50": 13.276376724243164,
+            "p95": 28.438980102539062,
+            "maximum": 45.2348747253418
+          },
+          "relief_m": {
+            "count": 4096,
+            "minimum": 8.045570373535156,
+            "p50": 73.93163299560547,
+            "p95": 137.38427734375,
+            "maximum": 243.44369506835938
+          }
+        },
+        "candidate_cell_area_km2": {
+          "count": 4096,
+          "minimum": 3.9987059731595442,
+          "p50": 3.9990986624817495,
+          "p95": 3.9991986780435917,
+          "maximum": 3.9991996644462295
+        },
+        "source_raster": {
+          "width": 387,
+          "height": 338,
+          "dtype": "float32",
+          "native_crs": "EPSG:9518",
+          "horizontal_crs_used_for_warp": "EPSG:4326",
+          "vertical_reference": "EGM2008 geoid; values are unchanged by horizontal reprojection",
+          "nodata": -99999.0,
+          "source_tile_count": 1,
+          "source_tile_window_shape_rows_columns": [
+            338,
+            387
+          ],
+          "source_window_bounds_wgs84": [
+            26.27348337505316,
+            28.389202210472874,
+            27.88598337505316,
+            29.797535543806205
+          ],
+          "source_window_land_cells": 130806,
+          "source_window_valid_land_dem_cells": 130806,
+          "source_window_nodata_cells": 0,
+          "source_window_nonland_cells": 0,
+          "source_window_nodata_or_water_cells": 0
+        },
+        "source_files": [
+          {
+            "filename": "ETOPO_2022_v1_15s_N30E015_surface.tif",
+            "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N30E015_surface.tif",
+            "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30E015_surface.tif",
+            "size_bytes": 33429495,
+            "sha256": "1ee225cb379eb7c95d446337004f413a2eb270a4682383afb6930270ec04515c",
+            "verified": true
+          }
+        ],
+        "manual_feature_check": {
+          "pixel_id": "earth:k042-metric-2km:utm35n:qattara-depression:r031:c032",
+          "center_lon_deg": 27.089878731341273,
+          "center_lat_deg": 29.1029001984832,
+          "distance_to_focus_m": 1036.3541849366688,
+          "direct_check": {
+            "slope_deg": 0.22155137005526399,
+            "roughness_m": 6.0027866568628445,
+            "relief_m": 34.543235778808594,
+            "window_valid_count": 81
+          },
+          "pipeline_values": {
+            "slope_deg": 0.22155135869979858,
+            "roughness_m": 6.002786636352539,
+            "relief_m": 34.543235778808594
+          },
+          "passed": true
+        },
+        "output": {
+          "path": "data/derived/k042-global-grid-pilot/qattara-depression.csv.gz",
+          "sha256": "70e7556bc20a9dc1882e31638eeea21756b5731e80819c011bf138d64b384f81",
+          "size_bytes": 180760
+        },
+        "processing_seconds": 20.63091199999326,
+        "resumed_from_checkpoint": false
+      },
+      {
+        "site_id": "greenland-high-north",
+        "purpose": "High-north metric cells and polar-tile path",
+        "focus_point": {
+          "longitude_deg": -40.0,
+          "latitude_deg": 82.0,
+          "expected_land": true
+        },
+        "tile_family": "ups-north",
+        "grid_version": "k042-metric-2km-pilot-v1",
+        "grid_crs": "EPSG:3413",
+        "physical_cell_size_target_m": 2000,
+        "projected_grid_spacing_m": 1949,
+        "projection_scale_factor_at_focus": 0.9746002521335813,
+        "projection_scale_factor_core_corners_min": 0.9739275946318418,
+        "projection_scale_factor_core_corners_max": 0.9753797921775371,
+        "physical_cell_size_method": "Projected spacing is rounded from target_m * local conformal scale at the tile focus; feature distances use target physical metres, and geodesic cell areas are stored.",
+        "core_cells_rows_columns": [
+          64,
+          64
+        ],
+        "core_candidate_rule": "Every cell in the declared projected 64x64 tile core is emitted once; halo cells are context only.",
+        "feature_window": {
+          "shape": "circular",
+          "radius_m": 10000,
+          "sample_count": 81,
+          "minimum_valid_fraction": 0.9,
+          "minimum_valid_samples": 73,
+          "projected_equivalent_radius_at_focus_m": 9746.002521335813,
+          "halo_cells_each_side": 7,
+          "halo_size_m_each_side": 14000
+        },
+        "candidate_counts": {
+          "candidate_cells": 4096,
+          "land_center_cells": 4046,
+          "valid_dem_center_cells": 4089,
+          "eligible_cells": 3859,
+          "excluded_by_reason": {
+            "insufficient_window_support": 103,
+            "insufficient_slope_support": 84,
+            "not_land": 50
+          }
+        },
+        "center_land_fraction": 0.98779296875,
+        "negative_elevation_land_cells": 48,
+        "minimum_negative_land_elevation_m": -66.55963897705078,
+        "feature_summaries_eligible_only": {
+          "slope_deg": {
+            "count": 3859,
+            "minimum": 0.03199126198887825,
+            "p50": 1.530580997467041,
+            "p95": 7.113354682922363,
+            "maximum": 16.20355987548828
+          },
+          "roughness_m": {
+            "count": 3859,
+            "minimum": 3.7475459575653076,
+            "p50": 66.89299774169922,
+            "p95": 243.09030151367188,
+            "maximum": 377.7878723144531
+          },
+          "relief_m": {
+            "count": 3859,
+            "minimum": 66.59228515625,
+            "p50": 441.5947265625,
+            "p95": 940.0836181640625,
+            "maximum": 1188.9896240234375
+          }
+        },
+        "candidate_cell_area_km2": {
+          "count": 4096,
+          "minimum": 3.9927872574996948,
+          "p50": 3.9990674966380597,
+          "p95": 4.00391941894412,
+          "maximum": 4.004703212507963
+        },
+        "source_raster": {
+          "width": 2618,
+          "height": 361,
+          "dtype": "float32",
+          "native_crs": "EPSG:9518",
+          "horizontal_crs_used_for_warp": "EPSG:4326",
+          "vertical_reference": "EGM2008 geoid; values are unchanged by horizontal reprojection",
+          "nodata": -99999.0,
+          "source_tile_count": 1,
+          "source_tile_window_shape_rows_columns": [
+            361,
+            2618
+          ],
+          "source_window_bounds_wgs84": [
+            -45.1414707730282,
+            81.21855449769329,
+            -34.23313743969487,
+            82.72272116435995
+          ],
+          "source_window_land_cells": 922272,
+          "source_window_valid_land_dem_cells": 911188,
+          "source_window_nodata_cells": 12274,
+          "source_window_nonland_cells": 22826,
+          "source_window_nodata_or_water_cells": 33910
+        },
+        "source_files": [
+          {
+            "filename": "ETOPO_2022_v1_15s_N90W045_surface.tif",
+            "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_N90W045_surface.tif",
+            "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N90W045_surface.tif",
+            "size_bytes": 14851825,
+            "sha256": "d0999cc6b029eae2eb266c607778ac109052d9beb9588d53117e33d637bf92fe",
+            "verified": true
+          }
+        ],
+        "manual_feature_check": {
+          "pixel_id": "earth:k042-metric-2km:ups-north:greenland-high-north:r031:c032",
+          "center_lon_deg": -40.038621584578515,
+          "center_lat_deg": 82.00312393728254,
+          "distance_to_focus_m": 694.2275786387069,
+          "direct_check": {
+            "slope_deg": 2.4981924215169884,
+            "roughness_m": 47.278600403810024,
+            "relief_m": 523.4324951171875,
+            "window_valid_count": 81
+          },
+          "pipeline_values": {
+            "slope_deg": 2.498192310333252,
+            "roughness_m": 47.27859878540039,
+            "relief_m": 523.4324951171875
+          },
+          "passed": true
+        },
+        "output": {
+          "path": "data/derived/k042-global-grid-pilot/greenland-high-north.csv.gz",
+          "sha256": "cd7c0700af1f99d52b7d488c749aa419b860ecff98c019213a26875cd2ec887f",
+          "size_bytes": 192928
+        },
+        "processing_seconds": 14.74696989999211,
+        "resumed_from_checkpoint": false
+      },
+      {
+        "site_id": "antarctica-grounded",
+        "purpose": "Grounded Antarctic mask uses GSHHG L6",
+        "focus_point": {
+          "longitude_deg": 5.0,
+          "latitude_deg": -85.0,
+          "expected_land": true
+        },
+        "tile_family": "ups-south",
+        "grid_version": "k042-metric-2km-pilot-v1",
+        "grid_crs": "EPSG:3031",
+        "physical_cell_size_target_m": 2000,
+        "projected_grid_spacing_m": 1949,
+        "projection_scale_factor_at_focus": 0.9746233334241698,
+        "projection_scale_factor_core_corners_min": 0.9742070362121668,
+        "projection_scale_factor_core_corners_max": 0.9751111204248679,
+        "physical_cell_size_method": "Projected spacing is rounded from target_m * local conformal scale at the tile focus; feature distances use target physical metres, and geodesic cell areas are stored.",
+        "core_cells_rows_columns": [
+          64,
+          64
+        ],
+        "core_candidate_rule": "Every cell in the declared projected 64x64 tile core is emitted once; halo cells are context only.",
+        "feature_window": {
+          "shape": "circular",
+          "radius_m": 10000,
+          "sample_count": 81,
+          "minimum_valid_fraction": 0.9,
+          "minimum_valid_samples": 73,
+          "projected_equivalent_radius_at_focus_m": 9746.233334241699,
+          "halo_cells_each_side": 7,
+          "halo_size_m_each_side": 14000
+        },
+        "candidate_counts": {
+          "candidate_cells": 4096,
+          "land_center_cells": 4096,
+          "valid_dem_center_cells": 4096,
+          "eligible_cells": 4096,
+          "excluded_by_reason": {}
+        },
+        "center_land_fraction": 1.0,
+        "negative_elevation_land_cells": 0,
+        "minimum_negative_land_elevation_m": null,
+        "feature_summaries_eligible_only": {
+          "slope_deg": {
+            "count": 4096,
+            "minimum": 0.0005824147956445813,
+            "p50": 0.08013084530830383,
+            "p95": 0.22532126307487488,
+            "maximum": 0.46345993876457214
+          },
+          "roughness_m": {
+            "count": 4096,
+            "minimum": 0.7953667640686035,
+            "p50": 2.907829761505127,
+            "p95": 5.825794219970703,
+            "maximum": 8.950350761413574
+          },
+          "relief_m": {
+            "count": 4096,
+            "minimum": 6.58251953125,
+            "p50": 22.3673095703125,
+            "p95": 39.2847900390625,
+            "maximum": 59.77587890625
+          }
+        },
+        "candidate_cell_area_km2": {
+          "count": 4096,
+          "minimum": 3.994987820919037,
+          "p50": 3.99902128118372,
+          "p95": 4.001984645961762,
+          "maximum": 4.002417092392087
+        },
+        "source_raster": {
+          "width": 4424,
+          "height": 362,
+          "dtype": "float32",
+          "native_crs": "EPSG:9518",
+          "horizontal_crs_used_for_warp": "EPSG:4326",
+          "vertical_reference": "EGM2008 geoid; values are unchanged by horizontal reprojection",
+          "nodata": -99999.0,
+          "source_tile_count": 2,
+          "source_tile_window_shape_rows_columns": [
+            362,
+            4424
+          ],
+          "source_window_bounds_wgs84": [
+            -3.6063086225966603,
+            -85.73309049713794,
+            14.827024710736673,
+            -84.2247571638046
+          ],
+          "source_window_land_cells": 1601488,
+          "source_window_valid_land_dem_cells": 1601126,
+          "source_window_nodata_cells": 362,
+          "source_window_nonland_cells": 0,
+          "source_window_nodata_or_water_cells": 362
+        },
+        "source_files": [
+          {
+            "filename": "ETOPO_2022_v1_15s_S75W015_surface.tif",
+            "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_S75W015_surface.tif",
+            "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S75W015_surface.tif",
+            "size_bytes": 23694802,
+            "sha256": "f3329a47b67dff29382cf1679302bb0db3940b091dba110331615f12b9d736b0",
+            "verified": true
+          },
+          {
+            "filename": "ETOPO_2022_v1_15s_S75E000_surface.tif",
+            "path": "data/raw/k042/etopo/ETOPO_2022_v1_15s_S75E000_surface.tif",
+            "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_S75E000_surface.tif",
+            "size_bytes": 22866882,
+            "sha256": "946c142b64712f789931a3e9c863328343a517a2987f84cadd4c7ddfb75b5f4f",
+            "verified": true
+          }
+        ],
+        "manual_feature_check": {
+          "pixel_id": "earth:k042-metric-2km:ups-south:antarctica-grounded:r031:c032",
+          "center_lon_deg": 5.045463940783695,
+          "center_lat_deg": -85.00589783384973,
+          "distance_to_focus_m": 793.4266675735532,
+          "direct_check": {
+            "slope_deg": 0.08829654530087905,
+            "roughness_m": 4.467812324250928,
+            "relief_m": 31.654541015625,
+            "window_valid_count": 81
+          },
+          "pipeline_values": {
+            "slope_deg": 0.08829654008150101,
+            "roughness_m": 4.467812538146973,
+            "relief_m": 31.654541015625
+          },
+          "passed": true
+        },
+        "output": {
+          "path": "data/derived/k042-global-grid-pilot/antarctica-grounded.csv.gz",
+          "sha256": "d3d5dfafc29c9e2013cd968855c21cd90c3ec58938b07cd1de88f859d5124a5a",
+          "size_bytes": 183069
+        },
+        "processing_seconds": 15.140085899998667,
+        "resumed_from_checkpoint": false
+      }
+    ],
+    "mask_controls": {
+      "sites": [
+        {
+          "id": "focus:hawaii-coast",
+          "longitude_deg": -155.5,
+          "latitude_deg": 19.5,
+          "expected_land": true,
+          "gshhg_land": true,
+          "gshhg_deepest_level": 1,
+          "etopo_surface_m_egm2008": 3173.581298828125,
+          "source_tile": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+          "negative_land_elevation_required": false,
+          "passed": true
+        },
+        {
+          "id": "focus:qattara-depression",
+          "longitude_deg": 27.1,
+          "latitude_deg": 29.1,
+          "expected_land": true,
+          "gshhg_land": true,
+          "gshhg_deepest_level": 1,
+          "etopo_surface_m_egm2008": -78.35311126708984,
+          "source_tile": "ETOPO_2022_v1_15s_N30E015_surface.tif",
+          "negative_land_elevation_required": true,
+          "passed": true
+        },
+        {
+          "id": "focus:greenland-high-north",
+          "longitude_deg": -40.0,
+          "latitude_deg": 82.0,
+          "expected_land": true,
+          "gshhg_land": true,
+          "gshhg_deepest_level": 1,
+          "etopo_surface_m_egm2008": 945.621337890625,
+          "source_tile": "ETOPO_2022_v1_15s_N90W045_surface.tif",
+          "negative_land_elevation_required": false,
+          "passed": true
+        },
+        {
+          "id": "focus:antarctica-grounded",
+          "longitude_deg": 5.0,
+          "latitude_deg": -85.0,
+          "expected_land": true,
+          "gshhg_land": true,
+          "gshhg_deepest_level": 6,
+          "etopo_surface_m_egm2008": 2617.722412109375,
+          "source_tile": "ETOPO_2022_v1_15s_S75E000_surface.tif",
+          "negative_land_elevation_required": false,
+          "passed": true
+        }
+      ],
+      "hawaii_ocean_control": {
+        "id": "hawaii-ocean",
+        "longitude_deg": -155.99,
+        "latitude_deg": 19.5,
+        "gshhg_land": false,
+        "etopo_bathymetry_m_egm2008": -792.7115478515625,
+        "expected_candidate_land": false,
+        "passed": true
+      },
+      "passed": true
+    },
+    "antimeridian_control": {
+      "source_tiles": [
+        "ETOPO_2022_v1_15s_N00E165_surface.tif",
+        "ETOPO_2022_v1_15s_N00W180_surface.tif"
+      ],
+      "points": [
+        {
+          "id": "antimeridian-east",
+          "longitude_deg": 179.99,
+          "latitude_deg": -0.1,
+          "gshhg_land": false,
+          "etopo_surface_m_egm2008": -5192.41943359375,
+          "source_tile": "ETOPO_2022_v1_15s_N00E165_surface.tif"
+        },
+        {
+          "id": "antimeridian-west",
+          "longitude_deg": -179.99,
+          "latitude_deg": -0.1,
+          "gshhg_land": false,
+          "etopo_surface_m_egm2008": -5218.861328125,
+          "source_tile": "ETOPO_2022_v1_15s_N00W180_surface.tif"
+        }
+      ],
+      "wrapped_longitude_delta_deg": 0.01999999999998181,
+      "geodesic_distance_m": 2226.386447579157,
+      "both_points_are_water_in_gshhg": true,
+      "both_source_dem_samples_valid": true,
+      "passed": true,
+      "scope_limit": "Antimeridian points and metric wrap are verified from adjacent real source tiles; a full cross-seam metric raster tile is not part of this pilot."
+    }
+  },
+  "global_extrapolation": {
+    "basis": "Linear scale-up from the slowest and fastest measured full 64x64 core pilot tiles; this is an order-of-magnitude extrapolation, not a global run estimate validated at scale.",
+    "metric_cell_count_estimate": 137921962,
+    "candidate_count_scope": "Approximate geometric grid positions before land/NoData exclusions.",
+    "processing_seconds_low_from_fastest_tile": 496565.19095748424,
+    "processing_seconds_high_from_slowest_tile": 694691.3722872105,
+    "compressed_output_bytes_at_pilot_mean_per_candidate": 5942210820,
+    "uncompressed_output_bytes_at_pilot_mean_per_candidate": 24758759978,
+    "omitted_costs": [
+      "Global source-file reads and tile scheduling",
+      "Global GSHHG selection/rasterization and geometry caching",
+      "Checkpoint metadata, index construction, compression variance, API storage, and reprocessing retries",
+      "Land and NoData filtering changes the actual eligible count and output bytes"
+    ]
+  },
+  "limitations": [
+    "This is four local metric tile cores plus an antimeridian point control, not a global feature build, full-coverage mask, map pyramid, or ranking.",
+    "The 60-arcsecond candidate count is an angular-layout arithmetic count; it does not equal the approximately 2 km metric grid count.",
+    "The 60-arcsecond ETOPO product was not separately downloaded; the source choice is tested through actual 15-arcsecond tiles and the measured geometry/source-support comparison.",
+    "The antimeridian test samples both real ETOPO tiles and GSHHG points and checks geodesic wrapping; it does not yet rasterize a complete cross-seam feature tile.",
+    "ETopo Ice Surface is a surface DEM over grounded ice, not bare bedrock or a measure of ice thickness."
+  ],
+  "global_run_performed": false,
+  "global_ranking_performed": false
+}
