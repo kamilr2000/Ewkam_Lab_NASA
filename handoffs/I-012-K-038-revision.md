@@ -19,4 +19,6 @@ Centralny JSON nadal ma 14 syntetycznych ścieżek; top-level `is_synthetic: tru
 
 ## Sprawdzenie i przekazanie
 
-Po korekcie uruchomić `python tools/check_planning.py`, `python -m json.tool docs/ai-usage.json`, kontrolę centralnych ścieżek/liczników flag i `git diff --check`. PR #46 ma zawierać nowy exact ref; po zmianie statusu I-012 na `review` K-040 sprawdzi ten ref i bieżący head. I-012 pozostaje otwarte do niezależnej akceptacji i integracji.
+Treść korekty jest dostępna pod exact commitem `0785708a8fee9504ae74339ff4d572c69570a3d9` w PR #46. `python tools/check_planning.py` — OK (163 Markdown, 36 JSON, 79 kart); `python -m json.tool docs/ai-usage.json` — poprawny; audyt fixture'ów — 14/14 ścieżek istnieje, flagi top-level 12/14 i 1/14; `git diff --check` — czysto.
+
+I-012 pozostaje otwarte do czasu akceptacji exact refu przez K-040 i integracji disclosure. K-040 porówna `0785708a8fee9504ae74339ff4d572c69570a3d9` z bieżącym headem PR #46 po aktualizacji statusu karty i synchronizacji z main.
