@@ -73,6 +73,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-017 — Pozyskaj NASADEM i wybierz niezależną maskę lądu](K-017.md), Kamil, P0: pobranie NASADEM po lokalnym logowaniu i weryfikacja maski przed walidacją Earth DEM.
 - [K-018 — Re-review overflowu mobilnego przy klasycznym pasku](K-018.md), Kamil, P0: ponowne sprawdzenie E-014 wobec `clientWidth` na dokładnym nowym headzie PR #5.
 - [I-010 — Uzupełnij rejestr AI dla E-002, E-014 i E-016](I-010.md), Ewelina, P0: uzupełnienie wymaganej deklaracji Codex dla UI, poprawki mobilnej i review próbek.
+- [I-011 — Uaktualnij rejestr użycia AI/SI](I-011.md), Ewelina, P0: uzupełnienie udokumentowanych prac po I-010 oraz aktualizacja stanu rzeczywistych próbek NASADEM.
 - [E-017 — Niezależny review NASADEM i maski lądu](E-017.md), Ewelina, P0: sprawdzenie opublikowanego K-017, jego źródeł, porównania i ograniczeń w PR #12.
 - [K-019 — Review adaptera API i widoków fixture E-003](K-019.md), Kamil, P0: sprawdzenie kontraktu, trybu syntetycznego, braku fallbacku i spójności `analysis_id` w PR #16.
 - [E-018 — Review silnika MCDA i rankingu pikseli K-006](E-018.md), Ewelina, P0: niezależne sprawdzenie punktacji, braków, deterministycznego Top K i selekcji różnych obszarów w PR #15.
@@ -80,10 +81,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-020 — Review map design handoff E-019](K-020.md), Kamil, P1: sprawdzenie semantyki agregatu, hotspotu, legendy i syntetycznych wartości w PR #18.
 - [E-020 — Odrzucaj odpowiedzi API niespójne z żądaniem](E-020.md), Ewelina, P0: walidacja datasetu i echo query search oraz parametrów bbox/level/limit mapy.
 - [K-021 — Re-review adaptera API po poprawce E-020](K-021.md), Kamil, P0: sprawdzenie dokładnego headu PR #20 i regresji po uwagach K-019.
+- [K-022 — Uzgodnij zakres fixture'u hotspotu z coverage mapy](K-022.md), Kamil, P0: napraw zgodność geometrii scope/bbox, komórek i liczników coverage wykrytą w K-020.
+- [K-023 — Review aktualizacji rejestru AI/SI I-011](K-023.md), Kamil, P0: sprawdź aktualność disclosure, źródła K-017 i rozróżnienie syntetycznych fixture'ów w PR #22.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-022, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-024, E-021, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
