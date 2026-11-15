@@ -5,9 +5,9 @@
 - Data i strefa: 2026-11-15, Europe/Warsaw
 - Zadanie / PR / commit: K-038 / I-012 / PR #46; exact source `ca1645d21f432810009b81ed23a9e2cab8afd662`, oceniony head `03f6dbda23812df66a0bb5cd7359b7c606fa8324`
 - Zdalne repo i gałąź: `origin`, `kamil/K-038-review-I012`
-- Wysłane SHA i URL PR: wynik review opublikowany w [PR #46](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/46#pullrequestreview-5910427350); integracyjny PR K-038 zostanie dopisany po jego utworzeniu.
+- Wysłane SHA i URL PR: raport K-038 w commicie `083ba6e574e52bba697f94b0cc7a107e742d4e5c`, [integracyjny PR #68](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/68); wynik review: [PR #46, review #5910427350](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/46#pullrequestreview-5910427350).
 - Rezerwacja w `origin/main`: potwierdzona; `tasks(K-038): IN PROGRESS` — `2e56c5c9733ffde666955e62ee77448f0883c7fc`.
-- Lokalne niewysłane zmiany: raport K-038 i aktualizacja karty są przygotowywane na opublikowanej gałęzi zadania.
+- Lokalne niewysłane zmiany: brak po wysłaniu końcowego headu PR #68.
 - Stan: `REQUEST_CHANGES` dla I-012; K-038 spełnia kryteria przeglądu po publikacji raportu.
 
 ## Co jest dostępne
