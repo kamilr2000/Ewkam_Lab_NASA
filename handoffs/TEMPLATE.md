@@ -1,27 +1,27 @@
-# Przekazanie: TASK-ID — krótki tytuł
+# Handoff: TASK-ID — short title
 
-- Od: kamil / ewelina, identyfikator agenta
-- Do: kamil / ewelina
-- Data i strefa:
-- Zadanie / PR / commit:
-- Zdalne repo i gałąź:
-- Wysłane SHA i URL PR:
-- Czy rezerwacja / rezultat są w origin/main:
-- Lokalne niewysłane zmiany i powód, jeśli występują:
-- Stan: gotowe / częściowe / wymaga decyzji
+- From: Kamil / Ewelina, agent identifier
+- To: Kamil / Ewelina
+- Date and time zone:
+- Task / PR / commit:
+- Remote repository and branch:
+- Published SHA and PR URL:
+- Reservation and result present in origin/main:
+- Local unpublished changes and reason, if any:
+- State: ready / partial / decision required
 
-## Co jest dostępne
+## Available result
 
-Pliki i interfejsy dostępne w remote oraz rzeczywiste zachowanie. Oddziel fixture od danych naukowych. Opublikuj ten handoff; plik pozostający tylko na jednym komputerze nie jest przekazaniem.
+List the files, interfaces, and observed behaviour available remotely. Distinguish synthetic fixtures from scientific data. Publish the handoff; a file that exists only on one computer is not a handoff.
 
-## Jak odtworzyć
+## Reproduction
 
-Sprawdzone polecenia, konfiguracja i wersje danych / kontraktu.
+List checked commands, configuration, data versions, and contract version.
 
-## Sprawdzenia
+## Checks
 
-Co uruchomiono, jaki wynik, czego nie sprawdzono.
+State what ran, its result, and what was not checked.
 
-## Ograniczenia i potrzebne działania
+## Limits and required actions
 
-Konkretna rzecz dla drugiego toru, zależności i nowo odkryte karty.
+Name the other track's concrete next action, dependencies, and any newly discovered task.

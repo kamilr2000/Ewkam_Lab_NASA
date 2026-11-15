@@ -12,34 +12,34 @@ updated: 2026-11-14
 discovered_from: TASK-ID-or-source
 ---
 
-# TASK-ID — krótki konkretny tytuł
+# TASK-ID — Short, specific title
 
-Cel: obserwowalny rezultat i powód, dla którego praca jest potrzebna.
+Goal: state the observable outcome and why the work is needed.
 
-Zakres: dokładne pliki/moduły oraz ewentualne potrzebne przekazanie między torami.
+Scope: name exact files/modules and any required cross-track handoff.
 
-## Kroki
+## Steps
 
-1. Konkretne działanie.
-2. Konkretne działanie.
-3. Sprawdzenie i dokumentacja.
+1. State a concrete action.
+2. State a concrete action.
+3. Verify and document the result.
 
-## Kryteria odbioru
+## Acceptance criteria
 
-- [ ] Testowalny warunek.
-- [ ] Warunek obejmujący problem brzegowy.
-- [ ] Źródła/kontrakt/handoff zaktualizowane, jeśli potrzebne.
+- [ ] A testable condition.
+- [ ] A condition covering a relevant edge case.
+- [ ] Update sources, contract, or handoff if needed.
 
-## Sprawdzenie
+## Verification
 
-Jak potwierdzisz działanie; nie kopiuj automatycznie komend, których repo jeszcze nie ma.
+Describe how to confirm the outcome. Do not copy commands for tools the repository does not have.
 
-## Przebieg i dowody
+## Progress and evidence
 
-Przed implementacją opublikuj osobny commit `tasks(ID): IN PROGRESS` w `origin/main`, ustawiający `status: in_progress`, agenta, datę i gałąź. Potwierdź zdalną rezerwację. Każdą poprawkę commituj i wysyłaj; synchronizuj remote i rozwiązuj rzeczywiste konflikty. Data, agent, kroki, sprawdzenia, wysłane SHA/URL PR i ograniczenia. `done` dopiero po odbiorze i integracji do `origin/main`. Przy blokadzie: warunek, zależność, niewysłane zmiany i następne działanie.
+Before implementation, publish a separate tasks(ID): IN PROGRESS commit on origin/main. Set status to in_progress and record the agent, date, and branch. Confirm the remote reservation. Commit and push each coherent change; synchronize and resolve real conflicts. Record checks, pushed SHA/PR URL, and limitations. Mark done only after acceptance and integration into origin/main. For a blocker, record the condition, dependency, unpublished changes, and next action.
 
-## Powód dodania / wpływ
+## Reason and impact
 
-Co odkryto w zadaniu lub źródle, co blokuje, dlaczego P0/P1/P2. Dodaj link do indeksu i zależności w zablokowanych kartach. Sprawdź cykle. Nie wymyślaj nowych P0 bez związku z MVP.
+Explain what was discovered, what is blocked, and why the priority is P0/P1/P2. Add the card to the index and update blocked dependencies. Check for cycles. Do not create P0 work unrelated to the agreed MVP.
 
-Możesz utworzyć tę kartę dla drugiego agenta: prefix i owner należą do odbiorcy, który sam rezerwuje zadanie. Dla review użyj REVIEW_TEMPLATE.md i wskaż review_of/review_ref zamiast zależności od done ocenianej pracy. Dla własnej implementacji wymagającej odbioru możesz dodać review_tasks z ID przeglądu.
+You may create this card for the other agent: use that owner's prefix; the receiver makes their own reservation. For reviews, use REVIEW_TEMPLATE.md with review_of/review_ref instead of depending on the reviewed task reaching done. For implementation needing review, record review_tasks.
