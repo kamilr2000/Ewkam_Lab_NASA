@@ -1,19 +1,19 @@
-# Źródła organizatora
+# Organizer source snapshots
 
-Wszystkie cztery linki dostarczone przez Kamila odczytano **14 listopada 2026 r.** Bezpośrednie pobieranie części stron kończyło się błędem; pełną treść uzyskano przez odczyt renderowanych stron TinyFish. Streszczenia poniżej opierają się na tej treści, nie na poprzednich edycjach ani projektach innych zespołów.
+The organizer pages listed here were read on 14 November 2026. Some direct page fetches failed; the recorded summaries were based on rendered page contents. They describe those snapshots, not later editions or other teams' projects. Re-check the live guidance before submission.
 
-| ID | Link podany przez użytkownika | Streszczenie |
+| ID | Source | Local summary |
 |---|---|---|
-| S01 | [Opis wyzwania](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=details) | [01-challenge](01-challenge.md) |
-| S02 | [Zasoby wyzwania](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources) | [02-resources](02-resources.md) |
-| S03 | [Przewodnik zgłoszenia](https://www.spaceappschallenge.org/resources/project-submission-guide/) | [03-submission](03-submission.md) |
-| S04 | [Regulamin](https://www.spaceappschallenge.org/legal/) | [04-legal](04-legal.md) |
-| S05 | [Przewodnik oceniania — dodatkowo sprawdzony](https://www.spaceappschallenge.org/resources/judging-awards-guide/) | Poniżej |
+| S01 | [Challenge details](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=details) | [01-challenge.md](01-challenge.md) |
+| S02 | [Challenge resources](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources) | [02-resources.md](02-resources.md) |
+| S03 | [Project submission guide](https://www.spaceappschallenge.org/resources/project-submission-guide/) | [03-submission.md](03-submission.md) |
+| S04 | [Legal terms](https://www.spaceappschallenge.org/legal/) | [04-legal.md](04-legal.md) |
+| S05 | [Judging and awards guide](https://www.spaceappschallenge.org/resources/judging-awards-guide/) | Summarized below |
 
-S03 i S05 mają na stronie datę 2026-11-13; S04 aktualizację 2026-08-07. Treści mogą się zmienić, dlatego I-005 obejmuje kontrolę przed wysłaniem. Rejestr maszynowy: [links.json](links.json). Nie kopiujemy pełnych stron do repo.
+S03 and S05 displayed a 13 November 2026 date; S04 showed an update date of 7 August 2026. These snapshots may become stale. The source URL inventory is in [links.json](links.json); the repository does not reproduce the full source pages.
 
-## Ocena projektu — S05
+## Judging guide — S05
 
-Sprawdzony przewodnik 2026 wymienia pięć kryteriów: wpływ, pomysłowość, zasadność naukową i wykonalność, zgodność z wyzwaniem oraz prezentację. W naszym projekcie odpowiadają im: konkretne zastosowanie analogów, odkrywanie pojedynczych hotspotów, jawny model i testy, faktyczne obliczenia na danych NASA, czytelna mapa i krótkie demo. To mapowanie jest naszą propozycją pracy, a nie gwarancją punktacji.
+The checked 2026 guide lists impact, creativity, scientific merit and feasibility, relevance to the challenge, and presentation. The project team maps these to an analogue use case, isolated-hotspot handling, explicit methods and tests, actual NASA data roles, and a clear map/demo. This is a planning interpretation, not a prediction or guarantee of judging results.
 
-Dokumentacja operacyjna po polsku nie jest gotowym materiałem do podlinkowania jury. Przed zgłoszeniem przygotowujemy angielski publiczny zestaw i opis użytych źródeł.
+Internal records are not jury-ready content. Use the current, reviewed English package and re-check event rules before submission.

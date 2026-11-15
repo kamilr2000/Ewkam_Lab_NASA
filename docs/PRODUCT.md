@@ -1,51 +1,39 @@
-# Produkt i zakres
+# Product scope
 
-## Pytanie użytkownika
+## User question
 
-„Gdzie na Ziemi znajdę teren najbardziej zbliżony do wybranego regionu Marsa lub Księżyca, biorąc pod uwagę wskazane przeze mnie właściwości?”
+Where on Earth do selected terrain measurements resemble a chosen region of Mars or the Moon?
 
-Odbiorcy: osoby szukające terenów do testów łazików, instrumentów i procedur, edukatorzy oraz uczestnicy badań analogowych. Aplikacja służy do screeningu kandydatów do dalszej weryfikacji.
+Terra Analog is a screening tool for researchers, rover and instrument teams, educators, and analogue-fieldwork planners. It identifies candidates for further investigation; it does not certify a site or establish environmental equivalence.
 
-## Przepływ MVP
+## Implemented regional MVP
 
-1. Wybierz **Mars / Moon** i konkretny profil referencyjny. Start: region Jezero oraz region południowego bieguna Księżyca; granice i wartości wyznacza K-004 z danych.
-2. Włącz od jednej do wszystkich dostępnych dla profilu warstw. Wybierz jedną warstwę, aby uzyskać wynik wyłącznie dla niej.
-3. Ustaw dodatnie wagi lub pozostaw równe. Widoczność warstwy na mapie jest osobnym ustawieniem od uwzględnienia jej w obliczeniach.
-4. Uruchom analizę globalną. Backend ocenia wszystkie kwalifikujące się komórki w aktualnej wersji siatki, niezależnie od widoku mapy.
-5. Zobacz mapę i **Top 10 pixels**. Wyniki mogą sąsiadować. Kliknięcie powiększa mapę do konkretnej komórki i pokazuje jej rzeczywisty obrys.
-6. Otwórz wyjaśnienie: wynik każdej warstwy, wkład w sumę, pomiar, jednostka, zakres referencyjny, jakość, źródło i ograniczenia analogii.
-7. Opcjonalnie przełącz na **Distinct areas** z jawnym promieniem grupowania; oryginalny ranking nadal jest dostępny.
-8. Skopiuj konfigurację / pobierz wynik, aby odtworzyć analizę.
+The current integrated application supports:
 
-## Warstwy proponowane przez nas
+1. Mars / Jezero and Moon / south-polar reference profiles.
+2. Three named, versioned Earth search regions: Atacama / Andes, Hawaii Big Island, and the Himalaya.
+3. Three topographic criteria: surface slope, local roughness, and local relief.
+4. Positive criterion weights, with map visibility managed independently from analysis criteria.
+5. Regional analysis, individual-pixel Top 10, and a separate distinct-area ranking with a user-specified minimum separation.
+6. A map with OpenStreetMap streets, separately controlled result-cell and ranked-marker layers, plus linked pixel measurements and score explanations.
 
-| Warstwa | Wersja | Znaczenie i warunek uruchomienia |
-|---|---|---|
-| Nachylenie powierzchni | P0 | Kąt ze wspólnie przeskalowanego DEM, dystanse w metrach |
-| Lokalna nierówność | P0 | Odchylenie wysokości po odjęciu lokalnej płaszczyzny; stałe okno w km |
-| Lokalna deniwelacja | P0 | P95–P05 wysokości w takim samym oknie; informuje o rzeźbie |
-| Roślinność / odsłonięcie gruntu | P1 | NASA MODIS NDVI z QA; ziemski filtr/proxy warunków testowych, bez fikcyjnego planetarnego NDVI |
-| Temperatura powierzchni i amplituda | P1 | Porównywalne statystyki LST / Diviner / danych Marsa; nie mieszać temperatury powietrza i gruntu |
-| Litologia / mineralogia | P1, ważne rozszerzenie | Najpierw mały dowód porównywalności na wspólnej ontologii; pokrycie może być regionalne |
-| Suchość, lód, pył, jaskinie | P2 | Osobne źródła, skale i profile procesów; nie włączać pustych warstw do wyniku |
+The integrated API does not provide global Earth search. A global request returns SCOPE_UNAVAILABLE; do not present a regional ranking as a global optimum. Additional environmental domains are planned, not part of this MVP.
 
-Trzy warstwy P0 opisują **jedną dziedzinę: topografię** i są ze sobą powiązane. UI oraz prezentacja muszą to mówić. Nie przedstawiamy ich jako pełnego porównania środowiska. Po ukończeniu P0 następny priorytet to dziedzina o niezależnej informacji, wybrana na podstawie audytu danych.
+## Analysis and map semantics
 
-## Granulacja jako wymaganie produktu
+- The API scores every eligible cell in the selected regional package before selecting the pixel Top 10.
+- Adjacent pixels may each appear in the default ranking. Distinct-area ranking is a separate API mode that returns selected pixel representatives; it does not create polygons or area-average scores.
+- Map-cell colours use the maximum score of an eligible pixel and preserve that pixel's ID. A cell mean is context only.
+- The map, ranking, and pixel detail must refer to the same analysis ID. Zoom changes the view, not the input grid or analysis resolution.
+- Missing active measurements make a cell ineligible and retain a reason. Missing is never converted to zero.
+- The score is a configured similarity index, not probability, confidence, habitability, or proof that two places are alike in every respect.
 
-Piksel = najmniejsza komórka aktualnej **siatki analitycznej**; nie piksel ekranu, zdjęcia ani dowolnie dokładny punkt. Startowa propozycja to piksele rastra ETOPO 60 arc-second, ok. 1,85 km w kierunku północ–południe; szerokość wschód–zachód i powierzchnia maleją z szerokością geograficzną. Siatka i fizyczna skala porównania zostają zatwierdzone po benchmarku G1. Nie łączymy najpierw wielu takich pikseli w większy kandydat rankingowy.
+## Data domains and planned work
 
-Światowy zasięg nie oznacza, że rozpoznajemy każdy mały obiekt. Aplikacja pokazuje wersję siatki, powierzchnię konkretnej komórki i efektywną rozdzielczość źródła. Nie wykryjemy hotspotu mniejszego niż wspierana skala pomiaru. Zwiększenie zoomu nie zwiększa dokładności danych. Jeżeli ograniczenia wymuszą grubszy raster, wydanie jawnie podaje utraconą szczegółowość; nie obiecuje zachowania hotspotów drobniejszej siatki.
+The three implemented criteria are related topographic measures. They do not represent a complete planetary environment. Climate, illumination, radiation, atmosphere, water, geology/mineralogy, and biological suitability are not scored. Future criteria require independent evidence for compatible sources, units, measurement scales, coverage, and quality.
 
-## Kryteria gotowego MVP
+Do not call lithology mineralogy. NDVI is a terrestrial vegetation index and is not evidence of life on Mars. Never compare absolute elevations across planetary vertical references without a documented, valid transformation.
 
-- Oba ciała niebieskie mają co najmniej jeden realny, udokumentowany profil.
-- Działa wybór 1–3 cech, wagi, mapa, oba widoki wyników, wyjaśnienia i eksport.
-- Top 10 jest dokładne **w obrębie opublikowanej siatki i kwalifikujących się danych**, również dla jednego dobrego piksela w słabym regionie.
-- Wyszukiwanie obejmuje globalny zbiór, z jawną maską i raportem pokrycia wszystkich kontynentów oraz obszarów polarnych. Braki są widoczne, nie interpolowane dla lepszego wyglądu.
-- NASA dane Ziemi i planet mają rzeczywistą rolę opisaną w wynikach / walidacji, a nie tylko link na stronie.
-- Publiczne materiały po angielsku, zgodność źródeł, testy i demo według przewodnika zgłoszenia.
+## Product acceptance boundaries
 
-## Świadomie poza P0
-
-Konta i płatności, dowolne profile definiowane przez użytkownika, trening ML, fotorealistyczny glob 3D, pełne archiwum surowych obrazów online, globalna mineralogia wysokiej rozdzielczości oraz rekomendowanie realnych miejsc budowy baz. P1 może wejść dopiero bez ryzyka dla działającego P0.
+A release description must match observable code and recorded evidence. Keep Live and synthetic modes distinct. Report the region, dataset version, grid scale, feature scale, criteria, weights, missing-data policy, analysis ID, and source limits for each example. Do not claim public deployment, global coverage, additional layers, or organizer endorsement without direct evidence.

@@ -1,19 +1,19 @@
-## Zmiana i zadanie
+## Change and task
 
-ID karty i konkretne zachowanie po zmianie:
+Task ID and specific behaviour changed:
 
-Commit rezerwujący IN PROGRESS w main oraz zdalna gałąź zadania:
+Reservation commit on main and remote task branch:
 
-## Sprawdzenia
+## Checks
 
-Co wykonano i jaki był wynik:
+What was run and the result:
 
-## Dane / kontrakt / przekazanie
+## Data, contract, and handoff
 
-Wersje, ewentualne zmiany znaczenia pól, potrzebny handoff do drugiego toru:
+Versions, semantic changes to fields, and any handoff needed by the other workstream:
 
-Czy pobrano aktualne remote, rozwiązano konflikty i wysłano wszystkie poprawki? Status done dopiero po integracji do main.
+Was the latest remote merged and were conflicts resolved? Mark the task done only after integration into main.
 
-## Pozostałe ograniczenia
+## Remaining limits
 
-Niedokończone kryteria i nowe karty:
+Unfinished criteria and new tasks:

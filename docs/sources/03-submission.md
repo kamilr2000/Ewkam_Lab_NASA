@@ -1,17 +1,19 @@
-# S03 — zasady zgłoszenia 2026
+# S03 — 2026 submission requirements snapshot
 
-Źródło: [Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/), data strony 2026-11-13, odczyt 2026-11-14.
+Source: [Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/), page date 13 November 2026, read on 14 November 2026.
 
-| Obszar | Potwierdzone wymaganie |
+| Area | Requirement recorded in this snapshot |
 |---|---|
-| Okno | 14.11.2026 09:00–15.11.2026 23:59 w strefie Local Event; Universal Event według miejsca zamieszkania Team Owner. Lokalny pitch może mieć wcześniejszy termin. |
-| Formularz | Strona zespołu → Project → edycja; samo zapisanie postępu nie jest zgłoszeniem. Potrzebne „Submit for Judging” i potwierdzenie powodzenia. |
-| Treść | Nazwa, streszczenie, demo, link do projektu, opis szczegółowy, wykorzystanie NASA, źródła/narzędzia i informacja o SI/AI; uzupełnić wszystkie obowiązkowe pola. |
-| Demo | Film **do 30 sekund** albo prezentacja **do 7 slajdów**, łącznie z tytułowymi. Przekroczenie wyklucza Global Judging. |
-| Dostęp | Linki publiczne bez logowania. Dokumenty i filmy hostowane zewnętrznie; obrazy JPG/PNG/GIF do 10 MB można dodać bezpośrednio. |
-| Język | Formularz i podlinkowane materiały po angielsku. Film może mieć inną mowę z angielskimi napisami. |
-| Dane | Co najmniej jeden zasób NASA dla Global Award; cytować wszystkie użyte materiały i narzędzia. |
-| AI/SI | Dozwolone wspomaganie, jawne wskazanie użycia; obrazy/wideo ze znakiem wodnym, audio oraz kod/dane z opisem i metadanymi. Zakaz generatywnego użycia brandingu NASA. |
-| Osoby | Członkowie zaakceptowani w tym samym evencie; materiały zgłoszeniowe bez rozpoznawalnych osób niepełnoletnich. |
+| Submission window | 14 November 2026, 09:00 through 15 November 2026, 23:59 in Local Event time. Universal Event timing depends on the Team Owner's location. A local pitch may have an earlier deadline. |
+| Form | Team page → Project → edit. Saving progress is not submission; use “Submit for Judging” and confirm success. |
+| Content | Project name, summary, demo, project link, detailed description, NASA use, source/tools, and AI/SI assistance disclosure. Complete all required fields. |
+| Demo | A video up to 30 seconds or a presentation of up to 7 slides, including title slides. Exceeding a limit excludes the entry from Global Judging. |
+| Access | Links must be public and work without sign-in. Host documents and videos externally. JPG/PNG/GIF images up to 10 MB may be uploaded directly. |
+| Language | The form and linked materials must be in English. Video speech may use another language with English subtitles. |
+| Data | At least one NASA resource is required for the Global Award. Cite all used sources and tools. |
+| AI/SI | Assistance is allowed but must be disclosed. Media and code/data disclosures have additional format and metadata requirements; generative use of NASA branding is prohibited. |
+| Team | Members must be accepted into the same event. Submission materials must not show identifiable minors. |
 
-Dla wydarzenia w strefie Europe/Warsaw końcem jest **15 listopada, 23:59 CET**; trzeba potwierdzić właściwy event zespołu. Kontrola wykonania: [SUBMISSION](../SUBMISSION.md).
+For an event in Europe/Warsaw, the snapshot's end time corresponds to 15 November at 23:59 CET. Confirm the team's actual event, local pitch deadline, and current online rules before submission. See [submission guidance](../SUBMISSION.md).
+
+This is a dated source snapshot, not a guarantee that the online guide has not changed.

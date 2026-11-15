@@ -1,47 +1,42 @@
-# Pipeline danych
+# Data pipeline
 
-Właściciel: Kamil; zadania K-001, K-002, K-004, K-005, K-008, K-017.
+Owner: Kamil. The scripts download pinned public inputs, verify their checksums, build reference profiles, and prepare the three regional Earth search packages. Raw source data stay in ignored local directories.
 
-Środowisko Python jest zdefiniowane w głównym `pyproject.toml`, a wersje rozwiązanych zależności w `uv.lock`. Skrypt `download_samples.py` pobiera publiczne próbki z `data/manifests/k002-samples.json` i weryfikuje liczbę bajtów oraz SHA-256. Uruchom z katalogu repo polecenie `python pipeline/download_samples.py`. Surowe dane trafiają do ignorowanego katalogu `data/raw/k002`.
+## Environment
 
-## NASADEM, maska i porównanie K-017
+Python 3.12 is pinned by .python-version. Install the data-processing group from the repository root:
 
-Zainstaluj grupę zależności danych, skonfiguruj lokalnie `EARTHDATA_TOKEN`, a następnie uruchom:
-
-```text
+```powershell
 uv sync --locked --group data
-uv run --locked --group data python pipeline/download_k017_assets.py
-uv run --locked --group data python pipeline/compare_nasadem_etopo.py
 ```
 
-Downloader korzysta z `earthaccess` przez zmienną środowiskową, nie zapisuje ani nie wyświetla tokenu, pobiera wskazane granule CMR i sprawdza nazwy, zawartość ZIP, wymiary, rozmiary, SHA-256, zakres HGT oraz klasy NUM/SWB. Pobiera też przypięte kafle ETOPO, GSHHG 2.3.7 i gridy PROJ. Archiwa GSHHG są bezpiecznie rozpakowywane do ignorowanego `data/raw/k017`; raw nie trafia do Git. `--nasadem-only` ogranicza downloader do NASADEM. `--record-checksums` zapisuje rozmiary, sumy i obserwowane statystyki warstw do manifestu po sprawdzeniu plików.
+## Mars and Moon reference profiles
 
-`compare_nasadem_etopo.py` transformuje HGT z EGM96 do EGM2008 lokalnymi gridami PROJ, przelicza oba DEM-y do wspólnej siatki lokalnego UTM 2 km, rasteruje niezależną maskę GSHHG oraz porównuje nachylenie, nierówność po odjęciu lokalnej płaszczyzny i P95−P05 w kołowym promieniu 10 km. Raport `data/reports/k017-validation.json` zawiera liczności, różnice masek, histogramy NUM, błędy wysokości i cech oraz cztery testy maski. Wynik obejmuje trzy AOI; nie jest globalnym rankingiem ani globalną walidacją DEM.
-
-## Profile planetarne K-004
-
-Pobierz i zweryfikuj przypięte publiczne rastry NASA PDS/PGDA oraz etykiety:
-
-```text
+```powershell
 python pipeline/download_k004_sources.py
 python pipeline/profiles/build_profiles.py
 ```
 
-Downloader używa manifestu `data/manifests/k004-source-files.json`, zapisuje pliki do ignorowanego `data/raw/k004` i sprawdza każdy rozmiar oraz SHA-256. Earthdata Login nie jest potrzebny dla tych dwóch profili. Builder kontroluje sumy przed obliczeniami, tworzy odpowiedzi `ProfileResponse v1` w `pipeline/profiles/` i raport odtwarzania w `data/manifests/k004-planetary-profiles.json`. Wspólna siatka ma nominalnie 2 km, promień okna cech 10 km, a źródłowe pola jakości (MEGC, LDEC, EFFRES, ERR) pozostają osobno opisane.
+The downloader checks manifest-pinned file sizes and SHA-256 values. It writes raw files under the ignored data/raw/k004 directory. The profile builder writes versioned outputs and a reproducibility manifest. These two profiles represent selected regions, not complete planetary environments.
 
-Profile i ręczne sprawdzenia K-004 dowodzą ekstrakcji dwóch wybranych regionów, nie działającego jeszcze globalnego rankingu Ziemi ani równoważności środowisk. Opis metody, zakresów i ograniczeń: [METHODOLOGY](../docs/METHODOLOGY.md#2-zmierzone-profile-k-004) oraz [DATA](../docs/DATA.md#profile-planetarne-k-004).
+## Regional Earth packages
 
-## Regionalne pakiety cech K-005
-
-Pobierz tylko publiczne wejścia potrzebne do trzech AOI i zbuduj realne komórki kandydujące:
-
-```text
+```powershell
 uv run --locked --group data python pipeline/download_k005_sources.py
 uv run --locked --group data python pipeline/build_k005_earth_grid.py
 ```
 
-To pobranie nie wymaga Earthdata tokenu. `--aoi atacama-andes`, `--aoi hawaii-big-island` i `--aoi himalaya` pozwalają wybrać region; można powtórzyć `--aoi` dla kilku. `--force` przelicza pakiety mimo zgodnych checkpointów. Każdy AOI jest osobną partią: plik CSV gzip powstaje atomowo, checkpoint zapisuje jego SHA-256 i konfigurację, a ponowne uruchomienie pomija tylko zweryfikowany pakiet.
+The build supports three AOIs: atacama-andes, hawaii-big-island, and himalaya. Each AOI is a regional package with a nominal 2 km cell grid and a 10 km feature neighbourhood. The build records its data and QA in data/manifests/ and data/reports/. Raw downloads, intermediate rasters, and checkpoints remain ignored. These packages are the current API inputs; they do not constitute global processing.
 
-Skompresowane, małe tabele `earth-cells.csv.gz` trafiają do śledzonego `data/derived/k005-earth-grid/`, aby API i UI mogły od razu pokazać rzeczywiste komórki; manifest każdego regionu podaje ich SHA-256. Surowe wejścia, rastry pośrednie i checkpointy pozostają w ignorowanych katalogach, więc nie commituj ich. Manifesty źródłowe regionów pozostają w `data/manifests/k005-earth-grid-<aoi>.json`, a zbiorczy pomiar skali i QA w `data/reports/k005-earth-grid.json`. Pakiety używają komórek UTM 2 km. GSHHG maskuje ocean na natywnej siatce ETOPO 15″ przed średnim resamplingiem, a następnie wyznacza ląd niezależnie na siatce docelowej; cechy używają okna 10 km. Raport budżetu dla hipotetycznej globalnej siatki 60″ jest dokładnym rozmiarem tablic i planem partii; nie oznacza, że przetworzono cały glob.
+## NASADEM validation
 
-Próbki z K-002 oraz wyniki K-017 dowodzą odczytu i pochodzenia wskazanych plików, nie pełnego globalnego przetwarzania. Preprocessing globalnej siatki i raport pokrycia pozostają kolejnymi zadaniami. Źródła, licencje i ograniczenia opisuje [DATA](../docs/DATA.md) oraz [THIRD_PARTY](../THIRD_PARTY.md).
+This is a separate Earth-data validation workflow. It requires Earthdata authentication configured locally; do not commit or print the token.
+
+```powershell
+uv run --locked --group data python pipeline/download_k017_assets.py
+uv run --locked --group data python pipeline/compare_nasadem_etopo.py
+```
+
+The workflow compares selected AOIs and documents mask, elevation, and derived-feature differences. It does not establish global DEM accuracy or supply the scored demo measurements.
+
+See [data inventory](../data/README.md), [data sources and limits](../docs/DATA.md), and [third-party terms](../THIRD_PARTY.md) before redistributing any output.

@@ -1,31 +1,31 @@
-# Rejestr decyzji
+# Decision log
 
-Decyzje startowe z 2026-11-14. Parametry zależne od danych są propozycją do G1; wymagania użytkownika obowiązują od razu.
+This log records decisions and their rationale. Older task cards and handoffs retain their original evidence and timestamps.
 
-| ID | Decyzja | Status i uzasadnienie |
+| ID | Decision | Status / rationale |
 |---|---|---|
-| D-001 | Globalna mapa, wybór Mars/Moon, warstwy, wagi, Top 10 | Wymaganie Kamila i Eweliny |
-| D-002 | Jednostka domyślnego rankingu to pojedyncza komórka; zachowujemy sąsiadujące wyniki | Wymaganie Kamila doprecyzowane w rozmowie; unikamy utraty hotspotów przez średnią obszaru |
-| D-003 | Mapa oddalona: maksimum wyniku z rzeczywistego piksela; średnia jako kontekst | Przyjęte w planie; agregacja po wyniku łącznym |
-| D-004 | Drugi tryb „różne obszary” nie zmienia domyślnego Top 10 pikseli | Przyjęte; pozwala zobaczyć różnorodność lokalizacji |
-| D-005 | Backend pełnego skanu zamiast pełnego zbioru w przeglądarce | Przyjęte w planie po doprecyzowaniu granulacji; wymaga benchmarku |
-| D-006 | Python/FastAPI + React/TypeScript/Vite/MapLibre | Proponowany stos; bez obowiązku używania konkretnego hostingu |
-| D-007 | Raster analityczny 60 arc-second, skala efektywna ~2 km, lokalny promień 10 km | Propozycja do G1; jeden piksel rastra to jeden kandydat; koszyki mapowe nie zastępują pikseli |
-| D-008 | P0: trzy topograficzne cechy; dodatkowe dziedziny P1 | Przyjęte ograniczenie weekendowego MVP, nie redukcja docelowej wizji |
-| D-009 | Brak dowolnej aktywnej cechy wyklucza piksel | Przyjęte; wyniki muszą odnosić się do tych samych kryteriów |
-| D-010 | Mineralogia przechodzi oddzielny pilotaż porównywalności | Przyjęte; nie obiecujemy istniejącej globalnej warstwy |
-| D-011 | Kamil: dane/API; Ewelina: UI/demo | Domyślny podział organizacyjny do ewentualnej zamiany przez zespół |
-| D-012 | MIT dla własnego kodu/docs; cudze materiały z osobnymi warunkami | Domyślna licencja repo; kontrola przed publikacją |
-| D-013 | Wewnętrzne instrukcje PL, produkt i pakiet jury EN | Przyjęte; pełna kontrola publicznie linkowanych materiałów w I-005 |
-| D-014 | Nie łączymy cech kilku pikseli w większy kandydat przed scoringiem | Przyjęte po przeglądzie granulacji; pierwotną roboczą propozycję większych komórek H3 zastąpił raster zachowujący osobne pomiary. Wymaga większego budżetu skanu, dlatego benchmark jest bramką. |
-| D-015 | Dwa komputery, całe przekazywanie przez `origin` repo `kamilr2000/Ewkam_Lab_NASA` | Wymaganie Kamila z 2026-11-14; zastępuje wariant wspólnego katalogu. Osobny commit IN PROGRESS musi znaleźć się w `origin/main` przed implementacją. Każda poprawka ma commit i push; konflikty rozwiązujemy przy synchronizacji z zachowaniem obu prac. |
-| D-016 | Repo prywatne; pierwsza wysyłka przyjęta po weryfikacji adresu i zakresu | Repo istnieje od 2026-11-14. Po początkowych odmowach potwierdzono własność konta, prywatność i przygotowany zakres 70 plików tekstowych, po czym wysłano historię do wskazanego repo. Zmiana widoczności wymaga osobnej decyzji właściciela. |
-| D-017 | Nazwa repo `Ewkam_Lab_NASA`, współpracowniczka `ewelixa` | Bezpośrednia instrukcja Kamila z 2026-11-14. Repo przemianowano, origin i instrukcje zaktualizowano, a zaproszenie z uprawnieniem write wysłano do wskazanego konta. Przyjęcie zaproszenia następuje na koncie Eweliny. |
-| D-018 | Submission wykonuje wyłącznie Kamil albo Ewelina osobiście | Bezpośrednia instrukcja Kamila z 2026-11-14. I-006 ma executor: human_only; agenci przygotowują wszystko do ręcznego zgłoszenia i nie wysyłają formularza/API ani nie składają oświadczeń. Otwarte I-006 nie blokuje ukończenia ich technicznych Celów. |
-| D-019 | Cele obejmują pull, dwukierunkowe zlecenia i review | Doprecyzowanie Kamila z 2026-11-14. Każdy agent aktualizuje własny klon, może tworzyć karty dla drugiego i obsługuje przeglądy odblokowujące współpracę. Review używa review_of/review_ref i nie czeka na done ocenianej karty. |
-| D-020 | Gotowe review pierwsze przy wyborze następnego zadania, bez przerywania bieżącego | Doprecyzowanie Kamila z 2026-11-14. Najpierw agent kończy wykonywaną pracę, potem po pullu wybiera gotowe review przed zwykłym backlogiem, także P0. Przy wielu przeglądach pierwszeństwo mają odblokowujące drugą osobę, następnie najstarsze prośby. Brak dostępnego kodu nie blokuje całej kolejki. |
-| D-021 | Regionalny pakiet K-005 jest osobnym produktem analitycznym o rozdzielczości UTM 2 km; budżet 60″ jest na razie rachunkiem, nie globalnym przebiegiem | Przyjęte w K-005 po zmierzeniu skali i kosztu trzech realnych AOI. Lokalna siatka kwadratowa upraszcza poprawne liczenie odległości i pola, a jej identyfikatory nie mieszają się z planowaną globalną siatką. Zachowanie tej granicy zapobiega przedstawianiu małych wycinków ani arytmetycznego budżetu jako globalnego pokrycia lub rankingu. |
-| D-022 | Trzy skompresowane tabele komórek K-005 są wersjonowanymi pochodnymi; źródłowe i pośrednie rastry pozostają lokalne | Przyjęte dla ciągłości technicznej K-005→K-007 oraz gotowego pokazu rzeczywistych wyników. Około 190 kB pomiarów, QA i stabilnych ID pozwala reviewerowi i UI od razu odczytać komórki; manifesty zachowują źródła i sumy. Surowe ETOPO/GSHHG i checkpointy są duże i nadal odtwarzalne ze źródeł. |
-| D-023 | Zanim ETOPO jest uśredniane do komórek K-005, wyklucz z wejścia próbki oceaniczne według GSHHG na siatce źródłowej | Przyjęte po przeglądzie brzegu Big Island: ETOPO zawiera batymetrię jako ważną wysokość, więc sama maska środka komórki docelowej nie zapobiega domieszce głębokości do wybrzeża. Maskowanie źródłowe i docelowe ma osobne role; zmiana podnosi wersje modelu/siatki do v2. Test z komórką mieszającą 100 m lądu i −100 m oceanu musi zwrócić wyłącznie 100 m. |
+| D-001 | The product vision includes a map, Mars/Moon choice, criteria, weights, and a Top 10. | Product goal; the integrated Earth search remains regional, not global. |
+| D-002 | The default ranking unit is an individual analysis cell; adjacent results remain separate. | Preserves individual hotspots. |
+| D-003 | A zoomed-out display uses the maximum score of a real pixel; a mean is context only. | Map aggregation occurs after combined pixel scoring. |
+| D-004 | Distinct-area results are a separate mode from pixel Top 10. | Exposes spatial diversity without changing the default pixel ranking. |
+| D-005 | A backend performs analysis; the full dataset is not sent to the browser. | Keeps one scoring implementation and bounds client workload. |
+| D-006 | The selected stack is Python/FastAPI and React/TypeScript/Vite/MapLibre. | Implementation choice; no specific hosting provider is required. |
+| D-007 | A 60-arc-second grid, roughly 2 km effective scale, and 10 km feature neighbourhood were initial global design proposals. | These are not evidence of a completed global scan. K-005 instead provides three regional UTM 2 km packages. |
+| D-008 | P0 uses three topographic features; other domains are deferred. | Keeps the delivered scope explicit and bounded. |
+| D-009 | A cell missing an active feature is excluded from ranking. | Candidates must be compared on the same active criteria. |
+| D-010 | Mineralogy requires a separate comparability pilot. | The project does not claim an existing global mineral layer. |
+| D-011 | Kamil owns data/API; Ewelina owns UI/demo. | Default organizational split; task owners remain authoritative. |
+| D-012 | MIT applies to project code and documentation; third-party materials keep their terms. | Review rights before redistribution. |
+| D-013 | The initial documentation-language plan was Polish operations and English public materials. | Superseded by I-014: maintained repository descriptions and guides are being standardized in English. Historical evidence is retained. |
+| D-014 | Do not aggregate multiple pixels into a larger ranking candidate before scoring. | Superseded the initial H3-area proposal to preserve pixel-level measurements; requires adequate scan capacity. |
+| D-015 | The shared remote is kamilr2000/Ewkam_Lab_NASA. | Separate computers exchange work through origin; publish task reservation on main before implementation. |
+| D-016 | The repository remains private. | Changing visibility requires a separate owner decision. |
+| D-017 | The repository is named Ewkam_Lab_NASA; Ewelina's GitHub account is ewelixa. | Keep access and origin instructions current. |
+| D-018 | Formal submission is human-only. | Only Kamil or Ewelina may submit or make required attestations. |
+| D-019 | Each agent synchronizes its own clone and may create a task for the other. | Review cards identify exact refs and must not deadlock on the reviewed task's done status. |
+| D-020 | Finish current work before selecting a ready review; reviews outrank other tasks after synchronization. | Prefer reviews that unblock the other owner, then the oldest ready request. |
+| D-021 | K-005's regional cell grid is 2 km UTM; the 60-arc-second budget is a model, not a global run. | Regional and planned-global products must not be mixed. |
+| D-022 | Small, compressed K-005 tables are versioned derived runtime inputs; raw/intermediate rasters stay local. | Manifests preserve provenance and checksums. |
+| D-023 | Apply GSHHG source masking before ETOPO is averaged into K-005 coastal cells. | Prevents ocean bathymetry from contaminating land elevations; the change is recorded in v2 and its tests. |
 
-Nowy wpis: data, powód, autor/tor, karta, rozważone opcje, wybór, wpływ na zakres/kontrakt/dane, konieczna aktualizacja drugiego toru. Nie zmieniaj starego wpisu tak, by zniknął powód wcześniejszej decyzji; oznacz go jako zastąpiony i wskaż nowy.
+Add new decisions with date, owner, rationale, considered options, and impact on scope/contracts/data. Supersede an old entry explicitly rather than rewriting it to erase its original context.
