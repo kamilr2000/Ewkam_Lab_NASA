@@ -37,7 +37,7 @@ Zasady: [COLLABORATION](../docs/COLLABORATION.md). Nowa karta: [TEMPLATE](TEMPLA
 | [E-005](E-005.md) | P0 | Ewelina | E-003 | Dodaj wybór celu, warstw i wag |
 | [E-006](E-006.md) | P0 | Ewelina | E-004, E-005, K-007 | Połącz ranking pikseli, obszary i wyjaśnienia |
 | [E-007](E-007.md) | P0 | Ewelina | E-006, K-008 | Dodaj odtwarzanie i eksport analizy |
-| [E-008](E-008.md) | P0 | Ewelina | E-006 | Sprawdź UX, telefon i dostępność |
+| [E-008](E-008.md) | P0 | Ewelina | E-006, E-021 | Sprawdź UX, telefon i dostępność |
 | [E-009](E-009.md) | P0 | Ewelina | E-007, E-008 | Przygotuj build web do wspólnego wydania |
 | [E-010](E-010.md) | P0 | Ewelina | E-006 | Przygotuj angielski pakiet i demo dla jury |
 | [E-011](E-011.md) | P1 | Ewelina | E-009, K-010 | Podłącz zatwierdzoną warstwę P1 |
@@ -83,10 +83,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-021 — Re-review adaptera API po poprawce E-020](K-021.md), Kamil, P0: sprawdzenie dokładnego headu PR #20 i regresji po uwagach K-019.
 - [K-022 — Uzgodnij zakres fixture'u hotspotu z coverage mapy](K-022.md), Kamil, P0: napraw zgodność geometrii scope/bbox, komórek i liczników coverage wykrytą w K-020.
 - [K-023 — Review aktualizacji rejestru AI/SI I-011](K-023.md), Kamil, P0: sprawdź aktualność disclosure, źródła K-017 i rozróżnienie syntetycznych fixture'ów w PR #22.
+- [K-024 — Re-review wiązania top-level scope w E-020](K-024.md), Kamil, P0: sprawdź poprawkę scope po P0 findingu K-021 w PR #20.
+- [E-021 — Popraw kontrast i czytelność bazowego UI](E-021.md), Ewelina, P0: popraw niewystarczający kontrast drobnych tekstów szkieletu i zachowaj układ telefonu przed pełnym audytem E-008.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-024, E-021, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-025, E-022, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
