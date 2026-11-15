@@ -19,6 +19,25 @@ Invoke-RestMethod http://127.0.0.1:8000/api/v1/health
 Invoke-RestMethod http://127.0.0.1:8000/api/v1/catalog
 ```
 
+### Live web na osobnym originie
+
+API dopuszcza domyślnie tylko `http://localhost:5173` i `http://127.0.0.1:5173`, czyli lokalne originy Vite. Dla innej konfiguracji ustaw `TERRA_ANALOG_CORS_ORIGINS` na rozdzieloną przecinkami listę dokładnych originów aplikacji web (schemat i host z opcjonalnym portem, bez ścieżki); wildcardy, cookies i credentials są wyłączone. Niezdefiniowana zmienna zachowuje domyślne originy lokalne, a jawnie pusta lista wyłącza dostęp CORS.
+
+Uruchom API w pierwszym terminalu:
+
+```powershell
+uv run --locked python -m uvicorn apps.api.main:app --reload
+```
+
+W drugim terminalu, w katalogu `apps/web`, wskaż API i uruchom Vite:
+
+```powershell
+$env:VITE_API_BASE_URL = "http://127.0.0.1:8000"
+npm run dev
+```
+
+Jeśli web jest wdrożony pod innym adresem, ustaw `TERRA_ANALOG_CORS_ORIGINS` po stronie API na dokładny origin web, np. `https://demo.example`; po stronie web ustaw `VITE_API_BASE_URL` na origin API. Nie umieszczaj ścieżki ani końcowego ukośnika w żadnej z tych wartości. CORS jest ograniczeniem dostępu z przeglądarki i nie uwierzytelnia API.
+
 Health sprawdza rozmiar i SHA-256 trzech śledzonych pakietów K-005. Zwraca `dataset_ready: true`, gdy lokalne dane przechodzą kontrolę. `dataset_version` pozostaje `null`, ponieważ istnieją trzy niezależne, niemieszane wersje regionalne.
 
 ## Obsługiwane dane i zakres
