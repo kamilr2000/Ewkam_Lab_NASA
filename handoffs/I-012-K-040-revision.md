@@ -23,13 +23,13 @@ Previous review ref: `3a7a313960a713c168f31caf63eaf83bef097c6e`; K-040 returned 
 
 ## Checks
 
-Exact disclosure correction ref: `4585d80a42b6106e6e35db3bb99449d53625c20d` (`docs(I-012): refresh disclosure review state`). The commit updates `docs/AI_USAGE.md`, `docs/ai-usage.json`, the I-012 card instructions/history and the historical K-038 handoff. It does not change fixture data or scientific measurements.
+Exact disclosure correction ref: `57c36d1c7d69c40ab14b97037238345224cf406b` (`docs(I-012): reflect current review status`), preceded by content correction `4585d80a42b6106e6e35db3bb99449d53625c20d`. The current ref updates `docs/AI_USAGE.md` and `docs/ai-usage.json` to record I-012 as in review with K-043 assigned. The preceding content correction also updates the I-012 card instructions/history and the historical K-038 handoff. No fixture data or scientific measurements changed.
 
 Checks on this correction:
 
-- `python tools/check_planning.py` — passed (170 Markdown, 40 JSON, 83 task cards, acyclic dependencies, five synthetic cases).
+- `python tools/check_planning.py` — passed (171 Markdown, 40 JSON, 84 task cards, acyclic dependencies, five synthetic cases).
 - `python -m json.tool docs/ai-usage.json` — valid JSON.
 - Fixture audit — all 14 listed paths exist; `is_synthetic: true` is present in 12/14 and `ai_assisted: true` in 1/14; `generated_media` is empty and `measurements_generated_by_ai` is false.
 - `git diff --check` — clean.
 
-The review will be requested from Kamil on exact ref `4585d80a42b6106e6e35db3bb99449d53625c20d` after publishing the correction. I-012 remains `in_progress` until re-review and integration.
+The review is requested from Kamil on exact ref `57c36d1c7d69c40ab14b97037238345224cf406b`. I-012 is `review` on `origin/main`; it must pass K-043 and integrate before it can be marked `done`.
