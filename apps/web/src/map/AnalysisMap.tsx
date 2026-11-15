@@ -323,6 +323,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         if (pixelsRef.current.has(pixel.pixel_id)) onSelectPixelRef.current(pixel.pixel_id)
       })
       const marker = new Marker({ element, anchor: 'center' }).setLngLat([longitude, latitude]).addTo(map)
+      if (pixel.pixel_id === selectedPixelId) marker.getElement().classList.add('is-selected-pixel-marker')
       markersRef.current.set(pixel.pixel_id, marker)
     })
     return () => {
