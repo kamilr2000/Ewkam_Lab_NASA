@@ -353,6 +353,30 @@ def _grid_quality_summary(
     window_valid_fraction: np.ndarray,
 ) -> dict[str, Any]:
     window_fraction = window_valid_fraction[region_mask]
+    window_below_minimum = region_mask & (window_valid_fraction < MIN_WINDOW_VALID_FRACTION)
+    central_difference_support_valid = np.zeros_like(source_valid, dtype=bool)
+    central_difference_support_valid[1:-1, 1:-1] = (
+        source_valid[1:-1, 1:-1]
+        & source_valid[1:-1, :-2]
+        & source_valid[1:-1, 2:]
+        & source_valid[:-2, 1:-1]
+        & source_valid[2:, 1:-1]
+    )
+    feature_missing_reasons: dict[str, dict[str, int]] = {}
+    for feature_id, feature_grid in feature_grids.items():
+        missing = region_mask & ~np.isfinite(feature_grid)
+        if feature_id == "slope_deg":
+            central_support_missing = missing & ~central_difference_support_valid
+            feature_missing_reasons[feature_id] = {
+                "central_difference_source_support_incomplete": int(np.count_nonzero(central_support_missing)),
+                "other_unavailable": int(np.count_nonzero(missing & central_difference_support_valid)),
+            }
+        else:
+            window_support_missing = missing & window_below_minimum
+            feature_missing_reasons[feature_id] = {
+                "window_below_required_valid_fraction": int(np.count_nonzero(window_support_missing)),
+                "other_unavailable": int(np.count_nonzero(missing & ~window_below_minimum)),
+            }
     return {
         "candidate_cell_count": int(np.count_nonzero(region_mask)),
         "candidate_cells_without_valid_2km_source_or_quality_value": int(
@@ -366,6 +390,7 @@ def _grid_quality_summary(
             feature_id: int(np.count_nonzero(~np.isfinite(feature_grid[region_mask])))
             for feature_id, feature_grid in feature_grids.items()
         },
+        "feature_missing_cell_reason_count": feature_missing_reasons,
         "feature_window_valid_source_fraction_by_candidate_cell": {
             "minimum": float(np.nanmin(window_fraction)),
             "p01": float(np.nanpercentile(window_fraction, 1)),
