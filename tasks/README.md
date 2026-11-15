@@ -122,11 +122,12 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-047 — Oceń wykonalność porównywalnej warstwy termicznej](K-047.md), Kamil, P1: pobierz małe próbki Ziemi, Marsa i Księżyca, zmierz pokrycie/QA i rozstrzygnij `GO`/`NO-GO` dla porównywalnej cechy przed K-010.
 - [K-048 — Re-review widoczności hotspotu i legendy E-004](K-048.md), Kamil, P0: sprawdź exact follow-up PR #83, marker wybranego hotspotu, mobilny HUD, stałość rankingu po zoomie i zakres twierdzeń o biegunach.
 - [K-049 — Re-review aktualnego snapshotu macierzy submission](K-049.md), Kamil, P1: zweryfikuj exact PR #50 head, odświeżone statusy/refy i granice twierdzeń S03 po K-046.
+- [K-050 — Re-review korekty snapshotu E-025 po K-049](K-050.md), Kamil, P1: sprawdź aktualne refy E-021, zakończony K-048, granice S03 i synchroniczność PR #50 dla exact matrix ref `3b219556`.
 - [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-050, E-033, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-051, E-033, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
