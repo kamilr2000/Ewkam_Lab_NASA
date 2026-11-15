@@ -112,10 +112,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-028 — Uaktualnij ujawnienie AI po wdrożeniu API](E-028.md), Ewelina, P0: po K-007 i I-013 zsynchronizuj Markdown/JSON disclosure z rzeczywistym API i jego ograniczeniami.
 - [K-041 — Dopasuj typy requestu API do JSON Schema](K-041.md), Kamil, P2: odrzuć string/boolean coercion w wagach i `top_k` zgodnie z kontraktem v1; follow-up z E-027.
 - [K-042 — Pilot globalnej siatki i pipeline'u](K-042.md), Kamil, P0: zmierz rzeczywiste zachowanie skali, źródła, maski i kafelkowego przetwarzania przed pełnym przebiegiem K-008; może ruszyć równolegle z review regionalnego API.
+- [K-043 — Re-review bieżącego disclosure I-012 po K-040](K-043.md), Kamil, P0: niezależnie sprawdź poprawione refy/statusy K-005, E-021, rejestru AI/SI i granic twierdzeń w PR #46.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-043, E-029, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-044, E-029, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
