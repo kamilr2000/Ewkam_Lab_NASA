@@ -1,5 +1,7 @@
 # I-012 — korekta po K-038
 
+> Historyczny snapshot sprzed K-040 i świeżego render review E-021. Bieżący stan oraz poprawki po K-040 są w [handoffie I-012/K-040](I-012-K-040-revision.md).
+
 Data: 2026-11-15
 
 Właścicielka: Ewelina
@@ -9,7 +11,7 @@ Właścicielka: Ewelina
 ## Korekty disclosure
 
 - E-021: karta ma `in_progress`, a PR #35 head `dbf341ce44f85ada6b2bf6770d2751740361da37`. K-037 pozostawiło P1 dla aktualnych pomiarów 320/375/390/780/782/1150/1151 px, inspekcji przycięć/nakładania, fokusu 320 px oraz zrzutów lub odtwarzalnego dowodu. Historyczne 782 px nie dowodzi bieżącego renderu. PR #35 bazuje teraz na `origin/main` `5273ca1008aa87c339fb6ef864d80ffe307c893c` i GitHub zgłasza `mergeable: true`; po tej synchronizacji testy 40/40 i build/typecheck przechodzą, ale nowych dowodów renderu nadal brak.
-- K-005: PR #44 scalono jako `1fa00555a00f695afa947abd205104000d819f4a`, a karta w `origin/main` ma teraz `status: done` (commit statusu `7deddad9f992ef69c13248195747349a283ce54b`). E-026 zatwierdziło metadata correction ref `d3b880cacbbdf339d078a2fbedbe8fd373db7bef` (review `5910439313`), a PR opisuje wymuszony rebuild `--force`. Disclosure opisuje zarówno integrację, jak i bieżący status karty.
+- K-005: PR #44 scalono jako `1fa00555a00f695afa947abd205104000d819f4a`, a karta w `origin/main` ma teraz `status: done` (commit statusu `25b10663baa984137a7c5e9effc8084188a9a2bb`). E-026 zatwierdziło metadata correction ref `d3b880cacbbdf339d078a2fbedbe8fd373db7bef` (review `5910439313`), a PR opisuje wymuszony rebuild `--force`. Disclosure opisuje zarówno integrację, jak i bieżący status karty.
 - E-019: E-022 opublikowało APPROVED dla syntetycznego zakresu w raporcie PR #34; raport PR #34 i implementacyjny PR #28 pozostają otwarte, więc E-019 nie jest oznaczone jako zintegrowane.
 - I-012: po K-038 `REQUEST_CHANGES` karta wróciła do `in_progress`; rezerwację `tasks(I-012/K-040): IN PROGRESS` potwierdzono w `origin/main` w `4261b3f3bbc25dd033c4ed6cdcae9549526b7963`. Nowe zadanie K-040 sprawdzi disclosure po korekcie.
 
