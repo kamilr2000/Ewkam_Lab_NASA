@@ -123,6 +123,8 @@ function fitMapToBounds(map: MapLibreMap, bounds: GeographicBounds | null, maxZo
 interface AnalysisMapProps {
   analysis: SearchResponse | null
   mode: DataMode
+  layerVisibility: MapLayerVisibility
+  onLayerVisibilityChange: (layer: keyof MapLayerVisibility, visible: boolean) => void
   pixels: SearchPixel[]
   selectedPixel: SearchPixel | null
   selectedPixelId: string | null
@@ -133,7 +135,7 @@ interface AnalysisMapProps {
   onRetry: () => void
 }
 
-export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, selectedPixelId, zoomRequest, emptyMessage, searchError, onSelectPixel, onRetry }: AnalysisMapProps) {
+export default function AnalysisMap({ analysis, mode, layerVisibility, onLayerVisibilityChange, pixels, selectedPixel, selectedPixelId, zoomRequest, emptyMessage, searchError, onSelectPixel, onRetry }: AnalysisMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const modeRef = useRef(mode)
@@ -147,17 +149,18 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
   const debounceRef = useRef<number | null>(null)
   const firstFitRef = useRef<string | null>(null)
   const lastZoomRequestRef = useRef(0)
+  const layerVisibilityRef = useRef(layerVisibility)
   const [mapReady, setMapReady] = useState(false)
   const [viewportCells, setViewportCells] = useState<SearchMapCell[] | null>(null)
   const [mapError, setMapError] = useState<string | null>(null)
   const [mapLoading, setMapLoading] = useState(false)
   const [rendererError, setRendererError] = useState<string | null>(null)
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
-  const [layerVisibility, setLayerVisibility] = useState<MapLayerVisibility>({ basemap: true, cells: true, markers: true })
 
   modeRef.current = mode
   analysisRef.current = analysis
   onSelectPixelRef.current = onSelectPixel
+  layerVisibilityRef.current = layerVisibility
   pixelsRef.current = new Map(pixels.map((pixel) => [pixel.pixel_id, pixel]))
 
   const displayCells = viewportCells ?? analysis?.map_cells ?? []
@@ -340,6 +343,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
       if (pixel.pixel_id === selectedPixelId) marker.getElement().classList.add('is-selected-pixel-marker')
       markersRef.current.set(pixel.pixel_id, marker)
     })
+    applyLayerVisibility(map, markersRef.current.values(), layerVisibilityRef.current)
     return () => {
       markersRef.current.forEach((marker) => marker.remove())
       markersRef.current.clear()
@@ -351,10 +355,6 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
     if (!mapReady || !map) return
     applyLayerVisibility(map, markersRef.current.values(), layerVisibility)
   }, [layerVisibility, mapReady])
-
-  const setLayerVisible = (layer: keyof MapLayerVisibility, visible: boolean) => {
-    setLayerVisibility((current) => ({ ...current, [layer]: visible }))
-  }
 
   useEffect(() => {
     if (!analysis) {
@@ -413,9 +413,9 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
           </div>
         </div>
         <div className="map-layer-controls" role="group" aria-label="Map layer visibility">
-          <label><input type="checkbox" checked={layerVisibility.basemap} onChange={(event) => setLayerVisible('basemap', event.currentTarget.checked)} />OpenStreetMap</label>
-          <label><input type="checkbox" checked={layerVisibility.cells} onChange={(event) => setLayerVisible('cells', event.currentTarget.checked)} />Result cells</label>
-          <label><input type="checkbox" checked={layerVisibility.markers} onChange={(event) => setLayerVisible('markers', event.currentTarget.checked)} />Ranked markers</label>
+          <label><input type="checkbox" checked={layerVisibility.basemap} onChange={(event) => onLayerVisibilityChange('basemap', event.currentTarget.checked)} />OpenStreetMap</label>
+          <label><input type="checkbox" checked={layerVisibility.cells} onChange={(event) => onLayerVisibilityChange('cells', event.currentTarget.checked)} />Result cells</label>
+          <label><input type="checkbox" checked={layerVisibility.markers} onChange={(event) => onLayerVisibilityChange('markers', event.currentTarget.checked)} />Ranked markers</label>
         </div>
         <div className="map-actions" aria-label="Map controls">
           <button type="button" onClick={() => mapRef.current?.zoomIn({ duration: 220 })} aria-label="Zoom in">+</button>

@@ -15,6 +15,7 @@ import {
   setCriterionWeight,
 } from './controls/criteria'
 import type { CriteriaSettings } from './controls/criteria'
+import { updateMapLayerVisibility, type MapLayerVisibility } from './map/layerVisibility'
 import type {
   CatalogResponse,
   DataMode,
@@ -128,6 +129,7 @@ function App() {
     settings: CriteriaSettings
   } | null>(null)
   const [analysis, setAnalysis] = useState<SearchResponse | null>(null)
+  const [layerVisibility, setLayerVisibility] = useState<MapLayerVisibility>({ basemap: true, cells: true, markers: true })
   const [selectedPixelId, setSelectedPixelId] = useState<string | null>(null)
   const [zoomRequest, setZoomRequest] = useState(0)
   const [catalogLoading, setCatalogLoading] = useState(true)
@@ -601,6 +603,8 @@ function App() {
                 <AnalysisMap
                   analysis={analysis}
                   mode={mode}
+                  layerVisibility={layerVisibility}
+                  onLayerVisibilityChange={(layer, visible) => setLayerVisibility((current) => updateMapLayerVisibility(current, layer, visible))}
                   pixels={resultPixels}
                   selectedPixel={selectedPixel}
                   selectedPixelId={selectedPixelId}

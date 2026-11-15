@@ -68,3 +68,25 @@ test('map visibility switches affect presentation only and preserve independent 
   assert.equal(layoutChanges[6][2], 'visible')
   assert.ok(layoutChanges.slice(7).every(([, , value]) => value === 'none'))
 })
+
+test('new ranked markers inherit a currently hidden marker layer', () => {
+  const recreatedMarkers = [
+    { element: { hidden: false, style: { display: '' } } },
+    { element: { hidden: false, style: { display: '' } } },
+  ]
+  const targets = recreatedMarkers.map(({ element }) => ({ getElement() { return element } }))
+  const map = { setLayoutProperty() {} }
+
+  layerVisibility.applyLayerVisibility(map, targets, { basemap: true, cells: true, markers: false })
+
+  assert.ok(recreatedMarkers.every(({ element }) => element.hidden && element.style.display === 'none'))
+})
+
+test('map layer settings retain independent values across unrelated analysis updates', () => {
+  const initial = { basemap: true, cells: true, markers: true }
+  const afterHidingMarkers = layerVisibility.updateMapLayerVisibility(initial, 'markers', false)
+  const afterHidingCells = layerVisibility.updateMapLayerVisibility(afterHidingMarkers, 'cells', false)
+
+  assert.deepEqual(afterHidingCells, { basemap: true, cells: false, markers: false })
+  assert.deepEqual(initial, { basemap: true, cells: true, markers: true })
+})

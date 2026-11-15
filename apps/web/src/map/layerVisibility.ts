@@ -4,6 +4,14 @@ export interface MapLayerVisibility {
   markers: boolean
 }
 
+export function updateMapLayerVisibility(
+  current: MapLayerVisibility,
+  layer: keyof MapLayerVisibility,
+  visible: boolean,
+): MapLayerVisibility {
+  return { ...current, [layer]: visible }
+}
+
 type MapLayerVisibilityTarget = {
   setLayoutProperty(layerId: string, name: 'visibility', value: 'visible' | 'none'): void
 }
