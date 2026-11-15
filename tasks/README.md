@@ -82,6 +82,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-020 — Odrzucaj odpowiedzi API niespójne z żądaniem](E-020.md), Ewelina, P0: walidacja datasetu i echo query search oraz parametrów bbox/level/limit mapy.
 - [K-021 — Re-review adaptera API po poprawce E-020](K-021.md), Kamil, P0: sprawdzenie dokładnego headu PR #20 i regresji po uwagach K-019.
 - [K-022 — Uzgodnij zakres fixture'u hotspotu z coverage mapy](K-022.md), Kamil, P0: napraw zgodność geometrii scope/bbox, komórek i liczników coverage wykrytą w K-020.
+- [E-022 — Review poprawki zakresu i coverage hotspotu K-022](E-022.md), Ewelina, P0: niezależnie sprawdź geometrię scope/mapy/pikseli, coverage i test regresji na exact ref w PR #28.
 - [K-023 — Review aktualizacji rejestru AI/SI I-011](K-023.md), Kamil, P0: sprawdź aktualność disclosure, źródła K-017 i rozróżnienie syntetycznych fixture'ów w PR #22.
 - [K-024 — Re-review wiązania top-level scope w E-020](K-024.md), Kamil, P0: sprawdź poprawkę scope po P0 findingu K-021 w PR #20.
 - [K-025 — Re-review poprawki rejestru AI/SI I-011](K-025.md), Kamil, P0: potwierdź aktualny stan K-017/E-017, integrację E-003/E-020 i syntetyczne fixture'y w PR #22.
@@ -89,7 +90,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-026, E-022, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-026, E-023, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
