@@ -79,10 +79,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-019 — Mapowy design handoff z hotspotem syntetycznym](E-019.md), Ewelina, P1: udokumentowanie legendy, projekcji i interakcji dla przyszłego E-004, z diagramem opartym wyłącznie na fixture'u.
 - [K-020 — Review map design handoff E-019](K-020.md), Kamil, P1: sprawdzenie semantyki agregatu, hotspotu, legendy i syntetycznych wartości w PR #18.
 - [E-020 — Odrzucaj odpowiedzi API niespójne z żądaniem](E-020.md), Ewelina, P0: walidacja datasetu i echo query search oraz parametrów bbox/level/limit mapy.
+- [K-021 — Re-review adaptera API po poprawce E-020](K-021.md), Kamil, P0: sprawdzenie dokładnego headu PR #20 i regresji po uwagach K-019.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-021, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-022, E-021, I-011; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
