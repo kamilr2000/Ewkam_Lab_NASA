@@ -60,12 +60,12 @@ Update after the implementation commit and PR are published:
 - Implementation branch: `kamil/K-042-global-grid-pilot`
 - Implementation commit: `a2b9c1aa755e1040e624b016f20f98fdc725bdc8`
 - PR #72: [K-042 measured 2 km global grid pilot](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/72)
-- Published branch head before this handoff metadata update: `5c99455a36cb6558e0e9269ef87ca867ebc5450e`; after this update, use the exact branch head recorded on the K-042 card.
+- Initial published branch head before the later handoff/status updates: `5c99455a36cb6558e0e9269ef87ca867ebc5450e`; the current synchronized base and PR head are recorded in the latest PR #72 metadata and the sync note below.
 - `python -m pytest pipeline/tests contracts/tests -q` using the project `.venv`: 50 passed in 2.65 s; the pilot and K-005 feature regression subset: 10 passed in 1.45 s.
 - `python tools/check_planning.py`: passed (168 Markdown files, 42 JSON files, 84 task cards; acyclic dependencies).
 - `git diff --check`: passed. All four derived CSV gzip files match their manifest SHA-256 and byte sizes; report totals are 16,384 candidates and 13,912 eligible.
 - An additional full-suite run stalled at the existing first API test `apps/api/tests/test_health.py::test_health_reports_api_ready_and_dataset_unavailable` for more than 30 seconds and was interrupted. This did not block the pipeline and contract test suites above.
-- Independent review: E-029, owner Ewelina
+- Independent review: E-029 reported a clean-clone downloader defect; E-030 is the re-review of the correction, owned by Ewelina.
 
 ## Follow-up after E-029 — clean-clone source download
 
@@ -73,4 +73,8 @@ E-029 reported that `download_public_file()` tried to open a `.part` file before
 
 The fix was then run in a fresh, separate Git clone at branch head `93e27b441da2c871ab865bff7ce1e5b4cd300e3b`, which matched the pushed PR #72 branch. `data/raw/k042` was absent before the run. `uv run --locked --group data python -m pipeline.download_k042_sources` downloaded all eight pinned ETOPO/GSHHG inputs, verified each against the manifest, and extracted GSHHG without a manually created directory. `uv run --locked --group data python -m pipeline.download_k042_sources --verify-only` then passed on the same clone. Exact source sizes and hashes are in the [independent E-029 report](E-029-review-K-042.md); no Earthdata token was needed.
 
-After synchronizing current main, the code review ref is `935fb086ce874eb89b7ed9342ea8f7be4f458bda`; this sync added only E-025 review-status documentation and did not change the downloader. On this updated tree, `uv run --locked --group data --group dev python -m pytest pipeline/tests contracts/tests -q` passed 51 tests, `python tools/check_planning.py` passed (176 Markdown, 42 JSON, 89 task cards), and `git diff --check` passed. E-030 is the independent review of this fix. K-042 remains unintegrated and still does not claim a global feature build, coverage proof, or ranking.
+### Synchronization after K-022 integration
+
+The K-042 branch was synchronized with `origin/main` at `a36e045ebfa97d0e1c3c9d98d296e4ff944f73e3` by merge commit `907295f1d1f40a5943fb1066c5b0548974c0036f`. The exact implementation/fix ref for E-030 remains `935fb086ce874eb89b7ed9342ea8f7be4f458bda`; synchronization did not change K-042's code, manifest, report or derived pilot tables.
+
+On the synchronized tree, `python -m pipeline.download_k042_sources --verify-only` verified all eight pinned ETOPO/GSHHG inputs by size and SHA-256. `python -m pytest pipeline/tests contracts/tests -q` passed 53 tests in 1.58 s; `python tools/check_planning.py` passed (188 Markdown files, 44 JSON files, 96 cards, acyclic dependencies, 5 synthetic cases); `git diff --check origin/main...HEAD` passed. The original measured pilot remains four complete tiles, 16,384 candidates and 13,912 eligible cells. E-030 can begin after Ewelina publishes her own reservation. K-042 is still not integrated and does not claim a full global build, complete coverage or ranking.
