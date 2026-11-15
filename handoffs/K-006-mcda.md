@@ -7,7 +7,7 @@
 - Repozytorium i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-006-mcda-ranking`
 - Rezerwacja: `c04425e262460792a07678c95d8cfd2b41f44de4` jest w `origin/main`.
 - Implementacja: `5ade37c9bc987a3cfb1087b334dd650c81630dad`; zsynchronizowany head PR przed handoffem: `8516281373145547bbf46949b74a3e497e73f9be`.
-- Rezultat: E-018 zatwierdziło PR #15 dla silnika scoringowego po niezależnym przeliczeniu przykładu i 71 zaliczonych testach; zatwierdzenie dotyczy dokładnego head `aa464eb33cc023e63bd24f2f6b60a2d5a69b7fcf`. Raport: [review E-018](E-018-review-K-006.md). PR #15 nadal oczekuje na integrację z `main`.
+- Rezultat: E-018 zatwierdziło PR #15 dla silnika scoringowego po niezależnym przeliczeniu przykładu i 71 zaliczonych testach; zatwierdzenie dotyczy dokładnego head `aa464eb33cc023e63bd24f2f6b60a2d5a69b7fcf`. Raport: [review E-018](E-018-review-K-006.md). PR #15 scalono do `origin/main` merge SHA `9208d8af8c7720a545d189abd61b7c3794d07c56`; implementacja scoringu nie zmieniła się od zatwierdzonego SHA.
 
 ## Co implementuje silnik
 
