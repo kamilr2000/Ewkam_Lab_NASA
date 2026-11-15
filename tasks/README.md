@@ -126,7 +126,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-052 — Połącz web z regionalnym API przez jawne CORS](K-052.md), Kamil, P0: odblokuj żądania z osobnego originu przeglądarki do prawdziwego regionalnego API na potrzeby E-006.
 - [K-051 — Odbiór regionalnego Live MVP E-006](K-051.md), Kamil, P0: sprawdź exact ref PR #96 pod kątem zgodności profile/dataset/scope, braku fallbacku, nulli, hotspotu i spójności analysis ID.
 - [K-053 — Szybko zweryfikuj opis jury i demo E-010](K-053.md), Kamil, P0: sprawdź źródła, liczby, znaczenie wyniku i twierdzenia w PR #99.
-- [K-054 — Review warstwy OSM na zaktualizowanym E-006](K-054.md), Kamil, P0: sprawdź exact head 66baced PR #96, atrybucję, przełączniki, hotspot i spójność live danych; odróżnij test API od niezweryfikowanego renderu kafli.
+- [K-054 — Review warstwy OSM na zaktualizowanym E-006](K-054.md), Kamil, P0: sprawdź exact head 8ee541a PR #96, atrybucję, przełączniki, hotspot i spójność live danych; odróżnij test API od niezweryfikowanego renderu kafli.
 - [K-055 — Weryfikacja Live demo E-035 w przeglądarce](K-055.md), Kamil, P0: po K-054 sprawdź prawdziwe Mars/Księżyc, kafle OSM, atrybucję, przełączniki, hotspot i świeże analysis ID; udokumentuj rzeczywiste obserwacje.
 - [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
 - [E-033 — Review ścisłej walidacji wejściowych typów liczbowych K-041](E-033.md), Ewelina, P2: sprawdź exact PR #90, zgodność Draft 2020-12, brak coercion i obsługę integralnego `top_k: 2.0`.
