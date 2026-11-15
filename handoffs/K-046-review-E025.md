@@ -5,9 +5,9 @@
 - Data i strefa: 2026-11-15, Europe/Warsaw
 - Zadanie / PR / commit: K-046; oceniony E-025 exact ref `be69b7c4356f0b60787325bfdb0338dd516a8280`; PR #50, bieżący head `31e27b6cefc77df6e83f85439937647df3e05518`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`; `kamil/K-046-review-E025-followup`
-- Wysłane SHA i URL PR: review `REQUEST_CHANGES` #5911341247 na [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50); korekta macierzy przypisana w [E-031](../tasks/E-031.md)
-- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-046 jest w `origin/main` jako `7a5ebe324c4837186891140a1235f866c212699b`; raport publikowany w PR z tej gałęzi
-- Lokalne niewysłane zmiany i powód, jeśli występują: raport i karta E-031 są w przygotowaniu na gałęzi K-046 do PR integracyjnego
+- Wysłane SHA i URL PR: commit `6c283b82bb1912c9e3c5881210438cc58510c664`, [PR #80](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/80); review `REQUEST_CHANGES` #5911341247 na [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50); korekta przypisana w [E-031](../tasks/E-031.md)
+- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-046 jest w `origin/main` jako `7a5ebe324c4837186891140a1235f866c212699b`; rezultat opublikowany na gałęzi PR #80, oczekuje na integrację
+- Lokalne niewysłane zmiany i powód, jeśli występują: aktualizacja handoffu do commita `6c283b8` jest lokalna do wysłania na gałąź PR #80
 - Stan: wymaga poprawki E-025 przez E-031 i późniejszego review exact refu
 
 ## Co jest dostępne
