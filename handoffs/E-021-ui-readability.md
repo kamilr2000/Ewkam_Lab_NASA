@@ -1,6 +1,6 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. Ostatni opublikowany przyrost CSS: `94ba5ea41f505afff3bd063bb6aeff2046a364fa`. Brak PR i `review_ref`; nie jest to jeszcze gotowe do odbioru.
+Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. CSS po integracji zmian z `origin/main` znajduje się w merge commicie `a3f8fde`; PR raportujący i `review_ref` zostaną dopisane po publikacji dowodów.
 
 ## Zmiana
 
@@ -25,26 +25,43 @@ Kontrast policzono ze względnej luminancji sRGB. Dla mapy użyto konserwatywneg
 
 Sprawdzono `npm run build` w `apps/web/` — typecheck i produkcyjny build Vite przechodzą. `git diff --check` przechodzi.
 
+Po synchronizacji E-005 doszły etykiety i opisy w syntetycznym przepływie wyników. Podniesiono je do minimum 9 px, a dwa kolory poniżej 4.5:1 na ich rzeczywistych ciemnych panelach rozjaśniono. Dodatkowe pary sprawdzono ze złożonym tłem wynikającym z CSS; wszystkie mają co najmniej 4.68:1:
+
+| Dodatkowy element | Kolor tekstu / złożone tło | Kontrast |
+|---|---|---:|
+| Etykieta pola pomocniczego | `#81918a` / `#172122` | 4.97:1 |
+| Opis banera danych syntetycznych | `#93a199` / `#202a26` | 5.49:1 |
+| Etykiety metryk wyniku | `#84938b` / `#121d1d` | 5.35:1 |
+| Identyfikator analizy | `#82918b` / `#121d1d` | 5.23:1 |
+| Opis w rankingu | `#84938b` / `#172122` | 5.11:1 |
+| Etykiety metadanych piksela | `#7d8d84` / `#172122` | 4.71:1 |
+| Tekst źródła cechy | `#82918b` / `#1a2425` | 4.82:1 |
+| Znacznik pustego stanu | `#7e8c85` / `#172122` | 4.68:1 |
+
+Sprawdzenie deklaracji fontów w aktualnym `styles.css` nie znalazło tekstu poniżej 9 px. Tabela dotyczy tekstu; nie jest audytem kontrastu wszystkich ikon, obramowań i stanów interaktywnych.
+
 ## Responsywność i fokus
 
-Produkcyjny build Vite oglądano w Chrome DevTools responsive mode pod lokalnym preview na `http://127.0.0.1:4174/`. Pomiar z poziomu strony zwracał identyczne `innerWidth`, `documentElement.clientWidth`, `documentElement.scrollWidth` i `body.scrollWidth` dla:
+Produkcyjny build Vite obejrzano w Chrome DevTools responsive mode z preview `http://localhost:4173/`. Z konsoli strony odczytano `innerWidth`, `document.documentElement.clientWidth`, `document.documentElement.scrollWidth` i `document.body.scrollWidth`:
 
-| Żądana szerokość | Faktyczna szerokość viewportu | `scrollWidth` / `clientWidth` |
-|---:|---:|---:|
-| 320 | 320 | 320 / 320 |
-| 375 | 375 | 375 / 375 |
-| 390 | 390 | 390 / 390 |
-| 780 | 780 | 780 / 780 |
-| 781 | 782 | 782 / 782 |
-| 1150 | 1150 | 1150 / 1150 |
-| 1151 | 1151 | 1151 / 1151 |
+| Żądana szerokość | Faktyczny `innerWidth` | `clientWidth` | `scrollWidth` / `body.scrollWidth` |
+|---:|---:|---:|---:|
+| 320 | 320 | 320 | 320 / 320 |
+| 375 | 375 | 375 | 375 / 375 |
+| 390 | 390 | 390 | 390 / 390 |
+| 780 | 780 | 780 | 780 / 780 |
+| 781 | 782 | 782 | 782 / 782 |
+| 1150 | 1150 | 1150 | 1150 / 1150 |
+| 1151 | 1151 | 1151 | 1151 / 1151 |
 
-Przy 781 px emulator Chrome zaokrąglił rozmiar viewportu do 782 px, dlatego punktu 781 px nie uznajemy za dokładnie zweryfikowany. Zrzut w szerokości 320 px pokazał układ mobilny bez oczywistego poziomego przycięcia lub nachodzenia tekstu. Dla pozostałych szerokości nie zapisano zrzutów ani pełnego przeglądu wizualnego. Nie wymuszono wariantu klasycznego paska przewijania.
+Na każdym faktycznie zmierzonym viewportcie `scrollWidth == clientWidth`; oględziny renderu nie pokazały oczywistego przycięcia poziomego ani nachodzenia etykiet. Przy żądaniu 781 px pole Chrome przyjęło 781, ale strona raportowała 782 px. Ten punkt nie jest dokładnym pomiarem 781 px; 782 px pozostaje po tej samej stronie progu media query 780 px.
 
-W CSS pozostaje `:focus-visible` z obrysem `2px solid var(--accent)` i offsetem 3 px. Próba przejścia klawiaturą w przeglądarce nie potwierdziła, że fokus dotarł do elementu strony; widoczny fokus nie jest więc jeszcze zweryfikowany. Przy kolejnej próbie należy użyć preview, w którym można dokładnie ustawić viewport 781 px i skierować klawiaturę do treści strony.
+Przy 320 px kliknięto selektor „Data source”, zamknięto menu klawiszem Escape i przejście Tab przeniosło fokus na „Fixture scenario” z widocznym obrysem `:focus-visible`. Test wykonano na produkcyjnym preview.
 
 ## Ograniczenia
 
-Pomiary overflow pochodzą z produkcyjnego renderu, ale same w sobie nie wykrywają każdego rodzaju obcięcia tekstu ani nakładania elementów. Automatyzacja przeglądarki została przerwana przy otwieraniu nowej karty, gdy nie mogła jednoznacznie ustalić bieżącego URL; dlatego fokus i pełny przegląd wizualny pozostają otwarte. Do odbioru E-021 trzeba powtórzyć punkt 781 px, obejrzeć layout w każdej zadanej szerokości, sprawdzić wariant z klasycznym paskiem przewijania i udokumentować widoczny fokus klawiatury.
+Chrome DevTools nie udostępnił dokładnego `innerWidth` 781 px, więc raport zachowuje rzeczywisty wynik 782 px zamiast deklarować sprawdzenie brakującego piksela. Nie wymuszono osobno nieprzezroczystego, klasycznego paska przewijania; pomiar wykonano przy pasku dostępnym w bieżącej konfiguracji Chrome/Windows. Oględziny oraz pomiar szerokości nie zastępują pełnego audytu dostępności E-008 ani sprawdzenia na fizycznym telefonie.
+
+Podczas podglądu konsola zgłosiła żądanie `favicon.ico` z odpowiedzią 404. Nie wpływa ono na pomiary układu i nie należy do zakresu E-021; wymaga osobnej decyzji o brakującym zasobie.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
