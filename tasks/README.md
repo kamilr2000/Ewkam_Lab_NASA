@@ -127,6 +127,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-051 — Odbiór regionalnego Live MVP E-006](K-051.md), Kamil, P0: sprawdź exact ref PR #96 pod kątem zgodności profile/dataset/scope, braku fallbacku, nulli, hotspotu i spójności analysis ID.
 - [K-053 — Szybko zweryfikuj opis jury i demo E-010](K-053.md), Kamil, P0: sprawdź źródła, liczby, znaczenie wyniku i twierdzenia w PR #99.
 - [K-054 — Review warstwy OSM na zaktualizowanym E-006](K-054.md), Kamil, P0: sprawdź exact head d1ebca8 PR #96, atrybucję, przełączniki, hotspot i spójność live danych; odróżnij test API od niezweryfikowanego renderu kafli.
+- [K-055 — Re-review poprawki widoczności markerów E-035](K-055.md), Kamil, P0: po K-054 sprawdź exact code ref 66baced, niezależne przełączniki i test regresyjny w PR #96.
 - [E-032 — Niezależny review wykonalności danych termicznych K-047](E-032.md), Ewelina, P1: sprawdź dokładny head PR #84, metody, próbki, jednostki, QA i uzasadnienie `NO-GO` przed integracją.
 - [E-033 — Review ścisłej walidacji wejściowych typów liczbowych K-041](E-033.md), Ewelina, P2: sprawdź exact PR #90, zgodność Draft 2020-12, brak coercion i obsługę integralnego `top_k: 2.0`.
 - [E-035 — Podkład OSM i przełączane warstwy wyniku](E-035.md), Ewelina, P0: pierwsze zadanie demo po bieżącej aktywnej pracy; dodaj czytelny OSM basemap z atrybucją i przełączniki mapy, zachowaj wybór pomiarów oraz ponowne przeliczenie.
@@ -134,7 +135,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-055, E-036, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-056, E-036, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
