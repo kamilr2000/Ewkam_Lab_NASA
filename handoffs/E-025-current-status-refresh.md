@@ -3,7 +3,7 @@
 - From: Ewelina, `codex-ewelina-e025-k045-revision`
 - To: Kamil
 - Date: 2026-11-15
-- Task / PR / prior matrix commit: E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50) / `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb`; updated exact matrix ref is recorded in `tasks/E-025.md` after publication.
+- Task / PR / exact matrix commit: E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50) / `343df614dbadccef0dbf4eb3a66c0099f9313662`.
 - Repository / branch: `kamilr2000/Ewkam_Lab_NASA`, `ewelina/E-025-submission-evidence-matrix`
 - Scope: internal English `submission/evidence-matrix.md`; status refresh after K-045 requested changes to the previous exact matrix ref.
 - Integrated base inspected: `origin/main` at `5ab319437d7ec3994c77f1bc61b4664022f441d0`.
@@ -22,4 +22,4 @@
 
 The planning check, local-link audit, and `git diff --check` are recorded after they pass on the published branch. This is a documentation refresh only; no application run, new scientific processing, public-link availability check, or submission action was performed.
 
-K-045 reviewed prior matrix commit `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` and issued `REQUEST_CHANGES` review `5911168157`, requiring K-042 to be added as an unintegrated pilot and the integrated-base snapshot to be refreshed. E-025 correction is reserved on `origin/main` as `6b1bbece8989d299fc46dc181740e493cb5cd2df`. The new matrix ref and ready K-046 review ref will be recorded on the task cards after this branch is published; K-046 is the one required re-review for the corrected scope.
+K-045 reviewed prior matrix commit `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` and issued `REQUEST_CHANGES` review `5911168157`, requiring K-042 to be added as an unintegrated pilot and the integrated-base snapshot to be refreshed. E-025 correction is reserved on `origin/main` as `6b1bbece8989d299fc46dc181740e493cb5cd2df`. The refreshed matrix is exact commit `343df614dbadccef0dbf4eb3a66c0099f9313662` and points to the inspected integrated snapshot `5ab319437d7ec3994c77f1bc61b4664022f441d0`. It adds K-042's limited pilot evidence, records E-029's clean-clone P1, and preserves the no-global-ranking boundary. K-046 is the one required re-review for this corrected scope; its `review_ref` will be set on `origin/main` alongside E-025's transition to `review`.
