@@ -2,6 +2,8 @@
 
 **Decyzja:** `REQUEST_CHANGES` dla PR #35. Re-review dotyczy exact `review_ref` `874d41ab92290146f0a9f9484a75f5a8f15c30a8`. W chwili sprawdzenia bieżący head PR #35 to `5c180e0a339e9667745d689a4b2ab7fd3284755e`; plik `apps/web/src/styles.css` jest identyczny z wersją w `review_ref`.
 
+Opublikowane review GitHub: [5910307090](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/35#pullrequestreview-5910307090). W chwili przeglądu PR #35 zgłaszał konflikt z `origin/main` (`07243a4bfbed71edcd991fafedb7ea05f21d6b14`); jego właścicielka musi zsynchronizować branch przed scaleniem. Zmiana reviewed scope na nowym headzie wymaga ponownego review.
+
 ## Sprawdzenia exact CSS
 
 - Teksty kontrolek kryteriów mają co najmniej 9 px również w mobilnym nadpisaniu do 390 px: nazwa 10 px, jednostka i stan 9 px, etykieta i znormalizowany udział wagi 9 px. Wyszukiwanie deklaracji `font-size`/`font` poniżej 9 px w exact `styles.css` nie zwróciło wyników.
@@ -33,4 +35,4 @@ Jawnie zmienione kryterium 780/782 px jest uczciwe i użyteczne: 780 px sprawdza
 
 ## Następny krok
 
-PR #35 pozostaje własnością Eweliny. Po dodaniu pomiarów oraz zrzutów z aktualnego renderu poproś o re-review; do tego czasu kryterium responsywności/fokusu pozostaje otwarte i E-021 nie powinno przejść do `done`.
+PR #35 pozostaje własnością Eweliny. Po synchronizacji konfliktu oraz dodaniu pomiarów i zrzutów z aktualnego renderu poproś o re-review; do tego czasu kryterium responsywności/fokusu pozostaje otwarte i E-021 nie powinno przejść do `done`.
