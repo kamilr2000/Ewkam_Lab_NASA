@@ -119,10 +119,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-045 — Re-review aktualnych statusów w macierzy E-025](K-045.md), Kamil, P1: potwierdź stany E-004/E-021/K-007/I-012, regionalne dowody, S03 i bezpieczne granice twierdzeń w PR #50.
 - [K-046 — Re-review pilota K-042 w macierzy E-025](K-046.md), Kamil, P1: potwierdź aktualny snapshot, status otwartego pilota K-042, jego ograniczenia i poprawkę po K-045 w PR #50.
 - [E-031 — Odśwież aktualny snapshot macierzy submission](E-031.md), Ewelina, P1: zaktualizuj statusy K-042/E-030 i E-004 oraz exact refy PR #72 w macierzy i handoffie E-025 po K-046.
+- [K-047 — Oceń wykonalność porównywalnej warstwy termicznej](K-047.md), Kamil, P1: pobierz małe próbki Ziemi, Marsa i Księżyca, zmierz pokrycie/QA i rozstrzygnij `GO`/`NO-GO` dla porównywalnej cechy przed K-010.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-047, E-031, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-048, E-032, I-014; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
