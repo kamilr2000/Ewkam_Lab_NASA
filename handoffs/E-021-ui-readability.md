@@ -25,8 +25,26 @@ Kontrast policzono ze względnej luminancji sRGB. Dla mapy użyto konserwatywneg
 
 Sprawdzono `npm run build` w `apps/web/` — typecheck i produkcyjny build Vite przechodzą. `git diff --check` przechodzi.
 
-## Niezweryfikowane
+## Responsywność i fokus
 
-Nie wykonano jeszcze oględzin renderu, fokusu ani pomiarów `scrollWidth <= clientWidth` dla 320/375/390/780/781/1150/1151 px. Próba otwarcia lokalnego podglądu została przerwana przez kontrolę Computer Use, która nie mogła pewnie ustalić URL; niezależne lokalne żądanie HTTP zostało zablokowane przez uprawnienia gniazda w środowisku. Nie ma zrzutów i nie twierdzimy, że układ w tych szerokościach został sprawdzony. Do zamknięcia E-021 potrzebna jest kontrola layoutu i fokusu w dostępnym, zatwierdzonym podglądzie.
+Produkcyjny build Vite oglądano w Chrome DevTools responsive mode pod lokalnym preview na `http://127.0.0.1:4174/`. Pomiar z poziomu strony zwracał identyczne `innerWidth`, `documentElement.clientWidth`, `documentElement.scrollWidth` i `body.scrollWidth` dla:
+
+| Żądana szerokość | Faktyczna szerokość viewportu | `scrollWidth` / `clientWidth` |
+|---:|---:|---:|
+| 320 | 320 | 320 / 320 |
+| 375 | 375 | 375 / 375 |
+| 390 | 390 | 390 / 390 |
+| 780 | 780 | 780 / 780 |
+| 781 | 782 | 782 / 782 |
+| 1150 | 1150 | 1150 / 1150 |
+| 1151 | 1151 | 1151 / 1151 |
+
+Przy 781 px emulator Chrome zaokrąglił rozmiar viewportu do 782 px, dlatego punktu 781 px nie uznajemy za dokładnie zweryfikowany. Zrzut w szerokości 320 px pokazał układ mobilny bez oczywistego poziomego przycięcia lub nachodzenia tekstu. Dla pozostałych szerokości nie zapisano zrzutów ani pełnego przeglądu wizualnego. Nie wymuszono wariantu klasycznego paska przewijania.
+
+W CSS pozostaje `:focus-visible` z obrysem `2px solid var(--accent)` i offsetem 3 px. Próba przejścia klawiaturą w przeglądarce nie potwierdziła, że fokus dotarł do elementu strony; widoczny fokus nie jest więc jeszcze zweryfikowany. Przy kolejnej próbie należy użyć preview, w którym można dokładnie ustawić viewport 781 px i skierować klawiaturę do treści strony.
+
+## Ograniczenia
+
+Pomiary overflow pochodzą z produkcyjnego renderu, ale same w sobie nie wykrywają każdego rodzaju obcięcia tekstu ani nakładania elementów. Automatyzacja przeglądarki została przerwana przy otwieraniu nowej karty, gdy nie mogła jednoznacznie ustalić bieżącego URL; dlatego fokus i pełny przegląd wizualny pozostają otwarte. Do odbioru E-021 trzeba powtórzyć punkt 781 px, obejrzeć layout w każdej zadanej szerokości, sprawdzić wariant z klasycznym paskiem przewijania i udokumentować widoczny fokus klawiatury.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
