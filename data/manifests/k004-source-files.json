@@ -1,0 +1,120 @@
+{
+  "manifest_version": 1,
+  "task_id": "K-004",
+  "accessed_at": "2026-11-15",
+  "description": "Pinned public raw inputs for reproducible Jezero and lunar south-polar profile generation.",
+  "files": [
+    {
+      "dataset_id": "mola-megdr-v2-megt-44n000-128ppd",
+      "filename": "megt44n000hb.img",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megt44n000hb.img",
+      "role": "measurement",
+      "size_bytes": 129761280,
+      "sha256": "14022166079edafc99650f354e5a634e6eb2c2ea544b444c01cd8ee55437df36"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megt-44n000-128ppd",
+      "filename": "megt44n000hb.xml",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megt44n000hb.xml",
+      "role": "pds4_label",
+      "size_bytes": 15513,
+      "sha256": "f6de640ed5603eb03395616214c9a5707c9d49273f699d2cbeec53e93df6bd08"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megt-44n000-128ppd",
+      "filename": "megt44n000hb.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megt44n000hb.lbl",
+      "role": "pds3_label",
+      "size_bytes": 4820,
+      "sha256": "bc624a238ba6d71a770a09f959ead96f1c144970fae435b8ca5e26208b42eec5"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megt-44n000-128ppd",
+      "filename": "megt44n000hb.hdr",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megt44n000hb.hdr",
+      "role": "envi_label",
+      "size_bytes": 1029,
+      "sha256": "4871add22f0e8096281ea6c3b79fc0555a541cf72785e4abe87055e38970d20a"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megc-44n000-128ppd",
+      "filename": "megc44n000hb.img",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megc44n000hb.img",
+      "role": "measurement",
+      "size_bytes": 64880640,
+      "sha256": "cfb4d7e3626106ef4ed2a466eb03a538feed9c163be99e860b7ae8700a8ecab5"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megc-44n000-128ppd",
+      "filename": "megc44n000hb.xml",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megc44n000hb.xml",
+      "role": "pds4_label",
+      "size_bytes": 13859,
+      "sha256": "65e44d550d0117766b9bd52cc5f1d307263fe031767ba57938413c5078bea1f5"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megc-44n000-128ppd",
+      "filename": "megc44n000hb.lbl",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megc44n000hb.lbl",
+      "role": "pds3_label",
+      "size_bytes": 3088,
+      "sha256": "e7bde6960c05e9fc48ff6417ee3e2b12ed271af16ea85294a775a6948d890a1e"
+    },
+    {
+      "dataset_id": "mola-megdr-v2-megc-44n000-128ppd",
+      "filename": "megc44n000hb.hdr",
+      "url": "https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg128/megc44n000hb.hdr",
+      "role": "envi_label",
+      "size_bytes": 1029,
+      "sha256": "4871add22f0e8096281ea6c3b79fc0555a541cf72785e4abe87055e38970d20a"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-adjusted-dem",
+      "filename": "LDEM_80S_80MPP_ADJ.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF",
+      "role": "measurement",
+      "size_bytes": 189158392,
+      "sha256": "82030dcbdd7c4bb0c7d858e9b4b293b9f2cda5a543ba31ec0f42784bd6beee5a"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-adjusted-counts",
+      "filename": "LDEC_80S_80MPP_ADJ.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEC_80S_80MPP_ADJ.TIF",
+      "role": "measurement",
+      "size_bytes": 115657642,
+      "sha256": "7ce73ea46243e7119076cf7bb4ed1d5536328431607fc1f7988d63ef7607cdd8"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-effective-resolution",
+      "filename": "LDEM_80S_80MPP_ADJ_EFFRES.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ_EFFRES.TIF",
+      "role": "quality",
+      "size_bytes": 250228467,
+      "sha256": "7e973835104343f7c10e868e73ca1b0a506879d3eabe8c17c56ed6774a493400"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-height-error",
+      "filename": "LDEM_80S_80MPP_ADJ_ERR.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ_ERR.TIF",
+      "role": "quality",
+      "size_bytes": 254808965,
+      "sha256": "e89306914bb209143f61ba66d341703d75221339424b774c6a1eb3c6c370ffc6"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-adjusted-dem",
+      "filename": "ldem_80s_80m.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/ldem_80s_80m.lbl",
+      "role": "coordinate_metadata",
+      "size_bytes": 4986,
+      "sha256": "107c7558cbf8832e4119d3c8c2b1b272623344275c85378a9b0e03c22876eb33"
+    },
+    {
+      "dataset_id": "lola-pgda-80s-80mpp-adjusted-counts",
+      "filename": "ldec_80s_80m.lbl",
+      "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/ldec_80s_80m.lbl",
+      "role": "coordinate_metadata",
+      "size_bytes": 3815,
+      "sha256": "0b684c268bfe3eb996c6ae752f875c644a1c3aa5e3be148ff986a86b3cac3c38"
+    }
+  ]
+}

@@ -46,7 +46,7 @@ before(async () => {
   server = await createServer({
     configFile: false,
     root: appRoot,
-    server: { middlewareMode: true },
+    server: { middlewareMode: true, hmr: false, ws: false },
     appType: 'custom',
   })
   client = await server.ssrLoadModule('/src/api/client.ts')
