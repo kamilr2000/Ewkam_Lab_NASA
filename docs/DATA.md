@@ -50,6 +50,22 @@ LOLA Product 90 daje 72 580 komórek celu 2 km w czapie 80–90°S, z czego 72 1
 
 W obu profilach ręczna ekstrakcja trzech cech i test długości geograficznej w obie strony przeszły. Szczegółowe zakresy i tolerancje są w [metodzie](METHODOLOGY.md#2-zmierzone-profile-k-004). Są to statystyki dwóch regionów referencyjnych, nie ranking Ziemi. Źródła, DOI, ograniczenia i sumy kontrolne są zapisane w manifestach.
 
+### Regionalne komórki K-005
+
+Odtworzenie: `uv run --locked --group data python pipeline/download_k005_sources.py`, następnie `uv run --locked --group data python pipeline/build_k005_earth_grid.py`. Pobieranie potrzebuje tylko publicznych plików NOAA ETOPO 2022 v1 15″ i GSHHG 2.3.7; nie wymaga Earthdata tokenu. Surowe wejścia i checkpointy pozostają lokalnie w ignorowanych `data/raw/` i `data/processed/`. Trzy małe CSV gzip z komórkami są śledzone w `data/derived/k005-earth-grid/`; ich SHA-256 są zapisane w wersjonowanych manifestach, a zbiorczy raport w `data/reports/k005-earth-grid.json`.
+
+Każdy wiersz CSV jest pojedynczą komórką analityczną: stabilny ID wersji/wiersza/kolumny, środek WGS84, ellipsoidalne pole komórki z narożników UTM, udział maski lądu z 16 próbek, trzy cechy, udziały ważnych próbek i jawna przyczyna wykluczenia. Komórki wybieramy regułą środka w bbox; bufor metryczny nie dodaje kandydatów. GSHHG usuwa próbki oceaniczne ETOPO na natywnej siatce 15″ przed uśrednianiem lądowych wysokości do 2 km w lokalnym UTM; docelowa maska lądu pozostaje niezależną kontrolą. Nachylenie wymaga 9/9 ważnych sąsiadów; nierówność i deniwelacja wymagają co najmniej 73/81 ważnych próbek lądu w kołowym oknie 10 km. Brak DEM pozostaje pustym polem, nigdy zerem. W Atacamie i Himalajach środki kandydatów miały ważną wysokość; na Big Island 134 z 1 854 środków nie miały żadnej lądowej próbki źródłowej, a 151 środków odrzucono jako wodne według docelowej maski.
+
+| AOI i bbox [W, S, E, N] | Komórki | Środek lądu | Kwalifikujące się | Wykluczenia | Mediana nachylenia | Mediana nierówności | Mediana deniwelacji |
+|---|---:|---:|---:|---|---:|---:|---:|
+| Atacama / Andes `[-68.9, -24.9, -68.1, -24.1]` | 1 796 | 1 796 | 1 791 | 5: za mało próbek w oknie | 3,40° | 161,68 m | 858,89 m |
+| Hawaii, Big Island `[-155.9, 19.1, -155.1, 19.9]` | 1 854 | 1 703 | 1 497 | 151: woda; 62: sąsiedztwo nachylenia; 144: okno cechy | 4,63° | 118,99 m | 1 311,74 m |
+| Himalaya `[86.1, 28.1, 86.9, 28.9]` | 1 737 | 1 737 | 1 737 | 0 | 4,58° | 197,48 m | 913,72 m |
+
+To są rozkłady pomiarów topografii na trzech regionalnych wycinkach, nie podobieństwa do Jezero ani południowego bieguna Księżyca i nie ranking analogów. ETOPO 15″ ma nominalny posting ok. 0,42–0,46 km w tych szerokościach; resampling nie oznacza, że źródło rozpoznaje obiekty 2-kilometrowe równie dokładnie wszędzie. Komórki wodne nie są kandydatami; próbki batymetryczne są wykluczane z uśredniania już na źródłowej siatce GSHHG/ETOPO.
+
+Globalny budżet siatki komórkowej 60″ wyliczono z wymiarów 21 600 × 10 800: 233 280 000 komórek, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech float32 cech i 6 065 280 000 B dla modelowanego pełnego stanu komórek. Model partii 64 wierszy z 7 wierszami halo potrzebuje około 208,1 MB tablic roboczych oraz okna źródłowego float32 i maski GSHHG 15″, przed buforami GDAL, PROJ i geometrii. To rachunek kosztu pamięci dla formatu używanego przez ETOPO, nie uruchomiony globalny raster ani pomiar szczytowego RSS lub czasu całego globu. Pełna siatka, bieguny i globalne pokrycie nadal wymagają osobnej bramki.
+
 ### Dowody próbek z K-002
 
 | Produkt | Odczyt próbki | Układ / rozdzielczość | Kontrola jakości |

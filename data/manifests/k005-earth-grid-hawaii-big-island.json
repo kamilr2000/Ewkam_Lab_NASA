@@ -1,0 +1,223 @@
+{
+  "contract_version": "1.0.0",
+  "is_synthetic": false,
+  "dataset_id": "earth-hawaii-big-island-terrain",
+  "dataset_version": "k005-earth-2km-hawaii-big-island-v2",
+  "provider": "Terra Analog, derived from NOAA NCEI ETOPO 2022 with the GSHHG land mask",
+  "role": "earth_search",
+  "body": "earth",
+  "product_version": "K-005 v2 land-masked features; ETOPO_2022_v1 15 arc-second surface",
+  "generated_at": "2026-11-15T10:58:03Z",
+  "sources": [
+    {
+      "source_id": "noaa-etopo-2022",
+      "provider": "NOAA National Centers for Environmental Information",
+      "title": "ETOPO 2022 15 Arc-Second Global Relief Model, surface elevation tiles",
+      "product_version": "ETOPO_2022_v1",
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+      "doi": "https://doi.org/10.25921/fd45-gt74",
+      "citation": "NOAA National Centers for Environmental Information. ETOPO 2022 15 Arc-Second Global Relief Model, surface elevation tiles. https://doi.org/10.25921/fd45-gt74.",
+      "accessed_at": null,
+      "license": {
+        "name": "CC0-1.0",
+        "url": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022"
+      },
+      "role": "Earth surface elevation input. GSHHG ocean/water samples are excluded before area-averaging land heights to the regional metric grid; absolute elevation is not a cross-body scoring feature."
+    },
+    {
+      "source_id": "gshhg-2.3.7",
+      "provider": "Paul Wessel and Walter H. F. Smith, SOEST University of Hawai'i and NOAA",
+      "title": "Global Self-consistent, Hierarchical, High-resolution Geography Database",
+      "product_version": "2.3.7",
+      "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+      "doi": "https://doi.org/10.5281/zenodo.7007502",
+      "citation": "Wessel, P. and W. H. F. Smith. Global Self-consistent, Hierarchical, High-resolution Geography Database (GSHHG), version 2.3.7. https://doi.org/10.5281/zenodo.7007502.",
+      "accessed_at": null,
+      "license": {
+        "name": "LGPL-3.0-or-later",
+        "url": "https://www.soest.hawaii.edu/wessel/gshhg/"
+      },
+      "role": "Independent land/water mask. L1/L3 land, L2/L4 water, L5 excluded, L6 grounded Antarctic land."
+    }
+  ],
+  "files": [
+    {
+      "path": "data/derived/k005-earth-grid/hawaii-big-island/earth-cells.csv.gz",
+      "sha256": "5489e51b4ec4f1a770fe7e7511565de6e5083b4547ebb48d61ada3af0ec4668b",
+      "size_bytes": 64177,
+      "source_id": "noaa-etopo-2022"
+    }
+  ],
+  "temporal_coverage": {
+    "start_date": null,
+    "end_date": null,
+    "missing_reason": "Static terrain surface; no single acquisition interval is provided."
+  },
+  "spatial_coverage": {
+    "coordinate_system_id": "EPSG:4326",
+    "bounds": [
+      -155.9,
+      19.1,
+      -155.1,
+      19.9
+    ],
+    "bounds_order": [
+      "min_x",
+      "min_y",
+      "max_x",
+      "max_y"
+    ],
+    "bounds_unit": "degree",
+    "missing_reason": null,
+    "total_pixels": 1854,
+    "eligible_pixels": 1497,
+    "excluded_by_reason": {
+      "not_land": 151,
+      "dem_nodata": 0,
+      "insufficient_slope_support": 62,
+      "insufficient_window_support": 144
+    },
+    "total_area_km2": 7409.230122143466,
+    "eligible_area_km2": 5982.35610663917
+  },
+  "grid": {
+    "grid_version": "k005-earth-2km-hawaii-big-island-v2",
+    "model_version": "terrain-p0-k005-v2",
+    "cell_id_scheme": "earth:k005-earth-2km-hawaii-big-island-v2:r<zero-based-row>:c<zero-based-column> in the aligned EPSG:32605 grid",
+    "nominal_resolution_m": 2000,
+    "effective_resolution_m": 2000,
+    "resolution_missing_reason": null,
+    "mask_id": "GSHHG-2.3.7 source land-only, target L1-L4-L6 land-center; land fraction sampled at 4x",
+    "vertical_reference": "EGM2008 geoid in source ETOPO; scored features are relative terrain measures."
+  },
+  "measurements": [
+    {
+      "feature_id": "slope_deg",
+      "unit": "degree",
+      "measurement_scale": "ratio",
+      "source_ids": [
+        "noaa-etopo-2022"
+      ]
+    },
+    {
+      "feature_id": "roughness_m",
+      "unit": "m",
+      "measurement_scale": "ratio",
+      "source_ids": [
+        "noaa-etopo-2022"
+      ]
+    },
+    {
+      "feature_id": "relief_m",
+      "unit": "m",
+      "measurement_scale": "ratio",
+      "source_ids": [
+        "noaa-etopo-2022"
+      ]
+    }
+  ],
+  "processing": {
+    "code_version": "sha256:56543c206661c3158999fd442f13a3ebc56e695333da8b2ad01b1e19d8d63829",
+    "processed_at": "2026-11-15T10:58:03Z",
+    "steps": [
+      "Verify input file size and SHA-256 against the pinned K-017 source manifest.",
+      "Rasterize GSHHG L1/L3/L6 as land and L2/L4 as water at the ETOPO source posting; mask ocean and source no-data before area-averaging land heights to the metric grid.",
+      "Rasterize the independent GSHHG hierarchy on the 2,000 m target grid and estimate coastal land fraction from 4x subcell centre samples.",
+      "Retain the centre-based land candidate rule; no bathymetry is used as a land elevation sample.",
+      "Compute slope with metric 2,000 m gradients; compute local-plane roughness and P95-P05 relief in a 10,000 m circular window.",
+      "Retain every AOI cell with stable row/column ID; store unavailable measurements as blank CSV fields with QA reason."
+    ],
+    "parameters": {
+      "aoi_id": "hawaii-big-island",
+      "aoi_label": "Hawaii, Big Island",
+      "aoi_bounds_wgs84": [
+        -155.9,
+        19.1,
+        -155.1,
+        19.9
+      ],
+      "aoi_candidate_rule": "Cell centre is inside the declared regional bbox; margin cells support local windows but are not candidates.",
+      "metric_crs": "EPSG:32605",
+      "grid_transform": [
+        2000.0,
+        0.0,
+        180000.0,
+        0.0,
+        -2000.0,
+        2218000.0
+      ],
+      "grid_bounds_m": [
+        180000,
+        2098000,
+        296000,
+        2218000
+      ],
+      "grid_shape_rows_columns": [
+        60,
+        58
+      ],
+      "nominal_cell_size_m": 2000,
+      "nominal_cell_area_km2": 4.0,
+      "pixel_area_measurement": "WGS84 ellipsoidal polygon area from each cell's four UTM-transformed corners; regional coverage areas sum these pixel areas.",
+      "source_etopo_file": {
+        "filename": "ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/15s/15s_surface_elev_gtif/ETOPO_2022_v1_15s_N30W165_surface.tif",
+        "size_bytes": 22411557,
+        "sha256": "8265ec91d7db7644d227374afe91d23662203a4eb3fd580626b3f7d3d27dc85c",
+        "path": "data/raw/k017/etopo/ETOPO_2022_v1_15s_N30W165_surface.tif"
+      },
+      "source_mask_archive": {
+        "filename": "gshhg-shp-2.3.7.zip",
+        "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+        "size_bytes": 149157845,
+        "sha256": "8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+        "path": "data/raw/k017/gshhg/gshhg-shp-2.3.7.zip"
+      },
+      "source_resolution_arc_seconds": 15,
+      "source_resolution_at_aoi_center_m": {
+        "north_south_approx": 463.05,
+        "east_west_approx": 437.22854495158873
+      },
+      "source_vertical_reference": "EGM2008 geoid",
+      "elevation_resampling": "average of GSHHG land-only source samples; ocean and source no-data are excluded before resampling",
+      "feature_window_shape": "circular",
+      "feature_window_radius_m": 10000,
+      "feature_window_radius_cells": 5,
+      "feature_window_sample_count": 81,
+      "minimum_valid_sample_fraction": 0.9,
+      "minimum_valid_window_samples": 73,
+      "slope_requires_complete_3x3_land_dem_support": true,
+      "land_fraction_supersampling_factor": 4,
+      "nodata_policy": "Missing or non-land samples reduce support; no interpolation or zero fill.",
+      "output_sha256": "5489e51b4ec4f1a770fe7e7511565de6e5083b4547ebb48d61ada3af0ec4668b"
+    }
+  },
+  "quality": {
+    "qa_rules": [
+      "is_land_center is independent of ETOPO elevation and uses GSHHG hierarchy.",
+      "land_fraction_4x is a 4x subcell-centre estimate, not an exact polygon area fraction.",
+      "slope requires all 9 cells in its 3x3 neighbourhood to be land with finite DEM.",
+      "roughness_m and relief_m require at least 73 of 81 expected cells in the 10 km disk to be finite land DEM samples.",
+      "A cell is eligible only when it is centre-land and all three feature values are present.",
+      "Exclusion reasons are mutually exclusive and sum with eligible_pixels to total_pixels.",
+      "Ocean bathymetry is excluded before ETOPO resampling; all unmeasured CSV values are empty strings and zero is never a missing-data sentinel."
+    ],
+    "nodata_convention": "Empty CSV cell plus is_eligible=false and missing_reason; source no-data remains NaN during warp and is never filled.",
+    "interpolation_fraction": 0.0
+  },
+  "limitations": [
+    "This is a set of regional candidate cells, not a global search or proof of a global optimum.",
+    "A local UTM grid is used only within each declared AOI; pixels from different regional grid versions are not mixed into one ranking.",
+    "2 km is the analytical cell and effective output scale; ETOPO source posting is approximately 0.42–0.46 km at these latitudes and aggregation does not add source detail.",
+    "The candidate rule uses cell centres in an AOI bbox, so edge cells can extend outside the bbox; the bbox and rule are explicit.",
+    "The source land mask follows GSHHG polygon centres at the 15 arc-second ETOPO posting; the separate 4x target-cell land fraction can miss sub-500 m islands or narrow coastline features.",
+    "NASADEM's SRTM latitude coverage and its vertical conversion are not used for this ETOPO feature package; NASADEM is an independent validation source in K-017."
+  ],
+  "synthetic_reason": null,
+  "missing_reasons": {
+    "sources[0].accessed_at": "The pinned K-017 source record gives access date '2026-11-14' at date precision only; time of day is unavailable.",
+    "sources[1].accessed_at": "The pinned K-017 source record gives access date '2026-11-14' at date precision only; time of day is unavailable.",
+    "temporal_coverage.start_date": "ETOPO 2022 is a static topographic product; the source manifest does not provide one acquisition date for the regional tile.",
+    "temporal_coverage.end_date": "ETOPO 2022 is a static topographic product; the source manifest does not provide one acquisition date for the regional tile."
+  }
+}
