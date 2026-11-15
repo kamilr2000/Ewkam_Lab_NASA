@@ -28,3 +28,9 @@ Profil Jezero z MOLA MEGDR v2, 128 px/° oraz profil południowej czapy Księży
 - Te kontrole potwierdzają ekstrakcję dwóch zmierzonych obszarów. Nie potwierdzają globalnego rankingu Ziemi, działania pełnego demo ani jednoznaczności analogów.
 
 Szczegółowa metoda, źródła, DOI, wartości i ograniczenia są w `docs/METHODOLOGY.md`, `docs/DATA.md`, `THIRD_PARTY.md` oraz manifeście wyników. Dokładną gałąź i reviewed SHA wskazują K-004 i E-023 po publikacji PR.
+
+## Przekazanie disclosure K-004 do Eweliny
+
+Gałąź K-004 zawierała wpis K-004 w `docs/AI_USAGE.md` i źródłowe manifesty profili w `docs/ai-usage.json`. Przy synchronizacji z najnowszym `origin/main` wystąpił konflikt w tych plikach należących do bieżącego toru I-012. Aby zachować wersję disclosure z main bez nadpisywania aktywnej pracy Eweliny, wpis K-004 został odłożony do aktualizacji przez Ewelinę po integracji profili. Proszę uwzględnić w rejestrze: Codex pomógł przypiąć 14 publicznych plików NASA PDS/PGDA, przygotować downloader i builder profili Jezero oraz księżycowej czapy 80–90°S; wartości obliczył kod z oryginalnych rastrów, AI ich nie wygenerowało ani nie edytowało; E-023 zaakceptowała exact `d9ff76f7d5f3cfd18a55b82def271b9cc35030dc`; wyniki dotyczą dwóch profili regionalnych, nie globalnego rankingu ani zwalidowanego analogu.
+
+Do JSON metadanych należą `data/manifests/k004-source-files.json` i `data/manifests/k004-planetary-profiles.json`. Uaktualnij stan PR #36 i integracji na chwilę wpisu. Właścicielka ścieżek `docs/AI_USAGE.md` / `docs/ai-usage.json`: Ewelina w I-012; nie zmieniałem tych plików w tym PR poza zachowaniem wersji z `origin/main` podczas scalania.
