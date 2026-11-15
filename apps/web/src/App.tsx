@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ApiError, demoScenarios, getCatalog, getProfile, runSearch } from './api/client'
 import { RequestEpoch } from './api/requestEpoch'
+import AnalysisMap from './map/AnalysisMap'
 import type {
   CatalogResponse,
   DataMode,
@@ -75,6 +76,7 @@ function App() {
   const [profile, setProfile] = useState<ProfileResponse | null>(null)
   const [analysis, setAnalysis] = useState<SearchResponse | null>(null)
   const [selectedPixelId, setSelectedPixelId] = useState<string | null>(null)
+  const [zoomRequest, setZoomRequest] = useState(0)
   const [catalogLoading, setCatalogLoading] = useState(true)
   const [profileLoading, setProfileLoading] = useState(false)
   const [searching, setSearching] = useState(false)
@@ -253,6 +255,11 @@ function App() {
     setScenario(nextScenario)
   }
 
+  function selectPixelAndZoom(pixelId: string): void {
+    setSelectedPixelId(pixelId)
+    setZoomRequest((current) => current + 1)
+  }
+
   const profileCatalogEntry = visibleProfiles.find((item) => item.profile_id === profileId)
   const profileFeatures = profile?.profile.features ?? []
   const maxMapCell = analysis?.map_cells.reduce<typeof analysis.map_cells[number] | null>((best, cell) => {
@@ -377,47 +384,43 @@ function App() {
             <div className={`toolbar-status ${analysis ? 'is-complete' : ''}`} role="status" aria-live="polite"><span className="status-dot" aria-hidden="true" />{searching ? 'Analysis in progress' : searchError ? 'Request failed' : analysis ? (analysis.is_synthetic ? 'Synthetic response' : 'API response') : 'Awaiting analysis'}</div>
           </div>
 
-          <div className={`map-frame ${analysis ? 'has-analysis' : ''}`} role="region" aria-label={analysis ? 'Analysis summary' : 'Analysis results awaiting data'} aria-describedby="map-scale-note">
-            <div className="map-grid" aria-hidden="true" />
-            <div className="map-coordinate coordinate-nw">{analysis?.scope.type === 'global' ? 'GLOBAL REQUEST' : 'REGIONAL REQUEST'} <span>·</span> EARTH WGS 84</div>
-            <div className="map-coordinate coordinate-ne">{analysis ? `${analysis.map_cells.length} MAP CELLS` : 'NO ACTIVE DATASET'}</div>
-            {searchError ? (
-              <div className="map-empty-state result-message" role="alert">
-                <div className="orbit-mark error-mark" aria-hidden="true"><span /><span /><span /></div>
-                <p className="eyebrow">REQUEST ERROR · NO DEMO FALLBACK</p>
-                <h2>Analysis could not be loaded.</h2>
-                <p>{searchError}</p>
-                <button className="secondary-button" type="button" onClick={() => void runAnalysis()} disabled={searching}>Try again</button>
-              </div>
-            ) : analysis ? (
-              <div className="analysis-summary">
-                <p className="eyebrow">{analysis.is_synthetic ? 'SYNTHETIC CONTRACT FIXTURE' : 'LIVE API RESPONSE'}</p>
-                <h2>{analysis.scope.region_name ?? (analysis.scope.type === 'global' ? 'Global scope requested' : 'Regional scope')}</h2>
-                <p className="summary-description">{analysis.scope.description}</p>
-                <div className="summary-metrics">
-                  <div><span>Eligible cells</span><strong>{formatNumber(analysis.coverage.eligible_pixels, 0)} / {formatNumber(analysis.coverage.total_pixels, 0)}</strong></div>
-                  <div><span>Eligible area</span><strong>{formatNumber(analysis.coverage.eligible_area_fraction === null ? null : analysis.coverage.eligible_area_fraction * 100)}{analysis.coverage.eligible_area_fraction === null ? '' : '%'}</strong></div>
-                  <div><span>Map display cells</span><strong>{formatNumber(analysis.map_cells.length, 0)}</strong></div>
+          <AnalysisMap
+            analysis={analysis}
+            mode={mode}
+            pixels={resultPixels}
+            selectedPixel={selectedPixel}
+            selectedPixelId={selectedPixelId}
+            zoomRequest={zoomRequest}
+            onSelectPixel={selectPixelAndZoom}
+            searchError={searchError}
+            onRetry={() => void runAnalysis()}
+            emptyMessage={searchError
+              ? `Analysis could not be loaded. ${searchError}`
+              : catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run the synthetic fixture or connect the live API to inspect a versioned result.')}
+          />
+
+          {analysis && (
+            <div className="analysis-summary">
+              <div className="analysis-summary-heading">
+                <div>
+                  <p className="eyebrow">{analysis.is_synthetic ? 'SYNTHETIC CONTRACT FIXTURE' : 'LIVE API RESPONSE'}</p>
+                  <h2>{analysis.scope.region_name ?? (analysis.scope.type === 'global' ? 'Global scope requested' : 'Regional scope')}</h2>
                 </div>
-                {maxMapCell ? (
-                  <p className="map-maximum">Map-cell maximum: <strong>{formatNumber(maxMapCell.max_score_pct)}%</strong> · pixel <code>{maxMapCell.max_pixel_id}</code>. The mean ({formatNumber(maxMapCell.mean_score_pct)}%) is context for that display cell; it is not the pixel's score.</p>
-                ) : (
-                  <p className="map-maximum no-data-note">No eligible pixel scores are available for the map. Missing data remain null; they are not zero.</p>
-                )}
+                <span className="analysis-contract-tag">{analysis.grid_version} · {analysis.model_version}</span>
               </div>
-            ) : (
-              <div className="map-empty-state">
-                <div className="orbit-mark" aria-hidden="true"><span /><span /><span /></div>
-                <p className="eyebrow">YOUR NEXT FIELD SITE STARTS HERE</p>
-                <h2>A world of terrain,<br />waiting to be explored.</h2>
-                <p>{catalogError || (catalogLoading ? 'Loading the selected catalog and profile.' : 'Run a synthetic fixture or connect the live API to inspect a versioned result.')}</p>
+              <p className="summary-description">{analysis.scope.description}</p>
+              <div className="summary-metrics">
+                <div><span>Eligible cells</span><strong>{formatNumber(analysis.coverage.eligible_pixels, 0)} / {formatNumber(analysis.coverage.total_pixels, 0)}</strong></div>
+                <div><span>Eligible area</span><strong>{formatNumber(analysis.coverage.eligible_area_fraction === null ? null : analysis.coverage.eligible_area_fraction * 100)}{analysis.coverage.eligible_area_fraction === null ? '' : '%'}</strong></div>
+                <div><span>Map display cells</span><strong>{formatNumber(analysis.map_cells.length, 0)}</strong></div>
               </div>
-            )}
-            <div className="map-coordinate coordinate-sw">{analysis ? `${analysis.dataset_version} · GRID ${analysis.grid_version}` : 'MAP LAYERS · NOT YET LOADED'}</div>
-            <div className="map-coordinate coordinate-se">ANALYSIS CELLS · NOT SCREEN PIXELS</div>
-            <div className="map-scale" aria-label="Map scale unavailable"><span /><span>—</span><span>Scale unavailable</span></div>
-            <p className="map-scale-note" id="map-scale-note">Zoom changes the view, not the data resolution.</p>
-          </div>
+              {maxMapCell ? (
+                <p className="map-maximum">Highest display-cell maximum: <strong>{formatNumber(maxMapCell.max_score_pct)}%</strong> · pixel <code>{maxMapCell.max_pixel_id}</code>. Its mean ({formatNumber(maxMapCell.mean_score_pct)}%) describes the cell as context; the fill shows only the best eligible pixel.</p>
+              ) : (
+                <p className="map-maximum no-data-note">No eligible pixel scores are available for the map. Missing data remain null; they are not zero.</p>
+              )}
+            </div>
+          )}
 
           {analysis?.warnings.length ? <ul className="warning-list" aria-label="Analysis warnings">{analysis.warnings.map((warning) => <li key={`${warning.code}-${warning.message}`}>{warning.message}</li>)}</ul> : null}
           {analysis && <p className="analysis-id-line">Analysis <code>{analysis.analysis_id}</code> · contract {analysis.contract_version} · profile {analysis.profile_version} · model {analysis.model_version}</p>}
