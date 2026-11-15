@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-labelledby="title description">
+  <title id="title">Synthetic isolated-hotspot map design concept</title>
+  <desc id="description">A regional synthetic fixture map. The first map cell has a maximum score of 100 and a mean of 46.7. A numbered marker identifies the isolated top pixel. A separate detail panel shows the ranked pixels and coverage. This is not a planetary observation.</desc>
+  <defs>
+    <pattern id="noData" width="9" height="9" patternUnits="userSpaceOnUse">
+      <rect width="9" height="9" fill="#384342" />
+      <path d="M-2 2 L2 -2 M0 9 L9 0 M7 11 L11 7" stroke="#9aa7a0" stroke-width="1.2" />
+    </pattern>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; }
+      .mono { font-family: "Cascadia Mono", Consolas, monospace; }
+      .label { fill: #a8b5ad; font-size: 13px; letter-spacing: 1.2px; }
+      .small { fill: #9aa8a0; font-size: 13px; }
+      .tiny { fill: #82928a; font-size: 11px; }
+      .bright { fill: #edf2e9; }
+      .accent { fill: #f0d35c; }
+      .panel { fill: #172222; stroke: #34423e; stroke-width: 1; }
+      .hairline { stroke: #35423f; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1440" height="900" fill="#101819" />
+  <rect x="0" y="0" width="1440" height="70" fill="#141e1f" />
+  <path d="M0 70 H1440" stroke="#2a3836" />
+  <g aria-label="Project title">
+    <circle cx="42" cy="35" r="13" fill="none" stroke="#d6ed85" stroke-width="1.5" />
+    <path d="M31 35 H53 M42 24 V46" stroke="#d6ed85" stroke-width="1.2" />
+    <text x="68" y="33" fill="#f0f2e9" font-size="17" font-weight="700">terra<tspan fill="#d6ed85">analog</tspan></text>
+    <text x="68" y="51" class="tiny">MAP DESIGN CONCEPT · E-019</text>
+    <text x="1394" y="39" text-anchor="end" class="mono" fill="#d7dcce" font-size="12">SYNTHETIC FIXTURE · NOT A PLANETARY OBSERVATION</text>
+  </g>
+
+  <g aria-label="Regional map of synthetic fixture cells">
+    <rect class="panel" x="30" y="94" width="858" height="684" rx="8" />
+    <text x="58" y="132" class="label">REGIONAL SEARCH</text>
+    <text x="58" y="160" class="bright" font-size="22" font-weight="600">Cell maximum with individual pixel ranks</text>
+    <text x="58" y="184" class="small">Fill encodes max_score_pct; the mean is shown only as context.</text>
+    <rect x="674" y="118" width="185" height="34" rx="17" fill="#273631" stroke="#657552" />
+    <circle cx="695" cy="135" r="4" fill="#d6ed85" />
+    <text x="710" y="140" class="mono" fill="#d9e1d7" font-size="11">SYNTHETIC · FIXTURE</text>
+
+    <rect x="78" y="218" width="760" height="405" rx="5" fill="#131d1e" stroke="#2a3937" />
+    <text x="100" y="243" class="mono" fill="#9eaaa1" font-size="11">LATITUDE · DEGREES</text>
+    <text x="806" y="601" text-anchor="end" class="mono" fill="#9eaaa1" font-size="11">LONGITUDE · DEGREES</text>
+
+    <g stroke="#33423e" stroke-width="1" stroke-dasharray="4 6" opacity="0.8">
+      <path d="M100 362 H792 M100 522 H792" />
+      <path d="M100 362 V522 M260 362 V522 M420 362 V522 M580 362 V522 M740 362 V522 M792 362 V522" />
+    </g>
+    <g class="mono" fill="#82928a" font-size="11">
+      <text x="92" y="366" text-anchor="end">3.01° N</text>
+      <text x="92" y="526" text-anchor="end">3.00° N</text>
+      <text x="100" y="619" text-anchor="middle">3.00° E</text>
+      <text x="260" y="619" text-anchor="middle">3.01° E</text>
+      <text x="420" y="619" text-anchor="middle">3.02° E</text>
+      <text x="580" y="619" text-anchor="middle">3.03° E</text>
+      <text x="740" y="619" text-anchor="middle">3.04° E</text>
+    </g>
+
+    <g aria-label="Synthetic map cell fills; first cell maximum 100 and mean 46.7, second cell maximum and mean 60">
+      <rect x="100" y="362" width="480" height="160" fill="#e7d64f" fill-opacity="0.78" stroke="#f2e99e" stroke-width="1.5" />
+      <rect x="580" y="362" width="160" height="160" fill="#a7a767" fill-opacity="0.82" stroke="#d5d49a" stroke-width="1.5" />
+      <path d="M260 362 V522 M420 362 V522" stroke="#d8ded1" stroke-opacity="0.42" stroke-width="1" />
+    </g>
+
+    <g aria-label="Synthetic ranking markers. 01 hotspot 100, 02 steady pixel 60, 03 and 04 weak pixels 20">
+      <circle cx="180" cy="442" r="29" fill="#f0d35c" fill-opacity="0.12" stroke="#fff1a6" stroke-width="2.5" filter="url(#softGlow)" />
+      <circle cx="180" cy="442" r="17" fill="#161f1e" stroke="#fff1a6" stroke-width="2" />
+      <text x="180" y="447" text-anchor="middle" class="mono" fill="#fff1a6" font-size="13" font-weight="700">01</text>
+
+      <circle cx="660" cy="442" r="17" fill="#16201f" stroke="#eaf0e4" stroke-width="2" />
+      <text x="660" y="447" text-anchor="middle" class="mono" fill="#edf2e9" font-size="13" font-weight="700">02</text>
+      <circle cx="340" cy="442" r="17" fill="#16201f" stroke="#eaf0e4" stroke-width="1.6" />
+      <text x="340" y="447" text-anchor="middle" class="mono" fill="#edf2e9" font-size="13" font-weight="700">03</text>
+      <circle cx="500" cy="442" r="17" fill="#16201f" stroke="#eaf0e4" stroke-width="1.6" />
+      <text x="500" y="447" text-anchor="middle" class="mono" fill="#edf2e9" font-size="13" font-weight="700">04</text>
+    </g>
+
+    <g aria-label="Legend for fixed score classes and missing data">
+      <text x="100" y="667" class="label">CELL MAXIMUM SIMILARITY INDEX · 0–100%</text>
+      <g class="mono" font-size="11" fill="#dce3db">
+        <rect x="100" y="686" width="25" height="14" rx="2" fill="#283e5a" /><text x="133" y="698">0–&lt;20</text>
+        <rect x="216" y="686" width="25" height="14" rx="2" fill="#49656f" /><text x="249" y="698">20–&lt;40</text>
+        <rect x="342" y="686" width="25" height="14" rx="2" fill="#738774" /><text x="375" y="698">40–&lt;60</text>
+        <rect x="468" y="686" width="25" height="14" rx="2" fill="#a7a767" /><text x="501" y="698">60–&lt;80</text>
+        <rect x="594" y="686" width="25" height="14" rx="2" fill="#e7d64f" /><text x="627" y="698">80–100</text>
+        <rect x="724" y="686" width="25" height="14" rx="2" fill="url(#noData)" stroke="#82928a" /><text x="757" y="698">No data</text>
+      </g>
+      <text x="100" y="735" class="small">Zoom changes the view only. This sketch has no scale bar: its axes are degrees.</text>
+      <text x="100" y="756" class="tiny">No basemap or land outline is included; only contract fixture geometries are drawn.</text>
+    </g>
+  </g>
+
+  <g aria-label="Selected cell detail and ranked pixel list">
+    <rect class="panel" x="912" y="94" width="498" height="684" rx="8" />
+    <text x="942" y="132" class="label">SELECTED MAP CELL</text>
+    <text x="942" y="160" class="mono" fill="#d8e1d5" font-size="13">synthetic-weak-map-cell</text>
+    <path d="M942 179 H1380" class="hairline" />
+
+    <text x="942" y="216" class="tiny">CELL MAX · PIXEL SCORE</text>
+    <text x="942" y="259" class="accent" font-size="38" font-weight="700">100.0%</text>
+    <text x="1164" y="216" class="tiny">MEAN · CONTEXT ONLY</text>
+    <text x="1164" y="259" class="bright" font-size="30" font-weight="600">46.7%</text>
+    <text x="942" y="285" class="small">A strong pixel stays visible inside a weaker mean.</text>
+
+    <rect x="942" y="310" width="438" height="70" rx="5" fill="#202e2b" stroke="#43534b" />
+    <text x="960" y="336" class="label">COVERAGE</text>
+    <text x="960" y="361" class="bright" font-size="17" font-weight="600">3 / 3 valid pixels · 100%</text>
+    <text x="1358" y="361" text-anchor="end" class="tiny">synthetic fixture</text>
+
+    <text x="942" y="421" class="label">TOP PIXELS · INDIVIDUAL RANKING</text>
+    <g class="hairline">
+      <path d="M942 438 H1380 M942 501 H1380 M942 564 H1380 M942 627 H1380 M942 690 H1380" />
+    </g>
+    <g>
+      <circle cx="960" cy="468" r="13" fill="#d6ed85" /><text x="960" y="472" text-anchor="middle" class="mono" fill="#17201b" font-size="10" font-weight="700">01</text>
+      <text x="984" y="464" class="mono" fill="#f0f2e9" font-size="12">synthetic-hotspot-p001</text>
+      <text x="984" y="484" class="tiny">individual pixel · selected</text>
+      <text x="1364" y="474" text-anchor="end" class="mono" fill="#f0d35c" font-size="13">100%</text>
+
+      <circle cx="960" cy="531" r="13" fill="#35423e" stroke="#cbd5ca" /><text x="960" y="535" text-anchor="middle" class="mono" fill="#edf2e9" font-size="10" font-weight="700">02</text>
+      <text x="984" y="527" class="mono" fill="#f0f2e9" font-size="12">synthetic-steady-p001</text>
+      <text x="984" y="547" class="tiny">individual pixel</text>
+      <text x="1364" y="537" text-anchor="end" class="mono" fill="#dce3db" font-size="13">60%</text>
+
+      <circle cx="960" cy="594" r="13" fill="#35423e" stroke="#cbd5ca" /><text x="960" y="598" text-anchor="middle" class="mono" fill="#edf2e9" font-size="10" font-weight="700">03</text>
+      <text x="984" y="590" class="mono" fill="#f0f2e9" font-size="12">synthetic-weak-p001</text>
+      <text x="984" y="610" class="tiny">individual pixel</text>
+      <text x="1364" y="600" text-anchor="end" class="mono" fill="#dce3db" font-size="13">20%</text>
+
+      <circle cx="960" cy="657" r="13" fill="#35423e" stroke="#cbd5ca" /><text x="960" y="661" text-anchor="middle" class="mono" fill="#edf2e9" font-size="10" font-weight="700">04</text>
+      <text x="984" y="653" class="mono" fill="#f0f2e9" font-size="12">synthetic-weak-p002</text>
+      <text x="984" y="673" class="tiny">individual pixel</text>
+      <text x="1364" y="663" text-anchor="end" class="mono" fill="#dce3db" font-size="13">20%</text>
+    </g>
+
+    <path d="M942 712 H1380" class="hairline" />
+    <text x="942" y="738" class="small">Map fill = cell maximum. Mean does not replace the pixel score.</text>
+    <text x="942" y="758" class="tiny">A distinct-area representative uses a different marker and a separate mode.</text>
+  </g>
+
+  <text x="34" y="844" class="mono" fill="#7f9088" font-size="12">SOURCE: contracts/fixtures/search-hotspot-synthetic.json · synthetic contract example only</text>
+  <text x="1404" y="844" text-anchor="end" class="mono" fill="#7f9088" font-size="12">NO REAL-WORLD DATA · NO NASA ENDORSEMENT</text>
+</svg>
