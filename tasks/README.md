@@ -110,6 +110,7 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [I-013 — Ujawnij lazy-load mapy E-004 w rejestrze AI/SI](I-013.md), Ewelina, P0: dopisz źródłowo poparte użycie Codex przy follow-upie `e63ded5`, po integracji I-012.
 - [E-027 — Review regionalnego API K-007](E-027.md), Ewelina, P0: niezależnie sprawdź kontrakt, realne przebiegi obu profili, ranking/mapę/szczegóły i jawny brak globalnego scope w PR #70.
 - [E-028 — Uaktualnij ujawnienie AI po wdrożeniu API](E-028.md), Ewelina, P0: po K-007 i I-013 zsynchronizuj Markdown/JSON disclosure z rzeczywistym API i jego ograniczeniami.
+- [K-041 — Dopasuj typy requestu API do JSON Schema](K-041.md), Kamil, P2: odrzuć string/boolean coercion w wagach i `top_k` zgodnie z kontraktem v1; follow-up z E-027.
 - [K-042 — Pilot globalnej siatki i pipeline'u](K-042.md), Kamil, P0: zmierz rzeczywiste zachowanie skali, źródła, maski i kafelkowego przetwarzania przed pełnym przebiegiem K-008; może ruszyć równolegle z review regionalnego API.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
