@@ -332,6 +332,7 @@ def _feature_statistics(
             },
             "interquartile_range": q75 - q25,
             "valid_cell_count": int(np.count_nonzero(finite)),
+            "missing_cell_count": int(core_count - np.count_nonzero(finite)),
             "valid_cell_fraction": float(np.count_nonzero(finite) / core_count) if core_count else 0.0,
         }
     all_valid = region_mask.copy()
@@ -343,6 +344,36 @@ def _feature_statistics(
         "all_three_features_valid_cell_fraction": float(np.count_nonzero(all_valid) / core_count) if core_count else 0.0,
     }
     return result
+
+
+def _grid_quality_summary(
+    feature_grids: dict[str, np.ndarray],
+    source_valid: np.ndarray,
+    region_mask: np.ndarray,
+    window_valid_fraction: np.ndarray,
+) -> dict[str, Any]:
+    window_fraction = window_valid_fraction[region_mask]
+    return {
+        "candidate_cell_count": int(np.count_nonzero(region_mask)),
+        "candidate_cells_without_valid_2km_source_or_quality_value": int(
+            np.count_nonzero(~source_valid[region_mask])
+        ),
+        "feature_window_cells_below_required_valid_fraction": int(
+            np.count_nonzero(window_fraction < MIN_WINDOW_VALID_FRACTION)
+        ),
+        "required_feature_window_valid_fraction": MIN_WINDOW_VALID_FRACTION,
+        "feature_missing_cell_count": {
+            feature_id: int(np.count_nonzero(~np.isfinite(feature_grid[region_mask])))
+            for feature_id, feature_grid in feature_grids.items()
+        },
+        "feature_window_valid_source_fraction_by_candidate_cell": {
+            "minimum": float(np.nanmin(window_fraction)),
+            "p01": float(np.nanpercentile(window_fraction, 1)),
+            "p05": float(np.nanpercentile(window_fraction, 5)),
+            "p50": float(np.nanpercentile(window_fraction, 50)),
+            "p95": float(np.nanpercentile(window_fraction, 95)),
+        },
+    }
 
 
 def _manual_feature_reproduction(
@@ -758,14 +789,16 @@ def _moon_source(raw_dir: Path, output_shape: tuple[int, int], output_transform:
         ),
         "profile_cells_without_LOLA_returns_fraction": float(np.mean(ldec[region_mask] <= 0.0)),
         "mean_LOLA_returns_per_native_80m_pixel": float(np.nanmean(ldec[region_mask])),
-        "effective_resolution_m_p50": float(np.nanmedian(effres[region_mask])),
-        "effective_resolution_m_p95": float(np.nanpercentile(effres[region_mask], 95)),
-        "height_error_m_p50": float(np.nanmedian(error[region_mask])),
-        "height_error_m_p95": float(np.nanpercentile(error[region_mask], 95)),
+        "analysis_cell_mean_effective_resolution_m_p50": float(np.nanmedian(effres[region_mask])),
+        "analysis_cell_mean_effective_resolution_m_p95": float(np.nanpercentile(effres[region_mask], 95)),
+        "analysis_cell_mean_height_error_m_p50": float(np.nanmedian(error[region_mask])),
+        "analysis_cell_mean_height_error_m_p95": float(np.nanpercentile(error[region_mask], 95)),
         "quality_interpretation": (
             "LDEC is a return-count layer, not area coverage. LDEM posting is 80 m; the official effective-resolution "
-            "and error rasters are retained. Analysis cells are excluded only when their averaged effective resolution "
-            "exceeds the declared 2 km analysis scale or source values are nodata."
+            "and error rasters are retained separately. Reported effective-resolution and height-error percentiles are "
+            "computed from their area-averaged 2 km analysis-cell layers, not native 80 m pixels. Analysis cells are "
+            "excluded only when their averaged effective resolution exceeds the declared 2 km analysis scale or "
+            "source values are nodata."
         ),
         "manual_source_pixel": raw_count_sample,
     }
@@ -1231,12 +1264,10 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
                     "pixel_size_m": GRID_M,
                     "crs_wkt": mars_projection.to_wkt(),
                     "region_candidate_cell_count": int(np.count_nonzero(mars_region)),
-                    "feature_window_valid_fraction_by_grid_cell": {
-                        "p05": float(np.nanpercentile(mars_window_coverage[mars_region], 5)),
-                        "p50": float(np.nanpercentile(mars_window_coverage[mars_region], 50)),
-                        "p95": float(np.nanpercentile(mars_window_coverage[mars_region], 95)),
-                    },
                 },
+                "grid_quality": _grid_quality_summary(
+                    mars_features, mars_valid, mars_region, mars_window_coverage
+                ),
                 "feature_statistics": mars_stats,
                 "source_quality": mars_quality,
                 "longitude_convention_check": mars_longitude_check,
@@ -1259,12 +1290,10 @@ def build(raw_dir: Path, manifest_path: Path, source_manifest_path: Path) -> dic
                     "pixel_size_nominal_m": GRID_M,
                     "source_crs_wkt": moon_source_meta["dem"]["crs_wkt"],
                     "region_candidate_cell_count": int(np.count_nonzero(moon_region)),
-                    "feature_window_valid_fraction_by_grid_cell": {
-                        "p05": float(np.nanpercentile(moon_window_coverage[moon_region], 5)),
-                        "p50": float(np.nanpercentile(moon_window_coverage[moon_region], 50)),
-                        "p95": float(np.nanpercentile(moon_window_coverage[moon_region], 95)),
-                    },
                 },
+                "grid_quality": _grid_quality_summary(
+                    moon_features, moon_valid, moon_region, moon_window_coverage
+                ),
                 "feature_statistics": moon_stats,
                 "source_quality": moon_info["quality"],
                 "source_raster_metadata": moon_source_meta,
