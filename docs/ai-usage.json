@@ -30,5 +30,5 @@
   ],
   "generated_media": [],
   "details": "docs/AI_USAGE.md",
-  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. K-017 validates three AOIs and four mask cases, but does not establish global DEM accuracy or produce a global mask raster/ranking; independent team review is pending."
+  "review_status": "Official source labels, sample file reads, sizes and SHA-256 were checked; measurements are real and were not AI-generated or edited. E-017 approved the K-017 scope, and Kamil reran local asset checks and the three-AOI comparison before PR #12 merged to origin/main. This does not establish global DEM accuracy or produce a global mask raster/ranking."
 }
