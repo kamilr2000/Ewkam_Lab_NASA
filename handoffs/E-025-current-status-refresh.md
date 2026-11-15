@@ -6,8 +6,8 @@
 - Task / PR: E-031 follow-up to E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50)
 - Repository / work branch: `kamilr2000/Ewkam_Lab_NASA`, PR #50 head branch `ewelina/E-025-submission-evidence-matrix`.
 - Integrated snapshot checked: `origin/main` at `fde8821d63778daba23f0d14722566d49579beed`.
-- Exact matrix content commit: pending the current correction commit.
-- Exact review ref: the corrected matrix commit will be pinned in `tasks/E-025.md` on `origin/main` after publication.
+- Exact matrix content commit: `3b219556d7648728cb3301c9e35f07f926b1a125`.
+- Exact review ref: `3b219556d7648728cb3301c9e35f07f926b1a125` on PR #50; it is the matrix content commit and will be pinned in `tasks/E-025.md` on `origin/main` after publication.
 
 ## Current state and evidence
 
