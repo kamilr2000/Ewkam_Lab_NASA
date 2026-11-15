@@ -38,6 +38,19 @@ function liveProfileFixtures() {
   }
 
   catalog.catalog_version = 'live-catalog-test-v1'
+  catalog.datasets = [{
+    ...catalog.datasets[0],
+    dataset_version: 'earth-dem-v1',
+    role: 'earth_search',
+    availability: 'available',
+  }]
+  catalog.search_regions = [{
+    ...catalog.search_regions[0],
+    region_id: 'andes-01',
+    name: 'Atacama/Andes',
+    dataset_version: 'earth-dem-v1',
+    availability: 'available',
+  }]
   catalog.features.forEach((feature) => { feature.availability = 'available' })
   catalog.profiles = [{
     profile_id: 'mars-jezero-v1',
@@ -81,12 +94,16 @@ test('live request selects earth_search when an available validation dataset com
     { ...template, dataset_version: 'earth-search-v2', role: 'earth_search', availability: 'available' },
   ]
 
-  const dataset = criteria.selectDatasetForMode('live', catalog)
+  catalog.search_regions[0].dataset_version = 'earth-search-v2'
+  const dataset = criteria.selectDatasetForMode('live', catalog, 'andes-01')
   const features = criteria.getAvailableProfileFeatures('live', catalog, profile)
   const settings = criteria.createInitialCriteriaSettings(features)
-  const request = criteria.buildSearchRequest(profile.profile, dataset.dataset_version, features, settings)
+  const request = criteria.buildSearchRequest(profile.profile, dataset.dataset_version, features, settings, {
+    scope: { type: 'regional', region_id: 'andes-01' },
+  })
 
   assert.equal(request.dataset_version, 'earth-search-v2')
+  assert.deepEqual(request.scope, { type: 'regional', region_id: 'andes-01' })
 })
 
 test('dataset selection reports missing or ambiguous intended roles', () => {
@@ -94,21 +111,22 @@ test('dataset selection reports missing or ambiguous intended roles', () => {
   catalog.datasets = [
     { ...catalog.datasets[0], dataset_version: 'validation-earth-v1', role: 'validation', availability: 'available' },
   ]
-  assert.throws(() => criteria.selectDatasetForMode('live', catalog), /No available Earth search dataset/)
-
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog, 'andes-01'), /No available Earth search dataset/)
   catalog.datasets.push({
     ...catalog.datasets[0],
     dataset_version: 'earth-search-v2',
     role: 'earth_search',
     availability: 'available',
   })
+  catalog.search_regions[0].dataset_version = 'earth-search-v2'
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog), /Choose an available Earth search region/)
   catalog.datasets.push({
     ...catalog.datasets[0],
-    dataset_version: 'earth-search-v3',
+    dataset_version: 'earth-search-v2',
     role: 'earth_search',
     availability: 'available',
   })
-  assert.throws(() => criteria.selectDatasetForMode('live', catalog), /multiple earth_search Earth datasets/)
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog, 'andes-01'), /exactly one available search dataset/)
 })
 
 test('synthetic request selection requires the fixture_only role', () => {
@@ -197,6 +215,47 @@ test('the selected profile keeps its planetary body and region-specific profile 
   assert.equal(request.body, 'moon')
   assert.equal(request.profile_id, 'moon-south-pole-v1')
   assert.deepEqual(request.criteria, [{ feature_id: 'slope_deg', weight: 1 }])
+})
+
+
+test('live regional choices map to the exact immutable dataset version', () => {
+  const { catalog } = liveProfileFixtures()
+  catalog.datasets = ['andes-v1', 'hawaii-v1', 'himalaya-v1'].map((dataset_version) => ({
+    ...catalog.datasets[0],
+    dataset_version,
+    role: 'earth_search',
+    availability: 'available',
+  }))
+  catalog.search_regions = [
+    { ...catalog.search_regions[0], region_id: 'andes', name: 'Atacama/Andes', dataset_version: 'andes-v1' },
+    { ...catalog.search_regions[0], region_id: 'hawaii', name: 'Big Island', dataset_version: 'hawaii-v1' },
+    { ...catalog.search_regions[0], region_id: 'himalaya', name: 'Himalayas', dataset_version: 'himalaya-v1' },
+  ]
+
+  assert.deepEqual(criteria.getAvailableSearchRegions('live', catalog).map((region) => region.region_id), ['andes', 'hawaii', 'himalaya'])
+  assert.equal(criteria.selectDatasetForMode('live', catalog, 'hawaii').dataset_version, 'hawaii-v1')
+  assert.throws(() => criteria.selectDatasetForMode('live', catalog, 'unknown-region'), /missing or ambiguous/)
+})
+
+test('distinct-area requests require and echo a bounded explicit distance', () => {
+  const { catalog, profile } = liveProfileFixtures()
+  const available = criteria.getAvailableProfileFeatures('live', catalog, profile)
+  const settings = criteria.createInitialCriteriaSettings(available)
+  const options = {
+    scope: { type: 'regional', region_id: 'andes-01' },
+    resultMode: 'distinct_areas',
+    minDistanceKm: 42.5,
+  }
+  const request = criteria.buildSearchRequest(profile.profile, 'earth-dem-v1', available, settings, options)
+
+  assert.deepEqual(request.scope, { type: 'regional', region_id: 'andes-01' })
+  assert.equal(request.result_mode, 'distinct_areas')
+  assert.equal(request.top_k, 10)
+  assert.equal(request.min_distance_km, 42.5)
+  assert.throws(() => criteria.buildSearchRequest(profile.profile, 'earth-dem-v1', available, settings, { resultMode: 'distinct_areas' }), /minimum distance/)
+  assert.throws(() => criteria.buildSearchRequest(profile.profile, 'earth-dem-v1', available, settings, { resultMode: 'distinct_areas', minDistanceKm: 0 }), /minimum distance/)
+  assert.throws(() => criteria.buildSearchRequest(profile.profile, 'earth-dem-v1', available, settings, { resultMode: 'distinct_areas', minDistanceKm: 10001 }), /minimum distance/)
+  assert.throws(() => criteria.buildSearchRequest(profile.profile, 'earth-dem-v1', available, settings, { minDistanceKm: 25 }), /only be set/)
 })
 
 test('map visibility metadata does not change submitted scoring weights', () => {

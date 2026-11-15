@@ -5,6 +5,7 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { getAnalysisMap } from '../api/client'
 import type { DataMode, Geometry, SearchMapCell, SearchPixel, SearchResponse } from '../api/types'
 import { boundsForCoordinates, splitGeometryAtAntimeridian, type GeographicBounds, type LonLat, type MapGeometry } from './geometry'
+import { applyLayerVisibility, type MapLayerVisibility } from './layerVisibility'
 import {
   applyCellCollectionData,
   formatMapContextLabel,
@@ -25,6 +26,8 @@ setWorkerUrl(maplibreWorkerUrl)
 
 const EMPTY_COLLECTION = { type: 'FeatureCollection', features: [] } as const
 const MAX_VIEWPORT_CELLS = 1000
+const OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+const OSM_COPYRIGHT_URL = 'https://www.openstreetmap.org/copyright'
 
 function formatNumber(value: number | null, maximumFractionDigits = 2): string {
   if (value === null || !Number.isFinite(value)) return 'Not available'
@@ -120,6 +123,8 @@ function fitMapToBounds(map: MapLibreMap, bounds: GeographicBounds | null, maxZo
 interface AnalysisMapProps {
   analysis: SearchResponse | null
   mode: DataMode
+  layerVisibility: MapLayerVisibility
+  onLayerVisibilityChange: (layer: keyof MapLayerVisibility, visible: boolean) => void
   pixels: SearchPixel[]
   selectedPixel: SearchPixel | null
   selectedPixelId: string | null
@@ -130,7 +135,7 @@ interface AnalysisMapProps {
   onRetry: () => void
 }
 
-export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, selectedPixelId, zoomRequest, emptyMessage, searchError, onSelectPixel, onRetry }: AnalysisMapProps) {
+export default function AnalysisMap({ analysis, mode, layerVisibility, onLayerVisibilityChange, pixels, selectedPixel, selectedPixelId, zoomRequest, emptyMessage, searchError, onSelectPixel, onRetry }: AnalysisMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const modeRef = useRef(mode)
@@ -144,6 +149,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
   const debounceRef = useRef<number | null>(null)
   const firstFitRef = useRef<string | null>(null)
   const lastZoomRequestRef = useRef(0)
+  const layerVisibilityRef = useRef(layerVisibility)
   const [mapReady, setMapReady] = useState(false)
   const [viewportCells, setViewportCells] = useState<SearchMapCell[] | null>(null)
   const [mapError, setMapError] = useState<string | null>(null)
@@ -154,6 +160,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
   modeRef.current = mode
   analysisRef.current = analysis
   onSelectPixelRef.current = onSelectPixel
+  layerVisibilityRef.current = layerVisibility
   pixelsRef.current = new Map(pixels.map((pixel) => [pixel.pixel_id, pixel]))
 
   const displayCells = viewportCells ?? analysis?.map_cells ?? []
@@ -229,6 +236,16 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
     mapRef.current = map
     map.on('load', () => {
       map.setProjection({ type: 'globe' })
+      map.addSource('osm-raster', {
+        type: 'raster',
+        tiles: [OSM_TILE_URL],
+        tileSize: 256,
+        attribution: '© OpenStreetMap contributors',
+      })
+      map.addLayer({
+        id: 'osm-basemap', type: 'raster', source: 'osm-raster',
+        paint: { 'raster-opacity': 0.78, 'raster-saturation': -0.18 },
+      })
       map.addSource('graticule', { type: 'geojson', data: makeGraticule() as never })
       map.addSource('analysis-cells', { type: 'geojson', data: EMPTY_COLLECTION as never })
       map.addSource('selected-pixel', { type: 'geojson', data: EMPTY_COLLECTION as never })
@@ -241,7 +258,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         id: 'analysis-cells-fill', type: 'fill', source: 'analysis-cells',
         paint: {
           'fill-color': ['case', ['==', ['get', 'score'], null], '#7c8585', ['interpolate', ['linear'], ['to-number', ['get', 'score']], 0, '#3b528b', 25, '#21918c', 50, '#5ec962', 75, '#b9de4f', 100, '#fde725']],
-          'fill-opacity': 0.83,
+          'fill-opacity': 0.68,
         },
       })
       map.addLayer({
@@ -326,11 +343,18 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
       if (pixel.pixel_id === selectedPixelId) marker.getElement().classList.add('is-selected-pixel-marker')
       markersRef.current.set(pixel.pixel_id, marker)
     })
+    applyLayerVisibility(map, markersRef.current.values(), layerVisibilityRef.current)
     return () => {
       markersRef.current.forEach((marker) => marker.remove())
       markersRef.current.clear()
     }
   }, [mapReady, pixels, selectedPixelId])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!mapReady || !map) return
+    applyLayerVisibility(map, markersRef.current.values(), layerVisibility)
+  }, [layerVisibility, mapReady])
 
   useEffect(() => {
     if (!analysis) {
@@ -378,9 +402,20 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         <div className="map-context">
           <span className="map-globe-icon" aria-hidden="true">◉</span>
           <div>
-            <p className="eyebrow">{analysis ? formatMapContextLabel(analysis.scope.type, analysis.map_cells.length) : 'GLOBAL SPATIAL VIEW'}</p>
-            <strong>{analysis?.scope.region_name ?? 'Earth terrain analogs'}</strong>
+            <p className="eyebrow">{analysis
+              ? formatMapContextLabel(analysis.scope.type, analysis.map_cells.length, analysis.is_synthetic)
+              : mode === 'live' ? 'LIVE RESULT PENDING' : 'SYNTHETIC FIXTURE PREVIEW'}</p>
+            <strong>{analysis?.scope.region_name ?? (
+              analysis
+                ? analysis.is_synthetic ? 'Synthetic fixture test universe' : analysis.scope.type === 'global' ? 'Global scope response' : 'Regional scope'
+                : mode === 'live' ? 'No live result yet' : 'Synthetic fixture preview'
+            )}</strong>
           </div>
+        </div>
+        <div className="map-layer-controls" role="group" aria-label="Map layer visibility">
+          <label><input type="checkbox" checked={layerVisibility.basemap} onChange={(event) => onLayerVisibilityChange('basemap', event.currentTarget.checked)} />OpenStreetMap</label>
+          <label><input type="checkbox" checked={layerVisibility.cells} onChange={(event) => onLayerVisibilityChange('cells', event.currentTarget.checked)} />Result cells</label>
+          <label><input type="checkbox" checked={layerVisibility.markers} onChange={(event) => onLayerVisibilityChange('markers', event.currentTarget.checked)} />Ranked markers</label>
         </div>
         <div className="map-actions" aria-label="Map controls">
           <button type="button" onClick={() => mapRef.current?.zoomIn({ duration: 220 })} aria-label="Zoom in">+</button>
@@ -388,11 +423,16 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
           <button type="button" onClick={fitResults} disabled={!analysis}>Fit scope</button>
         </div>
       </div>
+      {layerVisibility.basemap && (
+        <a className="map-attribution" href={OSM_COPYRIGHT_URL} target="_blank" rel="noreferrer" aria-label="OpenStreetMap contributors and map data license">
+          © OpenStreetMap contributors
+        </a>
+      )}
 
       {!analysis && (
         <div className={`map-empty-overlay ${searchError ? 'has-error' : ''}`}>
-          <p className="eyebrow">{searchError ? 'REQUEST ERROR · NO DEMO FALLBACK' : 'YOUR NEXT FIELD SITE STARTS HERE'}</p>
-          <h2>{searchError ? 'Analysis could not be loaded.' : 'Explore a world of terrain.'}</h2>
+          <p className="eyebrow">{searchError ? 'REQUEST ERROR · NO DEMO FALLBACK' : mode === 'live' ? 'NO LIVE RESPONSE' : 'SYNTHETIC FIXTURE PREVIEW'}</p>
+          <h2>{searchError ? 'Analysis could not be loaded.' : mode === 'live' ? 'No live result yet.' : 'Synthetic fixture preview.'}</h2>
           <p>{searchError ?? emptyMessage}</p>
           {searchError && <button className="secondary-button" type="button" onClick={onRetry}>Try again</button>}
         </div>
@@ -409,9 +449,9 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
           </div>
         </section>
         <div className="map-footnote">
-          <span>{analysis ? `${displayCells.length.toLocaleString('en-US')} visible cells · ${pixels.length} ranked markers` : 'No map results loaded'}</span>
+          <span>{analysis ? `${layerVisibility.cells ? displayCells.length.toLocaleString('en-US') : 'Hidden'} display cells · ${layerVisibility.markers ? pixels.length : 0} visible ranked markers` : 'No map results loaded'}</span>
           <span>Globe projection includes polar regions · zoom changes view, not data resolution.</span>
-          <span>No external basemap or tile license dependency.</span>
+          <span>OpenStreetMap is geographic context only; it is not scored. No satellite tiles are connected.</span>
         </div>
       </div>
 

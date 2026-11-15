@@ -7,18 +7,22 @@ import {
   createInitialCriteriaSettings,
   getActiveCriteria,
   getAvailableProfileFeatures,
+  getAvailableSearchRegions,
+  MAX_AREA_DISTANCE_KM,
   getCriteriaValidationError,
   selectDatasetForMode,
   setCriterionEnabled,
   setCriterionWeight,
 } from './controls/criteria'
 import type { CriteriaSettings } from './controls/criteria'
+import { updateMapLayerVisibility, type MapLayerVisibility } from './map/layerVisibility'
 import type {
   CatalogResponse,
   DataMode,
   DemoScenario,
   PlanetaryBody,
   ProfileResponse,
+  ResultMode,
   SearchPixel,
   SearchRequest,
   SearchResponse,
@@ -73,16 +77,28 @@ function makeRequest(
   catalog: CatalogResponse,
   profile: ProfileResponse,
   criteriaSettings: CriteriaSettings,
+  searchRegionId: string,
+  resultMode: ResultMode,
+  minimumDistanceKm: string,
 ): SearchRequest {
-  const dataset = selectDatasetForMode(mode, catalog)
-
+  if (mode === 'live' && !searchRegionId) {
+    throw new ApiError('Choose an available Earth search region before running a live analysis.')
+  }
+  const dataset = selectDatasetForMode(mode, catalog, mode === 'live' ? searchRegionId : undefined)
   const profileFeatures = getAvailableProfileFeatures(mode, catalog, profile)
   if (profileFeatures.length === 0) {
     throw new ApiError('This profile has no features available for the selected Earth dataset.')
   }
 
   try {
-    return buildSearchRequest(profile.profile, dataset.dataset_version, profileFeatures, criteriaSettings)
+    const options = mode === 'live'
+      ? {
+          scope: { type: 'regional' as const, region_id: searchRegionId },
+          resultMode,
+          ...(resultMode === 'distinct_areas' ? { minDistanceKm: Number(minimumDistanceKm) } : {}),
+        }
+      : undefined
+    return buildSearchRequest(profile.profile, dataset.dataset_version, profileFeatures, criteriaSettings, options)
   } catch (error) {
     throw new ApiError(error instanceof Error ? error.message : 'The selected criteria are not valid.')
   }
@@ -104,12 +120,16 @@ function App() {
   const [catalogMode, setCatalogMode] = useState<DataMode | null>(null)
   const [body, setBody] = useState<PlanetaryBody>('mars')
   const [profileId, setProfileId] = useState('')
+  const [searchRegionId, setSearchRegionId] = useState('')
+  const [resultMode, setResultMode] = useState<ResultMode>('pixels')
+  const [minimumDistanceKm, setMinimumDistanceKm] = useState('')
   const [profile, setProfile] = useState<ProfileResponse | null>(null)
   const [criteriaConfiguration, setCriteriaConfiguration] = useState<{
     key: string
     settings: CriteriaSettings
   } | null>(null)
   const [analysis, setAnalysis] = useState<SearchResponse | null>(null)
+  const [layerVisibility, setLayerVisibility] = useState<MapLayerVisibility>({ basemap: true, cells: true, markers: true })
   const [selectedPixelId, setSelectedPixelId] = useState<string | null>(null)
   const [zoomRequest, setZoomRequest] = useState(0)
   const [catalogLoading, setCatalogLoading] = useState(true)
@@ -127,16 +147,27 @@ function App() {
   const searchController = useRef<AbortController | null>(null)
 
   const bodyProfiles = useMemo(
-    () => (catalog?.profiles ?? []).filter((item) => item.body === body && isSelectableAvailability(mode, item.availability)),
-    [catalog, body, mode],
+    () => catalogMode === mode
+      ? (catalog?.profiles ?? []).filter((item) => item.body === body && isSelectableAvailability(mode, item.availability))
+      : [],
+    [catalog, catalogMode, body, mode],
   )
   const visibleProfiles = useMemo(
-    () => (catalog?.profiles ?? []).filter((item) => isSelectableAvailability(mode, item.availability)),
-    [catalog, mode],
+    () => catalogMode === mode
+      ? (catalog?.profiles ?? []).filter((item) => isSelectableAvailability(mode, item.availability))
+      : [],
+    [catalog, catalogMode, mode],
   )
+  const searchRegions = useMemo(
+    () => catalog && catalogMode === mode ? getAvailableSearchRegions(mode, catalog) : [],
+    [catalog, catalogMode, mode],
+  )
+  const selectedSearchRegion = searchRegions.find((item) => item.region_id === searchRegionId) ?? null
   const profileFeatures = useMemo(
-    () => catalog && profile ? getAvailableProfileFeatures(mode, catalog, profile) : [],
-    [catalog, mode, profile],
+    () => catalog && catalogMode === mode && profile
+      ? getAvailableProfileFeatures(mode, catalog, profile)
+      : [],
+    [catalog, catalogMode, mode, profile],
   )
   const currentConfigurationKey = catalog && profile ? configurationKey(mode, catalog, profile) : null
   const defaultCriteriaSettings = useMemo(
@@ -148,6 +179,17 @@ function App() {
     : defaultCriteriaSettings
   const activeCriteriaCount = getActiveCriteria(profileFeatures, criteriaSettings).length
   const criteriaValidationError = getCriteriaValidationError(profileFeatures, criteriaSettings)
+  const searchRegionError = mode === 'live' && catalog
+    ? searchRegions.length === 0
+      ? 'The live catalog lists no available regional Earth search packages.'
+      : selectedSearchRegion ? null : 'Choose an Earth search region from the live catalog.'
+    : null
+  const distanceValue = minimumDistanceKm.trim() ? Number(minimumDistanceKm) : Number.NaN
+  const distanceValidationError = mode === 'live' && resultMode === 'distinct_areas' &&
+    (!Number.isFinite(distanceValue) || distanceValue <= 0 || distanceValue > MAX_AREA_DISTANCE_KM)
+    ? 'Enter a minimum distance greater than 0 and no more than 10,000 km.'
+    : null
+  const runConfigurationError = criteriaValidationError ?? searchRegionError ?? distanceValidationError
   const resultPixels = useMemo(() => (analysis ? pixelsFromResponse(analysis) : []), [analysis])
   const selectedPixel = resultPixels.find((pixel) => pixel.pixel_id === selectedPixelId) ?? null
   const activeScenario = demoScenarios.find((item) => item.id === scenario)
@@ -160,6 +202,7 @@ function App() {
     setCatalog(null)
     setCatalogMode(null)
     setProfile(null)
+    setSearchRegionId('')
     setCriteriaConfiguration(null)
     setAnalysis(null)
     setSelectedPixelId(null)
@@ -176,6 +219,8 @@ function App() {
       setCatalog(result)
       setCatalogMode(mode)
       const firstProfile = result.profiles.find((item) => isSelectableAvailability(mode, item.availability))
+      const firstSearchRegion = mode === 'live' ? getAvailableSearchRegions(mode, result)[0] : undefined
+      setSearchRegionId(firstSearchRegion?.region_id ?? '')
       if (firstProfile) {
         setBody(firstProfile.body)
         setProfileId(firstProfile.profile_id)
@@ -278,7 +323,7 @@ function App() {
     setSelectedPixelId(null)
 
     try {
-      const request = makeRequest(mode, catalog, profile, criteriaSettings)
+      const request = makeRequest(mode, catalog, profile, criteriaSettings, searchRegionId, resultMode, minimumDistanceKm)
       const response = await runSearch(mode, request, scenario, controller.signal)
       if (!searchEpoch.current.isCurrent(epoch)) return
       setAnalysis(response)
@@ -292,12 +337,38 @@ function App() {
     }
   }
 
+  function chooseSearchRegion(value: string): void {
+    if (!searchRegions.some((region) => region.region_id === value)) return
+    searchController.current?.abort()
+    searchEpoch.current.invalidate()
+    setSearching(false)
+    setSearchRegionId(value)
+    clearAnalysisForCriteriaChange()
+  }
+
+  function changeResultMode(value: ResultMode): void {
+    if (value === resultMode) return
+    setResultMode(value)
+    clearAnalysisForCriteriaChange()
+  }
+
+  function changeMinimumDistance(value: string): void {
+    setMinimumDistanceKm(value)
+    clearAnalysisForCriteriaChange()
+  }
+
   function changeMode(nextMode: DataMode): void {
     if (nextMode === mode) return
     searchController.current?.abort()
     searchEpoch.current.invalidate()
     setSearching(false)
     setCriteriaConfiguration(null)
+    setSearchRegionId('')
+    setProfile(null)
+    setProfileId('')
+    setAnalysis(null)
+    setSelectedPixelId(null)
+    setSearchError(null)
     profileController.current?.abort()
     catalogController.current?.abort()
     setMode(nextMode)
@@ -423,6 +494,46 @@ function App() {
               {bodyProfiles.map((item) => <option key={item.profile_id} value={item.profile_id}>{item.name} · {item.region_name}</option>)}
             </select>
             {profileCatalogEntry && <p className="field-help">Profile {profileCatalogEntry.profile_version} · {profileCatalogEntry.availability.replace('_', ' ')}</p>}
+            {mode === 'live' && (
+              <>
+                <label className="field-label second-label" htmlFor="search-region-select">Earth search region</label>
+                <select
+                  id="search-region-select"
+                  value={searchRegionId}
+                  onChange={(event) => chooseSearchRegion(event.target.value)}
+                  disabled={catalogLoading || searchRegions.length === 0}
+                >
+                  {searchRegions.length === 0 && <option value="">No available regional Earth search package</option>}
+                  {searchRegions.map((item) => <option key={item.region_id} value={item.region_id}>{item.name} · {item.dataset_version}</option>)}
+                </select>
+                {selectedSearchRegion && <p className="field-help">{selectedSearchRegion.description} Dataset {selectedSearchRegion.dataset_version}.</p>}
+                {searchRegionError && <p className="inline-error" role="alert">{searchRegionError}</p>}
+
+                <label className="field-label second-label" htmlFor="result-mode-select">Ranking view</label>
+                <select id="result-mode-select" value={resultMode} onChange={(event) => changeResultMode(event.target.value as ResultMode)}>
+                  <option value="pixels">Top 10 pixels</option>
+                  <option value="distinct_areas">Distinct areas</option>
+                </select>
+                {resultMode === 'distinct_areas' && (
+                  <>
+                    <label className="field-label second-label" htmlFor="minimum-distance-km">Minimum separation (km)</label>
+                    <input
+                      id="minimum-distance-km"
+                      type="number"
+                      min="0.001"
+                      max={MAX_AREA_DISTANCE_KM}
+                      step="any"
+                      value={minimumDistanceKm}
+                      onChange={(event) => changeMinimumDistance(event.target.value)}
+                      aria-describedby="distinct-distance-help"
+                      aria-invalid={distanceValidationError ? true : undefined}
+                    />
+                    <p className="field-help" id="distinct-distance-help">The API selects representative pixels using this minimum geodesic separation. Switch to Top 10 pixels to see nearby cells without area selection.</p>
+                    {distanceValidationError && <p className="inline-error" role="alert">{distanceValidationError}</p>}
+                  </>
+                )}
+              </>
+            )}
           </div>
 
           <div className="criteria-section">
@@ -473,7 +584,7 @@ function App() {
                 {mode === 'synthetic' ? 'Each example is marked synthetic in its response.' : 'Catalog and search are requested from the configured API.'}
               </span>
             </div>
-            <button className="run-button" type="button" onClick={() => void runAnalysis()} disabled={catalogLoading || profileLoading || !catalog || !profile || profileFeatures.length === 0 || Boolean(criteriaValidationError) || searching}>
+            <button className="run-button" type="button" onClick={() => void runAnalysis()} disabled={catalogLoading || profileLoading || !catalog || !profile || profileFeatures.length === 0 || Boolean(runConfigurationError) || searching}>
               <span>{searching ? 'Running analysis…' : 'Run terrain analysis'}</span><span aria-hidden="true">↗</span>
             </button>
             <p className="fine-print">0–100% is a similarity index for selected features, not a probability or a measure of habitability.</p>
@@ -492,6 +603,8 @@ function App() {
                 <AnalysisMap
                   analysis={analysis}
                   mode={mode}
+                  layerVisibility={layerVisibility}
+                  onLayerVisibilityChange={(layer, visible) => setLayerVisibility((current) => updateMapLayerVisibility(current, layer, visible))}
                   pixels={resultPixels}
                   selectedPixel={selectedPixel}
                   selectedPixelId={selectedPixelId}
@@ -520,7 +633,7 @@ function App() {
               <div className="analysis-summary-heading">
                 <div>
                   <p className="eyebrow">{analysis.is_synthetic ? 'SYNTHETIC CONTRACT FIXTURE' : 'LIVE API RESPONSE'}</p>
-                  <h2>{analysis.scope.region_name ?? (analysis.scope.type === 'global' ? 'Global scope requested' : 'Regional scope')}</h2>
+                  <h2>{analysis.scope.region_name ?? (analysis.is_synthetic ? 'Synthetic fixture test universe' : 'Regional search scope')}</h2>
                 </div>
                 <span className="analysis-contract-tag">{analysis.grid_version} · {analysis.model_version}</span>
               </div>
@@ -539,7 +652,7 @@ function App() {
           )}
 
           {analysis?.warnings.length ? <ul className="warning-list" aria-label="Analysis warnings">{analysis.warnings.map((warning) => <li key={`${warning.code}-${warning.message}`}>{warning.message}</li>)}</ul> : null}
-          {analysis && <p className="analysis-id-line">Analysis <code>{analysis.analysis_id}</code> · contract {analysis.contract_version} · profile {analysis.profile_version} · model {analysis.model_version}</p>}
+          {analysis && <p className="analysis-id-line">Analysis <code>{analysis.analysis_id}</code> · contract {analysis.contract_version} · profile {analysis.query.profile_id} ({analysis.profile_version}) · dataset {analysis.dataset_version} · grid {analysis.grid_version} · model {analysis.model_version}</p>}
 
           <div className="results-bottom">
             <section className="result-card ranking-card" aria-labelledby="ranking-heading">
@@ -550,12 +663,20 @@ function App() {
               {resultPixels.length ? (
                 <ol className="ranking-list" aria-label={analysis?.query.result_mode === 'distinct_areas' ? 'Distinct area representatives' : 'Top ranked pixels'}>
                   {resultPixels.map((pixel, index) => {
-                    const areaEntry = analysis && 'area_ranking' in analysis && analysis.area_ranking ? analysis.area_ranking[index] : null
+                    const areaEntry = analysis && 'area_ranking' in analysis && analysis.area_ranking
+                      ? analysis.area_ranking.find((entry) => entry.representative_pixel.pixel_id === pixel.pixel_id) ?? null
+                      : null
+                    const resultRank = pixel.rank ?? areaEntry?.rank ?? index + 1
+                    const separation = areaEntry?.nearest_selected_distance_km
+                    const resultDescription = analysis?.query.result_mode === 'distinct_areas'
+                      ? 'Representative pixel · candidate ' + (areaEntry?.candidate_id ?? 'unknown') + ' · ' +
+                        (separation === null ? 'first selected' : separation === undefined ? 'distance unavailable' : 'nearest selected representative ' + formatNumber(separation) + ' km')
+                      : 'Individual pixel'
                     return (
                       <li key={pixel.pixel_id}>
                         <button className={`ranking-row ${selectedPixelId === pixel.pixel_id ? 'is-selected' : ''}`} type="button" onClick={() => setSelectedPixelId(pixel.pixel_id)} aria-pressed={selectedPixelId === pixel.pixel_id}>
-                          <span className="rank-number">{String(index + 1).padStart(2, '0')}</span>
-                          <span className="rank-copy"><strong>{pixel.pixel_id}</strong><small>{formatNumber(pixel.pixel_area_km2)} km² cell · {analysis?.query.result_mode === 'distinct_areas' ? `candidate ${areaEntry?.candidate_id ?? 'representative'}` : 'individual pixel'}</small></span>
+                          <span className="rank-number">{String(resultRank).padStart(2, '0')}</span>
+                          <span className="rank-copy"><strong>{pixel.pixel_id}</strong><small>{formatNumber(pixel.pixel_area_km2)} km² cell · {resultDescription}</small></span>
                           <span className="rank-score">{pixel.score_pct === null ? '—' : `${formatNumber(pixel.score_pct)}%`}</span>
                         </button>
                       </li>
@@ -570,7 +691,7 @@ function App() {
                     : 'Run an analysis to rank individual physical grid cells.'}</p>
                 </div>
               )}
-              <p className="card-footnote">Nearby cells can each appear in Top 10 pixels. Distinct areas is a separate representative-pixel view.</p>
+              <p className="card-footnote">{analysis?.query.result_mode === 'distinct_areas' ? 'Each row is a representative pixel selected using the requested minimum distance. Run Top 10 pixels to inspect nearby cell candidates.' : 'Nearby cells can each appear in Top 10 pixels. Distinct areas is a separate mode with an explicit minimum distance.'}</p>
             </section>
 
             <section className="result-card pixel-card" aria-labelledby="pixel-heading">
@@ -586,12 +707,13 @@ function App() {
                     <div><dt>Data coverage</dt><dd>{formatNumber(selectedPixel.coverage_fraction * 100)}%</dd></div>
                     <div><dt>Center</dt><dd>{formatNumber(selectedPixel.center[0], 4)}°, {formatNumber(selectedPixel.center[1], 4)}°</dd></div>
                     <div><dt>Quality flags</dt><dd>{selectedPixel.quality_flags.length ? selectedPixel.quality_flags.join(', ') : 'None recorded'}</dd></div>
+                    <div><dt>Missing reasons</dt><dd>{selectedPixel.missing_reasons?.length ? selectedPixel.missing_reasons.join(', ') : 'None recorded'}</dd></div>
                   </dl>
                   <div className="feature-results">
                     {selectedPixel.features.map((feature) => (
                       <div className="feature-result" key={feature.feature_id}>
                         <div className="feature-result-title"><strong>{profileFeatures.find((item) => item.feature_id === feature.feature_id)?.name ?? feature.feature_id}</strong><span>{feature.similarity_pct === null ? 'No similarity value' : `${formatNumber(feature.similarity_pct)}% similarity`}</span></div>
-                        <p>Measured {feature.value === null ? `not available${feature.missing_reason ? ` · ${feature.missing_reason.replaceAll('_', ' ')}` : ''}` : `${formatNumber(feature.value)} ${feature.unit}`} · reference {formatNumber(feature.reference_interval[0])}–{formatNumber(feature.reference_interval[1])} {feature.unit} · weighted contribution {feature.contribution_pct === null ? 'not available' : `${formatNumber(feature.contribution_pct)}%`}</p>
+                        <p>Scale {feature.measurement_scale} · measured {feature.value === null ? 'not available' : formatNumber(feature.value) + ' ' + feature.unit}{feature.value === null && feature.missing_reason ? ' · ' + feature.missing_reason.replaceAll('_', ' ') : ''} · reference {formatNumber(feature.reference_interval[0])}–{formatNumber(feature.reference_interval[1])} {feature.unit} · outside-interval tolerance {formatNumber(feature.tolerance)} {feature.unit} · weight share {formatNumber(feature.normalized_weight * 100)}% · weighted contribution {feature.contribution_pct === null ? 'not available' : formatNumber(feature.contribution_pct) + '%'}</p>
                         <small>Sources: {feature.source_ids.join(', ') || 'not listed'}</small>
                       </div>
                     ))}

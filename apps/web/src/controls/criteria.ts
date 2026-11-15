@@ -4,6 +4,8 @@ import type {
   DataMode,
   ProfileFeature,
   ProfileResponse,
+  ResultMode,
+  SearchRegion,
   SearchRequest,
 } from '../api/types'
 
@@ -29,8 +31,20 @@ function expectedAvailability(mode: DataMode): 'available' | 'synthetic_only' {
   return mode === 'synthetic' ? 'synthetic_only' : 'available'
 }
 
-/** Select only the dataset role intended for this mode; never rely on catalog ordering. */
-export function selectDatasetForMode(mode: DataMode, catalog: CatalogResponse): CatalogDataset {
+/** Return only catalog regions backed by the dataset role used in this mode. */
+export function getAvailableSearchRegions(mode: DataMode, catalog: CatalogResponse): SearchRegion[] {
+  const role = mode === 'synthetic' ? 'fixture_only' : 'earth_search'
+  const availability = expectedAvailability(mode)
+  const datasetVersions = new Set(catalog.datasets
+    .filter((dataset) => dataset.body === 'earth' && dataset.role === role && dataset.availability === availability)
+    .map((dataset) => dataset.dataset_version))
+  return catalog.search_regions.filter((region) =>
+    region.availability === availability && datasetVersions.has(region.dataset_version),
+  )
+}
+
+/** Select the immutable dataset mapped to an explicitly chosen live region. */
+export function selectDatasetForMode(mode: DataMode, catalog: CatalogResponse, regionId?: string): CatalogDataset {
   const role = mode === 'synthetic' ? 'fixture_only' : 'earth_search'
   const availability = expectedAvailability(mode)
   const candidates = catalog.datasets.filter((dataset) =>
@@ -42,8 +56,24 @@ export function selectDatasetForMode(mode: DataMode, catalog: CatalogResponse): 
       ? 'The synthetic catalog does not include a fixture-only Earth dataset.'
       : 'No available Earth search dataset is listed in the live catalog.')
   }
+
+  if (mode === 'live') {
+    if (!regionId) throw new Error('Choose an available Earth search region from the live catalog.')
+    const regions = catalog.search_regions.filter((region) =>
+      region.region_id === regionId && region.availability === availability,
+    )
+    if (regions.length !== 1) {
+      throw new Error('The selected Earth search region is missing or ambiguous in the live catalog.')
+    }
+    const regionalDatasets = candidates.filter((dataset) => dataset.dataset_version === regions[0].dataset_version)
+    if (regionalDatasets.length !== 1) {
+      throw new Error('The selected Earth region does not map to exactly one available search dataset.')
+    }
+    return regionalDatasets[0]
+  }
+
   if (candidates.length > 1) {
-    throw new Error(`The ${mode} catalog contains multiple ${role} Earth datasets; selection is ambiguous.`)
+    throw new Error('The synthetic catalog contains multiple fixture-only Earth datasets; selection is ambiguous.')
   }
   return candidates[0]
 }
@@ -151,12 +181,21 @@ export function getActiveCriteria(
   }))
 }
 
-/** Build the versioned global Earth request from selected features; map display visibility is not scoring state. */
+export const MAX_AREA_DISTANCE_KM = 10_000
+
+export interface SearchRequestOptions {
+  scope?: SearchRequest['scope']
+  resultMode?: ResultMode
+  minDistanceKm?: number
+}
+
+/** Build a versioned request from the chosen profile, criteria, and declared search scope. */
 export function buildSearchRequest(
   profile: ProfileResponse['profile'],
   datasetVersion: string,
   features: readonly ProfileFeature[],
   settings: CriteriaSettings,
+  options: SearchRequestOptions = {},
 ): SearchRequest {
   if (!datasetVersion.trim()) throw new Error('An Earth dataset version is required.')
   if (!profile.profile_id.trim()) throw new Error('A reference profile is required.')
@@ -164,19 +203,35 @@ export function buildSearchRequest(
   const validationError = getCriteriaValidationError(features, settings)
   if (validationError) throw new Error(validationError)
 
+  const resultMode = options.resultMode ?? 'pixels'
+  if (resultMode === 'distinct_areas') {
+    const distance = options.minDistanceKm
+    if (typeof distance !== 'number' || !Number.isFinite(distance) || distance <= 0 || distance > MAX_AREA_DISTANCE_KM) {
+      throw new Error('Enter a minimum distance greater than 0 and no more than 10,000 km for distinct areas.')
+    }
+  } else if (options.minDistanceKm !== undefined) {
+    throw new Error('A minimum distance can only be set for distinct areas.')
+  }
+
+  const scope = options.scope ?? { type: 'global' as const }
+  if (scope.type === 'regional' && !scope.region_id.trim()) {
+    throw new Error('An Earth region is required for a regional search.')
+  }
   const criteria = getActiveCriteria(features, settings).map(({ feature, weight }) => ({
     feature_id: feature.feature_id,
     weight,
   }))
 
-  return {
+  const request: SearchRequest = {
     contract_version: '1.0.0',
     body: profile.body,
     profile_id: profile.profile_id,
     dataset_version: datasetVersion,
-    scope: { type: 'global' },
+    scope,
     criteria,
-    result_mode: 'pixels',
+    result_mode: resultMode,
     top_k: 10,
   }
+  if (resultMode === 'distinct_areas') request.min_distance_km = options.minDistanceKm
+  return request
 }
