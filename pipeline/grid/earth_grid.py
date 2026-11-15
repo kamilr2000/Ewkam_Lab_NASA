@@ -43,16 +43,35 @@ def make_local_utm_grid(
     west, south, east, north = bounds_wgs84
     if not (-180 <= west < east <= 180 and -80 <= south < north <= 84):
         raise ValueError("UTM AOIs must be ordered, non-wrapping, and inside 80°S–84°N")
-    if cell_size_m <= 0 or margin_m < 0:
-        raise ValueError("cell_size_m must be positive and margin_m must be non-negative")
 
     center_lon = (west + east) / 2.0
     center_lat = (south + north) / 2.0
     zone = min(60, max(1, math.floor((center_lon + 180.0) / 6.0) + 1))
     epsg = (32600 if center_lat >= 0 else 32700) + zone
-    target_crs = f"EPSG:{epsg}"
+    return make_metric_grid(
+        bounds_wgs84,
+        crs=f"EPSG:{epsg}",
+        cell_size_m=cell_size_m,
+        margin_m=margin_m,
+    )
+
+
+def make_metric_grid(
+    bounds_wgs84: tuple[float, float, float, float],
+    *,
+    crs: str,
+    cell_size_m: int,
+    margin_m: int,
+) -> ProjectedGrid:
+    """Create an aligned metre grid in a caller-selected projected CRS."""
+    west, south, east, north = bounds_wgs84
+    if not (-180 <= west < east <= 180 and -90 <= south < north <= 90):
+        raise ValueError("bounds must be ordered, non-wrapping WGS84 coordinates")
+    if cell_size_m <= 0 or margin_m < 0:
+        raise ValueError("cell_size_m must be positive and margin_m must be non-negative")
+
     projected = transform_bounds(
-        "EPSG:4326", target_crs, west, south, east, north, densify_pts=21
+        "EPSG:4326", crs, west, south, east, north, densify_pts=21
     )
     left = math.floor((projected[0] - margin_m) / cell_size_m) * cell_size_m
     bottom = math.floor((projected[1] - margin_m) / cell_size_m) * cell_size_m
@@ -64,7 +83,7 @@ def make_local_utm_grid(
         raise ValueError("AOI produced an empty projected grid")
 
     return ProjectedGrid(
-        crs=target_crs,
+        crs=crs,
         transform=from_origin(left, top, cell_size_m, cell_size_m),
         shape=(height, width),
         cell_size_m=cell_size_m,
