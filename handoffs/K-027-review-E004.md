@@ -5,7 +5,8 @@
 - Data i strefa: 2026-11-15, Europe/Warsaw
 - Zadanie / PR / commit: K-027 / E-004 PR #37 / dokładnie `fa32bc6ee0a6ffa5dbc178fd13dc417c2928a480`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`; review gałąź `kamil/K-027-review-e004`; kod `ewelina/E-004-map-hotspot`
-- Wysłany wynik review: PR #37, review `5908868712`, `REQUEST_CHANGES`; raport publikowany wraz ze statusem K-027
+- Wysłane SHA i URL raportu: `48bc7070ae58054b827688add0f788eae19d4ce4` / PR #42
+- Wysłany wynik review: PR #37, review `5908868712`, `REQUEST_CHANGES`
 - Rezerwacja w `origin/main`: tak, PR #41, merge `98885f4aaae83935c08b50b50b0da12a84198ac1`
 - Lokalne niewysłane zmiany: brak po publikacji
 - Stan: wymagane poprawki przed akceptacją E-004
