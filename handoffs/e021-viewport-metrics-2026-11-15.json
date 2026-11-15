@@ -1,0 +1,37 @@
+{
+  "captured_at": "2026-11-15",
+  "branch": "ewelina/E-021-ui-readability",
+  "preview_source_head": "99a016e",
+  "preview_url": "http://127.0.0.1:4174/",
+  "preview_kind": "Vite production preview",
+  "browser": "Chrome responsive mode on Windows",
+  "viewport_height_css_px": 800,
+  "data_source": "Synthetic fixture demo",
+  "fixture_scenario": "Successful ranking",
+  "live_api_called": false,
+  "viewports": [
+    { "requested_css_px": 320, "innerWidth": 320, "clientWidth": 320, "scrollWidth": 320, "bodyScrollWidth": 320 },
+    { "requested_css_px": 375, "innerWidth": 375, "clientWidth": 375, "scrollWidth": 375, "bodyScrollWidth": 375 },
+    { "requested_css_px": 390, "innerWidth": 390, "clientWidth": 390, "scrollWidth": 390, "bodyScrollWidth": 390 },
+    { "requested_css_px": 780, "innerWidth": 780, "clientWidth": 780, "scrollWidth": 780, "bodyScrollWidth": 780 },
+    { "requested_css_px": 782, "innerWidth": 782, "clientWidth": 782, "scrollWidth": 782, "bodyScrollWidth": 782 },
+    { "requested_css_px": 1150, "innerWidth": 1150, "clientWidth": 1150, "scrollWidth": 1150, "bodyScrollWidth": 1150 },
+    { "requested_css_px": 1151, "innerWidth": 1151, "clientWidth": 1151, "scrollWidth": 1151, "bodyScrollWidth": 1151 }
+  ],
+  "visual_review_css_px": [320, 375, 390, 780, 782, 1150, 1151],
+  "visual_review_result": "No horizontal overflow, clipped text, or overlapping labels observed.",
+  "focus_check": {
+    "viewport_css_px": 320,
+    "result": "Keyboard Tab transition showed the 2px :focus-visible outline on the focused select.",
+    "outline_css": "2px solid #d6ed85"
+  },
+  "screenshots": [
+    "screenshots/E-021-320px-2026-11-15.png",
+    "screenshots/E-021-782px-2026-11-15.png",
+    "screenshots/E-021-1151px-2026-11-15.png"
+  ],
+  "limitations": [
+    "No physical phone was tested.",
+    "A classic non-overlay scrollbar was not forced."
+  ]
+}

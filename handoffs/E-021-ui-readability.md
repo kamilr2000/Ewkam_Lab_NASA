@@ -108,3 +108,25 @@ K-030 odnotowało, że żądany viewport 781 px dał `innerWidth=782`, `clientWi
 Gałąź PR #35 została zaktualizowana z `origin/main` `5273ca1008aa87c339fb6ef864d80ffe307c893c` w merge commicie `99c15f908d064149645802ee37e82db966ad0b9e`. Po synchronizacji `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny Vite build przechodzą. Vite nadal ostrzega o asynchronicznym chunku mapy 1,085.35 kB. `python tools/check_planning.py` — OK (161 Markdown, 40 JSON, 79 kart, 5 synthetic cases), a `git diff --check origin/main...HEAD` — czysto.
 
 Nie powstał nowy renderowy dowód. Lokalny podgląd wcześniej zablokowała polityka URL; nie ma świeżych pomiarów siedmiu szerokości, inspekcji przycięć/nakładania, testu fokusu przy 320 px ani screenshotów. Historyczna tabela responsywności pozostaje dowodem wyłącznie dla starszego snapshotu. K-039 nie powinno rozpoczynać review, dopóki te P1 nie zostaną uzupełnione.
+
+## Bieżący production preview — 2026-11-15
+
+Po synchronizacji `origin/main` i buildzie z gałęzi `ewelina/E-021-ui-readability` (`99a016e`) uruchomiono Vite production preview pod `http://127.0.0.1:4174/`. Oględziny wykonano w Chrome responsive mode, przy wysokości viewportu 800 CSS px. Widok używa `Synthetic fixture demo` i scenariusza `Successful ranking`; nie uruchamiano API ani nie przedstawia się tu pomiarów planetarnych.
+
+Wszystkie faktycznie raportowane szerokości zostały sprawdzone po zmianie viewportu. Dokument i `body` mają dokładnie szerokość viewportu. Ręczne oględziny przy każdym z siedmiu rozmiarów nie pokazały poziomego overflow, uciętego tekstu ani nachodzących etykiet.
+
+| Żądane CSS px | `innerWidth` | `clientWidth` | `scrollWidth` | `body.scrollWidth` |
+|---:|---:|---:|---:|---:|
+| 320 | 320 | 320 | 320 | 320 |
+| 375 | 375 | 375 | 375 | 375 |
+| 390 | 390 | 390 | 390 | 390 |
+| 780 | 780 | 780 | 780 | 780 |
+| 782 | 782 | 782 | 782 | 782 |
+| 1150 | 1150 | 1150 | 1150 | 1150 |
+| 1151 | 1151 | 1151 | 1151 | 1151 |
+
+Przy 320 px sprawdzono klawiaturą widoczny fokus na selektorze; po przejściu klawiszem Tab widać skonfigurowany obrys `:focus-visible` o grubości 2 px i kolorze `#d6ed85`. Reguła dotyczy `button`, `select`, `input` i linków.
+
+Zapisane świeże zrzuty: [320 px](screenshots/E-021-320px-2026-11-15.png), [782 px](screenshots/E-021-782px-2026-11-15.png), [1151 px](screenshots/E-021-1151px-2026-11-15.png). Pozostałe szerokości również obejrzano w tym samym podglądzie; tabela pomiarów jest kompletna. Dane maszynowe znajdują się w [e021-viewport-metrics-2026-11-15.json](e021-viewport-metrics-2026-11-15.json).
+
+Połączone kontrole: `npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i produkcyjny build przechodzą; `python tools/check_planning.py` — OK; `git diff --check` — czysto. Vite nadal ostrzega o asynchronicznym chunku mapy o rozmiarze 1,085.35 kB minified. Nie wymuszano klasycznego paska przewijania ani nie testowano na fizycznym telefonie.
