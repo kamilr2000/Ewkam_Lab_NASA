@@ -12,6 +12,7 @@ const noDataFixture = JSON.parse(await readFile(resolve(repositoryRoot, 'contrac
 
 let server
 let renderData
+let layerVisibility
 
 before(async () => {
   server = await createServer({
@@ -21,6 +22,7 @@ before(async () => {
     appType: 'custom',
   })
   renderData = await server.ssrLoadModule('/src/map/renderData.ts')
+  layerVisibility = await server.ssrLoadModule('/src/map/layerVisibility.ts')
 })
 
 after(async () => {
@@ -45,4 +47,18 @@ test('cell source receives a GeoJSON FeatureCollection with numeric and null res
 test('map context labels identify synthetic global fixtures as a test universe', () => {
   assert.equal(renderData.formatMapContextLabel('global', 1, true), 'SYNTHETIC TEST FIXTURE · 1 TEST CELL')
   assert.equal(renderData.formatMapContextLabel('regional', 2), 'REGIONAL ANALYSIS · 2 REGIONAL DISPLAY CELLS')
+})
+
+test('map visibility switches affect presentation only and preserve independent overlays', () => {
+  const layoutChanges = []
+  const markers = [{ element: { hidden: false } }, { element: { hidden: false } }]
+  const map = { setLayoutProperty(layerId, property, value) { layoutChanges.push([layerId, property, value]) } }
+  const markerTargets = markers.map(({ element }) => ({ getElement() { return element } }))
+
+  layerVisibility.applyLayerVisibility(map, markerTargets, { basemap: false, cells: true, markers: false })
+
+  assert.deepEqual(layoutChanges[0], ['osm-basemap', 'visibility', 'none'])
+  assert.deepEqual(layoutChanges.slice(1).map(([, , value]) => value), ['visible', 'visible', 'visible', 'visible', 'visible'])
+  assert.ok(markers.every(({ element }) => element.hidden))
+  assert.equal(layoutChanges.length, 6)
 })

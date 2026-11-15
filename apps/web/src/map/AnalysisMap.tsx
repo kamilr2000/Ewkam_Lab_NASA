@@ -5,6 +5,7 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { getAnalysisMap } from '../api/client'
 import type { DataMode, Geometry, SearchMapCell, SearchPixel, SearchResponse } from '../api/types'
 import { boundsForCoordinates, splitGeometryAtAntimeridian, type GeographicBounds, type LonLat, type MapGeometry } from './geometry'
+import { applyLayerVisibility, type MapLayerVisibility } from './layerVisibility'
 import {
   applyCellCollectionData,
   formatMapContextLabel,
@@ -25,6 +26,8 @@ setWorkerUrl(maplibreWorkerUrl)
 
 const EMPTY_COLLECTION = { type: 'FeatureCollection', features: [] } as const
 const MAX_VIEWPORT_CELLS = 1000
+const OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+const OSM_COPYRIGHT_URL = 'https://www.openstreetmap.org/copyright'
 
 function formatNumber(value: number | null, maximumFractionDigits = 2): string {
   if (value === null || !Number.isFinite(value)) return 'Not available'
@@ -150,6 +153,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
   const [mapLoading, setMapLoading] = useState(false)
   const [rendererError, setRendererError] = useState<string | null>(null)
   const [selectedCellId, setSelectedCellId] = useState<string | null>(null)
+  const [layerVisibility, setLayerVisibility] = useState<MapLayerVisibility>({ basemap: true, cells: true, markers: true })
 
   modeRef.current = mode
   analysisRef.current = analysis
@@ -229,6 +233,16 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
     mapRef.current = map
     map.on('load', () => {
       map.setProjection({ type: 'globe' })
+      map.addSource('osm-raster', {
+        type: 'raster',
+        tiles: [OSM_TILE_URL],
+        tileSize: 256,
+        attribution: '© OpenStreetMap contributors',
+      })
+      map.addLayer({
+        id: 'osm-basemap', type: 'raster', source: 'osm-raster',
+        paint: { 'raster-opacity': 0.78, 'raster-saturation': -0.18 },
+      })
       map.addSource('graticule', { type: 'geojson', data: makeGraticule() as never })
       map.addSource('analysis-cells', { type: 'geojson', data: EMPTY_COLLECTION as never })
       map.addSource('selected-pixel', { type: 'geojson', data: EMPTY_COLLECTION as never })
@@ -241,7 +255,7 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
         id: 'analysis-cells-fill', type: 'fill', source: 'analysis-cells',
         paint: {
           'fill-color': ['case', ['==', ['get', 'score'], null], '#7c8585', ['interpolate', ['linear'], ['to-number', ['get', 'score']], 0, '#3b528b', 25, '#21918c', 50, '#5ec962', 75, '#b9de4f', 100, '#fde725']],
-          'fill-opacity': 0.83,
+          'fill-opacity': 0.68,
         },
       })
       map.addLayer({
@@ -333,6 +347,16 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
   }, [mapReady, pixels, selectedPixelId])
 
   useEffect(() => {
+    const map = mapRef.current
+    if (!mapReady || !map) return
+    applyLayerVisibility(map, markersRef.current.values(), layerVisibility)
+  }, [layerVisibility, mapReady])
+
+  const setLayerVisible = (layer: keyof MapLayerVisibility, visible: boolean) => {
+    setLayerVisibility((current) => ({ ...current, [layer]: visible }))
+  }
+
+  useEffect(() => {
     if (!analysis) {
       setViewportCells(null)
       setSelectedCellId(null)
@@ -388,12 +412,22 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
             )}</strong>
           </div>
         </div>
+        <div className="map-layer-controls" role="group" aria-label="Map layer visibility">
+          <label><input type="checkbox" checked={layerVisibility.basemap} onChange={(event) => setLayerVisible('basemap', event.currentTarget.checked)} />OpenStreetMap</label>
+          <label><input type="checkbox" checked={layerVisibility.cells} onChange={(event) => setLayerVisible('cells', event.currentTarget.checked)} />Result cells</label>
+          <label><input type="checkbox" checked={layerVisibility.markers} onChange={(event) => setLayerVisible('markers', event.currentTarget.checked)} />Ranked markers</label>
+        </div>
         <div className="map-actions" aria-label="Map controls">
           <button type="button" onClick={() => mapRef.current?.zoomIn({ duration: 220 })} aria-label="Zoom in">+</button>
           <button type="button" onClick={() => mapRef.current?.zoomOut({ duration: 220 })} aria-label="Zoom out">−</button>
           <button type="button" onClick={fitResults} disabled={!analysis}>Fit scope</button>
         </div>
       </div>
+      {layerVisibility.basemap && (
+        <a className="map-attribution" href={OSM_COPYRIGHT_URL} target="_blank" rel="noreferrer" aria-label="OpenStreetMap contributors and map data license">
+          © OpenStreetMap contributors
+        </a>
+      )}
 
       {!analysis && (
         <div className={`map-empty-overlay ${searchError ? 'has-error' : ''}`}>
@@ -415,9 +449,9 @@ export default function AnalysisMap({ analysis, mode, pixels, selectedPixel, sel
           </div>
         </section>
         <div className="map-footnote">
-          <span>{analysis ? `${displayCells.length.toLocaleString('en-US')} visible cells · ${pixels.length} ranked markers` : 'No map results loaded'}</span>
+          <span>{analysis ? `${layerVisibility.cells ? displayCells.length.toLocaleString('en-US') : 'Hidden'} display cells · ${layerVisibility.markers ? pixels.length : 0} visible ranked markers` : 'No map results loaded'}</span>
           <span>Globe projection includes polar regions · zoom changes view, not data resolution.</span>
-          <span>No external basemap or tile license dependency.</span>
+          <span>OpenStreetMap is geographic context only; it is not scored. No satellite tiles are connected.</span>
         </div>
       </div>
 
