@@ -32,6 +32,7 @@ The matrix says PR #35 “is not synced to the current matrix snapshot” while 
 - `git diff --check` for the declared snapshot-to-review range `e601d91a1184ea8ea0d8d198f5b3be1368c2ef7e..8be43106baa2954f585ad275829787bf0d6f6ac2`: passed.
 - The matrix covers the S03 fields and boundaries: event/title confirmation, English materials, demo limits and public access, NASA/source attribution, AI/SI, minors, release limitations, and human-only submission.
 - K-042's measured pilot is kept distinct from the clean-clone downloader correction. PR #72's recorded clean-clone ref and current head are distinguished; its stale PR-description refs are called out. E-030 remains todo while PR #72 is not synchronized. K-005's merge and status refs, K-007's regional-only review state, I-012's unintegrated disclosure, and I-006's human-only boundary are consistent with the checked cards and PR metadata.
+- K-042's pilot counters were cross-checked against its task/PR descriptions only; I did not independently regenerate raw data or support counts. They remain documented branch evidence, not an independent validation.
 - This was a documentation and metadata review only: no application run, new scientific processing, anonymous public-link check, or submission was performed.
 
 The connected GitHub account authored PR #50, so this report is a review recommendation, not a formal GitHub `APPROVE` event. The findings are being posted on PR #50 with a link to this report.
