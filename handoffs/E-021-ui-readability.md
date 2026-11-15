@@ -1,10 +1,12 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. Brak PR i `review_ref`; nie jest to jeszcze gotowe do odbioru.
+Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. Ostatni opublikowany przyrost CSS: `94ba5ea41f505afff3bd063bb6aeff2046a364fa`. Brak PR i `review_ref`; nie jest to jeszcze gotowe do odbioru.
 
 ## Zmiana
 
-W `apps/web/src/styles.css` podniesiono kontrast drobnych podpisów oraz rozmiary kluczowych etykiet, jednostek, objaśnień i stanów z 8–11 px do 9–12 px. Widok disabled zachowuje wyłączone kontrolki i kursor `not-allowed`; fokus klawiatury pozostaje z jawnym obrysem. Dla podpisów mapy uwzględniono ciemną bazę oraz jaśniejszy gradient i siatkę z CSS.
+W `apps/web/src/styles.css` podniesiono kontrast drobnych podpisów oraz rozmiary kluczowych etykiet, jednostek, objaśnień i stanów z 8–11 px do 9–12 px, także w mobilnych etykietach mapy i stopce. Widok disabled zachowuje wyłączone kontrolki i kursor `not-allowed`; fokus klawiatury pozostaje z jawnym obrysem. Dla podpisów mapy uwzględniono ciemną bazę oraz jaśniejszy gradient i siatkę z CSS.
+
+Źródłowe sprawdzenie CSS nie znajduje deklaracji tekstu poniżej 9 px po uwzględnieniu mobilnych nadpisań.
 
 ## Dowody
 
