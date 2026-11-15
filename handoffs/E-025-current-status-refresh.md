@@ -21,4 +21,4 @@
 
 The planning check, local-link audit, and `git diff --check` are recorded after they pass on the published branch. This is a documentation refresh only; no application run, new scientific processing, public-link availability check, or submission action was performed.
 
-K-035 approved the previous snapshot `d755352240f003b7609104f500355c14df065251`. The changed status rows require a fresh review. K-044 is requested for exact matrix ref `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` after the task and review card are published on `origin/main`.
+K-035 approved the previous snapshot `d755352240f003b7609104f500355c14df065251`. The changed status rows require a fresh review. K-045 is requested for exact matrix ref `7113bf1a1ce6edc655be4acaf741ab71ed18f1fb` after the task and review card are published on `origin/main`.
