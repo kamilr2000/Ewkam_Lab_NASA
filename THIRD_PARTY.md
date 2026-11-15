@@ -1,19 +1,28 @@
-# Materiały zewnętrzne
+# Third-party data, software, and attribution
 
-MIT obejmuje własny kod i dokumentację projektu. Nie zmienia praw do danych NASA, NOAA, ESA, zdjęć, podkładów map ani bibliotek. K-017 używa rzeczywistych plików NASADEM, NOAA ETOPO, GSHHG i PROJ lokalnie; surowe dane pozostają poza Gitem, a pochodzenie i sumy są w `data/manifests/k017-earth-validation.json`.
+The repository's MIT licence applies only to project-authored code and documentation. It does not grant rights to external datasets, software, map tiles, or media. Check the cited source terms before redistribution. Exact input versions and checksums are recorded in data/manifests/.
 
-Przy dodaniu materiału dopisz wiersz i zachowaj wymagany tekst licencji/atrybucji. Publiczny dostęp do portalu nie wystarcza do uznania każdego produktu za swobodnie redystrybuowalny.
+## Scientific data
 
-| Materiał / wersja | Zastosowanie i pliki | Autor / URL | Licencja / warunki i dowód | Atrybucja | Status |
-|---|---|---|---|---|---|
-| Dokumentacja organizatora | Streszczenia i linki w `docs/sources/` | NASA Space Apps; linki w rejestrze | Odnośniki i własne streszczenia; bez kopii całych stron | Źródła przy streszczeniach | dodano |
-| ETOPO 2022 v1, 15″ surface S15W075, N30W165, N30E075 | Rzeczywiste kafle porównania NASADEM/ETOPO; manifest `data/manifests/k017-earth-validation.json` | NOAA NCEI; DOI 10.25921/fd45-gt74 | CC0-1.0 w metadanych NOAA; produkt nie jest przeznaczony do nawigacji | Cytuj NOAA NCEI i DOI | trzy kafle pobrane i zweryfikowane; nie oznacza to pobrania pełnego globalnego rastra |
-| LOLA LDEM_4, PDS dataset V3.0 | Rzeczywista próbka promienia/kształtu Księżyca; PDS3 IMG/LBL i PDS4 XML | NASA PDS Geosciences Node; DOI 10.17189/1520642 | PDS data są public domain; dokumenty PDS mogą mieć odrębne prawa | Cytuj zbiór PDS i DOI | próbka oraz etykiety pobrane i zweryfikowane |
-| MOLA MEGT/MEGC 4 px/deg | Rzeczywista próbka topografii Marsa i liczby obserwacji; etykiety PDS3/PDS4 | NASA PDS Geosciences Node; DOI 10.17189/1z1b-kv84 | PDS data są public domain; dokumenty PDS mogą mieć odrębne prawa | Cytuj bundle PDS4 i DOI | próbka, mapa liczności i etykiety pobrane i zweryfikowane |
-| LOLA PGDA Product 90, LDEM/LDEC/EFFRES/ERR 80 m, 80°S tile | Rzeczywisty profil topografii czapy księżycowej 80–90°S; pliki i SHA-256 w `data/manifests/k004-source-files.json` | NASA GSFC Planetary Geodesy Data Archive; DOI 10.60903/gsfcpgda-lola-spole; Barker et al. 2023, DOI 10.3847/psj/acf3e1 | Strona produktu prosi o cytowanie, ale nie podaje identyfikatora licencji; nie przypisujemy nieudokumentowanej licencji | Cytuj NASA PGDA, Barker et al. 2023 i DOI zbioru danych | cztery rastry pobrane i sprawdzone; raw pozostaje poza Gitem; K-004 oczekuje na E-023 review |
-| MOLA MEGT/MEGC 128 px/deg, kafel 44N000HB | Rzeczywisty profil topografii Jezero i wsparcia obserwacji; etykiety PDS3/PDS4/ENVI, pliki i SHA-256 w K-004 manifestach | NASA PDS Geosciences Node; DOI 10.17189/1z1b-kv84 | Archiwalne dane PDS są public domain; dokumenty mogą mieć odrębne prawa | Cytuj bundle MGS MOLA Topography Derived i DOI | biny źródłowe i etykiety pobrane oraz zweryfikowane; raw pozostaje poza Gitem; K-004 oczekuje na E-023 review |
-| NASADEM_HGT v001, kafle s25w069, n19w156, n28e086, n29e027 | HGT/NUM/SWB do walidacji DEM i maski NASADEM; archiwa i pliki opisane w K-017 manifeście | NASA JPL / LP DAAC; DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001; [przewodnik](https://lpdaac.usgs.gov/documents/2237/NASADEM_User_Guide_V13.pdf) | CC0-1.0 według [odpowiedzi LP DAAC](https://forum.earthdata.nasa.gov/viewtopic.php?p=18837&t=5421); pobranie wymaga Earthdata Login | Cytuj NASA JPL, NASADEM v001 i DOI; dokumentuj wersję i pochodzenie NUM | cztery kafle pobrane; rozmiary, SHA-256, wymiary, wartości i klasy sprawdzone; raw pozostaje lokalnie |
-| GSHHG 2.3.7, full-resolution shapefiles | Globalna maska lądu/jezior/wysp i granica uziemionej Antarktydy; archiwum w K-017 manifeście | [Wessel, SOEST Hawai'i; Smith, NOAA](https://www.soest.hawaii.edu/wessel/gshhg/); DOI 10.5281/zenodo.7007502 | LGPL-3.0-or-later; zachować tekst licencji i atrybucję przy redystrybucji lub modyfikacji | Wessel & Smith, DOI 10.1029/96JB00104 oraz GSHHG v2.3.7 | archiwum i pełne warstwy pobrane oraz lokalnie rasteryzowane/testowane; nie są commitowane |
-| PROJ NGA EGM96/EGM2008 grids | Pionowa transformacja wysokości NASADEM EGM96 → ETOPO EGM2008; nazwy, rozmiary i SHA-256 w K-017 manifeście | PROJ CDN: `us_nga_egm96_15.tif`, `us_nga_egm08_25.tif` | Metadane CDN ustawiają `open_license=true`; brak odnotowanego SPDX identifier, dlatego nie przypisujemy dodatkowej nazwy licencji | Cytuj PROJ i nazwy gridów; zachowaj metadane/wersję użytego gridu | pobrano i użyto lokalnie do konwersji; pliki pozostają poza Gitem |
+| Material | Project use | Recorded terms and attribution |
+|---|---|---|
+| NOAA ETOPO 2022 v1, 15-arc-second surface | Terrain input for the three regional K-005 Earth packages and selected NASADEM comparisons | NOAA NCEI; DOI 10.25921/fd45-gt74. The source metadata records CC0-1.0. The product is not intended for navigation. Cite NOAA NCEI and the DOI. |
+| NASA PDS LOLA LDEM_4, dataset V3.0 | Verified lunar source sample | DOI 10.17189/1520642. PDS data are public domain; documentation may have separate terms. Cite the PDS product and DOI. |
+| NASA PDS MOLA MEGT/MEGC, 4 px/degree sample | Verified Mars topography and observation-support sample | DOI 10.17189/1z1b-kv84. PDS data are public domain; documentation may have separate terms. Cite the PDS bundle and DOI. |
+| NASA GSFC PGDA LOLA Product 90: LDEM/LDEC/EFFRES/ERR, 80 m posting | Lunar south-polar reference profile for 80–90°S | DOI 10.60903/gsfcpgda-lola-spole; Barker et al. (2023), DOI 10.3847/psj/acf3e1. The product page requests citation but provides no licence identifier; no unverified licence is asserted. |
+| NASA PDS MOLA MEGT/MEGC, 128 px/degree, tile 44N000HB | Jezero reference profile and observation-support data | DOI 10.17189/1z1b-kv84. Cite the MGS MOLA Topography Derived bundle and DOI. |
+| NASADEM HGT v001 tiles s25w069, n19w156, n28e086, n29e027 | Separate DEM and land-mask validation | NASA JPL / LP DAAC; DOI 10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001. LP DAAC records CC0-1.0; download requires Earthdata Login. Cite NASADEM v001 and document NUM provenance. |
+| GSHHG 2.3.7 full-resolution shapefiles | Land, lake, island, and grounded-Antarctica masks | Wessel, SOEST Hawai'i, and Smith, NOAA; DOI 10.5281/zenodo.7007502. LGPL-3.0-or-later. Preserve licence text and attribution when redistributing or modifying. |
+| PROJ NGA EGM96/EGM2008 grids | Local vertical transformation from NASADEM EGM96 to ETOPO EGM2008 | Grid names, sizes, and SHA-256 are recorded in the K-017 manifest. CDN metadata indicates an open licence but no SPDX identifier; no more specific licence is asserted. |
 
-Źródła warunków ETOPO: [metadane NOAA](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.dem%3Aetopo_2022); [odpowiedź LP DAAC o licencji NASADEM](https://forum.earthdata.nasa.gov/viewtopic.php?p=18837&t=5421). Dla NASA PDS dane i dokumenty mogą mieć różne warunki; cytuj DOI produktu. Maska lądu, granice i kafle mapy również wymagają osobnego wpisu. Nie oznaczaj całego katalogu danych etykietą MIT.
+The recorded sample files were downloaded and checksum-verified as stated in their manifests. This does not mean the full global raster was downloaded, processed, or validated. NASADEM validation covers selected regions and is separate from the ETOPO-derived search measurements.
+
+## Web software and map
+
+Direct runtime and build dependency versions are pinned in apps/web/package.json and apps/web/package-lock.json. See [apps/web/THIRD_PARTY.md](apps/web/THIRD_PARTY.md) for package versions and licence metadata.
+
+The map uses MapLibre GL JS with visible-viewport tiles from the OpenStreetMap standard raster endpoint. Keep attribution visible when OSM is enabled and follow the [OSMF tile usage policy](https://operations.osmfoundation.org/policies/tiles/) and [copyright and licence terms](https://www.openstreetmap.org/copyright). The tile service is best-effort. No satellite provider or NASA imagery layer is connected. A library's licence does not grant rights to its data or tiles.
+
+## Adding a dependency or source
+
+Add the product/version, project use, source URL, rights evidence, required attribution, checksum or manifest, and validation status. Do not infer redistribution rights from free access or the fact that a source appears in an organizer resource list. Never label the entire data catalogue as MIT-licensed.

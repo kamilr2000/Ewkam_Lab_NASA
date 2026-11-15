@@ -1,80 +1,54 @@
-# Instrukcje pracy dla agentów
+# Repository instructions
 
-## Kontekst i kolejność czytania
+## Project and source of truth
 
-Projekt Kamila i Eweliny: ziemskie analogi regionów Marsa i Księżyca, NASA Space Apps 2026. Zadanie bieżącego etapu: wdrożyć plan opisany w repo. Początkowy commit zawiera przygotowanie, nie gotowy produkt.
+Terra Analog is a Kamil/Ewelina project for the NASA Space Apps Challenge 2026. The current product is a regional terrain-comparison MVP; global Earth search is not available.
 
-Przeczytaj kolejno: `README.md`, `docs/PRODUCT.md`, `docs/METHODOLOGY.md`, `docs/CONTRACTS.md`, `docs/COLLABORATION.md`, swój prompt w `prompts/` i kartę aktualnego zadania. Źródła organizatora są w `docs/sources/`. Kamil i Ewelina pracują na osobnych komputerach; ścieżki w instrukcjach są względne do własnego klonu.
+Read, in order, the root README, docs/PRODUCT.md, docs/METHODOLOGY.md, docs/CONTRACTS.md, docs/COLLABORATION.md, your work guide under prompts/, and the current task card. Organizer source snapshots are in docs/sources/.
 
-## Wspólne remote — obowiązkowe
+The shared private repository is https://github.com/kamilr2000/Ewkam_Lab_NASA. The source of truth is origin/main. Do not assume access to the other person's machine or local paths. Routine synchronization, commits, and pushes are part of assigned work.
 
-Repozytorium zespołu: **https://github.com/kamilr2000/Ewkam_Lab_NASA**, remote `origin`, obecnie prywatne. Obie osoby potrzebują dostępu do zapisu. **Źródłem prawdy jest `origin/main`**, nie lokalny katalog ani niepołączona gałąź. Wszystkie poprawki kodu, dokumentacji, kontraktów i statusów zapisuj w małych commitach i wysyłaj do tego remote. Nie wymieniaj plików ręcznie i nie zakładaj dostępu do komputera drugiej osoby.
+## Task reservation and delivery
 
-**Przed pierwszą zmianą implementacji każdego zadania** utwórz osobny commit `tasks(ID): IN PROGRESS`, zmieniający kartę na `status: in_progress` i zapisujący agenta, datę i gałąź. Najpierw opublikuj rezerwację w `origin/main` i potwierdź jej obecność. Sam push na gałąź roboczą lub otwarty PR nie rezerwuje zadania. Przy chronionym `main` rezerwacja musi najpierw zostać połączona przez mały PR. `in_progress` jest maszynowym zapisem statusu **IN PROGRESS**.
+Before implementing a task, publish a separate reservation commit to origin/main. Update only that task card with status in_progress, agent, date, branch, and a start entry. Use the commit title tasks(ID): IN PROGRESS. Confirm the reservation is present in origin/main before implementation. A branch-only push or open pull request does not reserve a task.
 
-Następnie implementuj na gałęzi zadania; po każdej spójnej poprawce wykonaj commit, synchronizację i skuteczny push. Zwykłe commity/pushe do ustalonego repo są częścią zleconej pracy. Respektuj rzeczywiste wymagania dostępu i zgody środowiska; błąd wysyłki raportuj uczciwie. Wyjątek startowy: utworzenie pustego repo i pierwsze zasilenie w I-001 wymaga lokalnego commita, bo `origin/main` jeszcze nie istnieje. Wyjątek nie dotyczy kolejnych zadań.
+Implement on ewelina/ID-description or kamil/ID-description based on current main. On a clean main, use fast-forward-only pull. On a published task branch, pull without rebasing and merge current origin/main. Preserve unrelated work. Never force-push, reset away another person's changes, or make broad ours/theirs conflict resolutions.
 
-**Pull jest obowiązkowy:** na początku sesji, przed wyborem nowego zadania i po połączeniu zmian do `main` aktualizuj własny klon. Na czystym `main` używaj `git pull --ff-only origin main`; na opublikowanej gałęzi roboczej `git pull --no-rebase`, a następnie dołącz aktualne `origin/main` przez merge. Ponawiaj synchronizację przed pushem. Sam `fetch` nie aktualizuje plików w drzewie roboczym. Jeśli masz niezapisane zmiany, najpierw bezpiecznie zachowaj własną pracę; nie nadpisuj jej ślepym pullem/resetem.
+After each coherent change: inspect it, run relevant checks, commit only owned files, synchronize, resolve real conflicts, and push. Report an unsuccessful push with its local commit SHA; do not describe unpublished work as delivered. Mark a task done only when its criteria and evidence are complete and the implementation is integrated into origin/main.
 
-## Współpraca i zlecanie drugiemu agentowi
+At the end of current work, synchronize and review the full queue. Ready reviews assigned to you take priority over other work; a review never interrupts an implementation or review already in progress. Review only the requested scope and exact published ref. Report blockers separately from cosmetic follow-ups. Do not create endless review-of-review chains.
 
-Każdy agent może utworzyć kartę dla drugiego: Kamil tworzy E-* z `owner: ewelina`, Ewelina tworzy K-* z `owner: kamil`; w I-* zawsze wskaż jednego właściciela. Dotyczy to implementacji, pytań o kontrakt, integracji i review. Nową kartę oraz indeks opublikuj w `origin/main`. Nie ustawiaj in_progress za drugiego agenta i nie przejmuj jego aktywnej karty.
+## Ownership
 
-Opisuj konkretny rezultat, powód, pliki/kontrakt, kryteria, priorytet oraz opublikowany SHA/PR. Dla przeglądu użyj `tasks/REVIEW_TEMPLATE.md`: `task_type: review`, `review_of`, `review_ref` i warunek startu. Nie dodawaj ocenianego zadania do `depends_on` przeglądu, jeśli czeka ono na review przed done — powodowałoby to blokadę. Producent zapisuje w swojej karcie `review_tasks`; przegląd rusza na opublikowanej wersji, gdy zadanie jest w review, nie dopiero po done.
-
-Regularnie pulluj i czytaj całą kolejkę przypisaną Tobie, w tym nowe zadania dodane przez drugiego agenta. Recenzent publikuje wynik i dowody w remote. Poprawki przypisuje właścicielowi kodu; nie uznaje zmiany za poprawną bez sprawdzenia. Istotne poprawki po przeglądzie wymagają przeglądu zmienionego zakresu. Nie twórz automatycznej nieskończonej kolejki review przeglądów.
-
-### Review ma pierwszeństwo przy wyborze następnego zadania
-
-**Nie przerywaj bieżącego zadania z powodu nowego review.** Najpierw dokończ wykonywaną pracę i opublikuj jej wynik. Następnie zrób pull i wybierz: (1) gotowe zadanie `task_type: review` przypisane Tobie, (2) inne gotowe P0, (3) P1/P2. Gotowe review wyprzedza zwykłe zadania także wtedy, gdy w kolejce jest dwadzieścia P0; nie odkładaj go do końca backlogu.
-
-Gotowe review wymaga spełnionych warunków startu, dostępnego `review_ref` i braku rezerwacji innego agenta. Jeśli kilka przeglądów jest gotowych, najpierw wybierz odblokowujące drugiego agenta, a w tej samej grupie najstarszą opublikowaną prośbę. Przy niedostępnym kodzie zgłoś brak i wybierz inną gotową kartę; nie czekaj bezczynnie. Sam `status: review` na karcie producenta nie jest zadaniem przeglądu dla recenzenta.
-
-Pierwszeństwo wynika z `task_type: review`, także dla starszych kart bez `queue_priority`. Szablon zapisuje `queue_priority: review_first`; to kolejność obsługi, niezależna od merytorycznego P0/P1/P2. Recenzent nadal publikuje własny commit IN PROGRESS przed rozpoczęciem. Gotowa implementacja przekazana już do odbioru nie wymaga bezczynnego oczekiwania na cudze zatwierdzenie — przy wyborze kolejnej pracy stosuj tę kolejność. Nie przełączaj się natomiast w środku trwającej implementacji lub przeglądu.
-
-## Formalny submission — wyłącznie człowiek
-
-**Agenci nigdy samodzielnie nie wysyłają zgłoszenia NASA. I-006 ma executor: human_only.** Przygotujcie kompletny projekt, materiały, treści, demo, źródła i checklistę dla Kamila lub Eweliny. Nie klikajcie Submit for Judging, nie wysyłajcie równoważnego żądania API, nie składajcie oświadczeń i nie akceptujcie regulaminu w ich imieniu. Ogólny cel „ukończ projekt” nie znosi tego ograniczenia.
-
-Submission wykonuje osobiście Kamil albo Ewelina. Po wyraźnym potwierdzeniu przez tę osobę agent może odnotować dowód i status w karcie, ale nie może sam wykonać wysyłki. Cel agenta kończy się na gotowym, sprawdzonym pakiecie do ręcznego zgłoszenia; otwarte I-006 nie blokuje ukończenia tak zdefiniowanego celu.
-
-## Najważniejsze wymagania
-
-1. Oceniaj każdą kwalifikującą się komórkę w zadeklarowanej siatce; globalny Top 10 powstaje przed agregacją do wyświetlania.
-2. Nigdy nie odrzucaj obszaru na podstawie średniej przed sprawdzeniem jego pikseli. Lokalne doprecyzowanie wybranych obszarów nie dowodzi globalnego optimum w wyższej rozdzielczości.
-3. Zachowaj pojedyncze hotspoty. Ranking pikseli i ranking różnych obszarów mają różne nazwy i jawne parametry.
-4. Brak danych oznacza `null` i powód; nie oznacza zera ani dobrego dopasowania. Porównuj komórki na tym samym zestawie aktywnych kryteriów.
-5. Nie wymyślaj danych, licencji, wyników, precyzji, NASA endorsement ani potwierdzeń zgłoszenia. Dane testowe zawsze oznaczaj jako syntetyczne.
-6. Metryki mają jednostki, skalę pomiaru, źródła i wersje. Nie porównuj wysokości nad różnymi planetarnymi zerami. Pochodne DEM licz z odległościami w metrach i modelem właściwego ciała niebieskiego.
-7. Nie nazywaj litologii mineralogią ani NDVI miarą życia na Marsie. Warstwy pośrednie oznaczaj jako proxy.
-8. Stosuj wymagania zgłoszenia z `docs/sources/03-submission.md`; dokumentuj użycie AI w `docs/AI_USAGE.md`.
-
-## Własność
-
-| Obszar | Właściciel |
+| Area | Owner |
 |---|---|
-| `pipeline/`, `apps/api/`, `data/`, `contracts/*.json`, `contracts/fixtures/` | Kamil |
-| `apps/web/`, `submission/`, `design/` | Ewelina |
-| `docs/DATA.md`, `docs/METHODOLOGY.md` | Kamil; Ewelina zgłasza uwagi |
-| `docs/SUBMISSION.md` | Ewelina; Kamil sprawdza twierdzenia naukowe |
-| `README.md`, `AGENTS.md`, inne wspólne docs, `.github/`, pliki główne | Właściciel aktualnego zadania I-*; domyślny integrator Kamil |
-| `tasks/<id>.md` | Jedyny właściciel danej karty; każdy agent może utworzyć nową kartę |
+| pipeline/, apps/api/, data/, contracts/*.json, contracts/fixtures/ | Kamil |
+| apps/web/, design/, submission/ | Ewelina |
+| docs/DATA.md, docs/METHODOLOGY.md | Kamil; Ewelina may propose edits for owner review |
+| docs/SUBMISSION.md | Ewelina; Kamil checks scientific claims |
+| Shared docs and root files | Owner of the active integration task |
+| tasks/ID.md | Owner recorded in that task |
 
-Nie jesteś sam w repozytorium. Nie cofaj cudzych zmian. Nie edytuj pliku drugiej ścieżki bez uzgodnionego przekazania; utwórz zadanie lub wpis w `handoffs/`. Nie buduj drugiego silnika scoringu w przeglądarce.
+The cross-repository inventory and language cleanup task I-014 is explicitly assigned to Ewelina and reviewed by Kamil. Do not use it to change scientific values, API behaviour, data provenance, or another owner's active implementation without review.
 
-## Pętla wykonania
+## Product and data invariants
 
-1. Sprawdź własny klon, `origin`, gałąź i zmiany; pobierz aktualne remote. Nie nadpisuj niezacommitowanej pracy.
-2. Po zakończeniu bieżącej pracy i pullu wybierz najpierw gotowe review przypisane Tobie, potem pozostałe P0, następnie P1/P2. Nie przerywaj rozpoczętego zadania. Sprawdź aktualne zależności i warunki startu w `origin/main`; lokalna gałąź drugiej osoby nie wystarcza.
-3. Opublikuj osobny commit **IN PROGRESS** w `origin/main` i potwierdź rezerwację przed implementacją. Jeśli kartę zajął ktoś inny, nie nadpisuj jego rezerwacji.
-4. Utwórz gałąź zadania z aktualnego `main`. Po każdej spójnej poprawce: sprawdzenie → commit → fetch → merge potrzebnych zmian i rozwiązanie konfliktów → sprawdzenie → push.
-5. Nowe karty, zmiany statusów i uzgodnienia publikuj w remote. Nie zostawiaj ustaleń tylko w rozmowie lub na lokalnym dysku.
-6. Opublikuj `review`, przekaż wynik przez zdalny PR/handoff, a po odbiorze połącz implementację do `main`. `done` publikuj dopiero po spełnieniu kryteriów i obecności rozwiązania w `origin/main`.
-7. Po odrzuconym pushu ponownie pobierz remote i zachowaj obie prace. Bez force-pusha, masowego „ours/theirs” i resetu usuwającego cudze zmiany. Rozwiązuj konflikty, gdy wystąpią; nie trzeba ich tworzyć przy każdym commicie.
-8. Kontynuuj gotowe P0 po synchronizacji. Gdy remote jest niedostępne, zabezpiecz pracę, napraw dostęp i raportuj niewysłane SHA; nie nazywaj ich przekazanymi ani zadania zarezerwowanym.
+1. A global Top 10 requires scoring every eligible cell in the declared grid before display aggregation. Never prune an area by its mean before checking its pixels.
+2. Preserve isolated hotspots. Pixel ranking and distinct-area ranking are separate modes with explicit parameters.
+3. Missing data remain null with reasons; they are not zero or a favourable score. Compare candidates on the same active criteria.
+4. Keep map, ranking, and details tied to one analysis ID. Do not silently replace stale or failed Live results with synthetic fixtures.
+5. Label all synthetic data visibly. Do not present them as NASADEM, Live output, or a global scan.
+6. Report units, measurement scale, source, version, and quality. Do not compare absolute heights across incompatible planetary vertical references.
+7. Lithology is not mineralogy. NDVI is not a measure of life on Mars.
+8. OSM is a basemap, not an analysis layer. Preserve attribution and usage-policy requirements.
+9. Do not invent data, licenses, precision, NASA endorsement, or submission confirmations.
 
-Logowanie, nadanie brakujących uprawnień i formalne oświadczenia mogą wymagać udziału człowieka. Przygotuj konkretne działanie i wskaż brakującą informację; nie oznaczaj go ukończonego na podstawie samej instrukcji. Commit/push do ustalonego remote jest normalnym krokiem realizacji zadania. Nie uruchamiaj dodatkowych subagentów bez prośby użytkownika.
+## Formal submission is human-only
 
-## Standard końcowy
+Only Kamil or Ewelina may submit the NASA project, make required attestations, or accept terms. Agents prepare a complete, evidence-backed package and checklist; they must not click Submit for Judging or send an equivalent API request. Task I-006 has executor human_only. An open I-006 does not block an otherwise complete agent objective.
 
-W raporcie podaj ID kart, zdalną gałąź, wysłane SHA / URL PR, stan połączenia do `main`, sprawdzenia, ograniczenia i kolejny krok drugiego toru. Wymień commity niewysłane z powodu blokady. Nie twierdź, że aplikacja działa, jeśli sprawdziłeś tylko dokumenty. Źródła prawdy: karta w `origin/main`, kontrakt i rejestr decyzji.
+Keep accurate, required AI/SI assistance disclosures and source/licence records. Remove incidental product or code-comment references that are not useful, but do not erase factual use records.
+
+## Final report
+
+Report task IDs, remote branch, pushed SHA and pull-request URL, merge state, checks actually run, evidence, limitations, unpublished commits, and the next human or cross-owner action. Never claim the application, browser, public deployment, or submission works unless that exact outcome was checked.

@@ -1,55 +1,58 @@
 # API
 
-Właściciel: Kamil; K-001, K-006, K-007, K-008.
+Owner: Kamil. The API serves versioned reference profiles, three regional Earth datasets, regional search results, map aggregates, and pixel details. It owns all scoring; the web client does not recalculate scores.
 
-## Uruchomienie lokalne
+## Run locally
 
-Wymagane: `uv`. Z katalogu głównego repozytorium:
+Requirements: Python 3.12 and uv. From the repository root:
 
 ```powershell
-uv python install
 uv sync --locked --dev
-uv run --locked python -m uvicorn apps.api.main:app --reload
+uv run --locked python -m uvicorn apps.api.main:app --reload --workers 1
 ```
 
-Serwer deweloperski nasłuchuje domyślnie na `http://127.0.0.1:8000`. Interaktywny opis tras jest pod `/docs`; zamrożony kontrakt v1 znajduje się w [CONTRACTS](../../docs/CONTRACTS.md) i `contracts/openapi.yaml`.
+The API listens on `http://127.0.0.1:8000`. Open `/docs` for the interactive route reference.
 
 ```powershell
 Invoke-RestMethod http://127.0.0.1:8000/api/v1/health
 Invoke-RestMethod http://127.0.0.1:8000/api/v1/catalog
 ```
 
-### Live web na osobnym originie
+Use one worker. Analyses are kept in process memory for one hour, up to 16 at a time. A map or pixel-detail request routed to another worker cannot resolve the same analysis ID, and a process restart clears stored analyses. Multiple workers require a shared persistent analysis store.
 
-API dopuszcza domyślnie tylko `http://localhost:5173` i `http://127.0.0.1:5173`, czyli lokalne originy Vite. Dla innej konfiguracji ustaw `TERRA_ANALOG_CORS_ORIGINS` na rozdzieloną przecinkami listę dokładnych originów aplikacji web (schemat i host z opcjonalnym portem, bez ścieżki); wildcardy, cookies i credentials są wyłączone. Niezdefiniowana zmienna zachowuje domyślne originy lokalne, a jawnie pusta lista wyłącza dostęp CORS.
+## Browser access from another origin
 
-Uruchom API w pierwszym terminalu:
+By default, browser requests are allowed only from the local Vite origins `http://localhost:5173` and `http://127.0.0.1:5173`. To allow a different frontend origin, set `TERRA_ANALOG_CORS_ORIGINS` to a comma-separated list of exact HTTP(S) origins without paths or wildcards. If unset, the local defaults apply; an explicitly empty value disables cross-origin access. The API permits GET and POST with the `Content-Type` header and does not allow cookies or credentials. CORS is a browser access rule, not API authentication.
+
+Start the API in one terminal:
 
 ```powershell
-uv run --locked python -m uvicorn apps.api.main:app --reload
+uv run --locked python -m uvicorn apps.api.main:app --reload --workers 1
 ```
 
-W drugim terminalu, w katalogu `apps/web`, wskaż API i uruchom Vite:
+In a second terminal, from `apps/web`, point the frontend at the API and run Vite:
 
 ```powershell
 $env:VITE_API_BASE_URL = "http://127.0.0.1:8000"
 npm run dev
 ```
 
-Jeśli web jest wdrożony pod innym adresem, ustaw `TERRA_ANALOG_CORS_ORIGINS` po stronie API na dokładny origin web, np. `https://demo.example`; po stronie web ustaw `VITE_API_BASE_URL` na origin API. Nie umieszczaj ścieżki ani końcowego ukośnika w żadnej z tych wartości. CORS jest ograniczeniem dostępu z przeglądarki i nie uwierzytelnia API.
+For a deployed split-origin setup, set the API allow-list to the exact frontend origin (for example, `https://demo.example`) and set `VITE_API_BASE_URL` to the API origin. Do not include a path or trailing slash in either value.
 
-Health sprawdza rozmiar i SHA-256 trzech śledzonych pakietów K-005. Zwraca `dataset_ready: true`, gdy lokalne dane przechodzą kontrolę. `dataset_version` pozostaje `null`, ponieważ istnieją trzy niezależne, niemieszane wersje regionalne.
+## Current data scope
 
-## Obsługiwane dane i zakres
+Reference profiles: Mars Jezero (`mars-jezero-mola128-v1`) and the lunar south polar region, 80–90°S (`moon-south-polar-80s-lola80-v1`). Earth search packages: Atacama / Andes (`k005-earth-2km-atacama-andes-v2`), Hawaii Big Island (`k005-earth-2km-hawaii-big-island-v2`), and the Himalaya (`k005-earth-2km-himalaya-v2`). Each request selects one catalogued package and version.
 
-API udostępnia profile `mars-jezero-mola128-v1` oraz `moon-south-polar-80s-lola80-v1`, a także rzeczywiste pakiety Earth search `k005-earth-2km-atacama-andes-v2`, `k005-earth-2km-hawaii-big-island-v2` i `k005-earth-2km-himalaya-v2`. Katalog zwraca aktualne regiony, źródła, wersje, ostrzeżenia i ograniczenia.
+`POST /api/v1/search` evaluates the selected regional package and returns either a pixel ranking or distinct-area representatives, plus map cells. The three criteria are surface slope (degrees), local roughness (metres), and local relief (metres). Missing active measurements remain unavailable with reasons. Map records retain the winning pixel ID and analysis ID.
 
-`POST /api/v1/search` wykonuje pełny ranking komórek jednego wybranego regionu, zapisuje konfigurację w `analysis_id`, zwraca ranking pikseli albo osobny ranking `distinct_areas` oraz kafle mapy poziomu 8. Profile Marsa i Księżyca porównują te same trzy cechy topograficzne. Braki są wykluczane dla aktywnych cech; wagi nie są lokalnie przeliczane.
+Global search is unavailable and returns `SCOPE_UNAVAILABLE`; the server does not silently substitute a regional result. A regional ranking is not a global optimum.
 
-Globalny zakres nie ma jeszcze pakietu Earth search. Żądanie `{"type":"global"}` zwraca `SCOPE_UNAVAILABLE`; serwer nigdy nie ogranicza go po cichu do dostępnych regionów. Wynik regionalny nie jest globalnym optimum ani NASA endorsement.
+## Map and data handling
 
-Endpoint mapy przyjmuje `bbox=west,south,east,north`, `level` 0–30, opcjonalne `limit` i `cursor`. `level` oznacza zoom kafli XYZ Web Mercator. Średnia kafla jest ważona powierzchnią, a `max_pixel_id` wskazuje konkretny piksel z tym wynikiem. Kafle przecinające bbox mogą obejmować także komórki poza granicą bbox, jeśli należą do tego samego kafla.
+The analysis map endpoint accepts `bbox=west,south,east,north`, `level` 0–30, and optional `limit` and `cursor`. `level` is the XYZ Web Mercator zoom. Tile averages are area-weighted; `max_pixel_id` identifies a pixel with the corresponding value. A tile that intersects the requested bbox may also contain cells outside the bbox if they fall within the same tile.
 
-Analizy są przechowywane w pamięci procesu przez godzinę, maksymalnie 16 naraz; po restarcie serwera identyfikatory analiz nie są odtwarzane. Ten etap MVP wymaga jednego workera Uvicorn: wiele workerów nie współdzieli `analysis_id`, więc żądania szczegółów i mapy mogą trafić do procesu bez zapisanej analizy. Wdrożenie wieloprocesowe wymaga wspólnego trwałego magazynu analiz. K-008 odpowiada za globalne przetwarzanie, pełne pokrycie, pomiary skali i mapowe agregaty dla globalnego zbioru.
+The health endpoint verifies the size and SHA-256 of the three tracked K-005 packages. It reports `dataset_ready: true` when those files pass integrity checks; `dataset_version` is `null` because the regional packages have separate immutable versions.
 
-Testowana konfiguracja: Python 3.12.14, FastAPI 0.162.7, NumPy 2.5.4, Rasterio 1.5.2, pyproj 3.8.0 i Uvicorn 0.54.0. Wersje zależności są przypięte w głównym `pyproject.toml` i `uv.lock`.
+## Dependencies and limits
+
+Exact Python dependency versions are pinned in the root `pyproject.toml` and `uv.lock`. The documented test environment uses Python 3.12.14, FastAPI 0.162.7, NumPy 2.5.4, Rasterio 1.5.2, pyproj 3.8.0, and Uvicorn 0.54.0. The API is a regional MVP, not a global Earth scan or a durable multi-worker service. K-008 covers global processing, full coverage, scale measurements, and global map aggregates.

@@ -1,16 +1,16 @@
-# S04 — regulamin
+# S04 — Participant terms summary
 
-Źródło: [Participant Terms and Conditions 2026](https://www.spaceappschallenge.org/legal/), aktualizacja 2026-08-07, pełny odczyt 2026-11-14.
+Source: [2026 Participant Terms and Conditions](https://www.spaceappschallenge.org/legal/), updated 7 August 2026 and read in full on 14 November 2026.
 
-## Streszczenie istotne dla implementacji
+## Points relevant to implementation
 
-- Zgłaszany projekt ma odpowiadać oficjalnemu wyzwaniu; autorzy muszą mieć prawa do opublikowanych materiałów.
-- Własna treść ma być dostępna bez ograniczeń lub na licencji open source zgodnej z OSI. Przy braku wskazanej licencji NASA przewiduje dystrybucję własnej treści na Apache 2.0.
-- Zewnętrzne materiały wymagają sprawdzenia dostępności/praw, odpowiedniej dokumentacji licencji oraz cytowania wszystkich źródeł, także darmowych. Braki mogą skutkować usunięciem materiałów lub wyróżnień.
-- Zgłoszenie udziela NASA uprawnień do rozpowszechniania rozwiązania na potrzeby Space Apps; nie jest prostym przekazaniem autorstwa.
-- Nie publikować poufnych danych, danych osobowych ani rozpoznawalnych nazw, głosów i wizerunków niepełnoletnich. Przy dorosłych osobach w materiałach obowiązują zgody.
-- Regulamin obejmuje też zasady uczestnictwa, ograniczenia afiliacji, odpowiedzialność i zgody medialne; zespół powinien zapoznać się z całością przed formalnym oświadczeniem.
+- A submitted project must answer the official challenge, and authors must have the rights needed for submitted materials.
+- Original content must be made available without restriction or under an OSI-compatible open-source licence. If no licence is specified, NASA's terms provide for distribution of original content under Apache 2.0.
+- External material requires rights and availability checks, licence documentation, and attribution, including material described as free. Missing permissions may lead to removal of materials or awards.
+- Submission grants NASA rights to distribute the solution for Space Apps purposes; it is not a simple transfer of authorship.
+- Do not publish confidential or personal information, or recognizable names, voices, or images of minors. Adult participants shown in media require consent.
+- The terms also cover participation, affiliation restrictions, liability, and media consent. The team should read the full terms before making a formal declaration.
 
-## Decyzje repozytorium
+## Repository policy
 
-Proponowana licencja własnego kodu i dokumentacji: MIT. Dane oraz materiały zewnętrzne pozostają przy własnych warunkach zapisanych w [THIRD_PARTY](../../THIRD_PARTY.md). Nie zakładamy, że każdy zasób dostępny bezpłatnie można ponownie opublikować. Człowiek dokonujący zgłoszenia potwierdza wymagane oświadczenia po przeglądzie materiałów.
+The repository's MIT licence applies to project code and documentation. External data and materials retain their own terms, as recorded in [THIRD_PARTY.md](../../THIRD_PARTY.md) and the manifests. Free access does not by itself establish redistribution rights. A human team member must personally review and accept the required declarations.

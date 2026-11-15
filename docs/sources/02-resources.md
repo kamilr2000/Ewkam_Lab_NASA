@@ -1,21 +1,21 @@
-# S02 — polecane zasoby
+# S02 — Recommended resources
 
-Źródło: [oficjalna zakładka Resources](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources). Pełny odczyt: 2026-11-14.
+Source: [official challenge Resources tab](https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources). Full read: 14 November 2026.
 
-Poniższe pozycje rzeczywiście znajdują się w zakładce. Usunięto parametry śledzące z linków. Produkty wybrane przez nas dodatkowo, np. ETOPO, opisuje osobno [DATA](../DATA.md).
+The following links were listed in the organizer's resource page. Tracking parameters have been removed. Additional sources selected by the team, such as ETOPO, are documented separately in [DATA.md](../DATA.md).
 
-| Agencja | Zasób | Do czego służy |
+| Agency | Resource | Intended use |
 |---|---|---|
-| NASA | [Earthdata Search](https://search.earthdata.nasa.gov/) | Wyszukanie obserwacji Ziemi |
-| NASA | [Worldview](https://worldview.earthdata.nasa.gov/index.html) | Wizualny przegląd obserwacji satelitarnych |
-| NASA | [Planetary Data System](https://pds.nasa.gov/) | Archiwum danych misji planetarnych |
-| NASA | [LRO](https://pds-geosciences.wustl.edu/missions/lro/) | Zestawy instrumentów księżycowych |
-| NASA | [LRO Diviner](https://pds-geosciences.wustl.edu/missions/lro/diviner.htm) | Temperatura i warunki polarne Księżyca |
-| CSA | [RCM](https://donnees-data.asc-csa.gc.ca/en/dataset/rcm) | Radarowe obserwacje Ziemi |
-| CSA | [RADARSAT-1](https://donnees-data.asc-csa.gc.ca/en/dataset/radarsat1) | Archiwum radarowe udostępnione na otwartych warunkach |
-| CSA | [Tutorial SAR](https://github.com/asc-csa/Synthetic_Aperture_Radar_Tutorial) | Praca z obrazami radarowymi w Pythonie i QGIS |
-| ESA | [Copernicus Data Space](https://dataspace.copernicus.eu/) | Dane Sentinel i narzędzia przetwarzania |
-| ESA | [Open Science Catalog](https://opensciencedata.esa.int/) | Katalog otwartych zbiorów i procesów |
-| JAXA | [G-Portal](https://gportal.jaxa.jp/gpr/index/index) | Obserwacje m.in. opadów, śniegu i roślinności |
+| NASA | [Earthdata Search](https://search.earthdata.nasa.gov/) | Find Earth observations |
+| NASA | [Worldview](https://worldview.earthdata.nasa.gov/index.html) | Visual review of satellite observations |
+| NASA | [Planetary Data System](https://pds.nasa.gov/) | Archive of planetary mission data |
+| NASA | [Lunar Reconnaissance Orbiter](https://pds-geosciences.wustl.edu/missions/lro/) | Lunar instrument datasets |
+| NASA | [LRO Diviner](https://pds-geosciences.wustl.edu/missions/lro/diviner.htm) | Lunar surface temperature and polar conditions |
+| CSA | [RADARSAT Constellation Mission](https://donnees-data.asc-csa.gc.ca/en/dataset/rcm) | Earth radar observations |
+| CSA | [RADARSAT-1](https://donnees-data.asc-csa.gc.ca/en/dataset/radarsat1) | Openly provided radar archive |
+| CSA | [Synthetic Aperture Radar tutorial](https://github.com/asc-csa/Synthetic_Aperture_Radar_Tutorial) | Work with radar imagery in Python and QGIS |
+| ESA | [Copernicus Data Space](https://dataspace.copernicus.eu/) | Sentinel data and processing tools |
+| ESA | [Open Science Catalog](https://opensciencedata.esa.int/) | Catalogue of open datasets and workflows |
+| JAXA | [G-Portal](https://gportal.jaxa.jp/gpr/index/index) | Observations including precipitation, snow, and vegetation |
 
-To katalog punktów dostępu, nie gotowe warstwy o identycznych jednostkach i pokryciu. K-002 wybiera konkretne produkty i sprawdza ich warunki. Zasoby zewnętrzne mają własne zasady użycia; obecność linku nie jest rekomendacją komercyjnego dostawcy przez NASA.
+A resource catalogue is not a set of ready-to-use layers with matching units, coverage, and resolution. The project selects specific products and checks their terms. A link in the challenge guide is not an endorsement of a commercial provider by NASA.

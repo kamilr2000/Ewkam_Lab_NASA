@@ -1,3 +1,5 @@
-# Pipeline test location
+# Pipeline tests
 
-Add tests beside the preprocessing or scoring behavior they verify. K-001 only bootstraps the shared Python environment; no scientific pipeline behavior or test result is present yet. K-002, K-005 and K-006 add checks with their corresponding data and algorithms.
+Place tests next to the preprocessing or scoring behavior they verify. Keep each test tied to its input version, units, grid, and expected QA behaviour.
+
+The repository's available pipeline tests are listed by pytest configuration in pyproject.toml. A test result is evidence only for the exercised code and fixture; it does not prove global coverage or accuracy of untested data.

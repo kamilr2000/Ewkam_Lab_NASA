@@ -1,9 +1,17 @@
-# Terra Analog — submission workspace
+# Terra Analog — submission status
 
-**Planning stage. No application, scientific results or public demo have been delivered yet.**
+The English project description and seven-slide demo are prepared in open E-010 PR #99. That package is awaiting its assigned factual review and is not yet integrated into the default branch.
 
-Kamil and Ewelina proposed a global Earth analogue explorer for selected Moon and Mars regions. Users would choose measurable features and weights, then inspect an explained ranking of individual analysis cells.
+The integrated application is a regional MVP with three named Earth datasets. It does not provide global search. There is no verified public deployment or signed-out project/demo link. Do not present a regional result as global, or a local file as a public submission link.
 
-This directory will contain the English project materials after implementation and validation. Do not submit this placeholder as a completed product.
+The older project template contained unresolved draft fields and is no longer needed. It has been removed; the actual jury materials remain in PR #99 until review and integration.
 
-Planned contents: project description, actual NASA data use, reproducible example, scientific limitations, source and licence acknowledgements, AI assistance disclosure, final project link and a demo meeting the current official format limits.
+## Human actions before submission
+
+1. Confirm the registered event, team account, members, local deadline, and current form requirements.
+2. Complete the review and integrate the English package; verify the final product and demo against the integrated code and data.
+3. Host the product and demo publicly, then verify both links without signing in.
+4. Confirm sources, rights, citations, limitations, and any event-required disclosures.
+5. Only Kamil or Ewelina personally may complete the form, accept terms, make attestations, or submit the project. Retain the confirmation URL and local timestamp.
+
+See [submission guidance](../docs/SUBMISSION.md), the [S03 requirements snapshot](../docs/sources/03-submission.md), and [human-only task I-006](../tasks/I-006.md).

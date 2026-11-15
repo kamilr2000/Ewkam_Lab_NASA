@@ -1,11 +1,27 @@
-# Dane
+# Data inventory
 
-Właściciel: Kamil. K-002 pobrał małe próbki ETOPO 2022, LOLA LDEM_4 i MOLA MEGT/MEGC. K-017 dodał NASADEM HGT/NUM/SWB, porównawcze kafle ETOPO, GSHHG 2.3.7 i gridy geoid PROJ. K-004 dodał profil Jezero z MOLA 128 px/° oraz profil księżycowej czapy 80–90°S z LOLA PGDA 80 m. Metadane, pochodzenie, rozmiary i SHA-256 są w `manifests/`; raporty K-017 i K-004 zapisują sprawdzenia i ograniczenia. Dane surowe nie są commitowane.
+Owner: Kamil. Tracked files document provenance and provide compact regional packages that the API uses. Raw archives and large intermediate rasters are excluded from Git.
 
-Odtwarzalne pobranie próbek publicznych z K-002: `python pipeline/download_samples.py`. Dla K-017 po `uv sync --locked --group data` uruchom `uv run --locked --group data python pipeline/download_k017_assets.py`, a potem `uv run --locked --group data python pipeline/compare_nasadem_etopo.py`. Dla K-004 uruchom `python pipeline/download_k004_sources.py`, a następnie `python pipeline/profiles/build_profiles.py`; downloader pobiera publiczne pliki bez EARTHDATA_TOKEN, sprawdza przypięte rozmiary/SHA-256, a builder dodatkowo odrzuca źródła różne od wersji w lockfile. Szczegóły są w [instrukcji pipeline](../pipeline/README.md).
+## Tracked data
 
-Duże dane w ignorowanych katalogach `raw/`, `intermediate/`, `processed/`, `cache/`. Małe manifesty i raporty pokrycia mogą być wersjonowane. Pobranie gotowego pakietu ma sprawdzać wersję i sumy kontrolne; źródła i ograniczenia opisuje [DATA](../docs/DATA.md).
+- data/manifests/: source IDs, versions, licence and provenance notes, file sizes, checksums, and processing parameters.
+- data/reports/: reproducibility and quality summaries.
+- data/derived/k005-earth-grid/: small, versioned regional Earth cell tables consumed by the current API.
 
-K-005 publikuje trzy małe, skompresowane regionalne tabele komórek (`derived/k005-earth-grid/`) wraz z manifestami SHA-256, więc kolejne etapy API i UI mogą od razu pokazać rzeczywiste dane. Mają łącznie mniej niż 200 kB; zawierają wyłącznie pochodne cechy i QA, nie surowe rastry. Surowe ETOPO/GSHHG oraz checkpointy pozostają ignorowane i można je pobrać oraz odtworzyć według instrukcji w [pipeline README](../pipeline/README.md).
+Do not remove the derived packages: they are runtime inputs, not disposable build output. Do not add raw downloads or temporary rasters to Git.
 
-Jedna wersja danych obejmuje jedną siatkę i skalę. Lokalnych wyników o większej szczegółowości nie dopisujemy do tej samej tabeli jako pozornie porównywalnych kandydatów globalnych.
+## Current sources and roles
+
+- NASA MOLA supplies the Mars Jezero reference profile.
+- NASA LOLA PGDA Product 90 supplies the lunar south-polar reference profile.
+- NOAA ETOPO 2022 supplies terrain elevation for the three regional Earth search packages.
+- GSHHG supplies a land/water mask during Earth processing.
+- NASADEM HGT is used in a separate Earth-data validation exercise. It does not supply the scored Earth measurements in the recorded demo examples.
+
+These sources have different grids, scales, and roles. The app compares documented terrain derivatives; it does not compare planetary elevation datums as if they were interchangeable. NASADEM validation over selected regions is not a global accuracy assessment.
+
+## Reproduce data products
+
+Follow the versioned commands in [pipeline/README.md](../pipeline/README.md). Downloaders verify pinned checksums. Use the corresponding manifest and report to confirm each result. Some NASADEM inputs require local Earthdata authentication; never write credentials into the repository.
+
+The compact packages represent three regional areas only. They do not provide global Earth coverage or a global ranking.

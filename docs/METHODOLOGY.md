@@ -1,138 +1,82 @@
-# Metoda podobieństwa i granulacja
+# Methodology and result interpretation
 
-Status: specyfikacja projektowa v0.1. Dwa zmierzone profile P0 powstały w K-004; ich tolerancje i wspólna skala nadal wymagają analizy wrażliwości K-009. Progi i parametry poniżej są decyzjami inżynierskimi, nie ustaleniami NASA.
+## Comparison target
 
-## 1. Co porównujemy
+A run is defined by the target body, reference region and profile version, active features and positive weights, Earth dataset version and region, and ranking mode. “Mars” alone is not a single reference condition. The current profiles cover Jezero crater and the lunar 80–90°S region; see their manifests for source IDs and profile statistics.
 
-Konfiguracja = ciało niebieskie + konkretny region referencyjny + wersja profilu + wybrane cechy + dodatnie wagi + wersja siatki/danych + tryb wyników. „Mars” bez profilu regionalnego nie definiuje jednego zestawu warunków.
+Absolute elevation values are not compared across Earth, Mars, and Moon vertical references. The MVP compares terrain derivatives with documented units and spatial support.
 
-Profil zawiera geometrię regionu we współrzędnych właściwego ciała, statystyki zmierzonych cech, datę/wersję źródła, jednostki, definicję skali i uzasadnienie tolerancji. K-004 przygotował rzeczywiste profile Jezero i księżycowego obszaru 80–90°S. Ich zasięg i ograniczenia są częścią danych profilu, a nie domyślnym twierdzeniem o całej planecie.
+## Current scales and features
 
-## 2. Zmierzone profile K-004
+The three K-005 Earth packages use a nominal 2 km UTM cell grid. Local terrain features use a 10 km physical neighbourhood. Source posting, analysis-cell size, feature neighbourhood, and map display aggregation are different scales and must be reported separately.
 
-Oba profile używają nominalnej komórki 2 km i kołowego okna cech o fizycznym promieniu 10 km. Każdy raster jest najpierw sprowadzany do siatki analitycznej właściwej dla jego ciała; absolutnych wysokości Marsa i Księżyca nie porównujemy.
-
-| Profil | Geometria celu | Źródło i wsparcie | Pokrycie profilu |
-|---|---|---|---:|
-| Jezero, Mars | Okrąg 47,52 km średnicy wokół środka 18,41°N, 77,69°E z Gazetteer USGS; to geometryczna obwiednia, nie obrys brzegu krateru | MOLA MEGDR v2, MEGT + MEGC, kafel 44N000HB, 128 px/°. MEGT ma ok. 463 m/piksel na równiku i ok. 439 m E–W na szerokości Jezero | 448 komórek celu; 448/448 z trzema cechami. Średnio 35,4% źródłowych binów MEGC ma bezpośrednie obserwacje; 95,5% komórek 2 km przecina co najmniej jeden taki bin |
-| Biegun południowy Księżyca | Sferyczna czapa 80–90°S, określona granicą pokrycia źródła; promień około 304,1 km w stereografii polarnej | NASA PGDA Product 90: LDEM, LDEC, EFFRES i ERR, nominalny posting DEM 80 m. Odległości cech uwzględniają zmianę skali stereografii; komórki odrzuca się, gdy uśredniona efektywna rozdzielczość przekracza 2 km | 72 580 komórek celu; 72 100/72 580 (99,34%) z trzema cechami. Efektywna rozdzielczość po uśrednieniu na komórkę analityczną 2 km: P50 42,49 m, P95 69,76 m |
-
-Referencyjne zakresy to ważone powierzchnią P10–P90 cech komórek w profilu. Tolerancja to jawne, prowizoryczne założenie `1,5 × IQR` (P75−P25) tego samego profilu. Nie jest niepewnością instrumentu, nie pochodzi z dopasowania do znanego ziemskiego analogu i nie jest progiem NASA. K-009 ma sprawdzić zmianę rankingu przy innych tolerancjach i regułach jakości.
-
-| Profil | Cecha | P10–P90 | Tolerancja K-004 |
-|---|---|---:|---:|
-| Jezero | Nachylenie | 0,377–5,682° | 3,040° |
-| Jezero | Nierówność po odjęciu płaszczyzny | 20,658–175,207 m | 151,788 m |
-| Jezero | Deniwelacja P95−P05 | 138,334–887,632 m | 630,221 m |
-| Księżyc 80–90°S | Nachylenie | 1,281–14,385° | 10,412° |
-| Księżyc 80–90°S | Nierówność po odjęciu płaszczyzny | 115,063–452,243 m | 252,451 m |
-| Księżyc 80–90°S | Deniwelacja P95−P05 | 572,221–2 959,491 m | 1 947,640 m |
-
-Wartości i źródłowe sumy kontrolne są zapisane w [manifeście wyników K-004](../data/manifests/k004-planetary-profiles.json); przypięte wejścia są w [manifeście plików](../data/manifests/k004-source-files.json). Reprodukcja używa `python pipeline/download_k004_sources.py`, a następnie `python pipeline/profiles/build_profiles.py`. Program sprawdza ręcznie odtworzony zestaw trzech cech w jednym pikselu każdego profilu oraz przejście długości geograficznej przez transformację w obie strony. Oba sprawdzenia przeszły dla bieżących danych.
-
-Ograniczenia źródeł są jawne. MOLA uzupełnia biny bez bezpośrednich obserwacji interpolacją produktu; MEGC pokazuje ten udział i nie maskujemy go jako pomiaru bezpośredniego. Księżycowy profil dotyczy tylko 80–90°S, a nie całego południowego bieguna ani obszaru na północ od pokrycia LDEM. LDEC jest liczbą zwrotów, nie odsetkiem pokrytej powierzchni; posting 80 m nie oznacza efektywnej rozdzielczości 80 m. Cytowania źródeł i ograniczenia licencyjne są w `docs/DATA.md` i manifeście.
-
-Braki w księżycowym profilu wynikają z geometrii i jawnych reguł wsparcia, a nie z braku danych w środku komórek analitycznych: 72 580/72 580 komórek 2 km ma ważną wartość źródłową po bramce jakości EFFRES. Przy krawędzi kafla część kołowych okien 10 km wychodzi poza raster; 480 okien ma wtedy mniej niż 90% ważnych próbek i nie dostarcza nierówności ani deniwelacji. Minimalne wsparcie okna wynosi 56,79%, P01 90,12%, a P05, P50 i P95 100%. Nachylenie nie wymaga całego okna 10 km, ale jego różnica centralna potrzebuje sąsiadów po obu stronach; ta sama krawędź pozbawia ich 96 komórek. Żadna wartość brakująca nie jest zastępowana zerem. Szczegóły są w sekcjach `grid_quality` i `feature_statistics` manifestu K-004. Dla Jezero 448/448 okien i komórek źródłowych są kompletne.
-
-Wszystkie liczby powyżej są statystykami wybranych zmierzonych obszarów. Nie są jeszcze wynikiem rankingu Ziemi, walidacją podobieństwa ani twierdzeniem, że którykolwiek obszar jest jednoznacznym analogiem.
-
-## 3. Trzy różne skale
-
-| Skala | Znaczenie | Zasada |
+| Feature | Unit | Definition |
 |---|---|---|
-| Efektywna rozdzielczość źródła | Najmniejsza rozpoznawalna struktura w pomiarze | Zagęszczenie rastra nie tworzy nowych obserwacji |
-| Komórka analityczna i okno cechy | Obiekt rankingu oraz otoczenie potrzebne do obliczenia cechy | Stałe w danym wydaniu, zapisane w metadanych |
-| Komórka wizualizacji | Zbiór wyników wyświetlany po oddaleniu mapy | Nigdy nie jest kandydatem zastępującym piksele |
+| Surface slope | degrees | Local gradient computed with distances in metres |
+| Local roughness | metres | Standard deviation of elevation residuals after removal of a local plane |
+| Local relief | metres | P95 minus P05 elevation in the physical neighbourhood |
 
-Propozycja P0: każdy ważny piksel ziemskiego rastra 60 arc-second jest osobnym kandydatem; ID zawiera wersję siatki, wiersz i kolumnę. Nominalna odległość północ–południe to ok. 1,85 km, a szerokość i powierzchnia zależą od szerokości geograficznej. Zapisujemy `pixel_area_km2`, granice i faktyczne wsparcie pomiaru. Proponowana wspólna efektywna skala DEM to ok. 2 km, a promień okna cech lokalnych 10 km. Konkretne wartości zamraża G1 po pomiarze danych i kosztów.
+The three features are related measures of topography; they are not independent evidence for a complete environmental analogue.
 
-### Decyzja K-005 dla regionalnego pakietu Ziemi
+## Measured K-004 reference profiles
 
-Wersja K-005 używa osobnej, kwadratowej siatki lokalnego UTM o komórce 2 000 × 2 000 m. ETOPO 2022 15″ jest uśredniane powierzchniowo do tej siatki; efektywna skala wyjściowa pozostaje 2 km, choć źródłowy posting wynosi ok. 0,42–0,46 km w badanych szerokościach. Kandydatem jest każda komórka, której środek leży w jawnie podanym bbox AOI. Bufor 12 km służy tylko obliczeniu cech i nie poszerza zakresu kandydatów. `pixel_id` wiąże wersję AOI/siatki z wierszem i kolumną. Pole każdej komórki obliczamy jako powierzchnię ellipsoidalną poligonu jej czterech narożników po transformacji UTM → WGS84; 4 km² w UTM pozostaje powierzchnią nominalną.
+Both profiles use a nominal 2 km analysis cell and a 10 km physical feature neighbourhood. Each source is processed on a grid appropriate to its body; absolute Earth, Mars, and lunar elevations are not compared.
 
-To regionalna siatka demonstracyjna; jej pikseli nie łączymy z przyszłą siatką globalną ani rankingiem. Budżet 60″ opisuje 233 280 000 komórek świata, 933 120 000 B dla float32 DEM, 2 799 360 000 B dla trzech pełnych tablic float32 i 6 065 280 000 B dla pełnego stanu kandydatów. Modelowana partia 64 wierszy z 7 wierszami halo wymaga 208,1 MB tablic roboczych, w tym okna float32 ETOPO 15″ i maski źródłowej GSHHG, przed buforami GDAL/PROJ. To jawny model rozmiaru tablic, nie pomiar pamięci lub czasu globalnego przebiegu. Globalna geometria, kontrola biegunów i czas pełnego przetwarzania pozostają bramką przed jakimkolwiek twierdzeniem o globalnym Top 10.
+| Profile | Region and source | Profile support |
+|---|---|---|
+| Mars — Jezero | A 47.52 km diameter circle around 18.41°N, 77.69°E, based on the USGS Gazetteer; this is a geometric envelope, not a crater-rim boundary. MOLA MEGDR v2 MEGT/MEGC, source tile 44N000HB, 128 px/degree. | 448 target cells; all 448 have the three features. At Jezero, source posting is about 463 m/pixel at the equator and 439 m east–west. On average 35.4% of MEGC bins have direct observations; 95.5% of 2 km cells intersect at least one such bin. |
+| Moon — 80–90°S | Spherical polar cap bounded by LOLA Product 90 coverage; radius about 304.1 km in polar stereographic coordinates. NASA GSFC PGDA LDEM, LDEC, EFFRES, and ERR; nominal 80 m DEM posting. | 72,580 target cells; 72,100 (99.34%) contain all three features. Effective resolution after averaging to 2 km: median 42.49 m and P95 69.76 m. |
 
-Maska GSHHG jest niezależna od wysokości i stosowana już na natywnej siatce źródłowego ETOPO 15″ przed uśrednieniem do 2 km; wartości batymetrii nie mogą domieszać się do lądowej wysokości komórki wybrzeża. Komórka kandydująca jest lądowa według punktu środkowego; `land_fraction_4x` dodatkowo zapisuje przybliżony udział 16 podkomórek. Okno 10 km zawiera 81 środków komórek; dla nierówności i deniwelacji wymagamy co najmniej 73 ważnych pomiarów lądu, a nachylenie wymaga kompletnego sąsiedztwa 3 × 3. Brak lub woda zmniejszają udziały QA, nie wypełniają pomiaru zerem. Zmiana metody maskowania źródła podnosi `model_version` i `grid_version` do v2.
+The intervals use area-weighted P10–P90 profile values. Tolerance is 1.5 × IQR for the same profile. This is a provisional modelling assumption, not instrument uncertainty, a known-analogue fit, or a NASA threshold.
 
-Na DEM obliczamy pola cech na wspólnej skali fizycznej i zapisujemy wartość dla **każdego piksela**. Nie uśredniamy potem cech wielu pikseli do większego heksagonu lub regionu przed scoringiem. Koszyki mapowe oraz opcjonalny indeks przestrzenny służą wyłącznie do wyświetlania i przyspieszania odczytu. Profil planetarny powstaje z próbek o porównywalnym wsparciu przestrzennym, w układzie właściwego ciała. Jeśli źródło lub cecha wymaga większego okna, nowa skala musi zostać jawnie zarejestrowana; nie mieszamy jej bez walidacji z poprzednią wersją.
+| Profile | Feature | P10–P90 | Tolerance |
+|---|---|---:|---:|
+| Jezero | Slope | 0.377–5.682° | 3.040° |
+| Jezero | Roughness after local-plane removal | 20.658–175.207 m | 151.788 m |
+| Jezero | Local relief, P95–P05 | 138.334–887.632 m | 630.221 m |
+| Moon 80–90°S | Slope | 1.281–14.385° | 10.412° |
+| Moon 80–90°S | Roughness after local-plane removal | 115.063–452.243 m | 252.451 m |
+| Moon 80–90°S | Local relief, P95–P05 | 572.221–2,959.491 m | 1,947.640 m |
 
-Okno potrzebne do wyznaczenia nierówności jest częścią definicji tej cechy, a nie średnią wyników rankingu. Dobry piksel może zatem oznaczać dopasowanie lokalnego otoczenia o zadanym promieniu. UI pokazuje to obok wielkości komórki; nie sugeruje niezależnego pomiaru wyłącznie wewnątrz małego piksela.
+Exact source checksums and profile outputs are recorded in data/manifests/k004-planetary-profiles.json and data/manifests/k004-source-files.json. The full coverage and edge-window audit remains there: 480 lunar 10 km windows at the source edge fall below the 90% support threshold for roughness/relief, and 96 edge cells lack neighbours required for central-difference slope. Missing measurements remain null; none are replaced with zero. MOLA MEGC records the proportion of interpolated or non-directly observed support; it is not treated as entirely direct measurement.
 
-## 4. Cechy P0
+## Profile intervals and feature similarity
 
-- `slope_deg`: lokalny kąt nachylenia w pikselu; gradient liczony po wygładzeniu / przeskalowaniu DEM do wspólnej efektywnej skali, z odległościami w metrach.
-- `roughness_m`: odchylenie standardowe reszt wysokości po odjęciu lokalnej płaszczyzny w oknie fizycznym.
-- `relief_m`: różnica P95 i P05 wysokości w tym samym oknie, odporna na pojedynczy ekstremalny pomiar.
+K-004 profile intervals use area-weighted P10–P90 values for each measured feature. The current tolerance is 1.5 times that feature's interquartile range. This is an experimental modelling choice, not instrument uncertainty, a NASA threshold, or a validated probability.
 
-Nie porównujemy wysokości nad ziemskim geoidem z wysokością nad marsjańskim areoidem ani promieniem Księżyca. Powyższe cechy są względne, lecz nadal zależą od skali. DEM lodowej powierzchni i DEM podłoża to różne wielkości. P0 opisuje powierzchnię dostępną do testów, a nie ukryte podłoże.
+For candidate value x, reference interval [a, b], and positive tolerance t:
 
-Wiele cech jednego DEM nie stanowi niezależnych dowodów zgodności. P0 jest modelem topograficznym. Przed dodaniem dziedzin środowiskowych wprowadzamy grupy wag, aby trzy podobne cechy terenu nie zdominowały jednej warstwy temperatury.
+- d = max(a − x, 0, x − b)
+- s(x) = max(0, 1 − d/t)
 
-## 5. Wynik pojedynczej warstwy
+Similarity s is 1 inside the interval and decreases linearly to 0 outside it. The exact intervals and tolerances are recorded in the versioned profile manifest. Do not tune them to force a known location to rank first.
 
-Dla wartości `x`, przedziału referencyjnego `[a, b]` i dodatniej tolerancji `t`:
+## Weighted score
 
-```text
-d = max(a - x, 0, x - b)
-s(x) = max(0, 1 - d / t)
-```
+For selected feature set A with positive weights wᵢ:
 
-`s` należy do [0,1]. Wynik jest równy 1 wewnątrz przedziału i maleje liniowo do 0 poza nim. Przedział może wynikać z kwartylów porównywalnych próbek regionu referencyjnego. Tolerancja musi mieć uzasadnienie fizyczne / pomiarowe lub być jawnym założeniem eksperymentalnym. Zapisujemy jej pochodzenie, nie dopasowujemy jej tak, by znany analog automatycznie wygrał.
+- αᵢ = wᵢ / Σwⱼ
+- score = 100 × Σ(αᵢ × sᵢ)
+- contributionᵢ = 100 × αᵢ × sᵢ
 
-Warstwy kategoryczne wymagają osobnej, udokumentowanej macierzy zgodności. Nie odejmujemy kodów klas minerałów od siebie. Nowy typ funkcji wymaga wersji modelu i testów.
+Contributions sum to the displayed score. The score is a configured, compensatory similarity index from 0 to 100. A score of 100 means every active feature falls within its selected profile interval. It is not probability, confidence, habitability, or overall environmental equivalence.
 
-## 6. MCDA
+The API calculates scores. The browser must not recalculate or reinterpret them.
 
-Dla aktywnego zestawu `A` i wag `w_i > 0`:
+## Missing data and quality
 
-```text
-alpha_i = w_i / sum(w_j for j in A)
-score_pct(p) = 100 * sum(alpha_i * s_i(p) for i in A)
-contribution_pct_i(p) = 100 * alpha_i * s_i(p)
-```
+A candidate must have valid values for every active feature under the dataset's QA rules. Missing values remain null with a reason; the score is not silently recalculated using a different subset of features. Coverage/completeness and quality flags are distinct from the score.
 
-Składniki sumują się do wyniku. Jedna warstwa daje dokładnie jej wynik. Wagi zerowe wyłączają kryterium; ujemne, niefinitywne i pusta suma są błędem. Wynik liczymy z pełną precyzją; zaokrąglenie tylko przy wyświetleniu.
+Compare candidates only when they use the same active criteria and dataset scope. Water masks, invalid source support, and quality failures must not be turned into zero-valued terrain.
 
-To model kompensacyjny: dobry wynik w jednej cesze może równoważyć słaby w drugiej. UI pokazuje rozbicie. Ewentualne nieprzekraczalne progi terenowe są osobnymi filtrami, nie ukrytymi wagami. 100% oznacza dopasowanie do przyjętych przedziałów wybranych cech, a nie identyczność środowiska lub pewność naukową.
+## Pixel ranking and map aggregation
 
-## 7. Braki i jakość
+The API evaluates eligible pixels in the selected regional dataset before returning the pixel Top 10. Adjacent pixels remain separate candidates, so several positions can come from one locality. Ties use the API's deterministic pixel-ID ordering.
 
-Domyślnie kwalifikuje się tylko komórka z ważnymi danymi dla **każdej aktywnej cechy**. Wymagany udział ważnych próbek w komórce i oknie startowo 90%; to próg operacyjny podlegający kontroli w G1. W razie braku danych `score_pct = null`, z listą braków i przyczyną. Nie przeliczamy automatycznie wag osobno dla każdego piksela.
+The distinct-area mode is a separate ranking. It selects pixel representatives subject to the requested geodesic minimum separation; it does not create polygons or area-average scores.
 
-`coverage_fraction` = suma wag cech z ważnym pomiarem / suma wag aktywnych. Jest to kompletność, nie prawdopodobieństwo poprawnego wyniku. Jakość obejmuje również źródło, maskę, efektywną rozdzielczość, udział interpolacji oraz diagnostykę artefaktów. Wynik, kompletność i jakość to odrębne pola.
+Map aggregation follows scoring. A display cell identifies the highest-scoring eligible pixel and may also show a mean for context. The map's maximum is the score of that actual pixel, not a sum of feature maxima from different places. Selecting a pixel links the map, ranking, and explanation to the same analysis ID. Zoom does not change measurement resolution.
 
-Maska lądu jest niezależna od wysokości: depresje poniżej poziomu morza pozostają lądem. Strefy polarne, małe wyspy i wybrzeża trafiają do raportu kwalifikowalności; brak pokrycia nie może zniknąć z mianownika raportu.
+## Current coverage limit
 
-## 8. Dokładny globalny Top 10 pikseli
-
-1. Zamroź wersję danych i konfigurację. Ustal wszystkie komórki w deklarowanym globalnym uniwersum.
-2. W partiach oblicz wynik **każdej** komórki spełniającej te same reguły QA; zachowuj liczności odrzuceń.
-3. Utrzymuj globalne Top K, porządkując po niezaokrąglonym wyniku malejąco, potem `pixel_id` rosnąco przy remisie.
-4. Zwróć do 10 wyników, faktyczny rozmiar komórek, obrysy, wkłady cech i liczbę przebadanych komórek. Mniej niż 10 ważnych wyników oznacza krótszą listę.
-5. Sąsiedztwo nie usuwa wyniku. Dziesięć dobrych pikseli w jednym kraterze może zająć wszystkie pozycje.
-
-Przeszukiwanie tylko regionów o najlepszej średniej jest niedopuszczalne. Jeśli optymalizujemy przez bloki, odcięcie wymaga **udowodnionej górnej granicy** wyniku dla aktualnych wag; P0 stosuje pełny skan. Suma maksimów poszczególnych cech może być górną granicą bloku, ale nie jest wynikiem rzeczywistego piksela — maksima mogły wypaść w różnych miejscach.
-
-## 9. Mapa, która nie chowa hotspotu
-
-Agregacja następuje po obliczeniu wszystkich wyników dla aktualnych wag. Komórka mapy przechowuje `max_score_pct`, `mean_score_pct`, `max_pixel_id`, liczbę ważnych i wszystkich pikseli. Domyślny kolor odpowiada maksimum. Tooltip wyjaśnia, że to najlepszy piksel w koszyku, nie jednorodny wynik całego obszaru.
-
-Nie wolno składać nowego wyniku z osobnych map maksymalnych warstw. Dla dwóch różnych pikseli — jeden dobry w A, drugi w B — taka operacja stworzyłaby nieistniejące idealne dopasowanie.
-
-Przy powiększeniu pobieramy właściwe komórki i geometrie, a Top 10 zawsze ma własne markery. Pojedynczy hotspot może zostać oznaczony jako izolowany; sprawdzamy QA, sąsiednie pomiary i źródło. Nie wygładzamy go i nie usuwamy tylko z powodu izolacji.
-
-## 10. Oddzielny ranking obszarów
-
-Tryb `distinct_areas` wybiera najlepszy piksel, następnie kolejne najlepsze co najmniej `min_distance_km` od już wybranych reprezentantów. Proponowana wartość startowa: 25 km, jawnie edytowalna. Dystans jest geodezyjny na Ziemi, nie liczony w stopniach. Reprezentant ma wynik najlepszego piksela, nie średnią obszaru. UI mówi, że to heurystyka różnorodności przestrzennej.
-
-Algorytm musi przeglądać dalszych kandydatów aż do 10 reprezentantów albo wyczerpania zbioru — nie wystarczy pogrupować wyłącznie pierwszych 10 pikseli. Granice grup nie są administracyjnymi granicami regionów.
-
-## 11. Rozdzielczość, stabilność i kontrola wyniku
-
-- Porównujemy co najmniej dwa poziomy siatki na tym samym obszarze, wskazując jak zmienia się Top 10. Najpierw liczymy drobne wyniki, później ich średnie i maksima do raportu.
-- Top 10 fine oraz coarse pozostają osobnymi wynikami. Wysokiej rozdzielczości analiza wybranych AOI nie jest globalnym rankingiem fine.
-- Walidacja obejmuje izolowany dobry piksel w słabym regionie, remisy, brak danych, bieguny i południk 180°.
-- Analiza wrażliwości: zmiana wag ±20%, tolerancji i reguł QA; pokazujemy czy zwycięzca jest stabilny. Nie nazywamy takiej stabilności przedziałem ufności.
-- Benchmarki analogów służą do sprawdzenia sensowności w odpowiednim wymiarze, nie do gwarantowania im pierwszych miejsc.
-
-Przypadki syntetyczne do testów: [hotspot-regression.json](../contracts/fixtures/hotspot-regression.json). Pozostałe kryteria odbioru: [VALIDATION](VALIDATION.md).
+The three named Earth packages are regional. A global search returns SCOPE_UNAVAILABLE. The project has not completed global preprocessing or global-ranking validation; no global optimum or coverage claim is supported.

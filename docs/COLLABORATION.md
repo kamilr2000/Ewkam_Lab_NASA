@@ -1,131 +1,36 @@
-# Współpraca dwóch komputerów przez remote
+# Collaboration and Git workflow
 
-## Podział
+Kamil and Ewelina work in separate clones and exchange work through the shared private repository. The remote main branch is the source of truth.
 
-Kamil odpowiada za wiarygodność danych, metodę i obliczenia. Ewelina odpowiada za czytelność i działanie produktu w przeglądarce oraz pakiet prezentacyjny. Każda osoba przegląda rezultat drugiej: Ewelina sprawdza zrozumiałość wyniku, Kamil sprawdza zgodność prezentowanych twierdzeń z danymi.
+## Before starting a task
 
-To dwie równoległe ścieżki, a nie dwa niezależne produkty. Wspólnym punktem jest kontrakt i fixture. Własność ścieżek wskazuje `AGENTS.md`; każda karta ma dokładniejszy zakres.
+1. Synchronize the local clone with origin/main without discarding uncommitted work.
+2. Read the task card, dependencies, owner, exact review references, and start conditions.
+3. Publish a separate IN PROGRESS reservation commit on main. Update the task status, agent, date, branch, and progress note. Confirm that commit is visible on origin/main.
+4. Create the task branch from the current main and publish it.
 
-## Repozytorium i gałęzie
+Do not reserve a task owned or actively held by the other person. Creating a card or pushing a feature branch does not reserve it.
 
-Repo: **[kamilr2000/Ewkam_Lab_NASA](https://github.com/kamilr2000/Ewkam_Lab_NASA)**, remote `origin`, wspólna gałąź `main`. Jest prywatne. Konto Kamila: `kamilr2000`; konto Eweliny: `ewelixa`. Wysłano zaproszenie dla `ewelixa` z uprawnieniem **write**; Ewelina musi je zaakceptować, zanim uzyska zapis. Każda osoba używa własnej tożsamości Git przy tworzeniu commitów.
+## Working and synchronizing
 
-Kamil i Ewelina mają osobne klony na swoich komputerach, w dowolnych katalogach. Instrukcje nie zakładają wspólnego dysku ani tej samej ścieżki. Po zaakceptowaniu zaproszenia Ewelina klonuje `https://github.com/kamilr2000/Ewkam_Lab_NASA.git`.
+Use small, reviewable commits. After each coherent change, run the relevant checks, commit only the files in scope, synchronize with the latest main, resolve actual conflicts while preserving both changes, and push. Do not force-push or use a reset that discards another person's work.
 
-`origin/main` jest źródłem prawdy dla rezerwacji, zależności i zakończonych zadań. Zdalne gałęzie pokazują implementację w toku. Wszystkie poprawki, karty, kontrakty i handoffy przechodzą przez remote. Lokalny commit lub plik nie jest przekazaniem drugiej osobie.
+On main, pull with fast-forward only. On a published work branch, pull without rebasing, then merge current origin/main. A fetch alone does not update the working tree. If an existing change is unrelated, preserve it and exclude it from the commit.
 
-Nazwy gałęzi: `kamil/K-006-scoring`, `ewelina/E-004-map`, `integration/I-003-acceptance`. Implementacja trafia do `main` przez mały PR, z ID karty i wynikami sprawdzeń. Zmiany koordynacyjne na `main` ograniczamy do kart, indeksu i niezbędnych ustaleń. Widoczności repo nie zmieniamy automatycznie; udostępnienie jury wymaga osobnego przygotowania.
+If a push fails, fetch again, integrate both changes, review the result, and retry a normal push. Report any local commit that cannot be published; do not call it handed off.
 
-## Obowiązkowy commit IN PROGRESS przed zadaniem
+## Queue and review
 
-1. Uporządkuj własne zmiany bez ich usuwania, przejdź do `main`, wykonaj `git fetch origin` i zaktualizuj lokalny `main` względem `origin/main`.
-2. Po zakończeniu bieżącej pracy sprawdź zdalne karty i warunki startu. Wybierz najpierw gotowe review przypisane Tobie, potem pozostałe P0 i następnie P1/P2. Nowe review nie przerywa wykonywanego zadania.
-3. Zmień tylko kartę: `status: in_progress`, `agent`, `updated`, planowana `work_branch` i wpis rozpoczęcia.
-4. Utwórz osobny commit, np. `tasks(K-006): IN PROGRESS`.
-5. Ponownie pobierz `origin`. Po przesunięciu `main` połącz zmiany, sprawdź rezerwację i rozwiąż konflikty. Jeżeli tę samą kartę wcześniej zajął inny agent, zachowaj jego rezerwację i wybierz inną kartę.
-6. Wyślij rezerwację do `main` zwykłym pushem. Jeżeli `main` jest chronione, doprowadź do połączenia małego PR zawierającego rezerwację.
-7. Potwierdź, że aktualne `origin/main` zawiera Twojego agenta i `in_progress`. Dopiero wtedy rozpocznij implementację.
+Finish work already in progress before choosing the next task. Then synchronize and choose a ready review assigned to you, followed by other ready P0 work and then P1/P2. A review request must identify the exact published ref and satisfy its start conditions. A review does not wait for the implementation card to reach done if its reviewed version is already ready. Do not review an unpublished or unavailable ref.
 
-Wartość `in_progress` oznacza status **IN PROGRESS**. Push samej gałęzi zadania ani niepołączony PR nie rezerwuje karty. Pierwszeństwo ma rezerwacja przyjęta do `origin/main`, nie wcześniejszy lokalny czas commita.
+Review only the requested and changed scope. Block on wrong dataset/scope, silent fixture fallback, incorrect null handling, lost hotspot, broken primary flow, or misleading units. Record cosmetic suggestions as follow-ups. Publish review evidence; a chat message alone is not a review record. Significant fixes need review of the corrected scope.
 
-Przykład dla K-006; wykonuj komendy pojedynczo, sprawdzając rezultat:
+## Task ownership and handoffs
 
-```text
-git switch main
-git fetch origin
-git merge --ff-only origin/main
-# Sprawdź i edytuj tasks/K-006.md.
-git add -- tasks/K-006.md
-git commit -m "tasks(K-006): IN PROGRESS"
-git fetch origin
-# Sprawdź, czy ktoś nie zajął tej samej karty, i połącz nowe zmiany.
-git merge origin/main
-git push origin main
-git fetch origin
-git show origin/main:tasks/K-006.md
-```
+Kamil owns data, pipeline, API, scientific methods, and contract schemas. Ewelina owns the web app, map, design, and submission package. Shared documentation belongs to the active integration-task owner. For work across ownership boundaries, use an explicit task or handoff and require the relevant owner's review. Do not build a second scoring engine in the browser.
 
-Przy błędzie zatrzymaj ten ciąg i rozwiąż przyczynę. Odmowa fast-forward wymaga kontroli historii i połączenia obu prac, nie resetu. Wyjątek: w I-001 samo utworzenie pustego repo wymaga lokalnego commita startowego; trafia on do pierwszego pushu, bo wcześniej `origin/main` nie istnieje. Kolejne zadania nie mają tego wyjątku.
+New cards use tasks/TEMPLATE.md. A review card uses tasks/REVIEW_TEMPLATE.md and records review_of, review_ref, and exact start conditions. Do not make a review depend on the reviewed card being done when that would create a deadlock.
 
-## Każda poprawka kończy się pushem
+## Submission
 
-Po opublikowaniu rezerwacji utwórz gałąź zadania z aktualnego `main` i opublikuj ją przez `git push -u origin HEAD`.
-
-Na początku sesji i przed kolejnym zadaniem wykonuj rzeczywisty **pull**, nie tylko odczyt zdalnych kart. Na czystym `main`: `git pull --ff-only origin main`. Na gałęzi z ustawionym upstream: `git pull --no-rebase`, potem merge aktualnego `origin/main`. Po cudzym przekazaniu i po połączeniu PR ponownie zsynchronizuj pliki. Przy niezapisanych zmianach najpierw zachowaj własną pracę; nie nadpisuj jej automatycznie. Jeśli ustawienie upstream nie istnieje, sprawdź docelową gałąź i skonfiguruj ją świadomie.
-
-1. Przed kolejną partią pobierz remote i połącz potrzebne zmiany z `origin/main` oraz zdalnej wersji własnej gałęzi.
-2. Wykonaj małą poprawkę, sprawdź ją i zrób commit zawierający ID zadania. Dotyczy to także dokumentacji, fixture'ów, kart i kontraktów.
-3. Przed wysłaniem ponownie pobierz remote. Jeśli doszły zmiany, połącz je, rozwiąż rzeczywiste konflikty i sprawdź rezultat.
-4. Od razu wyślij nowe commity zwykłym pushem na zdalną gałąź. Nie odkładaj synchronizacji do końca dnia lub zadania. Potwierdź powodzenie przed kolejną partią.
-
-Częściowy kod może być w gałęzi i draft PR. Nie może udawać gotowego rozwiązania w `main`. Konflikty nie występują automatycznie przy każdym commicie; obowiązkowa jest synchronizacja i rozwiązanie tych, które faktycznie powstaną.
-
-Przy odrzuconym pushu: fetch → przegląd zmian → merge właściwej gałęzi → rozwiązanie konfliktów z zachowaniem obu prac → odpowiednie kontrole → push. Bez force-pusha, przepisywania opublikowanej historii, resetu usuwającego pracę oraz globalnego wyboru `ours`/`theirs`. Przy sprzecznym znaczeniu kontraktu zapisz pytanie w karcie lub komentarzu PR zamiast zgadywać.
-
-Jeżeli remote jest niedostępne, zabezpiecz lokalne zmiany, napraw dostęp i zgłoś niewysłane SHA. Nie rozpoczynaj nowego zadania na podstawie lokalnej rezerwacji i nie nazywaj niewysłanego commita przekazanym.
-
-## Kolejka i status
-
-Źródło prawdy to oddzielne pliki `tasks/K-*.md`, `tasks/E-*.md` i `tasks/I-*.md`. Indeks `tasks/README.md` pokazuje kolejność i zależności, nie duplikuje aktualnego statusu.
-
-Dozwolone statusy: `todo`, `in_progress`, `blocked`, `review`, `done`, `cancelled`. Gotowe do podjęcia = wszystkie zależności ukończone, brak innego właściciela aktywnie wykonującego kartę, spełnione warunki startu. Jedna aktywna karta implementacyjna na agenta; niezależne drobne uzupełnienia dokumentacji są dopuszczalne.
-
-Każda zmiana statusu ma commit i skuteczny push do `main`, ewentualnie przez połączony mały PR. `review` oznacza wynik opublikowany na zdalnej gałęzi / w PR, gotowy do odbioru. `done` publikuj dopiero po spełnieniu kryteriów i połączeniu rozwiązania do `origin/main`. Przy `blocked` zapisz konkretny warunek, obejście i zależność. Przy `done` odhacz kryteria i dodaj dowód sprawdzenia.
-
-Statusy koordynacyjne zmieniaj na aktualnym `main`. Jeśli gałąź robocza zawiera starszą kartę, przy integracji zachowaj aktualny zdalny stan i faktyczny etap pracy. Zależność jest gotowa dla drugiego komputera dopiero po pobraniu opublikowanego rozwiązania i statusu. Wiadomość „gotowe” bez dostępnego commita nie wystarcza.
-
-## Jak agent dodaje odkryte zadanie
-
-1. Sprawdź istniejące karty i duplikaty.
-2. Utwórz nowy plik z [TEMPLATE](../tasks/TEMPLATE.md): następny wolny ID odpowiedniego toru, np. `K-012.md`, `E-012.md`, `I-007.md`.
-3. Wpisz właściciela, priorytet, zależności, pliki, powód odkrycia i testowalne kryteria. Dodaj `discovered_from`, np. ID karty lub konkretne źródło.
-4. Dodaj link do sekcji „Odkryte zadania” w indeksie. Indeks jest plikiem wspólnym; przy jednoczesnych zmianach zachowaj obie pozycje.
-5. Jeśli nowe zadanie blokuje starą kartę, dopisz zależność i powód. Unikaj cykli.
-6. Opublikuj nową kartę i indeks w `main` jako zmianę koordynacyjną. Przy kolizji ID zachowaj obie karty, nadając różne numery i poprawiając odnośniki. Przed wykonaniem nowego zadania zrób osobną rezerwację IN PROGRESS.
-7. P0 = konieczne do uzgodnionego MVP / prawidłowości / zgłoszenia. P1 = rozszerzenie po MVP. P2 = dalszy rozwój. Pomysł nie staje się P0 tylko dlatego, że jest ciekawy.
-
-Zmiany zakresu mają wpis w `docs/DECISIONS.md`, z powodem i skutkiem. Rozszerzenie wymagające dodatkowych kont, kosztów lub zmiany celu najpierw opisujemy jako propozycję; niezależne P0 są kontynuowane.
-
-## Przekazywanie rezultatów
-
-`handoffs/TEMPLATE.md` → `handoffs/<task-id>-<slug>.md`. Wpis zawiera: co gotowe, zdalną gałąź/URL PR, wysłane SHA, stan połączenia do `main`, jak odtworzyć, wersje kontraktu i danych, sprawdzenia, ograniczenia i czego potrzebuje druga strona. Opublikuj handoff w remote; plik tylko na własnym dysku nie jest przekazaniem.
-
-Wczesne przekazania:
-
-- K-003 → E-003: schema, przykłady sukcesu/pustego wyniku/błędu i hotspotu.
-- K-007 → E-006: działające API z regionalnymi danymi, zgodne z fixture.
-- K-008 → E-007: globalny zbiór, pokrycie i agregaty maksimum po wyniku łącznym.
-- E-006 → K-009: ekran pokazujący wkłady oraz reprodukowalna konfiguracja.
-- E-010 → I-005: publiczny pakiet z jasno rozdzielonym stanem wykonanym i planowanym.
-
-Krótki wspólny przegląd po G1, G2 i przed zgłoszeniem. Komunikaty mają identyfikator karty i konkretny zdalny rezultat. Repo utworzono 2026-11-14 jako prywatne i opublikowano początkowe przygotowanie oraz poprawki przez main (30b19ff). Zaproszenie write dla ewelixa oczekuje na przyjęcie; potem Ewelina potwierdza zapis ze swojego komputera. Bieżące potwierdzenia są w I-001.
-
-## Zadania dla drugiego agenta i przeglądy
-
-Kamil może utworzyć zadanie E-* dla Eweliny, a Ewelina K-* dla Kamila. Zlecający sprawdza duplikaty i wolny ID po pullu, tworzy kartę z właścicielem odbiorcy i publikuje ją z indeksem w `origin/main`. Odbiorca sam rezerwuje ją commitem IN PROGRESS. Samo przydzielenie nie oznacza rozpoczęcia ani wykonania.
-
-Przykłady: Kamil prosi o sprawdzenie zrozumiałości API/wyjaśnień i UI dla wyniku MCDA; Ewelina zleca sprawdzenie naukowej poprawności legendy, jednostek albo zgodności adaptera z kontraktem. Zlecenie musi wskazywać rezultat i opublikowane dowody; nie wystarcza „sprawdź backend”.
-
-Przegląd używa [REVIEW_TEMPLATE](../tasks/REVIEW_TEMPLATE.md). Producent publikuje implementację i sprawdzenia, ustawia swoje zadanie na review oraz wskazuje `review_tasks`. Karta przeglądu ma `task_type: review`, `review_of: K-006` i `review_ref` wskazujący konkretny commit/PR.
-
-**Przegląd nie zależy od done ocenianego zadania.** Jego `depends_on` zawiera tylko już wymagane inne zadania; `review_of` jest osobnym odnośnikiem. Warunek startu to dostępność wskazanego kodu i status review. Dzięki temu E-012 może sprawdzić K-006 przed jego ukończeniem. Nie twórz cyklu K-006 → E-012 → K-006 przez zwykłe zależności.
-
-Recenzent rezerwuje kartę, pobiera wskazaną wersję, sprawdza kryteria, uruchamia adekwatne kontrole i publikuje raport w `handoffs/` lub komentarzu PR. Wynik to zaakceptowanie wskazanego SHA albo konkretne wymagane poprawki z dowodami i właścicielem. Raport musi być dostępny w remote; sama wiadomość w lokalnym czacie nie zamyka review.
-
-Jeśli znaleziono błąd, recenzent dodaje kartę poprawki właścicielowi kodu lub odnotowuje ją w istniejącej karcie bez dublowania. Producent poprawia, pushuje i zleca kontrolę zmienionego zakresu. Nie oznacza parenta done, dopóki krytyczne uwagi nie są rozwiązane. Sam przegląd nie generuje automatycznie kolejnego przeglądu; jego kartę można zamknąć po opublikowaniu kompletnego raportu, nawet z wynikiem „wymagane poprawki”. To nie oznacza akceptacji implementacji.
-
-Przed rozpoczęciem następnego zadania i przed zakończeniem Celu sprawdź po pullu nowe karty przypisane Tobie. Publikuj wczesne wersje kontraktów i małe przekazania, aby obie strony mogły robić postępy. I-006 pozostaje zadaniem człowieka i nie jest zleceniem dla żadnego agenta.
-
-## Kolejność zadań: gotowe review przed zwykłym backlogiem
-
-To reguła wyboru **następnego** zadania, nie przerywania pracy. Jeśli agent jest w trakcie zadania, kontynuuje je i publikuje wynik. Dopiero potem robi pull i wybiera z własnej gotowej kolejki:
-
-1. Zadania `task_type: review` — również przed zwykłymi zadaniami P0.
-2. Inne zadania P0.
-3. Zadania P1/P2.
-
-Przy kilku gotowych review najpierw obsługuj te odblokowujące drugiego agenta, a w tej samej grupie najstarszą opublikowaną prośbę. Nie zaczynaj dwudziestu zwykłych zadań przed pierwszym dostępnym przeglądem. `queue_priority: review_first` dokumentuje tę kolejność; brak pola w starszej karcie review nie odbiera jej pierwszeństwa. Priorytet P0/P1/P2 nadal opisuje znaczenie pracy.
-
-Review musi mieć dostępny wskazany kod, spełniony warunek startu i brak aktywnej rezerwacji innego wykonawcy. Niedostępny `review_ref` lub niespełniona zależność oznacza zgłoszenie braku i wybór innego gotowego zadania, a nie blokadę całej kolejki. Gdy producent przekazał już ukończoną implementację do odbioru, może podjąć następne zadanie według powyższej kolejności bez czekania na finalny done swojej karty. Nie wolno natomiast porzucać trwającego zadania w środku tylko dlatego, że pojawiło się review.
-
-Recenzent zawsze najpierw publikuje własny commit IN PROGRESS w main. Pojawienie się review podczas pulla samo nie rezerwuje ani nie rozpoczyna przeglądu. Sam status review na karcie producenta nie jest odrębnym zadaniem do wykonania przez recenzenta.
+Only Kamil or Ewelina may complete the formal NASA Space Apps submission. Agents may prepare and verify the package but must not submit it or make attestations. See docs/SUBMISSION.md and task I-006.

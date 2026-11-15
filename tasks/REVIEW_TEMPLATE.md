@@ -16,34 +16,34 @@ updated: 2026-11-14
 discovered_from: requesting-task-or-pr
 ---
 
-# TASK-ID — Przegląd konkretnego zakresu i wersji
+# TASK-ID — Review a specific change and ref
 
-To szablon; nadaj aktualny wolny ID i właściciela odbiorcy. Kamil tworzy E-* dla Eweliny, Ewelina K-* dla Kamila.
+This is a template. Assign the next available ID and the receiver as owner. Kamil creates E-* cards for Ewelina; Ewelina creates K-* cards for Kamil.
 
-Pierwszeństwo przy wyborze następnego zadania: gotowe review przed zwykłymi P0/P1/P2, ale bez przerywania aktualnie wykonywanej pracy. Przy kilku przeglądach najpierw te odblokowujące drugiego agenta, następnie najstarsze prośby. Ustaw unblocks_other_agent zgodnie ze stanem faktycznym. Sam brak queue_priority w starszej karcie review nie odbiera jej pierwszeństwa.
+When choosing the next task, ready reviews come before ordinary P0/P1/P2 work, but never interrupt work already in progress. Among ready reviews, prefer those that unblock the other agent, then the oldest request. Set unblocks_other_agent only when accurate. Older review cards keep review priority even if they lack queue_priority.
 
-Cel: Sprawdzić wskazaną zmianę i opublikować ocenę z dowodami.
+Goal: inspect the requested change and publish a result with evidence.
 
-Zakres: Czytane pliki / kontrakt / kryteria. Raport recenzenta w handoffs/ lub PR. Poprawki kodu należą do jego właściciela, chyba że odrębnie uzgodniono przekazanie.
+Scope: list the files, contract, and criteria to inspect. Publish the reviewer report in handoffs/ or the PR. Fixes remain with the code owner unless a separate handoff is agreed.
 
-## Warunek startu
+## Start conditions
 
-Oceniane zadanie jest w review, a review_ref wskazuje dostępny w remote konkretny SHA/PR. W przypadku braku wersji zgłoś potrzebę przekazania. Nie czekaj na done ocenianego zadania i nie dodawaj go do depends_on; review_of jest relacją przeglądu, nie zależnością ukończenia.
+The implementation is in review and review_ref points to an available published SHA/PR. If it is missing, request an updated handoff; do not wait idly. Do not require the reviewed task to be done and do not put it in depends_on. review_of records the review relationship, not a completion dependency.
 
-## Kroki
+## Steps
 
-1. Dokończ bieżące zadanie. Przy wyborze następnego zrób pull, sprawdź gotowość review i jego pierwszeństwo; zweryfikuj wersję i opublikuj własny commit IN PROGRESS przed przeglądem.
-2. Sprawdź konkretne kryteria, integrację i adekwatne przypadki brzegowe; nie oceniaj wyłącznie opisu autora.
-3. Opublikuj raport: sprawdzony SHA, co sprawdzono, wyniki, braki i zaakceptowano / wymagane poprawki.
-4. Dla błędów dodaj konkretne zadanie właścicielowi kodu lub wskaż istniejącą kartę, bez duplikacji. Po istotnych poprawkach skontroluj zmieniony zakres.
+1. Finish current work. Before selecting the next task, synchronize, check review readiness and priority, verify the exact ref, and publish your own IN PROGRESS reservation.
+2. Check the specified criteria, integration, and relevant edge cases; do not review only the author's description.
+3. Publish the exact SHA, what was inspected, results, gaps, and ACCEPT or REQUEST CHANGES.
+4. For defects, create or update a specific task for the code owner. Recheck significant fixes without creating an endless chain of review requests.
 
-## Kryteria odbioru przeglądu
+## Acceptance criteria
 
-- [ ] Raport dotyczy jawnie wskazanej wersji i jest dostępny w remote.
-- [ ] Wynik poparto sprawdzeniami i odtwarzalnymi dowodami.
-- [ ] Uwagi mają priorytet, właściciela i warunek akceptacji poprawki.
-- [ ] Autor ocenianej zmiany otrzymał odnośnik przez kartę / PR w remote.
+- [ ] The report is published and names the exact reviewed version.
+- [ ] Results are supported by relevant checks and reproducible evidence.
+- [ ] Findings state priority, owner, and a testable correction condition.
+- [ ] The author can find the report in the task card or PR.
 
-## Przebieg i dowody
+## Progress and evidence
 
-Wpisz agenta, datę, work_branch, sprawdzony SHA, wysłane commity/PR i raport. Ukończenie review oznacza ukończenie przeglądu, nie automatyczne zaakceptowanie implementacji. Nie twórz automatycznie nieskończonego review przeglądów.
+Record the agent, date, branch, checked SHA, pushed commit/PR, and report location. Completing a review finishes the review task; it does not automatically accept the implementation.
