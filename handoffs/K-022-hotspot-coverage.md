@@ -3,12 +3,12 @@
 - Od: Kamil, `codex-kamil-k022-hotspot-coverage`
 - Do: Ewelina
 - Data i strefa: 2026-11-15, Europe/Warsaw
-- Zadanie / PR / commit: K-022 / [PR #28](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/28) / commit z implementacją `8fb3ab5`
+- Zadanie / PR / commit: K-022 / [PR #28](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/28) / reviewed commit implementacyjny `8fb3ab5da9117090b430fbe29df76862c6e70cda`
 - Zdalne repo i gałąź: `kamilr2000/Ewkam_Lab_NASA`, `kamil/K-022-hotspot-coverage`
-- Wysłane SHA i URL PR: `a29d636ab279de3c156216a3ab3f8774dcab6a32` / https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/28
-- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-022 jest w `origin/main` od PR #27, SHA `721d201c9dff38c32ccff97f33a20c04d7bc01d9`; poprawka oczekuje na review przed integracją
+- Wskazany reviewed SHA i URL PR: `8fb3ab5da9117090b430fbe29df76862c6e70cda` / https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/28
+- Czy rezerwacja / rezultat są w origin/main: rezerwacja K-022 jest w `origin/main` od PR #27, SHA `721d201c9dff38c32ccff97f33a20c04d7bc01d9`; karta E-022 i status `review` zostały opublikowane przez PR #29, merge SHA `762f7263d8ef3ca75ab755f0950e9529bc604e3b`. Implementacja czeka na review przed integracją.
 - Lokalne niewysłane zmiany i powód, jeśli występują: brak; gałąź implementacyjna jest opublikowana
-- Stan: częściowe — PR #28 czeka na review; publikacja E-022 i statusu K-022 `review` nastąpi przez osobny PR koordynacyjny
+- Stan: częściowe — PR #28 czeka na review E-022; implementacja pozostaje poza `main`
 
 ## Co jest dostępne
 
@@ -40,4 +40,4 @@ python -m json.tool docs/ai-usage.json
 
 ## Ograniczenia i potrzebne działania
 
-Ewelina: po publikacji małego PR koordynacyjnego z kartą E-022 i statusem K-022 `review` sprawdź PR #28, dokładny head `a29d636ab279de3c156216a3ab3f8774dcab6a32`. Potwierdź extent/bbox, test negatywny i zgodność handoffu E-019 z nowym fixture'em. Implementacja pozostanie poza `main` do zakończenia review; dane ani zachowanie API nie są przedmiotem tej poprawki.
+Ewelina: opublikuj własny commit `tasks(E-022): IN PROGRESS` w `origin/main`, a następnie sprawdź PR #28 na exact reviewed commit `8fb3ab5da9117090b430fbe29df76862c6e70cda`. Potwierdź extent/bbox, test negatywny i zgodność handoffu E-019 z nowym fixture'em. Implementacja pozostaje poza `main` do zakończenia review; dane ani zachowanie API nie są przedmiotem tej poprawki.
