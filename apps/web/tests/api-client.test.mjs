@@ -311,14 +311,14 @@ test('retains analysis id validation for live maps', async () => {
 })
 
 test('accepts the synthetic map fixture with its recorded bbox, level, and limit', async () => {
-  const result = await client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.04, 3.02], 0, 1000)
+  const result = await client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.04, 3.01], 0, 1000)
   assert.equal(result.is_synthetic, true)
   assert.equal(result.analysis_id, 'synthetic-analysis-hotspot')
 })
 
 test('synthetic maps reject a fixture with a different requested bbox', async () => {
   await assert.rejects(
-    client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.05, 3.02], 0, 1000),
+    client.getAnalysisMap('synthetic', 'synthetic-analysis-hotspot', [3, 3, 3.05, 3.01], 0, 1000),
     (error) => error instanceof client.ApiError && error.message.includes('bbox, level, or limit'),
   )
 })
