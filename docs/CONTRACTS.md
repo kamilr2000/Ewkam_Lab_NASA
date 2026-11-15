@@ -54,6 +54,7 @@ Przykład poprawnego requestu jest syntetyczny i pokazuje wyłącznie kształt k
 - `criteria` ma od 1 do 16 aktywnych cech o dodatnich wagach. `feature_id` musi być unikalne. JSON Schema nie wyraża tej reguły między polami; serwer najpierw waliduje schemat, a potem wywołuje [walidację semantyczną](../contracts/validation.py), która zwraca `DUPLICATE_FEATURE_ID`.
 - Serwer sprawdza, czy dataset i profil istnieją, ciało jest zgodne z profilem, a wszystkie cechy są dostępne dla wybranej wersji. Komórki porównuje na tym samym aktywnym zestawie cech i wag.
 - `top_k` wynosi 1–10. Porządek jest po niezaokrąglonym `score_pct` malejąco, a remisy rozstrzyga `pixel_id` rosnąco.
+- Typy liczbowe wejścia odpowiadają JSON Schema Draft 2020-12: `weight` przyjmuje skończoną liczbę JSON (całkowitą lub dziesiętną), a odrzuca stringi i booleany. `top_k` przyjmuje JSON-ową liczbę bez części ułamkowej, także zapisaną jako `2.0`; serwer normalizuje ją do integera `2`. Ułamki, stringi, booleany, wartości niefinitywne i liczby poza zakresem są odrzucane bez parsowania tekstu ani zaokrąglania.
 
 Tryb `pixels` nie przyjmuje `min_distance_km` i zwraca wyłącznie `ranking`. Tryb `distinct_areas` wymaga dodatniego `min_distance_km` i zwraca wyłącznie `area_ranking`. To osobne nazwy, by nie pomylić rankingu komórek z wyborem różnych lokalizacji.
 

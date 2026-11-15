@@ -9,7 +9,7 @@ from uuid import uuid4
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from apps.api.data_store import DataIntegrityError, load_registry
 from apps.api.errors import ApiProblem
@@ -31,7 +31,7 @@ class RegionalScopeRequest(BaseModel):
 class SearchCriterionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     feature_id: str = Field(min_length=1, max_length=128)
-    weight: float = Field(gt=0, le=1_000_000)
+    weight: float = Field(strict=True, gt=0, le=1_000_000)
 
 
 class SearchRequest(BaseModel):
@@ -44,8 +44,19 @@ class SearchRequest(BaseModel):
     scope: Annotated[Union[GlobalScopeRequest, RegionalScopeRequest], Field(discriminator="type")]
     criteria: list[SearchCriterionRequest] = Field(min_length=1, max_length=16)
     result_mode: Literal["pixels", "distinct_areas"]
-    top_k: int = Field(ge=1, le=10)
+    top_k: int = Field(strict=True, ge=1, le=10)
     min_distance_km: float | None = Field(default=None, gt=0, le=10_000)
+
+    @field_validator("top_k", mode="before")
+    @classmethod
+    def accept_integral_json_number(cls, value: object) -> object:
+        # Draft 2020-12 considers a JSON number such as 2.0 an integer when it
+        # has no fractional part. Normalize only that numeric case before the
+        # strict int validator; strings, booleans, and fractional numbers stay
+        # invalid instead of being coerced or rounded.
+        if isinstance(value, float) and math.isfinite(value) and value.is_integer():
+            return int(value)
+        return value
 
     @model_validator(mode="after")
     def validate_mode_distance(self) -> SearchRequest:
