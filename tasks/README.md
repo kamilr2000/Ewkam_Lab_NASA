@@ -89,10 +89,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [K-026 — Review wyboru cech i wag E-005](K-026.md), Kamil, P0: potwierdź dostępność kryteriów, konfigurację 1–3 cech, wagi i request globalny w PR #31.
 - [K-027 — Review interaktywnej mapy hotspotów E-004](K-027.md), Kamil, P0: sprawdź renderowanie, hotspot, legendę, geometrię brzegową i zachowanie bez podkładu w PR #37.
 - [E-021 — Popraw kontrast i czytelność bazowego UI](E-021.md), Ewelina, P0: popraw niewystarczający kontrast drobnych tekstów szkieletu i zachowaj układ telefonu przed pełnym audytem E-008.
+- [E-023 — Review rzeczywistych profili K-004](E-023.md), Ewelina, P0: niezależnie odtwórz źródła i profile Jezero/księżycowego bieguna, geometrię, braki, schemę i ograniczenia w PR #36.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-028, E-023, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-028, E-024, I-012; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
