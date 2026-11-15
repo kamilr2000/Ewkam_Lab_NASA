@@ -71,12 +71,11 @@ select:disabled { opacity: 1; color: #94a39d; -webkit-text-fill-color: #94a39d; 
 .criterion-name { color: #d3dbd4; font-size: 11px; font-weight: 600; }
 .criterion-unit { color: #82918b; font: 10px var(--mono); }
 .criterion-state { color: #9db284; font: 10px var(--mono); }
-.criterion-weight { display: grid; grid-template-columns: 58px minmax(35px, 1fr) 72px; align-items: center; gap: 8px; margin: 9px 0 0 54px; }
+.criterion-weight { display: grid; grid-template-columns: 70px minmax(35px, 1fr) 76px; align-items: center; gap: 8px; margin: 9px 0 0 54px; }
 .criterion-weight label { display: flex; justify-content: space-between; gap: 4px; color: #899990; font: 9px var(--mono); }
 .criterion-weight label span { color: #c0d28e; }
 .criterion-weight input[type="range"] { width: 100%; min-width: 0; accent-color: var(--accent); }
-.criterion-normalized { color: #9eaea3; font: 8px var(--mono); text-align: right; white-space: nowrap; }
-.criterion.is-disabled .criterion-copy { opacity: .68; }
+.criterion-normalized { color: #9eaea3; font: 9px var(--mono); text-align: right; white-space: nowrap; }
 .fixture-criterion { display: flex; align-items: center; min-height: 53px; }
 .criteria-selection-summary { margin: 9px 0 0; color: #83928d; font-size: 9px; line-height: 1.45; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -257,8 +256,8 @@ select:disabled { opacity: 1; color: #94a39d; -webkit-text-fill-color: #94a39d; 
   .control-panel { padding-right: 15px; padding-left: 15px; }
   .results-area { padding-right: 10px; padding-left: 10px; }
   .criterion { min-height: 50px; }
-  .criterion-weight { grid-template-columns: 52px minmax(35px, 1fr) 70px; gap: 6px; margin-left: 46px; }
-  .criterion-weight label, .criterion-normalized { font-size: 7px; }
+  .criterion-weight { grid-template-columns: 70px minmax(35px, 1fr) 76px; gap: 6px; margin-left: 46px; }
+  .criterion-weight label, .criterion-normalized { font-size: 9px; }
   .map-frame.has-analysis { min-height: 455px; max-height: none; }
   .analysis-summary { width: calc(100% - 22px); margin-right: auto; margin-left: auto; padding: 13px; }
   .summary-metrics { grid-template-columns: 1fr; margin-top: 12px; }

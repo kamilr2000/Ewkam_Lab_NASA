@@ -1,12 +1,12 @@
 # E-021 — Czytelność bazowego UI (w trakcie)
 
-Status: `review`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. CSS po integracji zmian z `origin/main` znajduje się w commicie `a3f8fdeb3fe5845538083e76d359acc35a9abce8`; raport jest w PR #35 w commicie `d3c99c13e14c95a98af517a142cc11e5903a88b3`.
+Status: `in_progress`. Gałąź: `ewelina/E-021-ui-readability`. Rezerwacja jest w `origin/main` w commicie `35c71be`. Poprzednia wersja CSS po integracji zmian z `origin/main` znajduje się w commicie `a3f8fdeb3fe5845538083e76d359acc35a9abce8`; raport jest w PR #35 w commicie `d3c99c13e14c95a98af517a142cc11e5903a88b3`.
 
 ## Zmiana
 
 W `apps/web/src/styles.css` podniesiono kontrast drobnych podpisów oraz rozmiary kluczowych etykiet, jednostek, objaśnień i stanów z 8–11 px do 9–12 px, także w mobilnych etykietach mapy i stopce. Widok disabled zachowuje wyłączone kontrolki i kursor `not-allowed`; fokus klawiatury pozostaje z jawnym obrysem. Dla podpisów mapy uwzględniono ciemną bazę oraz jaśniejszy gradient i siatkę z CSS.
 
-Źródłowe sprawdzenie CSS nie znajduje deklaracji tekstu poniżej 9 px po uwzględnieniu mobilnych nadpisań.
+Źródłowe sprawdzenie CSS w pierwotnym snapshotcie E-021 nie znajdowało deklaracji tekstu poniżej 9 px po uwzględnieniu mobilnych nadpisań.
 
 ## Dowody
 
@@ -38,9 +38,11 @@ Po synchronizacji E-005 doszły etykiety i opisy w syntetycznym przepływie wyni
 | Tekst źródła cechy | `#82918b` / `#1a2425` | 4.82:1 |
 | Znacznik pustego stanu | `#7e8c85` / `#172122` | 4.68:1 |
 
-Sprawdzenie deklaracji fontów w aktualnym `styles.css` nie znalazło tekstu poniżej 9 px. Tabela dotyczy tekstu; nie jest audytem kontrastu wszystkich ikon, obramowań i stanów interaktywnych.
+Sprawdzenie deklaracji fontów w tamtym snapshotcie `styles.css` nie znalazło tekstu poniżej 9 px. Tabela dotyczy tekstu; nie jest audytem kontrastu wszystkich ikon, obramowań i stanów interaktywnych.
 
-## Responsywność i fokus
+## Poprzednie pomiary responsywności i fokusu
+
+Poniższa tabela oraz oględziny opisują wcześniejszy snapshot `a3f8fdeb3fe5845538083e76d359acc35a9abce8`. Nie są dowodem dla bieżącej wersji po późniejszym dodaniu kontrolek kryteriów E-005.
 
 Produkcyjny build Vite obejrzano w Chrome DevTools responsive mode z preview `http://localhost:4173/`. Z konsoli strony odczytano `innerWidth`, `document.documentElement.clientWidth`, `document.documentElement.scrollWidth` i `document.body.scrollWidth`:
 
@@ -66,6 +68,12 @@ Podczas podglądu konsola zgłosiła żądanie `favicon.ico` z odpowiedzią 404.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
 
-## Follow-up po K-030
+## Follow-up po K-030 i synchronizacji
 
-2026-11-15: Po rezerwacji poprawki ponownie zbudowano produkcyjny frontend — typecheck i build przechodzą. Próba otwarcia lokalnego preview w Chrome została zatrzymana przez politykę URL Computer Use, zanim strona się załadowała. Nie uzyskano nowego screenshotu ani pomiaru `innerWidth`, `clientWidth` lub `scrollWidth`; wynik 781 px z `handoffs/e014-viewport-metrics.json` pochodzi z wcześniejszej wersji CSS i nie jest używany jako dowód dla aktualnego review. Dokładny viewport 781 px oraz ręczna kontrola renderu nadal wymagają wykonania; E-021 pozostaje `in_progress` i nie ma nowego review ref.
+2026-11-15: Po rezerwacji poprawki ponownie zbudowano produkcyjny frontend — typecheck i build przechodzą. Próba otwarcia lokalnego preview w Chrome została zatrzymana przez politykę URL Computer Use, zanim strona się załadowała. Nie uzyskano nowego screenshotu ani pomiaru `innerWidth`, `clientWidth` lub `scrollWidth`; wynik 781 px z `handoffs/e014-viewport-metrics.json` pochodzi z wcześniejszej wersji CSS i nie jest używany jako dowód dla aktualnego review.
+
+2026-11-15: Gałąź zsynchronizowano z `origin/main` w merge commicie `2e61fb1`. Konflikt CSS rozwiązano, zachowując czytelniejsze etykiety E-021 oraz reguły kontrolek dodane przez E-005. `npm test --prefix apps/web` przechodzi (38/38), `npm run build --prefix apps/web` przechodzi (typecheck i produkcyjny build), `git diff --check` przechodzi.
+
+Przegląd CSS po scaleniu ujawnił nowe teksty kontrolek E-005 o rozmiarze 8 px, a w widoku do 390 px 7 px. Podniesiono je do 9 px i powiększono kolumny etykiet, aby zrobić miejsce na czytelniejszy tekst. Usunięto też `opacity: .68` z wierszy niezaznaczonych kryteriów: checkbox nadal jest aktywny, a przygaszenie jednostki `#82918b` do około `#606d69` obniżało kontrast z `#172122` do 3.05:1. Bez przygaszenia etykieta wagi `#899990` ma 5.50:1, a udział wagi `#9eaea3` ma 7.08:1 na tle panelu `#172122`. Po poprawce wyszukiwanie deklaracji CSS/TSX nie znajduje tekstu poniżej 9 px.
+
+K-030 odnotowało, że żądany viewport 781 px dał `innerWidth=782`, `clientWidth=782`, `scrollWidth=782` i `body.scrollWidth=782`. W CSS breakpointem jest `max-width: 780px`; 782 px leży po jego drugiej stronie. Proponowana zmiana kryterium zastępuje nieosiągalny dokładny pomiar 781 px faktycznie raportowanym 782 px oraz jawnie zachowuje ograniczenie, że 781 px nie zmierzono. K-037 ma ocenić zasadność tej zmiany. Nie deklarujemy braku overflow ani widocznego fokusu dla aktualnego commitu: wcześniejsze oględziny tabeli powyżej dotyczą starszego snapshotu, a bieżący podgląd został zablokowany przed załadowaniem przez Computer Use. Poszerzone kolumny etykiet również nie mają jeszcze potwierdzenia w aktualnym renderze.
