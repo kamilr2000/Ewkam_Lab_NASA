@@ -6,6 +6,7 @@
 - Task / PR: E-031 follow-up to E-025 / [PR #50](https://github.com/kamilr2000/Ewkam_Lab_NASA/pull/50)
 - Repository / work branch: `kamilr2000/Ewkam_Lab_NASA`, `ewelina/E-031-refresh-submission-matrix`; PR #50 remains on `ewelina/E-025-submission-evidence-matrix`.
 - Integrated snapshot checked: `origin/main` at `e601d91a1184ea8ea0d8d198f5b3be1368c2ef7e`.
+- Exact matrix content commit: `3d617310b039e84c6cac319c3d3fae10fd859726` (`docs(E-031): refresh submission evidence snapshot`).
 - Exact review ref: recorded in `tasks/E-025.md` on `origin/main` after this handoff is published; it points to the final PR #50 head.
 
 ## Current state and evidence
