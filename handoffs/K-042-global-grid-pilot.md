@@ -88,3 +88,5 @@ The current user priority is the regional MVP: E-006 is first because the web cr
 ### Synchronization after E-006 reservation
 
 `origin/main` now contains Ewelina's own E-006 reservation (`11f978d`, `status: in_progress`, branch `ewelina/E-006-mvp-results`). The K-042 branch includes that exact main state through merge commit `dfdcffa`; no E-006 files were edited on the K-042 branch. K-042 code/data remain unchanged at `935fb086ce874eb89b7ed9342ea8f7be4f458bda`. E-006 is the current first task; E-030 remains deferred until the regional live flow works. The updated PR #72 head is recorded in its description. No full global scan or ranking was run.
+
+Ewelina clarified the active reservation in `origin/main` commit `7d5b1fa`; the K-042 branch now includes it through merge commit `1404ff2`. E-006 remains `in_progress` on `ewelina/E-006-mvp-results`. The clarification changes only the task card, not K-042 code/data. The current K-042 branch head is recorded in PR #72; the regional-MVP-first priority and global-scope limits above remain unchanged.
