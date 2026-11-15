@@ -18,7 +18,8 @@
     "K-006: backend MCDA scoring and pixel ranking implementation with tests",
     "K-017: authenticated NASADEM downloads, GSHHG mask rasterization and three-AOI comparison against ETOPO with EGM96-to-EGM2008 conversion",
     "E-018/K-019: independent review and evidence reports for scoring and API integration",
-    "E-019: map visual specification and a synthetic-fixture SVG concept"
+    "E-019: map visual specification and a synthetic-fixture SVG concept",
+    "K-022: semantic regression guard for synthetic hotspot scope, map coverage and pixel/map aggregation"
   ],
   "synthetic_data_paths": [
     "contracts/fixtures/catalog-synthetic.json",
@@ -52,7 +53,7 @@
     {
       "path": "design/map-hotspot-concept.svg",
       "description": "Static SVG schematic composed from a labeled synthetic contract fixture; no basemap, fabricated land shapes or NASA branding.",
-      "review_status": "E-019 is in review; K-020 requested a scope/coverage correction tracked in K-022."
+      "review_status": "E-019 remains in review; K-022 aligned synthetic scope and coverage, and E-022 approved exact code ref 8fb3ab5da9117090b430fbe29df76862c6e70cda. PR #28 is being synchronized with main before integration."
     }
   ],
   "generated_media": [],
