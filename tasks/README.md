@@ -96,10 +96,11 @@ Agenci mogą samodzielnie dodać konieczną pracę według szablonu. Dopisz tuta
 - [E-024 — Review siatki i cech regionalnych K-005](E-024.md), Ewelina, P0: niezależnie odtwórz publiczne źródła, maskowanie batymetrii, cechy, QA, checkpointy i trzy realne pakiety w PR #44.
 - [I-012 — Uzupełnij rejestr AI/SI o późniejsze prace web i review](I-012.md), Ewelina, P0: dodaj źródłowo poparte wpisy dla E-004/E-005/E-021/E-023/E-024 oraz zachowaj ograniczenia i statusy.
 - [K-031 — Review uzupełnienia rejestru AI/SI I-012](K-031.md), Kamil, P0: zweryfikuj exact ref disclosure, statusy, ograniczenia, linki i zachowanie syntetycznych ścieżek w PR #46.
+- [K-032 — Re-review ładowania mapy E-004](K-032.md), Kamil, P0: sprawdź renderowanie, no-data, fallbacki i lazy bundle MapLibre na nowym exact SHA w PR #37.
 
 Każdy agent może dodać zadanie drugiemu: Kamil tworzy E-*, Ewelina K-*, z właścicielem odbiorcy. Dla przeglądów użyj [REVIEW_TEMPLATE](REVIEW_TEMPLATE.md). Review wskazuje review_of oraz opublikowane review_ref; nie wymaga done ocenianej pracy. I-006 jest zadaniem wyłącznie dla człowieka — agent przygotowuje pakiet i pomija je przy wyborze zadań wykonawczych.
 
-Następne wolne numery po dodaniu tych kart: K-032, E-025, I-013; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
+Następne wolne numery po dodaniu tych kart: K-033, E-025, I-013; sprawdź aktualne pliki przed nadaniem numeru w równoległym klonie.
 
 ## Sprawdzanie dokumentacji
 
