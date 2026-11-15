@@ -68,6 +68,31 @@ Podczas podglądu konsola zgłosiła żądanie `favicon.ico` z odpowiedzią 404.
 
 WCAG 2.2 SC 1.4.3 wymaga co najmniej 4.5:1 dla zwykłego tekstu, z wyjątkami opisanymi w kryterium: [W3C WCAG 2.2](https://www.w3.org/TR/2023/REC-WCAG22-20231005/). Te statyczne obliczenia nie zastępują pełnego audytu UI w E-008.
 
+## Follow-up po K-037 i synchronizacji aktualnej mapy
+
+2026-11-15: Rezerwację follow-upu opublikowano na `origin/main`. PR #35 zsynchronizowano z aktualnym main; konflikt CSS rozwiązano, zachowując style MapLibre z E-004, kontrolki E-005 i poprawki czytelności E-021. Nowe etykiety mapy o rozmiarze 7–8 px podniesiono do 9 px, również w mobilnych nadpisaniach. Skan deklaracji `font`/`font-size` w `apps/web/src/styles.css` zwraca zero tekstów poniżej 9 px.
+
+Dla nowych etykiet MapLibre obliczono kontrast z luminancji sRGB po złożeniu przezroczystych warstw CSS z bazowym tłem mapy. Reprezentatywne pary:
+
+| Element | Tekst / złożone tło | Kontrast |
+|---|---|---:|
+| Kontekst mapy | `#a8b89a` / `#111b1c` | 8.34:1 |
+| Etykieta stanu pustej mapy | `#b6cb8d` / `#121d1d` | 9.77:1 |
+| Tytuł legendy | `#dce5d8` / `#101a1b` | 13.70:1 |
+| Opisy rampy | `#c0ccc2` / `#0d1516` | 11.14:1 |
+| Klucze legendy | `#b5c0b8` / `#101a1b` | 9.44:1 |
+| Stopka mapy | `#a0ada5` / `#0d1516` | 7.94:1 |
+| Etykieta inspectora | `#b6cb8d` / `#131e1e` | 9.67:1 |
+| Tekst szczegółu inspectora | `#d6ed85` / `#131e1e` | 13.24:1 |
+| Status mapy | `#b7c5ba` / `#131f1f` | 9.42:1 |
+| Ostrzeżenie mapy | `#e4b5a7` / `#131f1f` | 9.22:1 |
+| Tag kontraktu | `#9aaba0` / `#172122` | 6.82:1 |
+| Numer znacznika rankingu | `#f3f5e9` / `#172625` | 14.21:1 |
+
+`npm test --prefix apps/web` — 40/40; `npm run build --prefix apps/web` — typecheck i build produkcyjny przechodzą. Vite nadal ostrzega, że asynchroniczny chunk mapy ma 1,085.35 kB minified. `python tools/check_planning.py` — OK (156 Markdown, 36 JSON, 77 kart, 5 synthetic cases). Build i statyczne obliczenia nie dowodzą zachowania layoutu.
+
+Próba otwarcia lokalnego preview została zatrzymana przez politykę URL przed załadowaniem strony. Nie ma świeżych `innerWidth`/`clientWidth`/`scrollWidth`/`body.scrollWidth`, zrzutów, oględzin przycięć ani sprawdzenia fokusu po tej synchronizacji. Historyczna tabela wyżej pochodzi ze starszego snapshotu; nie stanowi dowodu dla aktualnego PR. K-039 ma przeprowadzić re-review dopiero po opublikowaniu tych renderowych dowodów.
+
 ## Follow-up po K-030 i synchronizacji
 
 2026-11-15: Po rezerwacji poprawki ponownie zbudowano produkcyjny frontend — typecheck i build przechodzą. Próba otwarcia lokalnego preview w Chrome została zatrzymana przez politykę URL Computer Use, zanim strona się załadowała. Nie uzyskano nowego screenshotu ani pomiaru `innerWidth`, `clientWidth` lub `scrollWidth`; wynik 781 px z `handoffs/e014-viewport-metrics.json` pochodzi z wcześniejszej wersji CSS i nie jest używany jako dowód dla aktualnego review.
