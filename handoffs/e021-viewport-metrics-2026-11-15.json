@@ -1,0 +1,60 @@
+{
+  "captured_at": "2026-11-15",
+  "branch": "ewelina/E-021-ui-readability",
+  "preview_source_head": "c26663ca64153399f75f3e518efc6b6607c25799",
+  "publish_state": "render_and_screenshot_pushed; synced_through_latest_origin_main",
+  "branch_head_before_fresh_screenshot": "4c4975eb5fcc45f9c2d4da163c35df3b813d4ee0",
+  "latest_confirmed_render_evidence_commit": "bff33641cf44906ad3ad8fbe073e55cc6e3ccf42",
+  "remote_main_head": "18803b793019069f87ce1fd2d51ebd78d24831e4",
+  "preview_url": "http://127.0.0.1:4180/",
+  "preview_kind": "Vite production preview",
+  "browser": "Chrome responsive mode on Windows",
+  "viewport_height_css_px": 900,
+  "scrollbar_gutter_css_px": 15,
+  "data_source": "Synthetic fixture demo",
+  "fixture_scenario": "Isolated hotspot",
+  "live_api_called": false,
+  "viewports": [
+    { "requested_css_px": 320, "innerWidth": 320, "clientWidth": 305, "scrollWidth": 305, "bodyScrollWidth": 305, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 375, "innerWidth": 375, "clientWidth": 360, "scrollWidth": 360, "bodyScrollWidth": 360, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 390, "innerWidth": 390, "clientWidth": 375, "scrollWidth": 375, "bodyScrollWidth": 375, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 780, "innerWidth": 780, "clientWidth": 765, "scrollWidth": 765, "bodyScrollWidth": 765, "scenarioHelpGapCssPx": 12 },
+    { "requested_css_px": 782, "innerWidth": 782, "clientWidth": 767, "scrollWidth": 767, "bodyScrollWidth": 767, "scenarioHelpGapCssPx": 3 },
+    { "requested_css_px": 1150, "innerWidth": 1150, "clientWidth": 1135, "scrollWidth": 1135, "bodyScrollWidth": 1135, "scenarioHelpGapCssPx": 3 },
+    { "requested_css_px": 1151, "innerWidth": 1151, "clientWidth": 1136, "scrollWidth": 1136, "bodyScrollWidth": 1136, "scenarioHelpGapCssPx": 3 }
+  ],
+  "before_after_field_help_gap_css_px": {
+    "320_375_390_780": { "before": 6, "after": 12 },
+    "782_1150_1151": { "before": -3, "after": 3 }
+  },
+  "visual_review_css_px": [320, 375, 390, 780, 782, 1150, 1151],
+  "visual_review_result": "After the margin fix, no horizontal overflow, clipped text, or overlapping labels were observed. The fixture scenario helper gap is positive at every viewport.",
+  "focus_check": {
+    "viewport_css_px": 320,
+    "result": "Keyboard Tab transition from Data source to Fixture scenario showed :focus-visible.",
+    "outline_css_rule": "2px solid #d6ed85",
+    "computed_outline_width_css_px": 1.6,
+    "computed_outline_color": "rgb(214, 237, 133)"
+  },
+  "reproduction": {
+    "viewport_metrics": "In Chrome DevTools responsive mode, set each requested width and evaluate window.innerWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, and document.body.scrollWidth.",
+    "helper_gap": "Compare the top of .field-help.getBoundingClientRect() with the bottom of #demo-scenario.getBoundingClientRect().",
+    "keyboard_focus": "At 320 CSS px click Data source, press Escape, then Tab; check document.activeElement.matches(':focus-visible') and its computed outlineColor."
+  },
+  "fresh_screenshots_saved": true,
+  "fresh_screenshot_paths": [
+    "screenshots/E-021-320px-2026-11-15-postfix.png"
+  ],
+  "superseded_screenshot_paths": [
+    "screenshots/E-021-320px-2026-11-15.png",
+    "screenshots/E-021-782px-2026-11-15.png",
+    "screenshots/E-021-1151px-2026-11-15.png"
+  ],
+  "limitations": [
+    "PNG files listed above show the older Successful ranking snapshot and are not evidence for this Isolated hotspot render or the spacing fix.",
+    "Only the 320 CSS px post-fix render has a fresh saved PNG; the remaining six widths were visually inspected live and are recorded with reproducible measurements.",
+    "Origin main commit 56fb2ed pins the exact screenshot evidence ref; the synchronized PR branch also includes latest main commit 18803b7.",
+    "No physical phone was tested.",
+    "A classic non-overlay scrollbar was not forced."
+  ]
+}
